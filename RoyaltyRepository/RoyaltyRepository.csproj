@@ -86,6 +86,10 @@
     <Compile Include="Migrations\201509071149289_Migration_AccountSettings_ChangeRequires.Designer.cs">
       <DependentUpon>201509071149289_Migration_AccountSettings_ChangeRequires.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509071409369_Migration_AddTicksInsteadTime.cs" />
+    <Compile Include="Migrations\201509071409369_Migration_AddTicksInsteadTime.Designer.cs">
+      <DependentUpon>201509071409369_Migration_AddTicksInsteadTime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountDataRecordAdditionalColumns.cs" />
@@ -158,6 +162,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509071149289_Migration_AccountSettings_ChangeRequires.resx">
       <DependentUpon>201509071149289_Migration_AccountSettings_ChangeRequires.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509071409369_Migration_AddTicksInsteadTime.resx">
+      <DependentUpon>201509071409369_Migration_AddTicksInsteadTime.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
