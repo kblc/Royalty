@@ -13,8 +13,10 @@ namespace RoyaltyRepositoryTest
         {
             try
             { 
-                using ( var rc = new RepositoryContext("name=connectionString"))
+                using ( var rc = new RepositoryContext("name=connectionStringHome"))
                 {
+                    rc.Log = (s) => { Console.WriteLine(string.Format("[~] Log message: {0}", s)); };
+
                     Account acc = new Account() { AccountUID = Guid.NewGuid(), Name = ".default", IsHidden = true };
                     acc.Settings.AddressColumnName = "Адрес объекта";
                     acc.Settings.AreaColumnName = "Район";
@@ -35,6 +37,9 @@ namespace RoyaltyRepositoryTest
                     acc.Dictionary.AllowAddToDictionaryAutomatically = true;
                     acc.Dictionary.AllowCalcAreasIfStreetExistsOnly = false;
                     acc.Dictionary.SimilarityForTrust = 0.6m;
+
+                    rc.Accounts.Add(acc);
+
                     foreach (var i in new string[] { 
                         ".",",","|","(",")",@"\","/","~","!","@","#","$","%","^","&","*","<",">","?",";","'","\"",":","[","]","{","}","+","_","`",
                         "ул",
@@ -65,7 +70,6 @@ namespace RoyaltyRepositoryTest
                         }
                         .Select(s => new AccountDictionaryExclude() { Dictionary = acc.Dictionary, Exclude = s }))
                         acc.Dictionary.Excludes.Add(i);
-                    rc.Accounts.Add(acc);
                     rc.SaveChanges();
                 }
             }

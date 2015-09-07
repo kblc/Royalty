@@ -148,6 +148,5 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("host_column_name"), Required(AllowEmptyStrings = false)]
         public string HostColumnName { get; set; }
-
     }
 }

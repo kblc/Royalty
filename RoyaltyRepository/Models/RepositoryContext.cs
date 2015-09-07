@@ -20,7 +20,13 @@ namespace RoyaltyRepository.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            //
+        }
+
+        public Action<string> Log
+        {
+            get { return Database.Log; }
+            set { Database.Log = value; }
         }
     }
 }
