@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9FC94FDA-B3FB-441D-9BAA-40252DA7E067}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RoyaltyRepository</RootNamespace>
+    <AssemblyName>RoyaltyRepository</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Migrations\201509070423152_Migration_Account.cs" />
+    <Compile Include="Migrations\201509070423152_Migration_Account.Designer.cs">
+      <DependentUpon>201509070423152_Migration_Account.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509070428448_Migration_Account_State.cs" />
+    <Compile Include="Migrations\201509070428448_Migration_Account_State.Designer.cs">
+      <DependentUpon>201509070428448_Migration_Account_State.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509070439481_Migration_Account_Settings.cs" />
+    <Compile Include="Migrations\201509070439481_Migration_Account_Settings.Designer.cs">
+      <DependentUpon>201509070439481_Migration_Account_Settings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509070513297_Migration_Account_Dictionary.cs" />
+    <Compile Include="Migrations\201509070513297_Migration_Account_Dictionary.Designer.cs">
+      <DependentUpon>201509070513297_Migration_Account_Dictionary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509070912212_Migration_Account_Data.cs" />
+    <Compile Include="Migrations\201509070912212_Migration_Account_Data.Designer.cs">
+      <DependentUpon>201509070912212_Migration_Account_Data.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509070925338_Migration_Account_AddIsHiddenField.cs" />
+    <Compile Include="Migrations\201509070925338_Migration_Account_AddIsHiddenField.Designer.cs">
+      <DependentUpon>201509070925338_Migration_Account_AddIsHiddenField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509071044212_Migration_City_AddUndefinedArea.cs" />
+    <Compile Include="Migrations\201509071044212_Migration_City_AddUndefinedArea.Designer.cs">
+      <DependentUpon>201509071044212_Migration_City_AddUndefinedArea.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509071052138_Migration_City_AddUndefinedAreaAsNullable.cs" />
+    <Compile Include="Migrations\201509071052138_Migration_City_AddUndefinedAreaAsNullable.Designer.cs">
+      <DependentUpon>201509071052138_Migration_City_AddUndefinedAreaAsNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509071122285_Migration_AccountSettings_AddHostColumnNameProperty.cs" />
+    <Compile Include="Migrations\201509071122285_Migration_AccountSettings_AddHostColumnNameProperty.Designer.cs">
+      <DependentUpon>201509071122285_Migration_AccountSettings_AddHostColumnNameProperty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509071149289_Migration_AccountSettings_ChangeRequires.cs" />
+    <Compile Include="Migrations\201509071149289_Migration_AccountSettings_ChangeRequires.Designer.cs">
+      <DependentUpon>201509071149289_Migration_AccountSettings_ChangeRequires.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\AccountDataRecordAdditionalColumns.cs" />
+    <Compile Include="Models\AccountDataRecordAdditional.cs" />
+    <Compile Include="Models\AccountDictionary.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\AccountDictionaryExclude.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\AccountDictionaryRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\AccountDictionaryRecordConditions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\AccountSettings.cs" />
+    <Compile Include="Models\AccountSettingsSheduleTime.cs" />
+    <Compile Include="Models\AccountState.cs" />
+    <Compile Include="Models\AccountDataRecord.cs" />
+    <Compile Include="Models\Area.cs" />
+    <Compile Include="Models\Host.cs" />
+    <Compile Include="Models\City.cs" />
+    <Compile Include="Models\Phone.cs" />
+    <Compile Include="Models\Mark.cs" />
+    <Compile Include="Models\RepositoryContext.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.ru.Designer.cs">
+      <DependentUpon>Resources.ru.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201509070423152_Migration_Account.resx">
+      <DependentUpon>201509070423152_Migration_Account.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509070428448_Migration_Account_State.resx">
+      <DependentUpon>201509070428448_Migration_Account_State.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509070439481_Migration_Account_Settings.resx">
+      <DependentUpon>201509070439481_Migration_Account_Settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509070513297_Migration_Account_Dictionary.resx">
+      <DependentUpon>201509070513297_Migration_Account_Dictionary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509070912212_Migration_Account_Data.resx">
+      <DependentUpon>201509070912212_Migration_Account_Data.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509070925338_Migration_Account_AddIsHiddenField.resx">
+      <DependentUpon>201509070925338_Migration_Account_AddIsHiddenField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509071044212_Migration_City_AddUndefinedArea.resx">
+      <DependentUpon>201509071044212_Migration_City_AddUndefinedArea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509071052138_Migration_City_AddUndefinedAreaAsNullable.resx">
+      <DependentUpon>201509071052138_Migration_City_AddUndefinedAreaAsNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509071122285_Migration_AccountSettings_AddHostColumnNameProperty.resx">
+      <DependentUpon>201509071122285_Migration_AccountSettings_AddHostColumnNameProperty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509071149289_Migration_AccountSettings_ChangeRequires.resx">
+      <DependentUpon>201509071149289_Migration_AccountSettings_ChangeRequires.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.ru.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
