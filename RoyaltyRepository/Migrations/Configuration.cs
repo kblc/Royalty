@@ -10,7 +10,7 @@ namespace RoyaltyRepository.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = false;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(RoyaltyRepository.Models.RepositoryContext context)

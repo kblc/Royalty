@@ -1,6 +1,7 @@
 ﻿using RoyaltyRepository.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace RoyaltyRepositoryTest
         {
             try
             { 
-                using ( var rc = new RepositoryContext("name=connectionStringHome"))
+                using ( var rc = new RepositoryContext("connectionStringHome"))
                 {
                     rc.Log = (s) => { Console.WriteLine(string.Format("[~] Log message: {0}", s)); };
 
