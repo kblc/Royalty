@@ -62,16 +62,42 @@ namespace RoyaltyRepository.Models
         public virtual ICollection<AccountSettingsSheduleTime> SheduleTimes { get; set; }
 
         /// <summary>
+        /// Игнорирование времени экспорта (используйте IgnoreExportTime)
+        /// </summary>
+        [Obsolete("Property IgnoreExportTime should be used instead.")]
+        [Column("ignore_export_ticks")]
+        public long? IgnoreExportTimeTicks { get; set; }
+
+        /// <summary>
         /// Игнорирование времени экспорта
         /// </summary>
-        [Column("ignore_export")]
-        public TimeSpan? IgnoreExportTime { get; set; }
+        [NotMapped]
+        public TimeSpan? IgnoreExportTime
+        {
+            #pragma warning disable 618
+            get { return IgnoreExportTimeTicks.HasValue ? TimeSpan.FromTicks(IgnoreExportTimeTicks.Value) : (TimeSpan?)null ; }
+            set { IgnoreExportTimeTicks = value == null ? (long?)null : value.Value.Ticks; }
+            #pragma warning restore 618
+        }
+
+        /// <summary>
+        /// Сколько времени должно пройти для того, что бы данные стали доверенными (используйте TimeForTrust)
+        /// </summary>
+        [Obsolete("Property TimeForTrust should be used instead.")]
+        [Column("time_for_trust_ticks")]
+        public long? TimeForTrustTicks { get; set; }
 
         /// <summary>
         /// Сколько времени должно пройти для того, что бы данные стали доверенными
         /// </summary>
-        [Column("time_for_trust")]
-        public TimeSpan? TimeForTrust { get; set; }
+        [NotMapped]
+        public TimeSpan? TimeForTrust
+        {
+            #pragma warning disable 618
+            get { return TimeForTrustTicks.HasValue ? TimeSpan.FromTicks(TimeForTrustTicks.Value) : (TimeSpan?)null; }
+            set { TimeForTrustTicks = value == null ? (long?)null : value.Value.Ticks; }
+            #pragma warning restore 618
+        }
 
         /// <summary>
         /// Удалять файлы после импорта

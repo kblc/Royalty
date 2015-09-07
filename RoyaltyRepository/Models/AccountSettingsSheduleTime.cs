@@ -31,10 +31,24 @@ namespace RoyaltyRepository.Models
         /// Аккаунт, которому принадлежат данные настройки
         /// </summary>
         public virtual AccountSettings AccountSettings { get; set; }
+
+        /// <summary>
+        /// Время запуска (используйте Time)
+        /// </summary>
+        [Obsolete("Property Time should be used instead.")]
+        [Column("time_ticks"), Required]
+        public long TimeTicks { get; set; }
+
         /// <summary>
         /// Время запуска
         /// </summary>
-        [Column("time"), Required]
-        public TimeSpan Time { get; set; }
+        [NotMapped]
+        public TimeSpan Time
+        {
+            #pragma warning disable 618
+            get { return TimeSpan.FromTicks(TimeTicks); }
+            set { TimeTicks = value.Ticks; }
+            #pragma warning restore 618
+        }
     }
 }
