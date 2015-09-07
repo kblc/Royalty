@@ -41,7 +41,7 @@ namespace RoyaltyRepository.Migrations
                     })
                 .PrimaryKey(t => t.shedule_time_id)
                 .ForeignKey("dbo.account_settings", t => t.account_uid, cascadeDelete: true)
-                .Index(t => t.account_uid, name: "IX_ACCOUNT_SETTINGS_SHEDULE_TIME_ACCOUNT_UID");
+                .Index(t => t.account_uid, name: "IX_ACCOUNT_SETTINGS_TIMER_ACCOUNT_UID");
             
         }
         
@@ -49,7 +49,7 @@ namespace RoyaltyRepository.Migrations
         {
             DropForeignKey("dbo.shedule_time", "account_uid", "dbo.account_settings");
             DropForeignKey("dbo.account_settings", "account_uid", "dbo.account");
-            DropIndex("dbo.shedule_time", "IX_ACCOUNT_SETTINGS_SHEDULE_TIME_ACCOUNT_UID");
+            DropIndex("dbo.shedule_time", "IX_ACCOUNT_SETTINGS_TIMER_ACCOUNT_UID");
             DropIndex("dbo.account_settings", new[] { "account_uid" });
             DropTable("dbo.shedule_time");
             DropTable("dbo.account_settings");
