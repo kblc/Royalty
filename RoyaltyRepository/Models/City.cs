@@ -25,7 +25,6 @@ namespace RoyaltyRepository.Models
     {
         public City()
         {
-            UndefinedArea = new Area() { City = this };
             Areas = new List<Area>();
         }
 
@@ -56,6 +55,6 @@ namespace RoyaltyRepository.Models
         #endregion
 
         [InverseProperty("City")]
-        public virtual IEnumerable<Area> Areas { get; set; }
+        public virtual ICollection<Area> Areas { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace RoyaltyRepository.Models
     [Table("account_state")]
     public partial class AccountState
     {
+        #region Account
         /// <summary>
         /// Идентификатор аккаунта, которому принадлежат данные настройки
         /// </summary>
@@ -26,6 +27,7 @@ namespace RoyaltyRepository.Models
         /// Аккаунт, которому принадлежат данные настройки
         /// </summary>
         public virtual Account Account { get; set; }
+        #endregion
         /// <summary>
         /// Время последнего запуска (UTC)
         /// </summary>

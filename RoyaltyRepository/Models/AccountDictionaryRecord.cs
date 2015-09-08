@@ -66,6 +66,6 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Условия
         /// </summary>
-        public virtual IEnumerable<AccountDictionaryRecordCondition> Conditions { get; set; }
+        public virtual ICollection<AccountDictionaryRecordCondition> Conditions { get; set; }
     }
 }

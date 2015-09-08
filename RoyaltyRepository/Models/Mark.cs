@@ -21,7 +21,7 @@ namespace RoyaltyRepository.Models
     /// Метка записи
     /// </summary>
     [Table("mark")]
-    public partial class Mark
+    public partial class Mark : IDefaultRepositoryInitialization
     {
         /// <summary>
         /// Идентификатор записи
@@ -50,6 +50,18 @@ namespace RoyaltyRepository.Models
             } 
         }
 
-
+        void IDefaultRepositoryInitialization.InitializeDefault(RepositoryContext context)
+        {
+            var resType = System.Reflection.Assembly.GetExecutingAssembly().GetType("RoyaltyRepository.Properties.Resources");
+            if (resType != null)
+            { 
+                foreach(var p in resType.GetProperties().Where(pi => pi.Name.StartsWith("MARK_")).Select(pi => pi.Name.Substring("MARK_".Length)))
+                {
+                    if (!context.Marks.Any(m => string.Compare(m.SystemName, p) == 0))
+                        context.Marks.Add(new Mark() { SystemName = p });
+                }
+                context.SaveChanges();
+            }
+        }
     }
 }

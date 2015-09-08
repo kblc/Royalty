@@ -23,6 +23,10 @@ namespace RoyaltyRepository.Models
     [Table("area")]
     public partial class Area
     {
+        public Area()
+        {
+            DefaultForCities = new List<City>();
+        }
         /// <summary>
         /// Идентификатор записи
         /// </summary>
@@ -44,7 +48,7 @@ namespace RoyaltyRepository.Models
         //[ForeignKey("DefaultForCity")]
         //public long DefaultForCityID { get; set; }
         [InverseProperty("UndefinedArea")]
-        public List<City> DefaultForCities { get; set; }
+        public virtual ICollection<City> DefaultForCities { get; set; }
         #endregion
         /// <summary>
         /// Название района

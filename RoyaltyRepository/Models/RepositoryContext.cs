@@ -9,6 +9,11 @@ using RoyaltyRepository.Migrations;
 
 namespace RoyaltyRepository.Models
 {
+    internal interface IDefaultRepositoryInitialization
+    {
+        void InitializeDefault(RepositoryContext context);
+    }
+
     public partial class RepositoryContext : DbContext
     {
         #region Get Entity connection strings
@@ -27,6 +32,8 @@ namespace RoyaltyRepository.Models
                 Name = connectionStringName,
             }.ToString();
         }
+
+        private static string DefConnectionString = string.Empty;
         #endregion
 
         static RepositoryContext()
@@ -34,13 +41,30 @@ namespace RoyaltyRepository.Models
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<RepositoryContext, Migrations.Configuration>());
         }
 
-        public RepositoryContext() : base() { }
-        public RepositoryContext(string connectionStringName) : base(GetEntityConnectionString(connectionStringName)) { }
-        public RepositoryContext(string connectionString, string connectionProviderName) : base(GetEntityConnectionString(connectionString, connectionProviderName)) { }
+        public RepositoryContext()
+            : base() 
+        {
+            if (!string.IsNullOrEmpty(DefConnectionString))
+                Database.Connection.ConnectionString = DefConnectionString;
+        }
+        public RepositoryContext(string connectionStringName)
+            : base(GetEntityConnectionString(connectionStringName)) 
+        {
+            DefConnectionString = Database.Connection.ConnectionString;
+        }
+        public RepositoryContext(string connectionString, string connectionProviderName)
+            : base(GetEntityConnectionString(connectionString, connectionProviderName)) 
+        {
+            DefConnectionString = Database.Connection.ConnectionString;
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //
+            //modelBuilder.Entity<AccountSettings>()
+            //    .HasKey(e => e.AccountUID);
+            //modelBuilder.Entity<Account>()
+            //    .HasOptional(s => s.Settings)
+            //    .WithRequired(ad => ad.Account);
         }
 
         public Action<string> Log
