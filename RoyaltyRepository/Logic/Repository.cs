@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RoyaltyRepository.Models;
 
-namespace RoyaltyRepository.Logic
+namespace RoyaltyRepository
 {
     public partial class Repository : IDisposable
     {
@@ -41,6 +41,12 @@ namespace RoyaltyRepository.Logic
                 Context.Dispose();
                 Context = null;
             }
+        }
+
+        public Action<string> Log
+        {
+            get { return Context.Log; }
+            set { Context.Log = value; }
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using RoyaltyRepository.Models;
 using Helpers;
 
-namespace RoyaltyRepository.Logic
+namespace RoyaltyRepository
 {
     public partial class Repository
     {

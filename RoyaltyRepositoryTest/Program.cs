@@ -1,5 +1,4 @@
-﻿using RoyaltyRepository.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -14,81 +13,13 @@ namespace RoyaltyRepositoryTest
         {
             try
             { 
-                using ( var rc = new RepositoryContext("connectionString"))
+                using (var rc = new RoyaltyRepository.Repository("connectionString"))
                 {
                     rc.Log = (s) => { Console.WriteLine(string.Format("[~] SQL: {0}", s)); };
-
-                    Account acc = new Account() 
-                    { 
-                        AccountUID = Guid.NewGuid(), 
-                        Name = ".default2", 
-                        IsHidden = true 
-                    };
-                    acc.Settings = new AccountSettings()
-                    {
-                        AddressColumnName = "Адрес объекта",
-                        AreaColumnName = "Район",
-                        MarkColumnName = "Метка",
-                        HostColumnName = "URL",
-                        PhoneColumnName = "Контакты для связи",
-                        ExecuteAfterAnalizeCommand = string.Empty,
-                        FolderExportAnalize = string.Empty,
-                        FolderExportPhones = string.Empty,
-                        FolderImportAnalize = string.Empty,
-                        FolderImportMain = string.Empty,
-                        IgnoreExportTime = TimeSpan.FromHours(1),
-                        DeleteFileAfterImport = false,
-                        RecursiveFolderSearch = true,
-                        TimeForTrust = TimeSpan.FromDays(30),
-                        WaitExecutionAfterAnalize = true
-                    };
-                    acc.State = new AccountState() 
-                    { 
-                        IsActive = false 
-                    };
-                    acc.Dictionary = new AccountDictionary() 
-                    {
-                        AllowAddToDictionaryAutomatically = true,
-                        AllowCalcAreasIfStreetExistsOnly = false,
-                        SimilarityForTrust = 0.6m
-                    };
-
-                    foreach (var i in new string[] { 
-                        ".",",","|","(",")",@"\","/","~","!","@","#","$","%","^","&","*","<",">","?",";","'","\"",":","[","]","{","}","+","_","`",
-                        "ул",
-                        "ул.",
-                        "улица",
-                        "пр",
-                        "пр.",
-                        "про.",
-                        "прос",
-                        "проспект",
-                        "пл",
-                        "пл.",
-                        "площадь",
-                        "ст.",
-                        "стр.",
-                        "ст",
-                        "стр",
-                        "строение",
-                        "-ое",
-                        "-ая",
-                        "-е",
-                        "-ья",
-                        "-я",
-                        "-ый",
-                        "-ой",
-                        "-ий",
-                        "-е",
-                        }
-                        .Select(s => new AccountDictionaryExclude() { Dictionary = acc.Dictionary, Exclude = s }))
-                        acc.Dictionary.Excludes.Add(i);
-
-                    rc.Accounts.Add(acc);
-                    rc.SaveChanges();
-
-                    rc.Accounts.Remove(acc);
-                    rc.SaveChanges();
+                    var acc = rc.AccountNew(byDefault: true);
+                    acc.Name = "default2";
+                    rc.AccountAdd(acc);
+                    rc.AccountRemove(acc);
                 }
             }
             catch(System.Data.Entity.Validation.DbEntityValidationException ex)
