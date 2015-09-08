@@ -17,12 +17,14 @@ namespace RoyaltyRepository.Models
     [Table("account")]
     public partial class Account : IDefaultRepositoryInitialization
     {
-        internal static const string defaultAccountName = ".default";
+        internal const string defaultAccountName = ".default";
 
         public Account()
         {
             Data = new List<AccountDataRecord>();
             AdditionalColumns = new List<AccountDataRecordAdditionalColumn>();
+            SeriesOfNumbers = new List<AccountSeriesOfNumbersRecord>();
+            ExportTypes = new List<AccountExportType>();
         }
 
         [Key, Column("account_uid")]
@@ -42,6 +44,7 @@ namespace RoyaltyRepository.Models
         public virtual ICollection<AccountDataRecord> Data { get; set; }
         public virtual ICollection<AccountDataRecordAdditionalColumn> AdditionalColumns { get; set; }
         public virtual ICollection<AccountSeriesOfNumbersRecord> SeriesOfNumbers { get; set; }
+        public virtual ICollection<AccountExportType> ExportTypes { get; set; }
 
         void IDefaultRepositoryInitialization.InitializeDefault(RepositoryContext context)
         {

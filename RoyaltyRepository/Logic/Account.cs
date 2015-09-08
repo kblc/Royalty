@@ -139,8 +139,8 @@ namespace RoyaltyRepository.Logic
         /// <param name="from">Account for copy from</param>
         /// <param name="to">Account for copy to</param>
         public void AccountCopy(Account from, Account to,
-            bool copyNumberSeries = true,
-            bool copyExportMarks = true,
+            bool copySeriesOfNumbers = true,
+            bool copyExportType = true,
             bool copyData = true,
             bool copyDataAdditionalColumns = true,
             bool copyDictionary = true, 
@@ -155,17 +155,45 @@ namespace RoyaltyRepository.Logic
             if (to == null)
                 throw new ArgumentNullException("to");
 
+            #region SeriesOfNumbers
+            if (copySeriesOfNumbers)
+            {
+                to.SeriesOfNumbers.Clear();
+                foreach (var son in from.SeriesOfNumbers)
+                    to.SeriesOfNumbers.Add(new AccountSeriesOfNumbersRecord() 
+                    {
+                        Delay = son.Delay,
+                        DigitCount = son.DigitCount
+                    });
+            }
+            #endregion
+            #region ExportType
+            if (copyExportType)
+            {
+                to.ExportTypes.Clear();
+                foreach (var et in from.ExportTypes)
+                    to.ExportTypes.Add(new AccountExportType()
+                    {
+                        FileName = et.FileName,
+                        Mark = et.Mark
+                    });
+            }
+            #endregion
             #region Data
             if (copyData)
             {
                 if (copyDataAdditionalColumns)
+                {
+                    to.AdditionalColumns.Clear();
                     foreach (var ac in from.AdditionalColumns)
                         to.AdditionalColumns.Add(new AccountDataRecordAdditionalColumn()
                         {
                             ColumnName = ac.ColumnName,
                             ColumnSystemName = ac.ColumnSystemName
                         });
-
+                }
+                
+                to.Data.Clear();
                 foreach (var d in from.Data)
                     to.Data.Add(new AccountDataRecord()
                     {
@@ -213,24 +241,29 @@ namespace RoyaltyRepository.Logic
                 to.Dictionary.AllowAddToDictionaryAutomatically = from.Dictionary.AllowAddToDictionaryAutomatically;
                 to.Dictionary.AllowCalcAreasIfStreetExistsOnly = from.Dictionary.AllowCalcAreasIfStreetExistsOnly;
                 to.Dictionary.SimilarityForTrust = from.Dictionary.SimilarityForTrust;
-                if (copyDictionary)
+                
+                if (copyDictionaryExclude)
                 {
-                    if (copyDictionaryExclude)
-                        foreach (var e in from.Dictionary.Excludes) 
-                            to.Dictionary.Excludes.Add(new AccountDictionaryExclude() { Exclude = e.Exclude });
-
-                    if (copyDictionaryData)
-                        foreach (var r in from.Dictionary.Records)
+                    to.Dictionary.Excludes.Clear();
+                    foreach (var e in from.Dictionary.Excludes) 
+                        to.Dictionary.Excludes.Add(new AccountDictionaryExclude() { Exclude = e.Exclude });
+                }
+                if (copyDictionaryData)
+                {
+                    to.Dictionary.Records.Clear();
+                    foreach (var r in from.Dictionary.Records)
+                    {
+                        var record = new AccountDictionaryRecord()
                         {
-                            var record = new AccountDictionaryRecord()
-                            {
-                                Area = r.Area,
-                                RenameStreetTo = r.RenameStreetTo,
-                                Street = r.Street
-                            };
-                            foreach (var c in r.Conditions)
-                                record.Conditions.Add(new AccountDictionaryRecordCondition() { From = c.From, To = c.To });
-                        }
+                            Area = r.Area,
+                            RenameStreetTo = r.RenameStreetTo,
+                            Street = r.Street
+                        };
+                        foreach (var c in r.Conditions)
+                            record.Conditions.Add(new AccountDictionaryRecordCondition() { From = c.From, To = c.To });
+                        
+                        to.Dictionary.Records.Add(record);
+                    }
                 }
             }
             #endregion

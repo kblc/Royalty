@@ -102,6 +102,10 @@
     <Compile Include="Migrations\201509080833450_Migration_ChangeAllArraysToCollections.Designer.cs">
       <DependentUpon>201509080833450_Migration_ChangeAllArraysToCollections.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509081103262_Migration_Account_AddExportTypeAndSeriesOfNumbers.cs" />
+    <Compile Include="Migrations\201509081103262_Migration_Account_AddExportTypeAndSeriesOfNumbers.Designer.cs">
+      <DependentUpon>201509081103262_Migration_Account_AddExportTypeAndSeriesOfNumbers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountExportType.cs" />
@@ -182,6 +186,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509080833450_Migration_ChangeAllArraysToCollections.resx">
       <DependentUpon>201509080833450_Migration_ChangeAllArraysToCollections.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509081103262_Migration_Account_AddExportTypeAndSeriesOfNumbers.resx">
+      <DependentUpon>201509081103262_Migration_Account_AddExportTypeAndSeriesOfNumbers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
