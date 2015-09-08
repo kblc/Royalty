@@ -14,9 +14,9 @@ namespace RoyaltyRepositoryTest
         {
             try
             { 
-                using ( var rc = new RepositoryContext("connectionStringHome"))
+                using ( var rc = new RepositoryContext("connectionString"))
                 {
-                    rc.Log = (s) => { Console.WriteLine(string.Format("[~] Log message: {0}", s)); };
+                    rc.Log = (s) => { Console.WriteLine(string.Format("[~] SQL: {0}", s)); };
 
                     Account acc = new Account() { AccountUID = Guid.NewGuid(), Name = ".default", IsHidden = true };
                     acc.Settings.AddressColumnName = "Адрес объекта";
@@ -71,6 +71,9 @@ namespace RoyaltyRepositoryTest
                         }
                         .Select(s => new AccountDictionaryExclude() { Dictionary = acc.Dictionary, Exclude = s }))
                         acc.Dictionary.Excludes.Add(i);
+                    rc.SaveChanges();
+
+                    rc.Accounts.Remove(acc);
                     rc.SaveChanges();
                 }
             }
