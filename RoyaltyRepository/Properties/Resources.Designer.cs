@@ -61,6 +61,15 @@ namespace RoyaltyRepository.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Default account not found.
+        /// </summary>
+        public static string _DEFAULT_ACCOUNT_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("_DEFAULT_ACCOUNT_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Exclude parameter length must be less or equals 250.
         /// </summary>
         public static string AccountDictionaryExcludeMaxLength {

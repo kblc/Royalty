@@ -17,6 +17,8 @@ namespace RoyaltyRepository.Models
     [Table("account")]
     public partial class Account : IDefaultRepositoryInitialization
     {
+        internal static const string defaultAccountName = ".default";
+
         public Account()
         {
             Data = new List<AccountDataRecord>();
@@ -37,12 +39,13 @@ namespace RoyaltyRepository.Models
         public virtual AccountState State { get; set; }
         public virtual AccountDictionary Dictionary { get; set; }
 
-        public virtual IEnumerable<AccountDataRecord> Data { get; set; }
-        public virtual IEnumerable<AccountDataRecordAdditionalColumn> AdditionalColumns { get; set; }
+        public virtual ICollection<AccountDataRecord> Data { get; set; }
+        public virtual ICollection<AccountDataRecordAdditionalColumn> AdditionalColumns { get; set; }
+        public virtual ICollection<AccountSeriesOfNumbersRecord> SeriesOfNumbers { get; set; }
 
         void IDefaultRepositoryInitialization.InitializeDefault(RepositoryContext context)
         {
-            var defAccount = context.Accounts.SingleOrDefault(a => string.Compare(a.Name, ".default") == 0 && a.IsHidden);
+            var defAccount = context.Accounts.SingleOrDefault(a => string.Compare(a.Name, defaultAccountName) == 0 && a.IsHidden);
             if (defAccount == null)
             {
                 defAccount = GenerateDefaultAccount();

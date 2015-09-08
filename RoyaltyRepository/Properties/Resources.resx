@@ -192,4 +192,7 @@
   <data name="DataAdditionalColumnSystemNameRequired" xml:space="preserve">
     <value>System column name length must be less or equals 250</value>
   </data>
+  <data name="_DEFAULT_ACCOUNT_NOT_FOUND" xml:space="preserve">
+    <value>Default account not found</value>
+  </data>
 </root>

@@ -192,4 +192,7 @@
   <data name="DataAdditionalColumnSystemNameRequired" xml:space="preserve">
     <value>Системное имя колонки не может быть пустым</value>
   </data>
+  <data name="_DEFAULT_ACCOUNT_NOT_FOUND" xml:space="preserve">
+    <value>Не найден аккаунт "по-умолчанию"</value>
+  </data>
 </root>

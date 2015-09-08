@@ -23,7 +23,7 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Идентификатор записи
         /// </summary>
-        [Key, Column("data_uid"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, Column("data_uid")]
         public Guid AccountDataRecordID { get; set; }
         
         #region Account
@@ -85,6 +85,8 @@ namespace RoyaltyRepository.Models
 
         [Column("id_dictionary"), Required]
         public bool InDictionary { get; set; }
+
+        public virtual AccountDataRecordAdditional DataAdditional { get; set; }
 
         #region Mark
         /// <summary>

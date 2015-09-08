@@ -20,6 +20,7 @@ namespace RoyaltyRepository.Models
     [Table("data_additional")]
     public partial class AccountDataRecordAdditional
     {
+        #region AccountDataRecord
         /// <summary>
         /// Идентификатор записи, которой принадлежат расширенные данные
         /// </summary>
@@ -29,6 +30,7 @@ namespace RoyaltyRepository.Models
         /// Запись, которой принадлежат расширенные данные
         /// </summary>
         public virtual AccountDataRecord AccountDataRecord { get; set; }
+        #endregion
 
         [Column("column00")]
         public string Column00 { get; set; }
