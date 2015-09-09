@@ -46,8 +46,8 @@ namespace RoyaltyRepository
                 catch (Exception ex)
                 {
                     var e = new Exception(ex.Message, ex);
-                    foreach (var i in instances)
-                        e.Data.Add(string.Format("id:{0}", i.AccountUID), string.Format("name:{0}", i.Name));
+                    for (int i = 0; i < instances.Count(); i++)
+                        e.Data.Add(string.Format("instance_{0}", i), instances.ElementAt(i).ToString());
                     throw e;
                 }
             }
@@ -90,8 +90,8 @@ namespace RoyaltyRepository
                 catch(Exception ex)
                 {
                     var e = new Exception(ex.Message, ex);
-                    foreach(var i in instances)
-                        e.Data.Add(string.Format("id:{0}", i.AccountUID), string.Format("name:{0}", i.Name));
+                    for (int i = 0; i < instances.Count(); i++)
+                        e.Data.Add(string.Format("instance_{0}", i), instances.ElementAt(i).ToString());
                     throw e;
                 }
             }
@@ -315,6 +315,16 @@ namespace RoyaltyRepository
         public Account AccountGet(Guid accountId, bool showHidden = false)
         {
             return AccountGet(new Guid[] { accountId }, showHidden).FirstOrDefault();
+        }
+        /// <summary>
+        /// Get one account by UID
+        /// </summary>
+        /// <param name="accountName">Account name</param>
+        /// <param name="showHidden">Show hidden accounts</param>
+        /// <returns>Account with identifier</returns>
+        public Account AccountGet(string accountName, bool showHidden = false)
+        {
+            return AccountGet(showHidden).FirstOrDefault(a => string.Compare(accountName, a.Name, true) == 0);
         }
         /// <summary>
         /// Get accounts by UIDs

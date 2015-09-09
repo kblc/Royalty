@@ -50,5 +50,10 @@ namespace RoyaltyRepository.Models
             set { TimeTicks = value.Ticks; }
             #pragma warning restore 618
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}:[id:{1},account_uid:'{2}',ticks:{3}]", this.GetType().Name, ID, this.AccountSettings == null ? "NULL" : this.AccountSettings.AccountUID.ToString(), Time.Ticks);
+        }
     }
 }

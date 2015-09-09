@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logic\AccountSettingsSheduleTime.cs" />
     <Compile Include="Logic\Account.cs" />
     <Compile Include="Logic\Repository.cs" />
     <Compile Include="Migrations\201509070423152_Migration_Account.cs" />

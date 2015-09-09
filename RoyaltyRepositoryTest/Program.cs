@@ -16,10 +16,33 @@ namespace RoyaltyRepositoryTest
                 using (var rc = new RoyaltyRepository.Repository("connectionString"))
                 {
                     rc.Log = (s) => { Console.WriteLine(string.Format("[~] SQL: {0}", s)); };
+
+                    var a2 = rc.AccountGet("default2", true);
+                    var a3 = rc.AccountGet("default3", true);
+                    if (a2 != null)
+                        rc.AccountRemove(a2);
+                    if (a3 != null)
+                        rc.AccountRemove(a3);
+
                     var acc = rc.AccountNew(byDefault: true);
-                    acc.Name = "default2";
+                    acc.Name = "default3";
                     rc.AccountAdd(acc);
-                    rc.AccountRemove(acc);
+                    try
+                    { 
+                        rc.AccountSettingsSheduleTimeNew(acc.Settings, new TimeSpan(09, 00, 00));
+                        rc.AccountSettingsSheduleTimeNew(acc.Settings, new TimeSpan(12, 00, 00));
+                        rc.AccountSettingsSheduleTimeNew(acc.Settings, new TimeSpan(18, 00, 00));
+                        var st = rc.AccountSettingsSheduleTimeNew(acc.Settings, new TimeSpan(20, 00, 00));
+                        rc.SaveChanges();
+                        rc.AccountSettingsSheduleTimeRemove(st);
+
+                        if (acc.Settings.SheduleTimes.Count() != 3)
+                            throw new Exception("Shedule time error");
+                    }
+                    finally
+                    { 
+                        rc.AccountRemove(acc);
+                    }
                 }
             }
             catch(System.Data.Entity.Validation.DbEntityValidationException ex)

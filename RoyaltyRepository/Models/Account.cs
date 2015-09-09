@@ -126,5 +126,10 @@ namespace RoyaltyRepository.Models
 
             return acc;
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}:[account_uid:'{1}',name:'{2}',is_hidden:'{3}']", this.GetType().Name, AccountUID.ToString(), Name, IsHidden);
+        }
     }
 }
