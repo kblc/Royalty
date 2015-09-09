@@ -16,6 +16,7 @@ namespace RoyaltyRepositoryTests
         {
             Rep = new Repository("connectionString");
             Rep.Log = (s) => { Console.WriteLine(string.Format("[~] SQL: {0}", s)); };
+            Rep.AccountRemove(Rep.AccountGet(defAccountName, true));
             Rep.AccountAdd(Rep.AccountNew(byDefault: true, accountName: defAccountName));
             Console.WriteLine("############################## Initialization done");
         }
@@ -33,26 +34,36 @@ namespace RoyaltyRepositoryTests
         [TestMethod]
         public void City_And_Area_Insert_Remove()
         {
+            var defCityName = "newCityName";
+            var defAreaName = "newAreaName";
+
+            var cD = Rep.CityGet(defCityName);
+            Rep.CityRemove(cD);
+            var aD = Rep.AreaGet(defAreaName);
+            Rep.AreaRemove(aD);
+
             var cCnt = Rep.CityGet().Count();
-            var c = Rep.CityNew("newCityName");
+            var c = Rep.CityNew(defCityName);
             Rep.CityAdd(c);
-            Assert.AreEqual(cCnt + 1, Rep.PhoneGet().Count(), "City count must increase by 1");
+            Assert.AreEqual(cCnt + 1, Rep.CityGet().Count(), "City count must increase by 1");
 
             var aCnt = Rep.AreaGet().Count();
-            var a = Rep.AreaNew("newAreaName", c);
+            var a = Rep.AreaNew(defAreaName, c);
             Rep.AreaAdd(a);
             Assert.AreEqual(aCnt + 1, Rep.AreaGet().Count(), "Area count must increase by 1");
 
             c.UndefinedArea = a;
             Rep.SaveChanges();
 
-            //
-
             Rep.AreaRemove(a);
             Assert.AreEqual(aCnt, Rep.AreaGet().Count(), "Area count must decrease by 1");
 
+            Assert.AreEqual(null, c.UndefinedArea, "Default area for city must be NULL (we just delete it)");
+
             Rep.CityRemove(c);
-            Assert.AreEqual(cCnt + 1, Rep.PhoneGet().Count(), "City count must decrease by 1");
+            Assert.AreEqual(cCnt, Rep.CityGet().Count(), "City count must decrease by 1");
+
+            Assert.AreEqual(aCnt - 1, Rep.AreaGet().Count(), "Area count must decrease by 1 because we delete city with 1 default area");
         }
 
         [TestMethod]

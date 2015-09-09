@@ -148,5 +148,17 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("host_column_name"), Required(AllowEmptyStrings = false)]
         public string HostColumnName { get; set; }
+
+        public override string ToString()
+        {
+            string properties = string.Empty;
+            foreach(var i  in this.GetType()
+                                .GetProperties()
+                                .Where(pi => pi.GetCustomAttributes(typeof(ColumnAttribute), false).Any())
+                                .Select(pi => new { Name = (this.GetType().GetProperties().First().GetCustomAttributes(typeof(ColumnAttribute), false).First() as ColumnAttribute).Name, Value = pi.GetValue(this) }))
+                properties += (string.IsNullOrWhiteSpace(properties) ? string.Empty : ",") + string.Format("{0}='{1}'", i.Name, i.Value == null ? "NULL" : i.Value.ToString());
+            
+            return string.Format("{0}:[{1}]", this.GetType().Name, properties);
+        }
     }
 }

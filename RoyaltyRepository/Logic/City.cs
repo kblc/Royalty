@@ -40,6 +40,15 @@ namespace RoyaltyRepository
                 try
                 {
                     this.Context.Cities.AddRange(instances);
+
+                    var instancesWithoutDefArea = instances.Where(i => i.UndefinedArea == null).ToArray();
+                    foreach (var i in instancesWithoutDefArea)
+                    {
+                        var area = AreaNew(Area.defaultAccountName, i);
+                        AreaAdd(area, saveAfterInsert, waitUntilSaving);
+                        i.UndefinedArea = area;
+                    }
+
                     if (saveAfterInsert)
                         this.SaveChanges(waitUntilSaving);
                 }
@@ -80,9 +89,11 @@ namespace RoyaltyRepository
                 if (instances == null)
                     throw new ArgumentNullException("instances");
                 instances = instances.Where(i => i != null).ToArray();
-
                 try
                 {
+                    var areas = instances.SelectMany(c => c.Areas);
+                    AreaRemove(areas.ToArray());
+
                     this.Context.Cities.RemoveRange(instances);
                     if (saveAfterRemove)
                         this.SaveChanges(waitUntilSaving);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoyaltyRepository.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -12,7 +13,10 @@ namespace RoyaltyRepositoryTest
         static void Main(string[] args)
         {
             try
-            { 
+            {
+                var ac = new AccountSettings();
+                ac.ToString();
+
                 using (var rc = new RoyaltyRepository.Repository("connectionString"))
                 {
                     rc.Log = (s) => { Console.WriteLine(string.Format("[~] SQL: {0}", s)); };

@@ -23,6 +23,8 @@ namespace RoyaltyRepository.Models
     [Table("area")]
     public partial class Area
     {
+        internal const string defaultAccountName = ".default";
+
         public Area()
         {
             DefaultForCities = new List<City>();
@@ -60,7 +62,7 @@ namespace RoyaltyRepository.Models
 
         public override string ToString()
         {
-            return string.Format("{0}:[area_id:'{1}',name:'{2}',city:'{3}']", this.GetType().Name, AreaID, Name ?? "NULL", City.ToString());
+            return string.Format("{0}:[area_id:'{1}',name:'{2}',city:'{3}']", this.GetType().Name, AreaID, Name ?? "NULL", City == null ? "NULL" : City.ToString());
         }
     }
 }
