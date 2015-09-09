@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoyaltyRepository.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -54,5 +55,10 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("filename"), Required]
         public string FileName { get; set; }
+
+        public override string ToString()
+        {
+            return this.GetColumnPropertiesForEntity();
+        }
     }
 }

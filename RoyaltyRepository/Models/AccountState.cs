@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoyaltyRepository.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -41,7 +42,7 @@ namespace RoyaltyRepository.Models
 
         public override string ToString()
         {
-            return string.Format("{0}:[account_uid:'{1}',is_active:'{2}',last_batch:'{3}']", this.GetType().Name, AccountUID.ToString(), IsActive, LastBatch == null ? "NULL" : LastBatch.Value.ToString("yyyy.MM.dd hh:mm:ss"));
+            return this.GetColumnPropertiesForEntity();
         }
     }
 }

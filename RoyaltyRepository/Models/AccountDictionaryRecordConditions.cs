@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoyaltyRepository.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,6 +12,9 @@ namespace RoyaltyRepository.Models
 {
     public partial class RepositoryContext
     {
+        /// <summary>
+        /// Условия для работы правил в словаре
+        /// </summary>
         public DbSet<AccountDictionaryRecordCondition> AccountDictionaryRecordConditions { get; set; }
     }
 
@@ -43,5 +47,10 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("to"), Required]
         public long To { get; set; }
+
+        public override string ToString()
+        {
+            return this.GetColumnPropertiesForEntity();
+        }
     }
 }

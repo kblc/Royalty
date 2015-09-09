@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoyaltyRepository.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -39,7 +40,7 @@ namespace RoyaltyRepository.Models
 
         public override string ToString()
         {
-            return string.Format("{0}:[host_id:'{1}',name:'{2}']", this.GetType().Name, HostID, Name ?? "NULL");
+            return this.GetColumnPropertiesForEntity();
         }
     }
 }

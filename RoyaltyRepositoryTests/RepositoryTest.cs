@@ -14,7 +14,7 @@ namespace RoyaltyRepositoryTests
         [TestInitialize]
         public void Initialization()
         {
-            Rep = new Repository("connectionString");
+            Rep = new Repository("connectionStringHome");
             Rep.Log = (s) => { Console.WriteLine(string.Format("[~] SQL: {0}", s)); };
             Rep.AccountRemove(Rep.AccountGet(defAccountName, true));
             Rep.AccountAdd(Rep.AccountNew(byDefault: true, accountName: defAccountName));
@@ -71,6 +71,22 @@ namespace RoyaltyRepositoryTests
         {
             var n = Rep.MarkGet().Count();
             Assert.AreNotEqual(0, n, "Mark count should be more then 0");
+        }
+
+        [TestMethod]
+        public void AccountExportTypes_Insert_Remove()
+        {
+            var acc = Rep.AccountGet(defAccountName);
+            var hPhn = acc.ExportTypes.Count;
+            var mark = Rep.MarkGet().First();
+
+            var p = Rep.AccountExportTypeNew(acc, "test.csv", mark);
+            Rep.SaveChanges();
+
+            Assert.AreEqual(hPhn + 1, acc.ExportTypes.Count, "AccountExportType count must be increase by 1");
+            Rep.AccountExportTypeRemove(p);
+
+            Assert.AreEqual(hPhn, acc.ExportTypes.Count, "AccountExportType count must be decrease by 1");
         }
 
         [TestMethod]

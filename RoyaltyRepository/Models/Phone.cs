@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RoyaltyRepository.Extensions;
 
 namespace RoyaltyRepository.Models
 {
@@ -38,7 +39,7 @@ namespace RoyaltyRepository.Models
 
         public override string ToString()
         {
-            return string.Format("{0}:[phone_id:'{1}',phone_number:'{2}']", this.GetType().Name, PhoneID, PhoneNumber);
+            return this.GetColumnPropertiesForEntity();
         }
     }
 }

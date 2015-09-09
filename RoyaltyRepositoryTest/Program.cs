@@ -14,9 +14,6 @@ namespace RoyaltyRepositoryTest
         {
             try
             {
-                var ac = new AccountSettings();
-                ac.ToString();
-
                 using (var rc = new RoyaltyRepository.Repository("connectionString"))
                 {
                     rc.Log = (s) => { Console.WriteLine(string.Format("[~] SQL: {0}", s)); };

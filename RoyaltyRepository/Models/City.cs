@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoyaltyRepository.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -59,7 +60,7 @@ namespace RoyaltyRepository.Models
 
         public override string ToString()
         {
-            return string.Format("{0}:[city_id:'{1}',name:'{2}',undefined_area_id:'{3}']", this.GetType().Name, CityID, Name ?? "NULL", !UndefinedAreaID.HasValue ? "NULL" : UndefinedAreaID.Value.ToString());
+            return this.GetColumnPropertiesForEntity();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoyaltyRepository.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -60,6 +61,11 @@ namespace RoyaltyRepository.Models
             get { return TimeSpan.FromTicks(DelayTicks); }
             set { DelayTicks = value.Ticks; }
 #pragma warning restore 618
+        }
+
+        public override string ToString()
+        {
+            return this.GetColumnPropertiesForEntity();
         }
     }
 }
