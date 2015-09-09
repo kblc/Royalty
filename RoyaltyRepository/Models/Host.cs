@@ -36,5 +36,10 @@ namespace RoyaltyRepository.Models
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "HostNameRequred")]
         [MaxLength(250, ErrorMessageResourceName = "HostNameMaxLength")]
         public string Name { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}:[host_id:'{1}',name:'{2}']", this.GetType().Name, HostID, Name ?? "NULL");
+        }
     }
 }

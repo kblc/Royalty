@@ -63,5 +63,10 @@ namespace RoyaltyRepository.Models
                 context.SaveChanges();
             }
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}:[mark_id:'{1}',system_name:'{2}']", this.GetType().Name, MarkID.ToString(), SystemName);
+        }
     }
 }

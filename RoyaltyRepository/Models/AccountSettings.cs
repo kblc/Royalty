@@ -75,8 +75,8 @@ namespace RoyaltyRepository.Models
         public TimeSpan? IgnoreExportTime
         {
             #pragma warning disable 618
-            get { return IgnoreExportTimeTicks.HasValue ? TimeSpan.FromTicks(IgnoreExportTimeTicks.Value) : (TimeSpan?)null ; }
-            set { IgnoreExportTimeTicks = value == null ? (long?)null : value.Value.Ticks; }
+            get { return IgnoreExportTimeTicks.HasValue ? TimeSpan.FromMilliseconds(IgnoreExportTimeTicks.Value) : (TimeSpan?)null ; }
+            set { IgnoreExportTimeTicks = value == null ? (long?)null : (long?)value.Value.TotalMilliseconds; }
             #pragma warning restore 618
         }
 
@@ -94,8 +94,8 @@ namespace RoyaltyRepository.Models
         public TimeSpan? TimeForTrust
         {
             #pragma warning disable 618
-            get { return TimeForTrustTicks.HasValue ? TimeSpan.FromTicks(TimeForTrustTicks.Value) : (TimeSpan?)null; }
-            set { TimeForTrustTicks = value == null ? (long?)null : value.Value.Ticks; }
+            get { return TimeForTrustTicks.HasValue ? TimeSpan.FromMilliseconds(TimeForTrustTicks.Value) : (TimeSpan?)null; }
+            set { TimeForTrustTicks = value == null ? (long?)null : (long)value.Value.TotalMilliseconds; }
             #pragma warning restore 618
         }
 

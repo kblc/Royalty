@@ -52,6 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logic\AccountSeriesOfNumbersRecord.cs" />
+    <Compile Include="Logic\Area.cs" />
+    <Compile Include="Logic\City.cs" />
+    <Compile Include="Logic\Host.cs" />
+    <Compile Include="Logic\Phone.cs" />
+    <Compile Include="Logic\Mark.cs" />
     <Compile Include="Logic\AccountSettingsSheduleTime.cs" />
     <Compile Include="Logic\Account.cs" />
     <Compile Include="Logic\Repository.cs" />
@@ -106,6 +112,14 @@
     <Compile Include="Migrations\201509081103262_Migration_Account_AddExportTypeAndSeriesOfNumbers.cs" />
     <Compile Include="Migrations\201509081103262_Migration_Account_AddExportTypeAndSeriesOfNumbers.Designer.cs">
       <DependentUpon>201509081103262_Migration_Account_AddExportTypeAndSeriesOfNumbers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509090540594_Migration_AccountState_AccountIdChangeForeignKey.cs" />
+    <Compile Include="Migrations\201509090540594_Migration_AccountState_AccountIdChangeForeignKey.Designer.cs">
+      <DependentUpon>201509090540594_Migration_AccountState_AccountIdChangeForeignKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509091015575_Migration_Area_City_Relationship_Change.cs" />
+    <Compile Include="Migrations\201509091015575_Migration_Area_City_Relationship_Change.Designer.cs">
+      <DependentUpon>201509091015575_Migration_Area_City_Relationship_Change.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
@@ -190,6 +204,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509081103262_Migration_Account_AddExportTypeAndSeriesOfNumbers.resx">
       <DependentUpon>201509081103262_Migration_Account_AddExportTypeAndSeriesOfNumbers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509090540594_Migration_AccountState_AccountIdChangeForeignKey.resx">
+      <DependentUpon>201509090540594_Migration_AccountState_AccountIdChangeForeignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509091015575_Migration_Area_City_Relationship_Change.resx">
+      <DependentUpon>201509091015575_Migration_Area_City_Relationship_Change.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

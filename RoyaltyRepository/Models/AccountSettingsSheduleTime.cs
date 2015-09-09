@@ -46,8 +46,8 @@ namespace RoyaltyRepository.Models
         public TimeSpan Time
         {
             #pragma warning disable 618
-            get { return TimeSpan.FromTicks(TimeTicks); }
-            set { TimeTicks = value.Ticks; }
+            get { return TimeSpan.FromMilliseconds(TimeTicks); }
+            set { TimeTicks = (long)value.TotalMilliseconds; }
             #pragma warning restore 618
         }
 

@@ -35,5 +35,10 @@ namespace RoyaltyRepository.Models
         [Required(ErrorMessageResourceName = "PhoneNumberRequired")]
         [MinLength(1, ErrorMessageResourceName = "PhoneNumberMinLength"), MaxLength(20, ErrorMessageResourceName = "PhoneNumberMaxLength")]
         public string PhoneNumber { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}:[phone_id:'{1}',phone_number:'{2}']", this.GetType().Name, PhoneID, PhoneNumber);
+        }
     }
 }

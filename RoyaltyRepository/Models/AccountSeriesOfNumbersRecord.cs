@@ -14,7 +14,7 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Серии номеров
         /// </summary>
-        public DbSet<AccountSeriesOfNumbersRecord> AccountNumberSeriaRecords { get; set; }
+        public DbSet<AccountSeriesOfNumbersRecord> AccountSeriesOfNumbersRecords { get; set; }
     }
 
     [Table("series_of_numbers")]

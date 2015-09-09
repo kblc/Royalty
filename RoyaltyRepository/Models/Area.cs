@@ -57,5 +57,10 @@ namespace RoyaltyRepository.Models
         [Required(ErrorMessageResourceName = "AreaNameRequred")]
         [MinLength(1, ErrorMessageResourceName = "AreaNameMinLength"), MaxLength(100, ErrorMessageResourceName = "AreaNameMaxLength")]
         public string Name { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}:[area_id:'{1}',name:'{2}',city:'{3}']", this.GetType().Name, AreaID, Name ?? "NULL", City.ToString());
+        }
     }
 }

@@ -56,5 +56,10 @@ namespace RoyaltyRepository.Models
 
         [InverseProperty("City")]
         public virtual ICollection<Area> Areas { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}:[city_id:'{1}',name:'{2}',undefined_area_id:'{3}']", this.GetType().Name, CityID, Name ?? "NULL", !UndefinedAreaID.HasValue ? "NULL" : UndefinedAreaID.Value.ToString());
+        }
     }
 }

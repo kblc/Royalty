@@ -38,5 +38,10 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("is_active"), Required]
         public bool IsActive { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}:[account_uid:'{1}',is_active:'{2}',last_batch:'{3}']", this.GetType().Name, AccountUID.ToString(), IsActive, LastBatch == null ? "NULL" : LastBatch.Value.ToString("yyyy.MM.dd hh:mm:ss"));
+        }
     }
 }

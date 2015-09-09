@@ -106,7 +106,7 @@ namespace RoyaltyRepository
         /// </summary>
         /// <param name="byDefault">Copy all settings and other from defaults</param>
         /// <returns>Account instance</returns>
-        public Account AccountNew(bool byDefault = false)
+        public Account AccountNew(bool byDefault = false, string accountName = null)
         {
             try
             { 
@@ -117,6 +117,7 @@ namespace RoyaltyRepository
                     Settings = new AccountSettings(),
                     State = new AccountState()
                 };
+
                 if (byDefault)
                 {
                     var defaultAccount = this.Context.Accounts.FirstOrDefault(a => string.Compare(Account.defaultAccountName, a.Name, true) == 0 && a.IsHidden);
@@ -125,6 +126,10 @@ namespace RoyaltyRepository
                     else
                         throw new Exception(RoyaltyRepository.Properties.Resources._DEFAULT_ACCOUNT_NOT_FOUND);
                 }
+                
+                if (accountName != null)
+                    res.Name = accountName;
+
                 return res;
             }
             catch(Exception ex)
