@@ -53,8 +53,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Logic\AccountDataRecordAdditionalColumn.cs" />
+    <Compile Include="Logic\AccountDataRecordAdditional.cs" />
+    <Compile Include="Logic\AccountDataRecord.cs" />
+    <Compile Include="Logic\AccountDictionaryRecordCondition.cs" />
+    <Compile Include="Logic\AccountDictionaryRecord.cs" />
     <Compile Include="Logic\AccountExportType.cs" />
     <Compile Include="Logic\AccountSeriesOfNumbersRecord.cs" />
+    <Compile Include="Logic\AccountDictionaryExclude.cs" />
     <Compile Include="Logic\Area.cs" />
     <Compile Include="Logic\City.cs" />
     <Compile Include="Logic\Host.cs" />
@@ -127,7 +133,7 @@
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountExportType.cs" />
     <Compile Include="Models\AccountSeriesOfNumbersRecord.cs" />
-    <Compile Include="Models\AccountDataRecordAdditionalColumns.cs" />
+    <Compile Include="Models\AccountDataRecordAdditionalColumn.cs" />
     <Compile Include="Models\AccountDataRecordAdditional.cs" />
     <Compile Include="Models\AccountDictionary.cs">
       <SubType>Code</SubType>
@@ -138,7 +144,7 @@
     <Compile Include="Models\AccountDictionaryRecord.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\AccountDictionaryRecordConditions.cs">
+    <Compile Include="Models\AccountDictionaryRecordCondition.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\AccountSettings.cs" />

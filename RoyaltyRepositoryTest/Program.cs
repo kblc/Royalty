@@ -14,7 +14,7 @@ namespace RoyaltyRepositoryTest
         {
             try
             {
-                using (var rc = new RoyaltyRepository.Repository("connectionString"))
+                using (var rc = new RoyaltyRepository.Repository("connectionStringHome"))
                 {
                     rc.Log = (s) => { Console.WriteLine(string.Format("[~] SQL: {0}", s)); };
 

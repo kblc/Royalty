@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoyaltyRepository.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -43,5 +44,10 @@ namespace RoyaltyRepository.Models
         [Column("name")]
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "DataAdditionalColumnNameRequired"), MaxLength(250, ErrorMessageResourceName = "DataAdditionalColumnNameMaxLength")]
         public string ColumnName { get; set; }
+
+        public override string ToString()
+        {
+            return this.GetColumnPropertiesForEntity();
+        }
     }
 }
