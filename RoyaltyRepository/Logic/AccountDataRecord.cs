@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RoyaltyRepository.Models;
 using Helpers;
+using RoyaltyRepository.Extensions;
 
 namespace RoyaltyRepository
 {
@@ -122,11 +123,20 @@ namespace RoyaltyRepository
         /// Create/Get new AccountDataRecord instance without any link to database
         /// </summary>
         /// <returns>AccountDataRecord instance</returns>
-        public AccountDataRecord AccountDataRecordNew(Account account = null)
+        public AccountDataRecord AccountDataRecordNew(Account account = null, object anonymousFiller = null)
         {
             try
             {
-                var res = new AccountDataRecord();
+                var dt = DateTime.UtcNow;
+                var res = new AccountDataRecord()
+                {
+                    AccountDataRecordID = Guid.NewGuid(),
+                    Created = dt,
+                    Changed = dt,
+                };
+                if (anonymousFiller != null)
+                    res.FillFromAnonymousType(anonymousFiller);
+                account = account ?? res.Account;
                 if (account != null)
                     account.Data.Add(res);
                 return res;

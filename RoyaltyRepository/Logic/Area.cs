@@ -114,7 +114,12 @@ namespace RoyaltyRepository
                 if (instanceName != null)
                     res.Name = instanceName;
                 if (city != null)
-                    city.Areas.Add(res);
+                {
+                    if (Context.Entry(city).State != EntityState.Detached)
+                        city.Areas.Add(res);
+                    else
+                        res.City = city;
+                }
                 return res;
             }
             catch (Exception ex)

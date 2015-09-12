@@ -24,6 +24,19 @@ namespace RoyaltyRepository
             Context = new RepositoryContext(connectionString, connectionProviderName);
         }
 
+        public IDisposable BeginTransaction(bool commitOnDispose = false)
+        {
+            return Context.BeginTransaction(commitOnDispose);
+        }
+        public void CommitTransaction()
+        {
+            Context.CommitTransaction();
+        }
+        public void RollbackTransaction()
+        {
+            Context.RollbackTransaction();
+        }
+
         public void SaveChanges(bool waitUntilSaving = true)
         {
             if (Context == null)

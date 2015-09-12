@@ -89,13 +89,7 @@ namespace RoyaltyRepositoryTest
                     #endregion
                 }
             }
-            catch(System.Data.Entity.Validation.DbEntityValidationException ex)
-            {
-                foreach (var e in ex.EntityValidationErrors)
-                    foreach(var e2 in e.ValidationErrors)
-                        Console.WriteLine(string.Format("[-] Validation error for {0}. Property '{1}' error: {2}", e.Entry.Entity, e2.PropertyName, e2.ErrorMessage));
-            }
-            catch(System.Data.DataException ex)
+            catch(Exception ex)
             {
                 Exception e = ex;
                 while (e != null)
@@ -110,15 +104,6 @@ namespace RoyaltyRepositoryTest
                                 Console.WriteLine(string.Format("[-] Validation error for {0}. Property '{1}' error: {2}", e3.Entry.Entity, e4.PropertyName, e4.ErrorMessage));
                     }
 
-                    e = e.InnerException;
-                }
-            }
-            catch(Exception ex)
-            {
-                var e = ex;
-                while (e != null)
-                {
-                    Console.WriteLine(string.Format("[-] Exception: {0}", e.Message));
                     e = e.InnerException;
                 }
             }

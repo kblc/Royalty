@@ -24,5 +24,23 @@ namespace RoyaltyRepository.Extensions
                 properties += (string.IsNullOrWhiteSpace(properties) ? string.Empty : ",") + string.Format("{0}='{1}'", i.Name, i.Value == null ? "NULL" : i.Value.ToString());
             return string.Format("{0}:[{1}]", type.Name, properties);
         }
+
+        public static void FillFromAnonymousType(this object obj, object anonymousObject)
+        {
+            if (obj == null)
+                throw new ArgumentNullException("obj");
+            if (anonymousObject == null)
+                throw new ArgumentNullException("anonymousObject");
+
+            Type type = obj.GetType();
+            Type typeAn = anonymousObject.GetType();
+            foreach(var pi in typeAn.GetProperties())
+            {
+                var value = pi.GetValue(anonymousObject, null);
+                var setProp = type.GetProperty(pi.Name);
+                if (setProp != null)
+                    setProp.SetValue(obj, value);
+            }
+        }
     }
 }

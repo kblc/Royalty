@@ -15,17 +15,17 @@ namespace RoyaltyRepositoryTests
         public void Initialization()
         {
             Rep = new Repository("connectionStringHome");
-            Rep.Log = (s) => { Console.WriteLine(string.Format("[~] SQL: {0}", s)); };
             Rep.AccountRemove(Rep.AccountGet(defAccountName, true));
             Rep.AccountAdd(Rep.AccountNew(byDefault: true, accountName: defAccountName));
             Console.WriteLine("############################## Initialization done");
+            Rep.Log = (s) => { Console.WriteLine(string.Format("[~] SQL: {0}", s)); };
         }
 
         [TestCleanup]
         public void Finalization()
         {
-            Rep.AccountRemove(Rep.AccountGet(defAccountName));
             Rep.Log = null;
+            Rep.AccountRemove(Rep.AccountGet(defAccountName));
             Rep.Dispose();
             Rep = null;
             Console.WriteLine("############################## Finalization done");
@@ -67,6 +67,28 @@ namespace RoyaltyRepositoryTests
         }
 
         [TestMethod]
+        public void City_InTransaction()
+        {
+            var defCityName = "newCityName2";
+
+            Rep.CityRemove(Rep.CityGet(defCityName));
+            using (Rep.BeginTransaction())
+            {
+                Rep.CityAdd(Rep.CityNew(defCityName));
+            }
+            var c = Rep.CityGet(defCityName);
+            Assert.AreEqual(null, c, "City must not exists");
+
+            using (Rep.BeginTransaction(commitOnDispose: true))
+            {
+                Rep.CityAdd(Rep.CityNew(defCityName));
+            }
+            var c2 = Rep.CityGet(defCityName);
+            Assert.AreNotEqual(null, c2, "City must exists");
+            Rep.CityRemove(c2);
+        }
+
+        [TestMethod]
         public void Mark_Select()
         {
             var n = Rep.MarkGet().Count();
@@ -90,8 +112,47 @@ namespace RoyaltyRepositoryTests
         }
 
         [TestMethod]
+        public void AccountDataRecord_Insert_Remove()
+        {
+            var acc = Rep.AccountGet(defAccountName);
+            var hPhn = acc.Data.Count;
+
+            var ph = Rep.PhoneGet("00-000-000-0000") ?? Rep.PhoneNew("00-000-000-0000");
+            var h = Rep.HostGet("test0.host.com") ?? Rep.HostNew("test0.host.com");
+            var c = Rep.CityGet("new test city") ?? Rep.CityNew("new test city");
+            var a = Rep.AreaGet().FirstOrDefault(i => i.Name == "new area test" && i.CityID == c.CityID) ?? Rep.AreaNew("new area test", c);
+            var m = Rep.MarkGet().First();
+
+            var p = Rep.AccountDataRecordNew(anonymousFiller: new
+            {
+                Account = acc,
+                Address = "test address",
+                InDictionary = false,
+                Phone = ph,
+                Area = a,
+                Host = h,
+                Mark = m
+            });
+            
+            Rep.SaveChanges();
+
+            Assert.AreEqual(hPhn + 1, acc.Data.Count, "AccountDataRecord count must be increase by 1");
+
+            Rep.AccountDataRecordRemove(p, saveAfterRemove: false);
+            Rep.PhoneRemove(ph, saveAfterRemove: false);
+            Rep.HostRemove(h, saveAfterRemove: false);
+            Rep.AreaRemove(a, saveAfterRemove: false);
+            Rep.CityRemove(c, saveAfterRemove: false);
+
+            Rep.SaveChanges();
+
+            Assert.AreEqual(hPhn, acc.Data.Count, "AccountDataRecord count must be decrease by 1");
+        }
+
+        [TestMethod]
         public void Phone_Insert_Remove()
         {
+            Rep.PhoneRemove(Rep.PhoneGet("00-000-000-0000"));
             var hPhn = Rep.PhoneGet().Count();
             var p = Rep.PhoneNew("00-000-000-0000");
             Rep.PhoneAdd(p);
