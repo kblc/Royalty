@@ -53,7 +53,6 @@ namespace RoyaltyRepository.Models
         }
 
         private static string DefConnectionString = string.Empty;
-        private static DbConnection DefConnection = null;
         #endregion
 
         static RepositoryContext()
