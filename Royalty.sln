@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{175BDE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoyaltyRepositoryTests", "RoyaltyRepositoryTests\RoyaltyRepositoryTests.csproj", "{827E3A72-5E15-4F76-82E6-FA9ECECCE174}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoyaltyDataCalculator", "RoyaltyDataCalculator\RoyaltyDataCalculator.csproj", "{39B6125A-3F96-4E77-B090-3BFB7C788423}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{827E3A72-5E15-4F76-82E6-FA9ECECCE174}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{827E3A72-5E15-4F76-82E6-FA9ECECCE174}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{827E3A72-5E15-4F76-82E6-FA9ECECCE174}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39B6125A-3F96-4E77-B090-3BFB7C788423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39B6125A-3F96-4E77-B090-3BFB7C788423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39B6125A-3F96-4E77-B090-3BFB7C788423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39B6125A-3F96-4E77-B090-3BFB7C788423}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
