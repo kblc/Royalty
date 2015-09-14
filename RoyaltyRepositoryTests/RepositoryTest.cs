@@ -14,7 +14,7 @@ namespace RoyaltyRepositoryTests
         [TestInitialize]
         public void Initialization()
         {
-            Rep = new Repository("connectionStringHome");
+            Rep = new Repository("connectionString");
             Rep.AccountRemove(Rep.AccountGet(defAccountName, true));
             Rep.AccountAdd(Rep.AccountNew(byDefault: true, accountName: defAccountName));
             Console.WriteLine("############################## Initialization done");
@@ -133,7 +133,9 @@ namespace RoyaltyRepositoryTests
                 Host = h,
                 Mark = m
             });
-            
+
+            p.DataAdditional = new RoyaltyRepository.Models.AccountDataRecordAdditional() { AccountDataRecord = p, Column00 = "test" };
+
             Rep.SaveChanges();
 
             Assert.AreEqual(hPhn + 1, acc.Data.Count, "AccountDataRecord count must be increase by 1");
@@ -170,6 +172,45 @@ namespace RoyaltyRepositoryTests
             Assert.AreEqual(hCnt + 1, Rep.HostGet().Count(), "Host count must be increase by 1");
             Rep.HostRemove(h);
             Assert.AreEqual(hCnt, Rep.HostGet().Count(), "Host count must be decrease by 1");
+        }
+
+        [TestMethod]
+        public void File_Insert_Remove()
+        {
+            var hCnt = Rep.HostGet().Count();
+            var h = Rep.FileNew();
+            h.FileName = "test";
+            h.FilePath = @"c:\test";
+            h.FileSize = 0;
+            h.MimeType = @"csv/plain";
+            Rep.FileAdd(h);
+            Assert.AreEqual(hCnt + 1, Rep.FileGet().Count(), "File count must be increase by 1");
+            Rep.FileRemove(h);
+            Assert.AreEqual(hCnt, Rep.FileGet().Count(), "File count must be decrease by 1");
+        }
+
+        [TestMethod]
+        public void Message_Insert_Remove()
+        {
+            var hCnt = Rep.MessageGet().Count();
+            var fCnt = Rep.FileGet().Count();
+            var h = Rep.MessageNew("test message");
+
+            var f = Rep.FileNew(new
+            {
+                FileName = "test.csv",
+                FilePath = @"c:\test.csv",
+                MimeType = @"csv/plain"
+            });
+
+            h.Files.Add(f);
+
+            Rep.MessageAdd(h);
+            Assert.AreEqual(hCnt + 1, Rep.MessageGet().Count(), "Message count must be increase by 1");
+            Assert.AreEqual(fCnt + 1, Rep.FileGet().Count(), "File count must be increase by 1");
+            Rep.MessageRemove(h);
+            Assert.AreEqual(hCnt, Rep.MessageGet().Count(), "Message count must be decrease by 1");
+            Assert.AreEqual(fCnt, Rep.FileGet().Count(), "File count must be decrease by 1");
         }
 
         [TestMethod]

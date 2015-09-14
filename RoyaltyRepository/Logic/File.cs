@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RoyaltyRepository.Models;
+using RoyaltyRepository.Extensions;
 using Helpers;
 
 namespace RoyaltyRepository
@@ -105,11 +106,13 @@ namespace RoyaltyRepository
         /// Create/Get new File without any link to database
         /// </summary>
         /// <returns>File instance</returns>
-        public File FileNew()
+        public File FileNew(object anonymousFiller = null)
         {
             try
             {
                 var res = new File() { FileID = Guid.NewGuid(), Date = DateTime.UtcNow };
+                if (anonymousFiller != null)
+                    res.FillFromAnonymousType(anonymousFiller);
                 return res;
             }
             catch (Exception ex)

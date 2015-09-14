@@ -61,6 +61,12 @@ namespace RoyaltyRepository.Models
         [Column("processed_date"), Index(IX_NAME, 3, IsUnique = false)]
         public DateTime? ProcessedDate { get; set; }
 
+        /// <summary>
+        /// Имеются ли ошибки при обработке очереди
+        /// </summary>
+        [Column("has_error"), Required]
+        public bool HasError { get; set; }
+
         public virtual ICollection<ImportQueueRecordFile> Files { get; set; }
 
         public override string ToString()

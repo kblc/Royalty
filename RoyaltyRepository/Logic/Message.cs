@@ -80,12 +80,24 @@ namespace RoyaltyRepository
                 if (instances == null)
                     throw new ArgumentNullException("instances");
                 instances = instances.Where(i => i != null).ToArray();
+                var files = instances.SelectMany(i => i.Files).ToArray();
 
                 try
                 {
-                    this.Context.Messages.RemoveRange(instances);
+                    var save = new Action(() => 
+                    {
+                        this.Context.Messages.RemoveRange(instances);
+                        this.FileRemove(files, saveAfterRemove: false);
+                    });
+
                     if (saveAfterRemove)
-                        this.SaveChanges(waitUntilSaving);
+                        using(BeginTransaction(commitOnDispose: true))
+                        {
+                            save();
+                            this.SaveChanges(waitUntilSaving);
+                        }
+                    else
+                        save();
                 }
                 catch (Exception ex)
                 {
