@@ -110,7 +110,12 @@ namespace RoyaltyRepository
         {
             try
             {
-                var res = new ImportQueueRecord() { ImportQueueRecordUID = Guid.NewGuid(), Account = account };
+                var res = new ImportQueueRecord() 
+                { 
+                    ImportQueueRecordUID = Guid.NewGuid(), 
+                    Account = account,
+                    CreatedDate = DateTime.UtcNow,
+                };
                 return res;
             }
             catch (Exception ex)

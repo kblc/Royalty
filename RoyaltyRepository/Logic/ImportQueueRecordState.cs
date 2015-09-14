@@ -39,6 +39,17 @@ namespace RoyaltyRepository
         {
             return ImportQueueRecordStateGet().FirstOrDefault(a => string.Compare(systemName, a.SystemName, true) == 0);
         }
+
+        private ImportQueueRecordState defaultState = null;
+        /// <summary>
+        /// Get default state
+        /// </summary>
+        /// <returns>Default state</returns>
+        public ImportQueueRecordState ImportQueueRecordStateGetDefault()
+        {
+            return defaultState ?? (defaultState = ImportQueueRecordStateGet(ImportQueueRecordState.DefaultSystemName));
+        }
+
         /// <summary>
         /// Get instances by identifiers
         /// </summary>

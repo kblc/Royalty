@@ -21,6 +21,7 @@ namespace RoyaltyRepository.Models
     [Table("import_queue_record_state")]
     public partial class ImportQueueRecordState : IDefaultRepositoryInitialization
     {
+        public const string DefaultSystemName = "WAIT";
         private const string strStart = "QUEUERECORDSTATE_";
 
         /// <summary>

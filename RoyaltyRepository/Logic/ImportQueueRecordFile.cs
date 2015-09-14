@@ -127,7 +127,11 @@ namespace RoyaltyRepository
             try
             {
                 var dt = DateTime.UtcNow;
-                var res = new ImportQueueRecordFile() { ImportQueueRecordFileUID = Guid.NewGuid() };
+                var res = new ImportQueueRecordFile()
+                { 
+                    ImportQueueRecordFileUID = Guid.NewGuid(),
+                    ImportQueueRecordState = ImportQueueRecordStateGetDefault(),
+                };
                 if (anonymousFiller != null)
                     res.FillFromAnonymousType(anonymousFiller);
                 importQueueRecord = importQueueRecord ?? res.ImportQueueRecord;

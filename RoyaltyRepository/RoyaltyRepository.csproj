@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Logic\File.cs" />
     <Compile Include="Logic\Message.cs" />
     <Compile Include="Logic\ImportQueueRecordFile.cs" />
     <Compile Include="Logic\AccountDataRecordAdditionalColumn.cs" />
