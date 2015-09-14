@@ -26,7 +26,7 @@ namespace RoyaltyRepository.Models
     {
         public Message()
         {
-            Files = new List<File>();
+            Files = new HashSet<File>();
         }
 
         /// <summary>
@@ -40,6 +40,7 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("message_text"), Required]
         public string MessageText { get; set; }
+
 
         public ICollection<File> Files { get; set; }
 
