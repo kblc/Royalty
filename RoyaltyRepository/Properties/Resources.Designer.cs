@@ -293,5 +293,59 @@ namespace RoyaltyRepository.Properties {
                 return ResourceManager.GetString("PhoneNumberRequired", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Error.
+        /// </summary>
+        public static string QUEUERECORDSTATE_ERROR {
+            get {
+                return ResourceManager.GetString("QUEUERECORDSTATE_ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Processed.
+        /// </summary>
+        public static string QUEUERECORDSTATE_PROCESSED {
+            get {
+                return ResourceManager.GetString("QUEUERECORDSTATE_PROCESSED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Try to proceed.
+        /// </summary>
+        public static string QUEUERECORDSTATE_TRYTOPROCESS {
+            get {
+                return ResourceManager.GetString("QUEUERECORDSTATE_TRYTOPROCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Wait.
+        /// </summary>
+        public static string QUEUERECORDSTATE_WAIT {
+            get {
+                return ResourceManager.GetString("QUEUERECORDSTATE_WAIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Record state name length must be less or equals 20.
+        /// </summary>
+        public static string QueueRecordStateNameMaxLength {
+            get {
+                return ResourceManager.GetString("QueueRecordStateNameMaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Record state name required.
+        /// </summary>
+        public static string QueueRecordStateNameRequred {
+            get {
+                return ResourceManager.GetString("QueueRecordStateNameRequred", resourceCulture);
+            }
+        }
     }
 }

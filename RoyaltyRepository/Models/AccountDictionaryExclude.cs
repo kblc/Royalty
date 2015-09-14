@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RoyaltyRepository.Extensions;
 
 namespace RoyaltyRepository.Models
 {
@@ -37,5 +38,10 @@ namespace RoyaltyRepository.Models
         [Column("exclude"), Required(ErrorMessageResourceName = "AccountDictionaryExcludeRequired")]
         [MinLength(1, ErrorMessageResourceName = "AccountDictionaryExcludeMinLength"), MaxLength(250, ErrorMessageResourceName = "AccountDictionaryExcludeMaxLength")]
         public string Exclude { get; set; }
+
+        public override string ToString()
+        {
+            return this.GetColumnPropertiesForEntity();
+        }
     }
 }

@@ -195,4 +195,22 @@
   <data name="_DEFAULT_ACCOUNT_NOT_FOUND" xml:space="preserve">
     <value>Default account not found</value>
   </data>
+  <data name="QueueRecordStateNameMaxLength" xml:space="preserve">
+    <value>Record state name length must be less or equals 20</value>
+  </data>
+  <data name="QueueRecordStateNameRequred" xml:space="preserve">
+    <value>Record state name required</value>
+  </data>
+  <data name="QUEUERECORDSTATE_ERROR" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="QUEUERECORDSTATE_PROCESSED" xml:space="preserve">
+    <value>Processed</value>
+  </data>
+  <data name="QUEUERECORDSTATE_TRYTOPROCESS" xml:space="preserve">
+    <value>Try to proceed</value>
+  </data>
+  <data name="QUEUERECORDSTATE_WAIT" xml:space="preserve">
+    <value>Wait</value>
+  </data>
 </root>

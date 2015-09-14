@@ -195,4 +195,22 @@
   <data name="_DEFAULT_ACCOUNT_NOT_FOUND" xml:space="preserve">
     <value>Не найден аккаунт "по-умолчанию"</value>
   </data>
+  <data name="QueueRecordStateNameMaxLength" xml:space="preserve">
+    <value>Системное имя состояния записи не может превышать 20 символов</value>
+  </data>
+  <data name="QueueRecordStateNameRequred" xml:space="preserve">
+    <value>Необходимо указать системное имя состояния записи очереди</value>
+  </data>
+  <data name="QUEUERECORDSTATE_ERROR" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="QUEUERECORDSTATE_PROCESSED" xml:space="preserve">
+    <value>Запись обработана</value>
+  </data>
+  <data name="QUEUERECORDSTATE_TRYTOPROCESS" xml:space="preserve">
+    <value>Попытка обработки записи</value>
+  </data>
+  <data name="QUEUERECORDSTATE_WAIT" xml:space="preserve">
+    <value>Ожидание загрузки</value>
+  </data>
 </root>

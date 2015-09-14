@@ -19,11 +19,16 @@ namespace RoyaltyRepository.Models
     }
 
     /// <summary>
-    /// Метка записи
+    /// Сообщение
     /// </summary>
     [Table("message")]
     public partial class Message
     {
+        public Message()
+        {
+            Files = new List<File>();
+        }
+
         /// <summary>
         /// Идентификатор записи
         /// </summary>
@@ -35,6 +40,8 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("message_text"), Required]
         public string MessageText { get; set; }
+
+        public ICollection<File> Files { get; set; }
 
         public override string ToString()
         {

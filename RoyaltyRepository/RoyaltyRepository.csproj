@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Logic\Message.cs" />
+    <Compile Include="Logic\ImportQueueRecordFile.cs" />
     <Compile Include="Logic\AccountDataRecordAdditionalColumn.cs" />
     <Compile Include="Logic\AccountDataRecordAdditional.cs" />
     <Compile Include="Logic\AccountDataRecord.cs" />
@@ -63,7 +65,9 @@
     <Compile Include="Logic\AccountDictionaryExclude.cs" />
     <Compile Include="Logic\Area.cs" />
     <Compile Include="Logic\City.cs" />
+    <Compile Include="Logic\ImportQueueRecord.cs" />
     <Compile Include="Logic\Host.cs" />
+    <Compile Include="Logic\ImportQueueRecordState.cs" />
     <Compile Include="Logic\Phone.cs" />
     <Compile Include="Logic\Mark.cs" />
     <Compile Include="Logic\AccountSettingsSheduleTime.cs" />
@@ -131,6 +135,9 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\File.cs" />
+    <Compile Include="Models\ImportQueueRecordFile.cs" />
+    <Compile Include="Models\ImportQueueRecordState.cs" />
     <Compile Include="Models\ImportQueueRecord.cs" />
     <Compile Include="Models\AccountExportType.cs" />
     <Compile Include="Models\AccountSeriesOfNumbersRecord.cs" />
@@ -155,7 +162,7 @@
     <Compile Include="Models\Area.cs" />
     <Compile Include="Models\Host.cs" />
     <Compile Include="Models\City.cs" />
-    <Compile Include="Models\Messages.cs" />
+    <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Phone.cs" />
     <Compile Include="Models\Mark.cs" />
     <Compile Include="Models\RepositoryContext.cs" />

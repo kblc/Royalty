@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RoyaltyRepository.Extensions;
 
 namespace RoyaltyRepository.Models
 {
@@ -52,5 +53,10 @@ namespace RoyaltyRepository.Models
 
         public virtual ICollection<AccountDictionaryExclude> Excludes { get; set; }
         public virtual ICollection<AccountDictionaryRecord> Records { get; set; }
+
+        public override string ToString()
+        {
+            return this.GetColumnPropertiesForEntity();
+        }
     }
 }

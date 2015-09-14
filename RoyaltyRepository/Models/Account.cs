@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RoyaltyRepository.Extensions;
 
 namespace RoyaltyRepository.Models
 {
@@ -25,6 +26,7 @@ namespace RoyaltyRepository.Models
             AdditionalColumns = new List<AccountDataRecordAdditionalColumn>();
             SeriesOfNumbers = new List<AccountSeriesOfNumbersRecord>();
             ExportTypes = new List<AccountExportType>();
+            ImportQueue = new List<ImportQueueRecord>();
         }
 
         [Key, Column("account_uid")]
@@ -45,6 +47,7 @@ namespace RoyaltyRepository.Models
         public virtual ICollection<AccountDataRecordAdditionalColumn> AdditionalColumns { get; set; }
         public virtual ICollection<AccountSeriesOfNumbersRecord> SeriesOfNumbers { get; set; }
         public virtual ICollection<AccountExportType> ExportTypes { get; set; }
+        public virtual ICollection<ImportQueueRecord> ImportQueue { get; set; }
 
         void IDefaultRepositoryInitialization.InitializeDefault(RepositoryContext context)
         {
@@ -129,7 +132,7 @@ namespace RoyaltyRepository.Models
 
         public override string ToString()
         {
-            return string.Format("{0}:[account_uid:'{1}',name:'{2}',is_hidden:'{3}']", this.GetType().Name, AccountUID.ToString(), Name, IsHidden);
+            return this.GetColumnPropertiesForEntity();
         }
     }
 }

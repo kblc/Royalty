@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RoyaltyRepository.Extensions;
 
 namespace RoyaltyRepository.Models
 {
@@ -99,5 +100,10 @@ namespace RoyaltyRepository.Models
         /// </summary>
         public virtual Mark Mark { get; set; }
         #endregion
+
+        public override string ToString()
+        {
+            return this.GetColumnPropertiesForEntity();
+        }
     }
 }
