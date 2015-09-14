@@ -18,9 +18,15 @@ namespace RoyaltyRepository.Extensions
                                 .Where(pi => pi.GetCustomAttributes(columnType, false).Any())
                                 .Select(pi => new
                                     {
-                                        Name = ((pi.GetCustomAttributes(columnType, false).FirstOrDefault() as ColumnAttribute)?.Name ?? "<err>").ToLower(),
+                                        Attr = (pi.GetCustomAttributes(columnType, false).FirstOrDefault() as ColumnAttribute),
                                         Value = pi.GetValue(obj)
-                                    }))
+                                    })
+                                .Select(i => new
+                                    {
+                                        Name = i.Attr == null ? "<err>" : i.Attr.Name,
+                                        i.Value
+                                    })
+                                )
                 properties += (string.IsNullOrWhiteSpace(properties) ? string.Empty : ",") + string.Format("{0}='{1}'", i.Name, i.Value == null ? "NULL" : i.Value.ToString());
             return string.Format("{0}:[{1}]", type.Name, properties);
         }

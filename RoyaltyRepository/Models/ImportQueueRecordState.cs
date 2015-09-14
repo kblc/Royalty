@@ -19,7 +19,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("import_queue_record_state")]
-    public partial class ImportQueueRecordState
+    public partial class ImportQueueRecordState : IDefaultRepositoryInitialization
     {
         private const string strStart = "QUEUERECORDSTATE_";
 
