@@ -35,7 +35,7 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("system_name"), Index("UIX_IMPORT_QUEUE_RECORD_STATE_SYSTEMNAME", IsUnique = true)]
         [Required(ErrorMessageResourceName = "QueueRecordStateNameRequred")]
-        [MaxLength(20, ErrorMessageResourceName = "QueueRecordStateNameMaxLength")]
+        [MaxLength(40, ErrorMessageResourceName = "QueueRecordStateNameMaxLength")]
         public string SystemName { get; set; }
 
         /// <summary>
