@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Helpers">
+      <HintPath>..\..\Helpers\Helpers\bin\Release\Helpers.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,6 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressParser\Address.cs" />
+    <Compile Include="AddressParser\AddressParser.cs" />
+    <Compile Include="AddressParser\EngRusDictionary.cs" />
+    <Compile Include="AddressParser\House.cs" />
+    <Compile Include="AddressParser\Phone.cs" />
     <Compile Include="DataCalculator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

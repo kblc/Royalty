@@ -144,8 +144,8 @@
   <data name="MARK_HALFTRUSTED" xml:space="preserve">
     <value>Полудоверенная</value>
   </data>
-  <data name="MARK_NOTSETTED" xml:space="preserve">
-    <value>Не установленна</value>
+  <data name="MARK_UNKNOWN" xml:space="preserve">
+    <value>Неизвестная</value>
   </data>
   <data name="MARK_NOTTRUSTED" xml:space="preserve">
     <value>Не доверенная</value>
@@ -218,5 +218,8 @@
   </data>
   <data name="StreetNameRequred" xml:space="preserve">
     <value>Необходимо указать название улицы</value>
+  </data>
+  <data name="MARK_DEFAULT" xml:space="preserve">
+    <value>Не установленная</value>
   </data>
 </root>

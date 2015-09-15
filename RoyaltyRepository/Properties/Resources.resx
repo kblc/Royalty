@@ -144,8 +144,8 @@
   <data name="MARK_HALFTRUSTED" xml:space="preserve">
     <value>Half trusted</value>
   </data>
-  <data name="MARK_NOTSETTED" xml:space="preserve">
-    <value>Undefined</value>
+  <data name="MARK_UNKNOWN" xml:space="preserve">
+    <value>Unknown</value>
   </data>
   <data name="MARK_NOTTRUSTED" xml:space="preserve">
     <value>Not trusted</value>
@@ -218,5 +218,8 @@
   </data>
   <data name="StreetNameRequred" xml:space="preserve">
     <value>Street name required</value>
+  </data>
+  <data name="MARK_DEFAULT" xml:space="preserve">
+    <value>Not setted</value>
   </data>
 </root>

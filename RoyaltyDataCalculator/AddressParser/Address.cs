@@ -1,0 +1,263 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RoyaltyDataCalculator.AddressParser
+{
+    public class Address
+    {
+        internal static readonly string digits = new string(Enumerable.Range(0, 10).Select(i => i.ToString().First()).ToArray());
+
+        public string Street { get; private set; }
+        public House House { get; private set; }
+
+        public Address()
+        {
+            House = new House();
+        }
+        public Address(string street) 
+            : this()
+        {
+            this.Street = street;
+        }
+        public Address(string street, string house)
+            : this(street)
+        {
+            this.House = House.FromString(house);
+        }
+
+        public static Address FromString(string textAddress, IEnumerable<string> excludesStrings = null, Func<string,string> renameString = null)
+        {
+            if (textAddress == null)
+                throw new Exception("textAddress");
+
+            renameString = renameString ?? new Func<string, string>(s => s);
+
+            string street = string.Empty;
+            string house = string.Empty;
+            double step = 0;
+            try
+            {
+                if (textAddress.Length > 0)
+                {
+                    step = 0;
+                    #region Reconstruct '123abc123' to '123 abc 123'
+
+                    string wrd = textAddress;
+                    bool isdigit = false;
+                    bool isword = false;
+                    for (int i = wrd.Length - 1; i >= 0; i--)
+                    {
+                        if (wrd[i] == ' ')
+                        {
+                            isdigit = false;
+                            isword = false;
+                        }
+                        else
+                        {
+                            bool iscurrentdigit = (digits.IndexOf(wrd[i]) >= 0);
+                            if (iscurrentdigit)
+                            {
+                                isdigit = true;
+                                if (isword)
+                                {
+                                    wrd = wrd.Insert(i + 1, " ");
+                                    isword = false;
+                                }
+                            }
+                            else
+                            {
+                                isword = true;
+                                if (isdigit)
+                                {
+                                    wrd = wrd.Insert(i + 1, " ");
+                                    isdigit = false;
+                                }
+                            }
+                        }
+                    }
+
+                    textAddress = wrd;
+
+                    #endregion
+                    step = 1;
+                    #region Translate ENG to RUS
+
+                    textAddress = EngRusDictionary.Fix(" " + textAddress.ToLower() + " ");
+
+                    #endregion
+                    step = 2;
+                    #region Remove excludes
+
+                    string textAddressBeforeExclude = textAddress;
+
+                    foreach (string delimiter in excludesStrings.Where(s => !string.IsNullOrWhiteSpace(s)))
+                        textAddress = textAddress.Replace(delimiter.ToLower(), " ");
+
+                    while (textAddress.IndexOf("  ") >= 0)
+                        textAddress = textAddress.Replace("  ", " ");
+                    textAddress = textAddress.Trim();
+
+                    // что бы после исключения символов не осталась пустая улица
+                    if (string.IsNullOrWhiteSpace(textAddress))
+                        textAddress = textAddressBeforeExclude;
+
+                    #endregion
+                    step = 3;
+                    #region Split street and house number
+                    step = 3.1;
+                    #region Street
+
+                    string[] streetWords = textAddress.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    bool street_started = false;
+                    for (int i = 0; i < streetWords.Length; i++)
+                    {
+                        if (digits.IndexOf(streetWords[i][0]) < 0)
+                            street_started = true;
+
+                        if ((digits.IndexOf(streetWords[i][0]) >= 0 && street_started) || (i == streetWords.Length - 1))
+                        {
+                            for (int n = 0; n < (digits.IndexOf(streetWords[i][0]) >= 0 ? i : i + 1); n++)
+                                street += " " + streetWords[n];
+                            street = street.Trim();
+                            break;
+                        }
+                    }
+                    if (!string.IsNullOrWhiteSpace(textAddress))
+                    {
+                        house = textAddress.Remove(0, street.Length).Trim();
+                        street = street.Trim().Replace("- ", "-").Replace(" -", "-");
+
+                        if (string.IsNullOrWhiteSpace(street) && !string.IsNullOrWhiteSpace(house))
+                        {
+                            street = house;
+                            house = string.Empty;
+                        }
+                    }
+
+                    #endregion
+                    step = 3.2;
+                    #region House
+
+                    if (!string.IsNullOrEmpty(house))
+                    {
+                        var houseItems = house.Replace(House.HousingDelimiter, " ")
+                            .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                            .Select(i => new
+                            {
+                                Item = i,
+                                IsStartFromDigit = digits.Contains(i.First()),
+                                IsDigit = i.All(c => digits.Contains(c))
+                            })
+                            .ToArray();
+
+                        house = string.Empty;
+                        for (int i = 0; i < Math.Min(houseItems.Length, 3); i++)
+                        {
+                            var item = houseItems[i];
+
+                            //House number can contains only 1 letter (e.g. a/b/c/ etc)
+                            if (!item.IsDigit && item.Item.Length > 1)
+                                break;
+
+                            if (string.IsNullOrEmpty(house))
+                                house = item.Item;
+                            else
+                            {
+                                //It is seccond digit
+                                if (item.IsDigit)
+                                {
+                                    if (house.Contains(House.HousingDelimiter))
+                                        break;
+                                    house += House.HousingDelimiter + item.Item;
+                                }
+                                else
+                                //It is not digit
+                                {
+                                    //If already contains house delimiter then break or if item part length more then 1
+                                    if (item.Item.Length > 1)
+                                        break;
+                                    house += item.Item;
+                                    //Letters adds last
+                                    break;
+                                }
+                            }
+                        }
+
+                        int last_index_housing_delimiter;
+                        if ((last_index_housing_delimiter = house.LastIndexOf(House.HousingDelimiter)) != house.IndexOf(House.HousingDelimiter))
+                            house = house.Remove(last_index_housing_delimiter);
+                    }
+
+                    #endregion
+                    step = 3.3;
+                    #region concat Street and House
+
+                    string[] words = street.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    street = string.Empty;
+                    foreach (string word in words)
+                        if (!string.IsNullOrWhiteSpace(word))
+                            street += " " + word[0].ToString().ToUpper() + word.Remove(0, 1).ToLower();
+                    street = street.Trim();
+
+                    #endregion
+
+                    #endregion
+                    step = 4;
+                    #region Mathing street with dictionary
+
+                    street = renameString(street) ?? street;
+
+                    #endregion
+                }
+
+                return new Address(street, house);
+            }
+            catch (Exception ex)
+            {
+                var e = new Exception("Parse string exception. See inner exception for details", ex);
+                e.Data.Add("Address", textAddress);
+                e.Data.Add("Step", step);
+                Helpers.Log.Add(e, "Address.FromString()");
+                throw e;
+            }
+        }
+
+        public override string ToString()
+        {
+            var h = House.ToString();
+            return Street + (string.IsNullOrWhiteSpace(h) ? string.Empty : " " + h);
+        }
+        public static bool operator ==(Address a, Address b)
+        {
+            return (a != null) ? a.Equals(b) : false;
+        }
+        public static bool operator !=(Address a, Address b)
+        {
+            return !(a == b);
+        }
+        public override bool Equals(object obj)
+        {
+            // If both are null, or both are same instance, return true.
+            if (System.Object.ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)this == null) || ((object)obj == null))
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return this.ToString() == obj.ToString();
+        }
+        public override int GetHashCode()
+        {
+            return this.ToString().GetHashCode();
+        }
+    }
+}
