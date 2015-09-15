@@ -157,7 +157,7 @@ namespace RoyaltyRepository
         /// <returns>Message queriable collection</returns>
         public IQueryable<Message> MessageGet(IEnumerable<Guid> instanceIds)
         {
-            return MessageGet().Where(a => instanceIds.Contains(a.MessageID));
+            return MessageGet().Join(instanceIds, s => s.MessageID, i => i, (s, i) => s);
         }
     }
 }

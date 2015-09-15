@@ -347,5 +347,23 @@ namespace RoyaltyRepository.Properties {
                 return ResourceManager.GetString("QueueRecordStateNameRequred", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Street name length must be less or equals 100.
+        /// </summary>
+        public static string StreetNameMaxLength {
+            get {
+                return ResourceManager.GetString("StreetNameMaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Street name required.
+        /// </summary>
+        public static string StreetNameRequred {
+            get {
+                return ResourceManager.GetString("StreetNameRequred", resourceCulture);
+            }
+        }
     }
 }

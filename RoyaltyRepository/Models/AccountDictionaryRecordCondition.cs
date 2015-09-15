@@ -41,12 +41,16 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("from"), Required]
         public long From { get; set; }
-
         /// <summary>
         /// Номер дома, до которого действует данное условие
         /// </summary>
         [Column("to"), Required]
         public long To { get; set; }
+        /// <summary>
+        /// Только четные
+        /// </summary>
+        [Column("even")]
+        public bool? Even { get; set; }
 
         public override string ToString()
         {

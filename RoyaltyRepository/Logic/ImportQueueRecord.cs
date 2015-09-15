@@ -148,7 +148,7 @@ namespace RoyaltyRepository
         /// <returns>ImportQueueRecord queriable collection</returns>
         public IQueryable<ImportQueueRecord> ImportQueueRecordGet(IEnumerable<Guid> instanceIds)
         {
-            return ImportQueueRecordGet().Where(a => instanceIds.Contains(a.ImportQueueRecordUID));
+            return ImportQueueRecordGet().Join(instanceIds, s => s.ImportQueueRecordUID, i => i, (s, i) => s);
         }
     }
 }

@@ -334,12 +334,12 @@ namespace RoyaltyRepository
         /// <summary>
         /// Get accounts by UIDs
         /// </summary>
-        /// <param name="accountId">Account identifier array</param>
+        /// <param name="instanceIds">Account identifier array</param>
         /// <param name="showHidden">Show hidden accounts</param>
         /// <returns>Account with identifier</returns>
-        public IQueryable<Account> AccountGet(IEnumerable<Guid> accountId, bool showHidden = false)
+        public IQueryable<Account> AccountGet(IEnumerable<Guid> instanceIds, bool showHidden = false)
         {
-            return AccountGet(showHidden).Where(a => accountId.Contains(a.AccountUID));
+            return AccountGet(showHidden).Join(instanceIds, s => s.AccountUID, i => i, (s, i) => s);
         }
     }
 }

@@ -213,4 +213,10 @@
   <data name="QUEUERECORDSTATE_WAIT" xml:space="preserve">
     <value>Ожидание загрузки</value>
   </data>
+  <data name="StreetNameMaxLength" xml:space="preserve">
+    <value>Название улицы не может превышать 100 символов</value>
+  </data>
+  <data name="StreetNameRequred" xml:space="preserve">
+    <value>Необходимо указать название улицы</value>
+  </data>
 </root>

@@ -159,11 +159,11 @@ namespace RoyaltyRepository
         /// <summary>
         /// Get phones by identifiers
         /// </summary>
-        /// <param name="phoneId">Phone identifier array</param>
+        /// <param name="instanceIds">Phone identifier array</param>
         /// <returns>Phone queriable collection</returns>
-        public IQueryable<Phone> PhoneGet(IEnumerable<long> phoneId)
+        public IQueryable<Phone> PhoneGet(IEnumerable<long> instanceIds)
         {
-            return PhoneGet().Where(a => phoneId.Contains(a.PhoneID));
+            return PhoneGet().Join(instanceIds, s => s.PhoneID, i => i, (s, i) => s);
         }
     }
 }

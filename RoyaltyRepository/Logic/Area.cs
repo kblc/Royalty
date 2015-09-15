@@ -161,7 +161,7 @@ namespace RoyaltyRepository
         /// <returns>Area array</returns>
         public IQueryable<Area> AreaGet(IEnumerable<string> instanceNames)
         {
-            return AreaGet().Where(a => instanceNames.Any(pn => string.Compare(pn, a.Name, true) == 0));
+            return AreaGet().Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
         }
         /// <summary>
         /// Get areas by identifiers
@@ -170,7 +170,7 @@ namespace RoyaltyRepository
         /// <returns>Area queriable collection</returns>
         public IQueryable<Area> AreaGet(IEnumerable<long> instanceIds)
         {
-            return AreaGet().Where(a => instanceIds.Contains(a.AreaID));
+            return AreaGet().Join(instanceIds, s => s.AreaID, i => i, (s, i) => s);
         }
     }
 }

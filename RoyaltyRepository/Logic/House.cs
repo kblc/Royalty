@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RoyaltyRepository.Models;
-using RoyaltyRepository.Extensions;
 using Helpers;
 
 namespace RoyaltyRepository
@@ -15,22 +14,22 @@ namespace RoyaltyRepository
     public partial class Repository
     {
         /// <summary>
-        /// Add File to database
+        /// Add House to database
         /// </summary>
-        /// <param name="instance">File instance</param>
+        /// <param name="instance">House instance</param>
         /// <param name="saveAfterInsert">Save database after insertion</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void FileAdd(File instance, bool saveAfterInsert = true, bool waitUntilSaving = true)
+        public void HouseAdd(House instance, bool saveAfterInsert = true, bool waitUntilSaving = true)
         {
-            FileAdd(new File[] { instance }, saveAfterInsert, waitUntilSaving);
+            HouseAdd(new House[] { instance }, saveAfterInsert, waitUntilSaving);
         }
         /// <summary>
-        /// Add Files to database
+        /// Add Houses to database
         /// </summary>
-        /// <param name="instances">File instance array</param>
+        /// <param name="instances">House instance array</param>
         /// <param name="saveAfterInsert">Save database after insertion</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void FileAdd(IEnumerable<File> instances, bool saveAfterInsert = true, bool waitUntilSaving = true)
+        public void HouseAdd(IEnumerable<House> instances, bool saveAfterInsert = true, bool waitUntilSaving = true)
         {
             try
             {
@@ -40,7 +39,7 @@ namespace RoyaltyRepository
 
                 try
                 {
-                    this.Context.Files.AddRange(instances);
+                    this.Context.Houses.AddRange(instances);
                     if (saveAfterInsert)
                         this.SaveChanges(waitUntilSaving);
                 }
@@ -54,27 +53,27 @@ namespace RoyaltyRepository
             }
             catch (Exception ex)
             {
-                Helpers.Log.Add(ex, string.Format("Repository.FileAdd(instances=[{0}],saveAfterInsert={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterInsert, waitUntilSaving));
+                Helpers.Log.Add(ex, string.Format("Repository.HouseAdd(instances=[{0}],saveAfterInsert={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterInsert, waitUntilSaving));
                 throw;
             }
         }
         /// <summary>
-        /// Remove File from database
+        /// Remove House from database
         /// </summary>
-        /// <param name="instance">File instance</param>
+        /// <param name="instance">House instance</param>
         /// <param name="saveAfterRemove">Save database after removing</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void FileRemove(File instance, bool saveAfterRemove = true, bool waitUntilSaving = true)
+        public void HouseRemove(House instance, bool saveAfterRemove = true, bool waitUntilSaving = true)
         {
-            FileRemove(new File[] { instance }, saveAfterRemove, waitUntilSaving);
+            HouseRemove(new House[] { instance }, saveAfterRemove, waitUntilSaving);
         }
         /// <summary>
-        /// Remove Files from database
+        /// Remove Houses from database
         /// </summary>
-        /// <param name="instances">File instance array</param>
+        /// <param name="instances">House instance array</param>
         /// <param name="saveAfterRemove">Save database after removing</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void FileRemove(IEnumerable<File> instances, bool saveAfterRemove = true, bool waitUntilSaving = true)
+        public void HouseRemove(IEnumerable<House> instances, bool saveAfterRemove = true, bool waitUntilSaving = true)
         {
             try
             {
@@ -84,7 +83,7 @@ namespace RoyaltyRepository
 
                 try
                 {
-                    this.Context.Files.RemoveRange(instances);
+                    this.Context.Houses.RemoveRange(instances);
                     if (saveAfterRemove)
                         this.SaveChanges(waitUntilSaving);
                 }
@@ -98,54 +97,63 @@ namespace RoyaltyRepository
             }
             catch (Exception ex)
             {
-                Helpers.Log.Add(ex, string.Format("Repository.FileRemove(instances=[{0}],saveAfterRemove={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterRemove, waitUntilSaving));
+                Helpers.Log.Add(ex, string.Format("Repository.HouseRemove(instances=[{0}],saveAfterRemove={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterRemove, waitUntilSaving));
                 throw;
             }
         }
         /// <summary>
-        /// Create/Get new File without any link to database
+        /// Create/Get new House without any link to database
         /// </summary>
-        /// <returns>File instance</returns>
-        public File FileNew(object anonymousFiller = null)
+        /// <param name="instanceNumber">House number</param>
+        /// <param name="street">Area to House add</param>
+        /// <returns>House instance</returns>
+        public House HouseNew(string instanceNumber = null, Street street = null)
         {
             try
             {
-                var res = new File() { FileID = Guid.NewGuid(), Date = DateTime.UtcNow };
-                if (anonymousFiller != null)
-                    res.FillFromAnonymousType(anonymousFiller);
+                var res = new House() { };
+                if (instanceNumber != null)
+                    res.Number = instanceNumber;
+                if (street != null)
+                {
+                    if (Context.Entry(street).State != EntityState.Detached)
+                        street.Houses.Add(res);
+                    else
+                        res.Street = street;
+                }
                 return res;
             }
             catch (Exception ex)
             {
-                Helpers.Log.Add(ex, string.Format("Repository.FileNew()"));
+                Helpers.Log.Add(ex, string.Format("Repository.HouseNew(instanceName='{0}',area='{1}')", instanceNumber ?? "NULL", street == null ? "NULL" : street.ToString()));
                 throw;
             }
         }
         /// <summary>
-        /// Get Files
+        /// Get Houses
         /// </summary>
-        /// <returns>File queriable collection</returns>
-        public IQueryable<File> FileGet()
+        /// <returns>House queriable collection</returns>
+        public IQueryable<House> HouseGet()
         {
-            return this.Context.Files;
+            return this.Context.Houses;
         }
         /// <summary>
-        /// Get one File by identifier
+        /// Get one House by identifier
         /// </summary>
-        /// <param name="instanceId">File identifier</param>
-        /// <returns>File</returns>
-        public File FileGet(Guid instanceId)
+        /// <param name="instanceId">House identifier</param>
+        /// <returns>House</returns>
+        public House HouseGet(long instanceId)
         {
-            return FileGet(new Guid[] { instanceId }).FirstOrDefault();
+            return HouseGet(new long[] { instanceId }).FirstOrDefault();
         }
         /// <summary>
-        /// Get Files by identifiers
+        /// Get Houses by identifiers
         /// </summary>
-        /// <param name="instanceIds">File identifier array</param>
-        /// <returns>File queriable collection</returns>
-        public IQueryable<File> FileGet(IEnumerable<Guid> instanceIds)
+        /// <param name="instanceIds">House identifier array</param>
+        /// <returns>House queriable collection</returns>
+        public IQueryable<House> HouseGet(IEnumerable<long> instanceIds)
         {
-            return FileGet().Join(instanceIds, s => s.FileID, i => i, (s, i) => s);
+            return HouseGet().Join(instanceIds, s => s.HouseID, i => i, (s,i) => s);
         }
     }
 }

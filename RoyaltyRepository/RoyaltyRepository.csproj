@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Logic\House.cs" />
+    <Compile Include="Logic\Street.cs" />
     <Compile Include="Logic\File.cs" />
     <Compile Include="Logic\Message.cs" />
     <Compile Include="Logic\ImportQueueRecordFile.cs" />
@@ -150,8 +152,18 @@
     <Compile Include="Migrations\201509140805375_Migration_RecordstateChangeMaxLengthTo401.Designer.cs">
       <DependentUpon>201509140805375_Migration_RecordstateChangeMaxLengthTo401.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509150546028_Migration_RecordConditionChange.cs" />
+    <Compile Include="Migrations\201509150546028_Migration_RecordConditionChange.Designer.cs">
+      <DependentUpon>201509150546028_Migration_RecordConditionChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509150551447_Migration_RecordConditionChange1.cs" />
+    <Compile Include="Migrations\201509150551447_Migration_RecordConditionChange1.Designer.cs">
+      <DependentUpon>201509150551447_Migration_RecordConditionChange1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\House.cs" />
+    <Compile Include="Models\Street.cs" />
     <Compile Include="Models\File.cs" />
     <Compile Include="Models\ImportQueueRecordFile.cs" />
     <Compile Include="Models\ImportQueueRecordState.cs" />
@@ -256,6 +268,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509140805375_Migration_RecordstateChangeMaxLengthTo401.resx">
       <DependentUpon>201509140805375_Migration_RecordstateChangeMaxLengthTo401.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509150546028_Migration_RecordConditionChange.resx">
+      <DependentUpon>201509150546028_Migration_RecordConditionChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509150551447_Migration_RecordConditionChange1.resx">
+      <DependentUpon>201509150551447_Migration_RecordConditionChange1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

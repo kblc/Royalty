@@ -53,11 +53,11 @@ namespace RoyaltyRepository
         /// <summary>
         /// Get instances by identifiers
         /// </summary>
-        /// <param name="importQueueRecordStateId">Instance identifier array</param>
+        /// <param name="instanceIds">Instance identifier array</param>
         /// <returns>Instances queriable collection</returns>
-        public IQueryable<ImportQueueRecordState> ImportQueueRecordStateGet(IEnumerable<long> importQueueRecordStateId)
+        public IQueryable<ImportQueueRecordState> ImportQueueRecordStateGet(IEnumerable<long> instanceIds)
         {
-            return ImportQueueRecordStateGet().Where(a => importQueueRecordStateId.Contains(a.ImportQueueRecordStateID));
+            return ImportQueueRecordStateGet().Join(instanceIds, s => s.ImportQueueRecordStateID, i => i, (s, i) => s);
         }
     }
 }

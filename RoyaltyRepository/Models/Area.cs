@@ -29,6 +29,7 @@ namespace RoyaltyRepository.Models
         public Area()
         {
             DefaultForCities = new List<City>();
+            Streets = new List<Street>();
         }
         /// <summary>
         /// Идентификатор записи
@@ -60,6 +61,8 @@ namespace RoyaltyRepository.Models
         [Required(ErrorMessageResourceName = "AreaNameRequred")]
         [MinLength(1, ErrorMessageResourceName = "AreaNameMinLength"), MaxLength(100, ErrorMessageResourceName = "AreaNameMaxLength")]
         public string Name { get; set; }
+
+        public virtual ICollection<Street> Streets { get; set; }
 
         public override string ToString()
         {

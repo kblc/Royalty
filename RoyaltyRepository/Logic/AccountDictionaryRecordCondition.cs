@@ -122,7 +122,7 @@ namespace RoyaltyRepository
         /// Create/Get new AccountDictionaryRecordCondition instance without any link to database
         /// </summary>
         /// <returns>AccountDictionaryRecordCondition instance</returns>
-        public AccountDictionaryRecordCondition AccountDictionaryRecordConditionNew(AccountDictionaryRecord accountDictionaryRecord = null, long? from = null, long? to = null)
+        public AccountDictionaryRecordCondition AccountDictionaryRecordConditionNew(AccountDictionaryRecord accountDictionaryRecord = null, uint? from = null, uint? to = null)
         {
             try
             {

@@ -161,9 +161,9 @@ namespace RoyaltyRepository
         /// </summary>
         /// <param name="HostId">Host identifier array</param>
         /// <returns>Host queriable collection</returns>
-        public IQueryable<Host> HostGet(IEnumerable<long> hostId)
+        public IQueryable<Host> HostGet(IEnumerable<long> instanceIds)
         {
-            return HostGet().Where(a => hostId.Contains(a.HostID));
+            return HostGet().Join(instanceIds, s => s.HostID, i => i, (s, i) => s);
         }
     }
 }

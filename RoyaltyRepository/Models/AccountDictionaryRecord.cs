@@ -28,6 +28,7 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Key, Column("dictionary_record_id"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long AccountDictionaryRecordID { get; set; }
+
         #region AccountDictionary
         /// <summary>
         /// Идентификатор словаря, которому принадлежат данная запись
@@ -39,30 +40,28 @@ namespace RoyaltyRepository.Models
         /// </summary>
         public virtual AccountDictionary Dictionary { get; set; }
         #endregion
-        
+        #region Street
+        /// <summary>
+        /// Идентификатор улицы
+        /// </summary>
+        [ForeignKey("Street"), Column("street_id"), Required]
+        public long StreetID { get; set; }
         /// <summary>
         /// Улица
         /// </summary>
-        [Column("street"), Required]
-        public string Street { get; set; }
-
-        #region Area
-        /// <summary>
-        /// Идентификатор района
-        /// </summary>
-        [ForeignKey("Area"), Column("area_id"), Required]
-        public long AreaID { get; set; }
-        /// <summary>
-        /// Район
-        /// </summary>
-        public virtual Area Area { get; set; }
+        public virtual Street Street { get; set; }
         #endregion        
-
+        #region ChangeStreetTo
         /// <summary>
-        /// Переименование улицы
+        /// Идентификатор улицы, на которую необходимо изменить текущую улицу
         /// </summary>
-        [Column("rename_street_to")]
-        public string RenameStreetTo { get; set; }
+        [ForeignKey("ChangeStreetTo"), Column("change_to_street_id")]
+        public long? ChangeStreetToID { get; set; }
+        /// <summary>
+        /// Улица, на которую необходимо изменить
+        /// </summary>
+        public virtual Street ChangeStreetTo { get; set; }
+        #endregion 
 
         /// <summary>
         /// Условия

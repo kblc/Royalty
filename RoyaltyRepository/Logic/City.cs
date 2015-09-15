@@ -165,7 +165,7 @@ namespace RoyaltyRepository
         /// <returns>City array</returns>
         public IQueryable<City> CityGet(IEnumerable<string> instanceNames)
         {
-            return CityGet().Where(a => instanceNames.Any(pn => string.Compare(pn, a.Name, true) == 0));
+            return CityGet().Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
         }
         /// <summary>
         /// Get Cities by identifiers
@@ -174,7 +174,7 @@ namespace RoyaltyRepository
         /// <returns>City queriable collection</returns>
         public IQueryable<City> CityGet(IEnumerable<long> instanceIds)
         {
-            return CityGet().Where(a => instanceIds.Contains(a.CityID));
+            return CityGet().Join(instanceIds, s => s.CityID, i => i, (s, i) => s);
         }
     }
 }

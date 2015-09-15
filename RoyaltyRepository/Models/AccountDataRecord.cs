@@ -49,17 +49,6 @@ namespace RoyaltyRepository.Models
         /// </summary>
         public virtual Phone Phone { get; set; }
         #endregion
-        #region Area
-        /// <summary>
-        /// Идентификатор района
-        /// </summary>
-        [ForeignKey("Area"), Column("area_id"), Required]
-        public long AreaID { get; set; }
-        /// <summary>
-        /// Район
-        /// </summary>
-        public virtual Area Area { get; set; }
-        #endregion        
         #region Host
         /// <summary>
         /// Идентификатор хоста, откуда была зугружена запись
@@ -71,24 +60,17 @@ namespace RoyaltyRepository.Models
         /// </summary>
         public virtual Host Host { get; set; }
         #endregion        
-
-        [Column("address"), Required(AllowEmptyStrings = false)]
-        public string Address { get; set; }
-
-        [Column("created"), Required]
-        public DateTime Created { get; set; }
-
-        [Column("changed"), Required]
-        public DateTime Changed { get; set; }
-
-        [Column("exported")]
-        public DateTime? Exported { get; set; }
-
-        [Column("id_dictionary"), Required]
-        public bool InDictionary { get; set; }
-
-        public virtual AccountDataRecordAdditional DataAdditional { get; set; }
-
+        #region House
+        /// <summary>
+        /// Идентификатор дома
+        /// </summary>
+        [ForeignKey("House"), Column("house_id"), Required]
+        public long HouseID { get; set; }
+        /// <summary>
+        /// Адрес
+        /// </summary>
+        public virtual House House { get; set; }
+        #endregion        
         #region Mark
         /// <summary>
         /// Идентификатор метки
@@ -100,6 +82,17 @@ namespace RoyaltyRepository.Models
         /// </summary>
         public virtual Mark Mark { get; set; }
         #endregion
+
+        [Column("created"), Required]
+        public DateTime Created { get; set; }
+
+        [Column("changed"), Required]
+        public DateTime Changed { get; set; }
+
+        [Column("exported")]
+        public DateTime? Exported { get; set; }
+
+        public virtual AccountDataRecordAdditional DataAdditional { get; set; }
 
         public override string ToString()
         {

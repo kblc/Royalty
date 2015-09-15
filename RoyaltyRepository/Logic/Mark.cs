@@ -42,11 +42,11 @@ namespace RoyaltyRepository
         /// <summary>
         /// Get marks by identifiers
         /// </summary>
-        /// <param name="markId">Mark identifier array</param>
+        /// <param name="instanceIds">Mark identifier array</param>
         /// <returns>Mark queriable collection</returns>
-        public IQueryable<Mark> MarkGet(IEnumerable<long> markId)
+        public IQueryable<Mark> MarkGet(IEnumerable<long> instanceIds)
         {
-            return MarkGet().Where(a => markId.Contains(a.MarkID));
+            return MarkGet().Join(instanceIds, s => s.MarkID, i => i, (s, i) => s);
         }
     }
 }
