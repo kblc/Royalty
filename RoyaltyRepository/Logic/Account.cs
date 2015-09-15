@@ -202,13 +202,11 @@ namespace RoyaltyRepository
                 foreach (var d in from.Data)
                     to.Data.Add(new AccountDataRecord()
                     {
-                        Address = d.Address,
-                        Area = d.Area,
+                        House = d.House,
                         Changed = d.Changed,
                         Created = d.Created,
                         Exported = d.Exported,
                         Host = d.Host,
-                        InDictionary = d.InDictionary,
                         Mark = d.Mark,
                         Phone = d.Phone,
                         DataAdditional = d.DataAdditional != null && copyDataAdditionalColumns
@@ -260,8 +258,7 @@ namespace RoyaltyRepository
                     {
                         var record = new AccountDictionaryRecord()
                         {
-                            Area = r.Area,
-                            RenameStreetTo = r.RenameStreetTo,
+                            ChangeStreetTo = r.ChangeStreetTo,
                             Street = r.Street
                         };
                         foreach (var c in r.Conditions)

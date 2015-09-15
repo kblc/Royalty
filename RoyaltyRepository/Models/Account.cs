@@ -59,12 +59,13 @@ namespace RoyaltyRepository.Models
                 context.SaveChanges();
             }
         }
+        
         private static Account GenerateDefaultAccount()
         {
             Account acc = new Account()
             {
                 AccountUID = Guid.NewGuid(),
-                Name = ".default",
+                Name = Account.defaultAccountName,
                 IsHidden = true,
                 Settings = new AccountSettings()
                 {

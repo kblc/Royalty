@@ -151,7 +151,7 @@ namespace RoyaltyRepository
         /// </summary>
         /// <param name="instanceNames">Streets name array</param>
         /// <returns>Street array</returns>
-        public IQueryable<Street> CityGet(IEnumerable<string> instanceNames)
+        public IQueryable<Street> StreetGet(IEnumerable<string> instanceNames)
         {
             return StreetGet().Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
         }

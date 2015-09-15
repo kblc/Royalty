@@ -160,6 +160,10 @@
     <Compile Include="Migrations\201509150551447_Migration_RecordConditionChange1.Designer.cs">
       <DependentUpon>201509150551447_Migration_RecordConditionChange1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509150844404_Migration_ChangeDictionaryAndAddStreetAndHouse.cs" />
+    <Compile Include="Migrations\201509150844404_Migration_ChangeDictionaryAndAddStreetAndHouse.Designer.cs">
+      <DependentUpon>201509150844404_Migration_ChangeDictionaryAndAddStreetAndHouse.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\House.cs" />
@@ -274,6 +278,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509150551447_Migration_RecordConditionChange1.resx">
       <DependentUpon>201509150551447_Migration_RecordConditionChange1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509150844404_Migration_ChangeDictionaryAndAddStreetAndHouse.resx">
+      <DependentUpon>201509150844404_Migration_ChangeDictionaryAndAddStreetAndHouse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
