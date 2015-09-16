@@ -222,4 +222,7 @@
   <data name="MARK_DEFAULT" xml:space="preserve">
     <value>Не установленная</value>
   </data>
+  <data name="CityPhoneNumberCodeMaxLength" xml:space="preserve">
+    <value>Телефонный код города не может превышать 20 символов</value>
+  </data>
 </root>

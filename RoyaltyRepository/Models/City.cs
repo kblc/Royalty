@@ -43,6 +43,12 @@ namespace RoyaltyRepository.Models
         [MinLength(1, ErrorMessageResourceName = "CityNameMinLength"), MaxLength(100, ErrorMessageResourceName = "CityNameMaxLength")]
         public string Name { get; set; }
 
+        /// <summary>
+        /// Телефонный код города
+        /// </summary>
+        [Column("phone_code"), MaxLength(10, ErrorMessageResourceName = "CityPhoneNumberCodeMaxLength")]
+        public string PhoneNumberCode { get; set; }
+
         #region UndefinedArea
         /// <summary>
         /// Идентификатор района, который используется в случае, когда район не определен

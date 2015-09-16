@@ -52,6 +52,36 @@ namespace RoyaltyDataCalculator.AddressParser
             }
             return new HouseAdditionalPart(number, letter);
         }
+
+        public static bool operator ==(HouseAdditionalPart a, HouseAdditionalPart b)
+        {
+            return (a != null) ? a.Equals(b) : false;
+        }
+        public static bool operator !=(HouseAdditionalPart a, HouseAdditionalPart b)
+        {
+            return !(a == b);
+        }
+        public override bool Equals(object obj)
+        {
+            // If both are null, or both are same instance, return true.
+            if (System.Object.ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)this == null) || ((object)obj == null))
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return this.ToString() == obj.ToString();
+        }
+        public override int GetHashCode()
+        {
+            return this.ToString().GetHashCode();
+        }
     }
 
     /// <summary>
@@ -119,6 +149,36 @@ namespace RoyaltyDataCalculator.AddressParser
             }
 
             return new House(number, add);
+        }
+
+        public static bool operator ==(House a, House b)
+        {
+            return (a != null) ? a.Equals(b) : false;
+        }
+        public static bool operator !=(House a, House b)
+        {
+            return !(a == b);
+        }
+        public override bool Equals(object obj)
+        {
+            // If both are null, or both are same instance, return true.
+            if (System.Object.ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)this == null) || ((object)obj == null))
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return this.ToString() == obj.ToString();
+        }
+        public override int GetHashCode()
+        {
+            return this.ToString().GetHashCode();
         }
     }
 }

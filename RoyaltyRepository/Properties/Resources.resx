@@ -222,4 +222,7 @@
   <data name="MARK_DEFAULT" xml:space="preserve">
     <value>Not setted</value>
   </data>
+  <data name="CityPhoneNumberCodeMaxLength" xml:space="preserve">
+    <value>Default phone number code length must be less or equals 20</value>
+  </data>
 </root>

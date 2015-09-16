@@ -33,7 +33,7 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Идентификатор словаря, которому принадлежат данная запись
         /// </summary>
-        [ForeignKey("Dictionary"), Column("dictionary_uid"), Index("IX_DICTIONARY_RECORD_DICTIONARY_UID", IsUnique = false), Required]
+        [ForeignKey("Dictionary"), Column("dictionary_uid"), Index("IX_DICTIONARY_RECORD_DICTIONARY_UID", 1, IsUnique = true), Required]
         public Guid DictionaryUID { get; set; }
         /// <summary>
         /// Словарь, которому принадлежат данная запись
@@ -44,7 +44,7 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Идентификатор улицы
         /// </summary>
-        [ForeignKey("Street"), Column("street_id"), Required]
+        [ForeignKey("Street"), Column("street_id"), Index("IX_DICTIONARY_RECORD_DICTIONARY_UID", 2, IsUnique = true), Required]
         public long StreetID { get; set; }
         /// <summary>
         /// Улица

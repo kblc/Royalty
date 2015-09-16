@@ -30,8 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Helpers">
-      <HintPath>..\..\Helpers\Helpers\bin\Release\Helpers.dll</HintPath>
+    <Reference Include="Helpers, Version=1.0.8.10, Culture=neutral, PublicKeyToken=fdd3186503d11cf0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Documents\Visual Studio 2013\Projects\Helpers\Helpers\bin\Release\Helpers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,11 +45,22 @@
   <ItemGroup>
     <Compile Include="AddressParser\Address.cs" />
     <Compile Include="AddressParser\AddressParser.cs" />
+    <Compile Include="AddressParser\AreaMap.cs" />
     <Compile Include="AddressParser\EngRusDictionary.cs" />
     <Compile Include="AddressParser\House.cs" />
     <Compile Include="AddressParser\Phone.cs" />
     <Compile Include="DataCalculator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RoyaltyRepository\RoyaltyRepository.csproj">
+      <Project>{9fc94fda-b3fb-441d-9baa-40252da7e067}</Project>
+      <Name>RoyaltyRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WordsMatching\WordsMatching.csproj">
+      <Project>{cffea5f4-2374-4336-956b-f6edb9e2fbf1}</Project>
+      <Name>WordsMatching</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

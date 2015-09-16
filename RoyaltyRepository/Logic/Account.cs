@@ -79,7 +79,10 @@ namespace RoyaltyRepository
             {
                 if (instances == null)
                     throw new ArgumentNullException("instances");
-                instances = instances.Where(i => i != null).ToArray();
+                instances = instances
+                    .Where(i => i != null)
+                    //.Where(i => Context.Entry(i).State != EntityState.Deleted)
+                    .ToArray();
 
                 try
                 { 

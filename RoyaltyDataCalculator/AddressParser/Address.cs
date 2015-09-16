@@ -9,6 +9,11 @@ namespace RoyaltyDataCalculator.AddressParser
     public class Address
     {
         internal static readonly string digits = new string(Enumerable.Range(0, 10).Select(i => i.ToString().First()).ToArray());
+        internal static readonly string alphabeet = "йцукенгшщзфывапролджэячсмитьбюё";
+        //internal static readonly string alphabeet = "qwertyuiopasdfghjklzxcvbnmйцукенгшщзфывапролджэячсмитьбюё";
+        internal static readonly string symbols = " ";
+        private enum AddressPart { Symbol, Digit, Letter };
+
 
         public string Street { get; private set; }
         public House House { get; private set; }
@@ -41,52 +46,12 @@ namespace RoyaltyDataCalculator.AddressParser
                 if (textAddress.Length > 0)
                 {
                     step = 0;
-                    #region Reconstruct '123abc123' to '123 abc 123'
-
-                    string wrd = textAddress;
-                    bool isdigit = false;
-                    bool isword = false;
-                    for (int i = wrd.Length - 1; i >= 0; i--)
-                    {
-                        if (wrd[i] == ' ')
-                        {
-                            isdigit = false;
-                            isword = false;
-                        }
-                        else
-                        {
-                            bool iscurrentdigit = (digits.IndexOf(wrd[i]) >= 0);
-                            if (iscurrentdigit)
-                            {
-                                isdigit = true;
-                                if (isword)
-                                {
-                                    wrd = wrd.Insert(i + 1, " ");
-                                    isword = false;
-                                }
-                            }
-                            else
-                            {
-                                isword = true;
-                                if (isdigit)
-                                {
-                                    wrd = wrd.Insert(i + 1, " ");
-                                    isdigit = false;
-                                }
-                            }
-                        }
-                    }
-
-                    textAddress = wrd;
-
-                    #endregion
-                    step = 1;
                     #region Translate ENG to RUS
 
                     textAddress = EngRusDictionary.Fix(" " + textAddress.ToLower() + " ");
 
                     #endregion
-                    step = 2;
+                    step = 1;
                     #region Remove excludes
 
                     string textAddressBeforeExclude = textAddress;
@@ -94,7 +59,7 @@ namespace RoyaltyDataCalculator.AddressParser
                     foreach (string delimiter in excludesStrings.Where(s => !string.IsNullOrWhiteSpace(s)))
                         textAddress = textAddress.Replace(delimiter.ToLower(), " ");
 
-                    while (textAddress.IndexOf("  ") >= 0)
+                    while (textAddress.Contains("  "))
                         textAddress = textAddress.Replace("  ", " ");
                     textAddress = textAddress.Trim();
 
@@ -103,38 +68,84 @@ namespace RoyaltyDataCalculator.AddressParser
                         textAddress = textAddressBeforeExclude;
 
                     #endregion
+                    step = 2;
+                    #region Reconstruct '123abc123' to '123 abc 123'
+
+                    var newAddress = string.Empty;
+                    var addressParts = Enumerable.Range(0, textAddress.Length)
+                        .AsParallel()
+                        .Select(i => new { Index = i, Char = textAddress[i] })
+                        .Select(c =>
+                        {
+                            var ch = c.Char;
+                            bool isSymbol = symbols.Contains(c.Char);
+                            bool isDigit = isSymbol ? false : digits.Contains(c.Char);
+                            bool isLetter = (isSymbol || isDigit) ? false : alphabeet.Contains(c.Char.ToString().ToLower().First());
+                            if (!isSymbol && !isDigit && !isLetter)
+                            {
+                                ch = ' ';
+                                isSymbol = true;
+                            }
+                            var t = isSymbol ? AddressPart.Symbol : ((isDigit ? AddressPart.Digit : AddressPart.Letter));
+
+                            return new
+                            {
+                                Char = ch,
+                                c.Index,
+                                Type = t,
+                            };
+                        })
+                        .OrderBy(c => c.Index)
+                        .ToArray();
+
+                    for (int i = 0; i < addressParts.Length; i++)
+                    {
+                        var part = addressParts[i];
+                        if (i != 0)
+                        {
+                            var partPrev = addressParts[i - 1];
+                            if (part.Type != partPrev.Type && part.Char != ' ')
+                                newAddress += ' ';
+                        }
+                        newAddress += part.Char;
+                    }
+
+                    while (newAddress.Contains("  "))
+                        newAddress = newAddress.Replace("  "," ");
+                    textAddress = newAddress.Trim();
+
+                    #endregion
                     step = 3;
                     #region Split street and house number
                     step = 3.1;
                     #region Street
 
-                    string[] streetWords = textAddress.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    bool street_started = false;
-                    for (int i = 0; i < streetWords.Length; i++)
-                    {
-                        if (digits.IndexOf(streetWords[i][0]) < 0)
-                            street_started = true;
-
-                        if ((digits.IndexOf(streetWords[i][0]) >= 0 && street_started) || (i == streetWords.Length - 1))
-                        {
-                            for (int n = 0; n < (digits.IndexOf(streetWords[i][0]) >= 0 ? i : i + 1); n++)
-                                street += " " + streetWords[n];
-                            street = street.Trim();
-                            break;
-                        }
-                    }
                     if (!string.IsNullOrWhiteSpace(textAddress))
-                    {
-                        house = textAddress.Remove(0, street.Length).Trim();
-                        street = street.Trim().Replace("- ", "-").Replace(" -", "-");
-
-                        if (string.IsNullOrWhiteSpace(street) && !string.IsNullOrWhiteSpace(house))
+                    { 
+                        string[] streetWords = textAddress.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        
+                        bool street_started = false;
+                        for (int i = 0; i < streetWords.Length; i++)
                         {
-                            street = house;
-                            house = string.Empty;
-                        }
-                    }
+                            bool isDigit = digits.Contains(streetWords[i][0]);
+                        
+                            if (!isDigit)
+                                street_started = true;
 
+                            if ((isDigit && street_started) || (i == streetWords.Length - 1))
+                            {
+                                for (int n = 0; n < (isDigit ? i : i + 1); n++)
+                                    street += " " + streetWords[n];
+                                street = street.Trim();
+                                break;
+                            }
+                        }
+
+                        if (street.Length > 0)
+                            house = textAddress.Remove(0, street.Length).Trim();
+                        else
+                            street = textAddress;
+                    }
                     #endregion
                     step = 3.2;
                     #region House

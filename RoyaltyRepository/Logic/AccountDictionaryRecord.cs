@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RoyaltyRepository.Models;
 using Helpers;
+using RoyaltyRepository.Extensions;
 
 namespace RoyaltyRepository
 {
@@ -122,11 +123,17 @@ namespace RoyaltyRepository
         /// Create/Get new AccountDictionaryRecord instance without any link to database
         /// </summary>
         /// <returns>AccountDictionaryRecord instance</returns>
-        public AccountDictionaryRecord AccountDictionaryRecordNew(AccountDictionary accountDictionary = null)
+        public AccountDictionaryRecord AccountDictionaryRecordNew(AccountDictionary accountDictionary = null, Street street = null, Street streetChangeTo = null, object anonymousObject = null)
         {
             try
             {
-                var res = new AccountDictionaryRecord();
+                var res = new AccountDictionaryRecord() 
+                {
+                    Street = street,
+                    ChangeStreetTo = streetChangeTo
+                };
+                if (anonymousObject != null)
+                    res.FillFromAnonymousType(anonymousObject);
                 if (accountDictionary != null)
                     accountDictionary.Records.Add(res);
                 return res;
@@ -136,6 +143,35 @@ namespace RoyaltyRepository
                 Helpers.Log.Add(ex, string.Format("Repository.AccountDictionaryRecordNew()"));
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Get dictionary records
+        /// </summary>
+        /// <returns>AccountDictionaryRecord queriable collection</returns>
+        public IQueryable<AccountDictionaryRecord> AccountDictionaryRecordGet()
+        {
+            return Context
+                .AccountDictionaryRecords
+                .Include(i => i.Street)
+                .Include(i => i.Street.Area)
+                .Include(i => i.ChangeStreetTo)
+                .Include(i => i.ChangeStreetTo.Area)
+                .Include(i => i.Street.Area.City)
+                .Include(i => i.ChangeStreetTo.Area.City)
+                .Include(i => i.Street.Houses)
+                .Include(i => i.ChangeStreetTo.Houses)
+                ;
+        }
+        /// <summary>
+        /// Get dictionary records by identifiers
+        /// </summary>
+        /// <param name="instanceIds">AccountDictionaryRecord identifier array</param>
+        /// <returns>AccountDictionaryRecord queriable collection</returns>
+        public IQueryable<AccountDictionaryRecord> AccountDictionaryRecordGet(IEnumerable<long> instanceIds)
+        {
+            return AccountDictionaryRecordGet()
+                .Join(instanceIds, s => s.AccountDictionaryRecordID, i => i, (s, i) => s);
         }
     }
 }

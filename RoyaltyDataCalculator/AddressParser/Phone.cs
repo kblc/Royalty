@@ -9,16 +9,20 @@ namespace RoyaltyDataCalculator.AddressParser
     public static class Phone
     {
         private const string preffix = "8-";
-        private static string digits = new string(Enumerable.Range(0, 10).Select(i => i.ToString().First()).ToArray());
+        private static IDictionary<char, char> digitDictionary = Enumerable.Range(0, 10).Select(i => i.ToString().First()).ToDictionary(d => d);
         private const int phoneNumerLenghToAddPreffix = 10;
 
         private static string PreffixAdd(string phone)
         {
-            return (!string.IsNullOrWhiteSpace(preffix) && !phone.StartsWith(preffix)) ? preffix + phone : phone;
+            return (!string.IsNullOrWhiteSpace(preffix) && !phone.StartsWith(preffix) && phone.Length == phoneNumerLenghToAddPreffix) 
+                ? preffix + phone 
+                : phone;
         }
         private static string PreffixRemove(string phone)
         {
-            return (!string.IsNullOrWhiteSpace(preffix) && phone.StartsWith(preffix)) ? phone.Remove(0, preffix.Length) : phone;
+            return (!string.IsNullOrWhiteSpace(preffix) && phone.StartsWith(preffix) && phone.Length > phoneNumerLenghToAddPreffix) 
+                ? phone.Remove(0, preffix.Length) 
+                : phone;
         }
 
         /// <summary>
@@ -26,21 +30,39 @@ namespace RoyaltyDataCalculator.AddressParser
         /// </summary>
         /// <param name="incomingPhoneNumber">Incoming phone number string</param>
         /// <returns>Normalized phone number</returns>
-        public static string Parse(string incomingPhoneNumber)
+        public static string Parse(string incomingPhoneNumber, string cityDefaultPhoneCode = null)
         {
             //convert to digits only
-            var result = new string((incomingPhoneNumber != null ? incomingPhoneNumber : string.Empty)
-                .Join(digits, c => c, d => d, (c, d) => c).ToArray());
+            var result = new string(
+                PreffixRemove(incomingPhoneNumber != null ? incomingPhoneNumber : string.Empty)
+                .Where(c => digitDictionary.ContainsKey(c))
+                .ToArray()
+                );
 
-            if (result.Length > 0)
+            if (!string.IsNullOrWhiteSpace(result))
             {
-                if (result.Length == phoneNumerLenghToAddPreffix + 1)
+                //Set max number length equals const phoneNumerLenghToAddPreffix
+                if (result.Length > phoneNumerLenghToAddPreffix)
+                    result = result.Remove(0, result.Length - phoneNumerLenghToAddPreffix);
+
+                //Add city phone code if exists
+                if (!string.IsNullOrWhiteSpace(cityDefaultPhoneCode))
                 {
-                    result = result.Remove(0, 1);
-                    result = PreffixAdd(result);
+                    if (cityDefaultPhoneCode.Length + result.Length == phoneNumerLenghToAddPreffix)
+                    {
+                        //Simple add city code
+                        result = cityDefaultPhoneCode + result;
+                    }
+                    else if (cityDefaultPhoneCode.Length + result.Length > phoneNumerLenghToAddPreffix)
+                    {
+                        var simDigits = cityDefaultPhoneCode.Length + result.Length - phoneNumerLenghToAddPreffix;
+                        //Add city code if digits equals
+                        if (cityDefaultPhoneCode.Remove(0, cityDefaultPhoneCode.Length - simDigits) == incomingPhoneNumber.Substring(0, simDigits))
+                            result = cityDefaultPhoneCode.Substring(0, cityDefaultPhoneCode.Length - simDigits) + incomingPhoneNumber;
+                    }
                 }
-                else if (result.Length == phoneNumerLenghToAddPreffix)
-                    result = PreffixAdd(result);
+                //Add preffix to phone number
+                result = PreffixAdd(result);
             }
             return result;
         }
