@@ -28,12 +28,10 @@ namespace RoyaltyDataCalculator.AddressParser
             this.House = House.FromString(house);
         }
 
-        public static Address FromString(string textAddress, IEnumerable<string> excludesStrings = null, Func<string,string> renameString = null)
+        public static Address FromString(string textAddress, IEnumerable<string> excludesStrings = null)
         {
             if (textAddress == null)
                 throw new Exception("textAddress");
-
-            renameString = renameString ?? new Func<string, string>(s => s);
 
             string street = string.Empty;
             string house = string.Empty;
@@ -143,18 +141,19 @@ namespace RoyaltyDataCalculator.AddressParser
 
                     if (!string.IsNullOrEmpty(house))
                     {
-                        var houseItems = house.Replace(House.HousingDelimiter, " ")
+                        var houseItems = house
                             .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
                             .Select(i => new
                             {
                                 Item = i,
-                                IsStartFromDigit = digits.Contains(i.First()),
-                                IsDigit = i.All(c => digits.Contains(c))
+                                //IsStartFromDigit = digits.Contains(i.First()),
+                                IsDigit = digits.Contains(i.First())//i.All(c => digits.Contains(c))
                             })
+                            .Take(3)
                             .ToArray();
 
                         house = string.Empty;
-                        for (int i = 0; i < Math.Min(houseItems.Length, 3); i++)
+                        for (int i = 0; i < houseItems.Length; i++)
                         {
                             var item = houseItems[i];
 
@@ -195,21 +194,13 @@ namespace RoyaltyDataCalculator.AddressParser
                     step = 3.3;
                     #region concat Street and House
 
-                    string[] words = street.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    var words = street.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                     street = string.Empty;
                     foreach (string word in words)
-                        if (!string.IsNullOrWhiteSpace(word))
-                            street += " " + word[0].ToString().ToUpper() + word.Remove(0, 1).ToLower();
+                        street += " " + word[0].ToString().ToUpper() + word.Remove(0, 1).ToLower();
                     street = street.Trim();
 
                     #endregion
-
-                    #endregion
-                    step = 4;
-                    #region Mathing street with dictionary
-
-                    street = renameString(street) ?? street;
-
                     #endregion
                 }
 

@@ -57,16 +57,8 @@ namespace RoyaltyDataCalculatorTest
         [TestMethod]
         public void Address_Address_FromString()
         {
-            var renameString = new Func<string, string>((s) => 
-            {
-                if (s == "79 Гвардейская")
-                    return "79-Гвардейской";
-                else
-                    return s;
-            });
-
-            var a = Address.FromString("79-Гвардейская, 12 / 1 а", excludesStrings: new string[] { ",", "-" }, renameString: renameString);
-            Assert.AreEqual("79-Гвардейской", a.Street, "Street must equals");
+            var a = Address.FromString("79-Гвардейская, 12 / 1 а", excludesStrings: new string[] { ",", "-", "/" });
+            Assert.AreEqual("79 Гвардейская", a.Street, "Street must equals");
 
             var h = a.House;
             Assert.AreEqual((uint)12, h.Number, "Number must be 12");
