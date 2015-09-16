@@ -7,9 +7,9 @@ using Helpers.Linq;
 
 namespace RoyaltyDataCalculator.AddressParser
 {
-    public class AddressParser
+    public static class AddressParser
     {
-        public static RoyaltyRepository.Models.Street GetStreet(
+        public static string GetStreet(
             string incomingStreet,
             RoyaltyRepository.Repository repository,
             RoyaltyRepository.Models.AccountDictionary accountDictionary,
@@ -21,13 +21,15 @@ namespace RoyaltyDataCalculator.AddressParser
                 .FirstOrDefault();
         }
 
-        public static IDictionary<string, RoyaltyRepository.Models.Street> GetStreets(
+        public static IDictionary<string, string> GetStreets(
             IEnumerable<string> incomingStreets,
             RoyaltyRepository.Repository repository,
             RoyaltyRepository.Models.AccountDictionary accountDictionary,
             RoyaltyRepository.Models.City city,
             bool doNotAddAnyDataToDictionary = false)
         {
+            if (incomingStreets == null)
+                throw new ArgumentNullException("incomingStreets");
             if (repository == null)
                 throw new ArgumentNullException("repository");
             if (accountDictionary == null)
@@ -36,7 +38,8 @@ namespace RoyaltyDataCalculator.AddressParser
                 throw new ArgumentNullException("city");
 
             var dictionary = accountDictionary.Records
-                .Select(r => new { Street = r.Street, ChangeStreetTo = r.ChangeStreetTo })
+                .Join(repository.StreetGet(), r => r.StreetID, s => s.StreetID, (r,s) => new { r.Street, r.ChangeStreetTo })
+                .Join(repository.AreaGet().Where(a => a.CityID == city.CityID), r => r.Street.AreaID, a => a.AreaID, (r,a) => new { r.Street, r.ChangeStreetTo, Area = a })
                 .ToArray();
 
             var getNewStreet = new Func<string, RoyaltyRepository.Models.Street>((streetName) => 
@@ -69,9 +72,13 @@ namespace RoyaltyDataCalculator.AddressParser
                             .FirstOrDefault()
                         ) ?? getNewStreet(a)
                     })
+                .GroupBy(i => i.IncomingStreet)
+                .Select(g => new { g.FirstOrDefault().IncomingStreet, Street = g.FirstOrDefault().Street.Name })
                 .ToDictionary(i => i.IncomingStreet, i => i.Street);
 
             return result;
         }
+
+
     }
 }

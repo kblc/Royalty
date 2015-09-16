@@ -30,9 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Helpers, Version=1.0.8.10, Culture=neutral, PublicKeyToken=fdd3186503d11cf0, processorArchitecture=MSIL">
+    <Reference Include="Helpers, Version=1.0.7.8, Culture=neutral, PublicKeyToken=fdd3186503d11cf0, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Documents\Visual Studio 2013\Projects\Helpers\Helpers\bin\Release\Helpers.dll</HintPath>
+      <HintPath>..\..\Helpers\Helpers\bin\Release\Helpers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
