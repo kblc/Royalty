@@ -14,7 +14,7 @@ namespace RoyaltyRepositoryTests
         [TestInitialize]
         public void Initialization()
         {
-            Rep = new Repository("connectionString");
+            Rep = new Repository("connectionStringHome");
             Rep.AccountRemove(Rep.AccountGet(defAccountName, true));
             Rep.AccountAdd(Rep.AccountNew(byDefault: true, accountName: defAccountName));
             Console.WriteLine("############################## Initialization done");

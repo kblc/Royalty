@@ -310,6 +310,7 @@ namespace RoyaltyRepository
                 to.Settings.IgnoreExportTime = from.Settings.IgnoreExportTime;
                 to.Settings.MarkColumnName = from.Settings.MarkColumnName;
                 to.Settings.PhoneColumnName = from.Settings.PhoneColumnName;
+                to.Settings.CityColumnName = from.Settings.CityColumnName;
                 to.Settings.RecursiveFolderSearch = from.Settings.RecursiveFolderSearch;
                 to.Settings.TimeForTrust = from.Settings.TimeForTrust;
                 to.Settings.WaitExecutionAfterAnalize = from.Settings.WaitExecutionAfterAnalize;

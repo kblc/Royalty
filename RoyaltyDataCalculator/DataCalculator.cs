@@ -39,13 +39,13 @@ namespace RoyaltyDataCalculator
                         .Where(pi => pi.GetCustomAttributes(typeof(IsRequiredForColumnImportAttribute), false).Length > 0)
                         .Select(pi => pi.GetValue(value.Settings, null))
                         .Where(pi => pi != null)
-                        .Select(pi => pi.ToString());
+                        .Select(pi => pi.ToString().ToLower());
 
                     columnNamesForRowFilter = cNames
                         .Where(pi => pi.GetCustomAttributes(typeof(IsRequiredForColumnImportAttribute), false).Length > 0)
                         .Select(pi => pi.GetValue(value.Settings, null))
                         .Where(pi => pi != null)
-                        .Select(pi => pi.ToString());
+                        .Select(pi => pi.ToString().ToLower());
                 } else
                 {
                     columnNamesForTableValidation = Enumerable.Empty<string>();
@@ -62,7 +62,7 @@ namespace RoyaltyDataCalculator
         private IEnumerable<string> columnNamesForTableValidation = Enumerable.Empty<string>();
         private IEnumerable<string> columnNamesForRowFilter = Enumerable.Empty<string>();
         public Action<DataTable> TableValidator { get; set; }
-        public Expression<Func<DataRow, bool>> RowFilter { get; set; }
+        public Func<DataRow, bool> RowFilter { get; set; }
 
         private static Action<DataTable> GetDefaultDataTableValidator(IEnumerable<string> columnNames, Account account)
         {
@@ -82,9 +82,9 @@ namespace RoyaltyDataCalculator
                     throw new Exception(string.Format(Resources.COLUMNS_NOT_FOUND_IN_IMPORT_FILE, notExistsedColumns));
             });
         }
-        private static Expression<Func<DataRow, bool>> GetDefaultRowFilter(IEnumerable<string> columnNames, Account account)
+        private static Func<DataRow, bool> GetDefaultRowFilter(IEnumerable<string> columnNames, Account account)
         {
-            return r => !columnNames.Select(cN => (string)r[cN]).Any(c => string.IsNullOrWhiteSpace(c));
+            return r => columnNames.Select(cN => (string)r[cN]).Any(c => string.IsNullOrWhiteSpace(c));
         }
         public DataCalculator(Account account = null, Repository repository = null)
         {
