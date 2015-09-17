@@ -70,6 +70,7 @@ namespace RoyaltyRepository.Models
                 Settings = new AccountSettings()
                 {
                     AddressColumnName = "Адрес объекта",
+                    CityColumnName = "Город",
                     AreaColumnName = "Район",
                     MarkColumnName = "Метка",
                     HostColumnName = "URL",
@@ -98,7 +99,6 @@ namespace RoyaltyRepository.Models
             };
 
             foreach (var i in new string[] { 
-                        ".",",","|","(",")",@"\","/","~","!","@","#","$","%","^","&","*","<",">","?",";","'","\"",":","[","]","{","}","+","_","`",
                         "ул",
                         "ул.",
                         "улица",

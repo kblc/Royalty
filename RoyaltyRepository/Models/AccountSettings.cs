@@ -123,21 +123,23 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("recursive_folder_search_for_csv_files")]
         public bool? RecursiveFolderSearch { get; set; }
-
         /// <summary>
         /// Название поля с номерами телефонов
         /// </summary>
         [Column("phones_column_name"), Required(AllowEmptyStrings = false)]
+        [IsRequiredForRowImport, IsRequiredForColumnImport]
         public string PhoneColumnName { get; set; }
         /// <summary>
         /// Название поля с адресами
         /// </summary>
         [Column("address_column_name"), Required(AllowEmptyStrings = false)]
+        [IsRequiredForRowImport, IsRequiredForColumnImport]
         public string AddressColumnName { get; set; }
         /// <summary>
         /// Название поля с районами
         /// </summary>
         [Column("area_column_name"), Required(AllowEmptyStrings = false)]
+        [IsRequiredForColumnImport]
         public string AreaColumnName { get; set; }
         /// <summary>
         /// Название поля с метками
@@ -148,7 +150,14 @@ namespace RoyaltyRepository.Models
         /// Название поля с хостом или URL
         /// </summary>
         [Column("host_column_name"), Required(AllowEmptyStrings = false)]
+        [IsRequiredForRowImport, IsRequiredForColumnImport]
         public string HostColumnName { get; set; }
+        /// <summary>
+        /// Название поля с городом
+        /// </summary>
+        [Column("city_column_name"), Required(AllowEmptyStrings = false)]
+        [IsRequiredForRowImport, IsRequiredForColumnImport]
+        public string CityColumnName { get; set; }
 
         public override string ToString()
         {

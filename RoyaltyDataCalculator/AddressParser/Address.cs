@@ -56,7 +56,7 @@ namespace RoyaltyDataCalculator.AddressParser
 
                     string textAddressBeforeExclude = textAddress;
 
-                    foreach (string delimiter in excludesStrings.Where(s => !string.IsNullOrWhiteSpace(s)))
+                    foreach (string delimiter in excludesStrings.Where(s => !string.IsNullOrWhiteSpace(s)).OrderByDescending(s => s.Length))
                         textAddress = textAddress.Replace(delimiter.ToLower(), " ");
 
                     while (textAddress.Contains("  "))

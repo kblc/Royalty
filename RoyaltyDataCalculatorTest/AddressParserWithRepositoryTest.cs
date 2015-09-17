@@ -57,7 +57,7 @@ namespace RoyaltyDataCalculatorTest
             Rep.StreetAdd(s11, saveAfterInsert: false);
             Rep.SaveChanges();
 
-            var a = Rep.AccountGet(defAccountName);
+            var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Dictionary", "Dictionary.Records" });
 
             Rep.AccountDictionaryRecordNew(a.Dictionary, s00);
             Rep.AccountDictionaryRecordNew(a.Dictionary, s01, s00);
