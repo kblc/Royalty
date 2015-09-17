@@ -143,25 +143,29 @@ namespace RoyaltyRepository
         /// <returns>Area</returns>
         public Area AreaGet(long instanceId)
         {
-            return AreaGet(new long[] { instanceId }).FirstOrDefault();
+            return AreaGet(new long[] { instanceId }).SingleOrDefault();
         }
         /// <summary>
         /// Get one area by name
         /// </summary>
         /// <param name="instanceName">Area name</param>
         /// <returns>Area</returns>
-        public Area AreaGet(string instanceName)
+        public Area AreaGet(string instanceName, City city)
         {
-            return AreaGet(new string[] { instanceName }).FirstOrDefault();
+            return AreaGet(new string[] { instanceName }, city).SingleOrDefault();
         }
         /// <summary>
         /// Get areas by names
         /// </summary>
         /// <param name="instanceNames">Area name array</param>
         /// <returns>Area array</returns>
-        public IQueryable<Area> AreaGet(IEnumerable<string> instanceNames)
+        public IQueryable<Area> AreaGet(IEnumerable<string> instanceNames, City city)
         {
-            return AreaGet().Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
+            var res = AreaGet()
+                .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
+            if (city != null)
+                res = res.Join(new long[] { city.CityID }, a => a.CityID, i => i, (a,i) => a);
+            return res;
         }
         /// <summary>
         /// Get areas by identifiers

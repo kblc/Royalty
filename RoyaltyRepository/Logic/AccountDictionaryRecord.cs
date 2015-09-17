@@ -144,32 +144,31 @@ namespace RoyaltyRepository
                 throw;
             }
         }
-
-        /// <summary>
-        /// Get dictionary records
-        /// </summary>
-        /// <returns>AccountDictionaryRecord queriable collection</returns>
-        public IQueryable<AccountDictionaryRecord> AccountDictionaryRecordGet()
-        {
-            return Context
-                .AccountDictionaryRecords
-                .Include(i => i.Street)
-                .Include(i => i.Street.Area)
-                .Include(i => i.ChangeStreetTo)
-                .Include(i => i.ChangeStreetTo.Area)
-                .Include(i => i.Street.Area.City)
-                .Include(i => i.ChangeStreetTo.Area.City)
-                ;
-        }
-        /// <summary>
-        /// Get dictionary records by identifiers
-        /// </summary>
-        /// <param name="instanceIds">AccountDictionaryRecord identifier array</param>
-        /// <returns>AccountDictionaryRecord queriable collection</returns>
-        public IQueryable<AccountDictionaryRecord> AccountDictionaryRecordGet(IEnumerable<long> instanceIds)
-        {
-            return AccountDictionaryRecordGet()
-                .Join(instanceIds, s => s.AccountDictionaryRecordID, i => i, (s, i) => s);
-        }
+        ///// <summary>
+        ///// Get dictionary records
+        ///// </summary>
+        ///// <returns>AccountDictionaryRecord queriable collection</returns>
+        //public IQueryable<AccountDictionaryRecord> AccountDictionaryRecordGet()
+        //{
+        //    return Context
+        //        .AccountDictionaryRecords
+        //        .Include(i => i.Street)
+        //        .Include(i => i.Street.Area)
+        //        .Include(i => i.ChangeStreetTo)
+        //        .Include(i => i.ChangeStreetTo.Area)
+        //        .Include(i => i.Street.Area.City)
+        //        .Include(i => i.ChangeStreetTo.Area.City)
+        //        ;
+        //}
+        ///// <summary>
+        ///// Get dictionary records by identifiers
+        ///// </summary>
+        ///// <param name="instanceIds">AccountDictionaryRecord identifier array</param>
+        ///// <returns>AccountDictionaryRecord queriable collection</returns>
+        //public IQueryable<AccountDictionaryRecord> AccountDictionaryRecordGet(IEnumerable<long> instanceIds)
+        //{
+        //    return AccountDictionaryRecordGet()
+        //        .Join(instanceIds, s => s.AccountDictionaryRecordID, i => i, (s, i) => s);
+        //}
     }
 }

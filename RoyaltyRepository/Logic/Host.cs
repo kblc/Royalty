@@ -154,7 +154,8 @@ namespace RoyaltyRepository
         /// <returns>Host array</returns>
         public IQueryable<Host> HostGet(IEnumerable<string> hostNames)
         {
-            return HostGet().Where(a => hostNames.Any(pn => string.Compare(pn, a.Name, true) == 0));
+            return HostGet()
+                .Join(hostNames.Select(h => h.ToUpper()), p => p.Name.ToUpper(), i => i, (p, i) => p);
         }
         /// <summary>
         /// Get Hosts by identifiers
@@ -163,7 +164,8 @@ namespace RoyaltyRepository
         /// <returns>Host queriable collection</returns>
         public IQueryable<Host> HostGet(IEnumerable<long> instanceIds)
         {
-            return HostGet().Join(instanceIds, s => s.HostID, i => i, (s, i) => s);
+            return HostGet()
+                .Join(instanceIds, s => s.HostID, i => i, (s, i) => s);
         }
     }
 }

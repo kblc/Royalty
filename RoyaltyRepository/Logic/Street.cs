@@ -144,16 +144,29 @@ namespace RoyaltyRepository
         /// <returns>Street</returns>
         public Street StreetGet(long instanceId)
         {
-            return StreetGet(new long[] { instanceId }).FirstOrDefault();
+            return StreetGet(new long[] { instanceId }).SingleOrDefault();
+        }
+        /// <summary>
+        /// Get Street by name
+        /// </summary>
+        /// <param name="instanceName">Street name</param>
+        /// <returns>Street instance</returns>
+        public Street StreetGet(string instanceName, Area area)
+        {
+            return StreetGet(new string[] { instanceName }, area).SingleOrDefault();
         }
         /// <summary>
         /// Get Streets by Street names
         /// </summary>
         /// <param name="instanceNames">Streets name array</param>
         /// <returns>Street array</returns>
-        public IQueryable<Street> StreetGet(IEnumerable<string> instanceNames)
+        public IQueryable<Street> StreetGet(IEnumerable<string> instanceNames, Area area)
         {
-            return StreetGet().Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
+            var res = StreetGet()
+                .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
+            if (area != null)
+                res = res.Join(new long[] { area.AreaID }, a => a.AreaID, i => i, (a, i) => a);
+            return res;
         }
         /// <summary>
         /// Get Streets by identifiers

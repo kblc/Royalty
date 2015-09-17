@@ -123,7 +123,23 @@ namespace RoyaltyRepository
 
                 if (byDefault)
                 {
-                    var defaultAccount = this.Context.Accounts.FirstOrDefault(a => string.Compare(Account.defaultAccountName, a.Name, true) == 0 && a.IsHidden);
+                    var defaultAccount = AccountGet(Account.defaultAccountName, true, new string[]
+                    {
+                        "AdditionalColumns",
+                        "Data",
+                        "Dictionary",
+                        "Dictionary.Excludes",
+                        "Dictionary.Records",
+                        "Dictionary.Records.Conditions",
+                        "Dictionary.Records.Street",
+                        "Dictionary.Records.ChangeStreetTo",
+                        "ExportTypes",
+                        "ExportTypes.Mark",
+                        "SeriesOfNumbers",
+                        "State",
+                        "Settings",
+                        "Settings.SheduleTimes"
+                    });
                     if (defaultAccount != null)
                         AccountCopy(defaultAccount, res);
                     else
@@ -308,9 +324,16 @@ namespace RoyaltyRepository
         /// </summary>
         /// <param name="showHidden">Show hidden accounts</param>
         /// <returns>Accounts</returns>
-        public IQueryable<Account> AccountGet(bool showHidden = false)
+        public IQueryable<Account> AccountGet(bool showHidden = false, IEnumerable<string> eagerLoad = null)
         {
-            return this.Context.Accounts.Where(a => showHidden || !a.IsHidden);
+            System.Data.Entity.Infrastructure.DbQuery<Account> res = Context.Accounts;
+            if (eagerLoad != null)
+            {
+                foreach (var el in eagerLoad)
+                    res = res.Include(el);
+                res.Include((a) => a.Dictionary);
+            }
+            return res.Where(a => showHidden || !a.IsHidden);
         }
         /// <summary>
         /// Get one account by UID
@@ -318,19 +341,31 @@ namespace RoyaltyRepository
         /// <param name="accountId">Account identifier</param>
         /// <param name="showHidden">Show hidden accounts</param>
         /// <returns>Account with identifier</returns>
-        public Account AccountGet(Guid accountId, bool showHidden = false)
+        public Account AccountGet(Guid accountId, bool showHidden = false, IEnumerable<string> eagerLoad = null)
         {
-            return AccountGet(new Guid[] { accountId }, showHidden).FirstOrDefault();
+            return AccountGet(new Guid[] { accountId }, showHidden, eagerLoad).FirstOrDefault();
         }
         /// <summary>
-        /// Get one account by UID
+        /// Get one account by name
         /// </summary>
         /// <param name="accountName">Account name</param>
         /// <param name="showHidden">Show hidden accounts</param>
         /// <returns>Account with identifier</returns>
-        public Account AccountGet(string accountName, bool showHidden = false)
+        public Account AccountGet(string accountName, bool showHidden = false, IEnumerable<string> eagerLoad = null)
         {
-            return AccountGet(showHidden).FirstOrDefault(a => string.Compare(accountName, a.Name, true) == 0);
+            return AccountGet(new string[] { accountName }, showHidden, eagerLoad)
+                .SingleOrDefault();
+        }
+        /// <summary>
+        /// Get accounts by names
+        /// </summary>
+        /// <param name="accountNames">Account name array</param>
+        /// <param name="showHidden">Show hidden accounts</param>
+        /// <returns>Account with identifier</returns>
+        public IQueryable<Account> AccountGet(IEnumerable<string> accountNames, bool showHidden = false, IEnumerable<string> eagerLoad = null)
+        {
+            return AccountGet(showHidden, eagerLoad)
+                .Join(accountNames.Select(n => n.ToUpper()), a => a.Name.ToUpper(), i => i, (a, i) => a);
         }
         /// <summary>
         /// Get accounts by UIDs
@@ -338,9 +373,10 @@ namespace RoyaltyRepository
         /// <param name="instanceIds">Account identifier array</param>
         /// <param name="showHidden">Show hidden accounts</param>
         /// <returns>Account with identifier</returns>
-        public IQueryable<Account> AccountGet(IEnumerable<Guid> instanceIds, bool showHidden = false)
+        public IQueryable<Account> AccountGet(IEnumerable<Guid> instanceIds, bool showHidden = false, IEnumerable<string> eagerLoad = null)
         {
-            return AccountGet(showHidden).Join(instanceIds, s => s.AccountUID, i => i, (s, i) => s);
+            return AccountGet(showHidden, eagerLoad)
+                .Join(instanceIds, s => s.AccountUID, i => i, (s, i) => s);
         }
     }
 }

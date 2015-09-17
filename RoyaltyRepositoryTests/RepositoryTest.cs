@@ -37,10 +37,7 @@ namespace RoyaltyRepositoryTests
             var defCityName = "newCityName";
             var defAreaName = "newAreaName";
 
-            var cD = Rep.CityGet(defCityName);
-            Rep.CityRemove(cD);
-            var aD = Rep.AreaGet(defAreaName);
-            Rep.AreaRemove(aD);
+            Rep.CityRemove(Rep.CityGet(defCityName));
 
             var cCnt = Rep.CityGet().Count();
             var c = Rep.CityNew(defCityName);
@@ -96,6 +93,13 @@ namespace RoyaltyRepositoryTests
         }
 
         [TestMethod]
+        public void Mark_Select2()
+        {
+            var n = Rep.MarkGet().Count();
+            Assert.AreNotEqual(0, n, "Mark count should be more then 0");
+        }
+
+        [TestMethod]
         public void AccountExportTypes_Insert_Remove()
         {
             var acc = Rep.AccountGet(defAccountName);
@@ -114,22 +118,22 @@ namespace RoyaltyRepositoryTests
         [TestMethod]
         public void AccountDataRecord_Insert_Remove()
         {
-            var acc = Rep.AccountGet(defAccountName);
+            var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Data" });
             var hPhn = acc.Data.Count;
 
             var ph = Rep.PhoneGet("00-000-000-0000") ?? Rep.PhoneNew("00-000-000-0000");
             var h = Rep.HostGet("test0.host.com") ?? Rep.HostNew("test0.host.com");
             var c = Rep.CityGet("new test city") ?? Rep.CityNew("new test city");
-            var a = Rep.AreaGet().FirstOrDefault(i => i.Name == "new area test" && i.CityID == c.CityID) ?? Rep.AreaNew("new area test", c);
+            var a = Rep.AreaGet("new area test", c) ?? Rep.AreaNew("new area test", c);
+            var s = Rep.StreetGet("test street", a) ?? Rep.StreetNew("test street", a);
             var m = Rep.MarkGet().First();
 
             var p = Rep.AccountDataRecordNew(anonymousFiller: new
             {
                 Account = acc,
-                Address = "test address",
-                InDictionary = false,
                 Phone = ph,
-                Area = a,
+                Street = s,
+                HouseNumber = (string)null,
                 Host = h,
                 Mark = m
             });
@@ -166,6 +170,8 @@ namespace RoyaltyRepositoryTests
         [TestMethod]
         public void Host_Insert_Remove()
         {
+            Rep.HostRemove(Rep.HostGet("test0.host.com"));
+
             var hCnt = Rep.HostGet().Count();
             var h = Rep.HostNew("test0.host.com");
             Rep.HostAdd(h);
@@ -177,7 +183,7 @@ namespace RoyaltyRepositoryTests
         [TestMethod]
         public void File_Insert_Remove()
         {
-            var hCnt = Rep.HostGet().Count();
+            var hCnt = Rep.FileGet().Count();
             var h = Rep.FileNew();
             h.FileName = "test";
             h.FilePath = @"c:\test";
@@ -216,7 +222,7 @@ namespace RoyaltyRepositoryTests
         [TestMethod]
         public void Account_State()
         {
-            var acc = Rep.AccountGet(defAccountName);
+            var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "State" });
             acc.State.IsActive = true;
             acc.State.LastBatch = DateTime.Now;
             Rep.SaveChanges();
@@ -225,7 +231,7 @@ namespace RoyaltyRepositoryTests
         [TestMethod]
         public void Account_Settings()
         {
-            var acc = Rep.AccountGet(defAccountName);
+            var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings" });
             acc.Settings.DeleteFileAfterImport = false;
             acc.Settings.ExecuteAfterAnalizeCommand = "C:\abc.bat";
             acc.Settings.TimeForTrust = TimeSpan.FromDays(30);
@@ -235,11 +241,12 @@ namespace RoyaltyRepositoryTests
         [TestMethod]
         public void Account_Settings_Shedule()
         {
-            var acc = Rep.AccountGet(defAccountName);
+            var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings", "Settings.SheduleTimes" });
             var cShd = acc.Settings.SheduleTimes.Count;
             Rep.AccountSettingsSheduleTimeNew(acc.Settings, new TimeSpan(09, 00, 00));
             Rep.AccountSettingsSheduleTimeNew(acc.Settings, new TimeSpan(12, 00, 00));
             Rep.AccountSettingsSheduleTimeNew(acc.Settings, new TimeSpan(18, 00, 00));
+            Rep.SaveChanges();
             Assert.AreEqual(cShd + 3, acc.Settings.SheduleTimes.Count, "Shedule count must be increase by 3");
             var st = acc.Settings.SheduleTimes.Last();
             Rep.AccountSettingsSheduleTimeRemove(st);

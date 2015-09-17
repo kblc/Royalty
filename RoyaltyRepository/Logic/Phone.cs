@@ -154,7 +154,8 @@ namespace RoyaltyRepository
         /// <returns>Phone array</returns>
         public IQueryable<Phone> PhoneGet(IEnumerable<string> phoneNumbers)
         {
-            return PhoneGet().Where(a => phoneNumbers.Any(pn => string.Compare(pn, a.PhoneNumber, true) == 0));
+            return PhoneGet()
+                .Join(phoneNumbers, p => p.PhoneNumber, i => i, (p, i) => p);
         }
         /// <summary>
         /// Get phones by identifiers
@@ -163,7 +164,8 @@ namespace RoyaltyRepository
         /// <returns>Phone queriable collection</returns>
         public IQueryable<Phone> PhoneGet(IEnumerable<long> instanceIds)
         {
-            return PhoneGet().Join(instanceIds, s => s.PhoneID, i => i, (s, i) => s);
+            return PhoneGet()
+                .Join(instanceIds, s => s.PhoneID, i => i, (s, i) => s);
         }
     }
 }
