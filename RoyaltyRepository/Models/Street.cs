@@ -49,11 +49,6 @@ namespace RoyaltyRepository.Models
         [MaxLength(100, ErrorMessageResourceName = "StreetNameMaxLength")]
         public string Name { get; set; }
 
-        /// <summary>
-        /// Список домов на улице
-        /// </summary>
-        public virtual ICollection<House> Houses { get; set; }
-
         public override string ToString()
         {
             return this.GetColumnPropertiesForEntity();

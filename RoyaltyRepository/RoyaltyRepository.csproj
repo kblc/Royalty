@@ -54,7 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\Extensions.cs" />
-    <Compile Include="Logic\House.cs" />
     <Compile Include="Logic\Street.cs" />
     <Compile Include="Logic\File.cs" />
     <Compile Include="Logic\Message.cs" />
@@ -177,9 +176,12 @@
     <Compile Include="Migrations\201509161120265_Migration_AccountDictionaryRecord_ChangeIndex.Designer.cs">
       <DependentUpon>201509161120265_Migration_AccountDictionaryRecord_ChangeIndex.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509170410549_Migration_RemoveHouseAndAddHouseNumberToDataRecord.cs" />
+    <Compile Include="Migrations\201509170410549_Migration_RemoveHouseAndAddHouseNumberToDataRecord.Designer.cs">
+      <DependentUpon>201509170410549_Migration_RemoveHouseAndAddHouseNumberToDataRecord.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
-    <Compile Include="Models\House.cs" />
     <Compile Include="Models\Street.cs" />
     <Compile Include="Models\File.cs" />
     <Compile Include="Models\ImportQueueRecordFile.cs" />
@@ -303,6 +305,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509161120265_Migration_AccountDictionaryRecord_ChangeIndex.resx">
       <DependentUpon>201509161120265_Migration_AccountDictionaryRecord_ChangeIndex.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509170410549_Migration_RemoveHouseAndAddHouseNumberToDataRecord.resx">
+      <DependentUpon>201509170410549_Migration_RemoveHouseAndAddHouseNumberToDataRecord.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

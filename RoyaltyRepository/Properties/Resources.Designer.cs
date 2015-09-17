@@ -205,6 +205,15 @@ namespace RoyaltyRepository.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на House number length must be less or equals 20.
+        /// </summary>
+        public static string HouseNumberMaxLength {
+            get {
+                return ResourceManager.GetString("HouseNumberMaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Not setted.
         /// </summary>
         public static string MARK_DEFAULT {

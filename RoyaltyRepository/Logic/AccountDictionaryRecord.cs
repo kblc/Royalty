@@ -159,8 +159,6 @@ namespace RoyaltyRepository
                 .Include(i => i.ChangeStreetTo.Area)
                 .Include(i => i.Street.Area.City)
                 .Include(i => i.ChangeStreetTo.Area.City)
-                .Include(i => i.Street.Houses)
-                .Include(i => i.ChangeStreetTo.Houses)
                 ;
         }
         /// <summary>

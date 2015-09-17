@@ -205,7 +205,8 @@ namespace RoyaltyRepository
                 foreach (var d in from.Data)
                     to.Data.Add(new AccountDataRecord()
                     {
-                        House = d.House,
+                        HouseNumber = d.HouseNumber,
+                        Street = d.Street,
                         Changed = d.Changed,
                         Created = d.Created,
                         Exported = d.Exported,

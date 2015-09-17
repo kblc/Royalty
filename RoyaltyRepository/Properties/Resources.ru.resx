@@ -225,4 +225,7 @@
   <data name="CityPhoneNumberCodeMaxLength" xml:space="preserve">
     <value>Телефонный код города не может превышать 20 символов</value>
   </data>
+  <data name="HouseNumberMaxLength" xml:space="preserve">
+    <value>Номер дома не может превышать 20 символов</value>
+  </data>
 </root>

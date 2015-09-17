@@ -14,7 +14,7 @@ namespace RoyaltyDataCalculatorTest
         [TestInitialize]
         public void Initialization()
         {
-            Rep = new Repository("connectionStringHome");
+            Rep = new Repository("connectionString");
             Rep.AccountRemove(Rep.AccountGet(defAccountName, true));
             Rep.AccountAdd(Rep.AccountNew(byDefault: true, accountName: defAccountName));
             Rep.Log = (s) => { Console.WriteLine(string.Format("{0}", s)); };

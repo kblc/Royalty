@@ -60,17 +60,21 @@ namespace RoyaltyRepository.Models
         /// </summary>
         public virtual Host Host { get; set; }
         #endregion        
-        #region House
+        #region Street
         /// <summary>
-        /// Идентификатор дома
+        /// Идентификатор улицы
         /// </summary>
-        [ForeignKey("House"), Column("house_id"), Required]
-        public long HouseID { get; set; }
+        [ForeignKey("Street"), Column("street_id"), Required]
+        public long StreetID { get; set; }
         /// <summary>
-        /// Адрес
+        /// Улица
         /// </summary>
-        public virtual House House { get; set; }
+        public virtual Street Street { get; set; }
         #endregion        
+        #region House number
+        [Column("house_number"), MaxLength(20, ErrorMessageResourceName = "HouseNumberMaxLength")]
+        public string HouseNumber { get; set; }
+        #endregion
         #region Mark
         /// <summary>
         /// Идентификатор метки
