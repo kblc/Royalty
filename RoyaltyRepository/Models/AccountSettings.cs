@@ -21,6 +21,7 @@ namespace RoyaltyRepository.Models
         public AccountSettings()
         {
             SheduleTimes = new List<AccountSettingsSheduleTime>();
+            Columns = new HashSet<AccountSettingsColumn>();
         }
         #region Account
         /// <summary>
@@ -61,6 +62,11 @@ namespace RoyaltyRepository.Models
         /// Время, в которое должна запускаться обработка файлов
         /// </summary>
         public virtual ICollection<AccountSettingsSheduleTime> SheduleTimes { get; set; }
+
+        /// <summary>
+        /// Настройка колонок для импорта
+        /// </summary>
+        public virtual ICollection<AccountSettingsColumn> Columns { get; set; }
 
         /// <summary>
         /// Игнорирование времени экспорта (используйте IgnoreExportTime)
@@ -123,41 +129,6 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("recursive_folder_search_for_csv_files")]
         public bool? RecursiveFolderSearch { get; set; }
-        /// <summary>
-        /// Название поля с номерами телефонов
-        /// </summary>
-        [Column("phones_column_name"), Required(AllowEmptyStrings = false)]
-        [IsRequiredForRowImport, IsRequiredForColumnImport]
-        public string PhoneColumnName { get; set; }
-        /// <summary>
-        /// Название поля с адресами
-        /// </summary>
-        [Column("address_column_name"), Required(AllowEmptyStrings = false)]
-        [IsRequiredForRowImport, IsRequiredForColumnImport]
-        public string AddressColumnName { get; set; }
-        /// <summary>
-        /// Название поля с районами
-        /// </summary>
-        [Column("area_column_name"), Required(AllowEmptyStrings = false)]
-        [IsRequiredForColumnImport]
-        public string AreaColumnName { get; set; }
-        /// <summary>
-        /// Название поля с метками
-        /// </summary>
-        [Column("mark_column_name"), Required(AllowEmptyStrings = false)]
-        public string MarkColumnName { get; set; }
-        /// <summary>
-        /// Название поля с хостом или URL
-        /// </summary>
-        [Column("host_column_name"), Required(AllowEmptyStrings = false)]
-        [IsRequiredForRowImport, IsRequiredForColumnImport]
-        public string HostColumnName { get; set; }
-        /// <summary>
-        /// Название поля с городом
-        /// </summary>
-        [Column("city_column_name"), Required(AllowEmptyStrings = false)]
-        [IsRequiredForRowImport, IsRequiredForColumnImport]
-        public string CityColumnName { get; set; }
 
         public override string ToString()
         {

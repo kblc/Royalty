@@ -54,14 +54,16 @@ namespace RoyaltyRepository.Models
             var defAccount = context.Accounts.SingleOrDefault(a => string.Compare(a.Name, defaultAccountName) == 0 && a.IsHidden);
             if (defAccount == null)
             {
-                defAccount = GenerateDefaultAccount();
+                defAccount = GenerateDefaultAccount(context);
                 context.Accounts.Add(defAccount);
                 context.SaveChanges();
             }
         }
         
-        private static Account GenerateDefaultAccount()
+        private static Account GenerateDefaultAccount(RepositoryContext context)
         {
+            var cts = context.ColumnTypes;
+
             Account acc = new Account()
             {
                 AccountUID = Guid.NewGuid(),
@@ -69,12 +71,6 @@ namespace RoyaltyRepository.Models
                 IsHidden = true,
                 Settings = new AccountSettings()
                 {
-                    AddressColumnName = "Адрес объекта",
-                    CityColumnName = "Город",
-                    AreaColumnName = "Район",
-                    MarkColumnName = "Метка",
-                    HostColumnName = "URL",
-                    PhoneColumnName = "Контакты для связи",
                     ExecuteAfterAnalizeCommand = string.Empty,
                     FolderExportAnalize = string.Empty,
                     FolderExportPhones = string.Empty,
@@ -84,7 +80,16 @@ namespace RoyaltyRepository.Models
                     DeleteFileAfterImport = false,
                     RecursiveFolderSearch = true,
                     TimeForTrust = TimeSpan.FromDays(30),
-                    WaitExecutionAfterAnalize = true
+                    WaitExecutionAfterAnalize = true,
+                    Columns = new AccountSettingsColumn[]
+                    {
+                        new AccountSettingsColumn() { ColumnName = "Адрес объекта", ColumnType = cts.FirstOrDefault(c => c.SystemName == ColumnTypes.Address.ToString().ToUpper()) },
+                        new AccountSettingsColumn() { ColumnName = "Город", ColumnType = cts.FirstOrDefault(c => c.SystemName == ColumnTypes.City.ToString().ToUpper()) },
+                        new AccountSettingsColumn() { ColumnName = "Район", ColumnType = cts.FirstOrDefault(c => c.SystemName == ColumnTypes.Area.ToString().ToUpper()) },
+                        new AccountSettingsColumn() { ColumnName = "Метка", ColumnType = cts.FirstOrDefault(c => c.SystemName == ColumnTypes.Mark.ToString().ToUpper()) },
+                        new AccountSettingsColumn() { ColumnName = "URL", ColumnType = cts.FirstOrDefault(c => c.SystemName == ColumnTypes.Host.ToString().ToUpper()) },
+                        new AccountSettingsColumn() { ColumnName = "Контакты для связи", ColumnType = cts.FirstOrDefault(c => c.SystemName == ColumnTypes.Phone.ToString().ToUpper()) },
+                    }
                 },
                 State = new AccountState()
                 {

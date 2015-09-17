@@ -228,4 +228,28 @@
   <data name="HouseNumberMaxLength" xml:space="preserve">
     <value>House number length must be less or equals 20</value>
   </data>
+  <data name="ColumnTypeNameMaxLength" xml:space="preserve">
+    <value>Path type system name length must be less or equals 100</value>
+  </data>
+  <data name="ColumnTypeNameRequred" xml:space="preserve">
+    <value>Path type system name required</value>
+  </data>
+  <data name="COLUMNTYPE_ADDRESS" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="COLUMNTYPE_AREA" xml:space="preserve">
+    <value>Area</value>
+  </data>
+  <data name="COLUMNTYPE_CITY" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="COLUMNTYPE_HOST" xml:space="preserve">
+    <value>Host</value>
+  </data>
+  <data name="COLUMNTYPE_MARK" xml:space="preserve">
+    <value>Mark</value>
+  </data>
+  <data name="COLUMNTYPE_PHONE" xml:space="preserve">
+    <value>Phone</value>
+  </data>
 </root>

@@ -185,8 +185,14 @@
     <Compile Include="Migrations\201509171242012_Migration_AddCityColumnNameToSettings.Designer.cs">
       <DependentUpon>201509171242012_Migration_AddCityColumnNameToSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509171740123_Migration_Settings_AddColumns.cs" />
+    <Compile Include="Migrations\201509171740123_Migration_Settings_AddColumns.Designer.cs">
+      <DependentUpon>201509171740123_Migration_Settings_AddColumns.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\AccountSettingsColumn.cs" />
+    <Compile Include="Models\ColumnType.cs" />
     <Compile Include="Models\Street.cs" />
     <Compile Include="Models\File.cs" />
     <Compile Include="Models\ImportQueueRecordFile.cs" />
@@ -316,6 +322,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509171242012_Migration_AddCityColumnNameToSettings.resx">
       <DependentUpon>201509171242012_Migration_AddCityColumnNameToSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509171740123_Migration_Settings_AddColumns.resx">
+      <DependentUpon>201509171740123_Migration_Settings_AddColumns.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

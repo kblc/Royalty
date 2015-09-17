@@ -228,4 +228,28 @@
   <data name="HouseNumberMaxLength" xml:space="preserve">
     <value>Номер дома не может превышать 20 символов</value>
   </data>
+  <data name="ColumnTypeNameMaxLength" xml:space="preserve">
+    <value>Системное имя типа пути не может превышать 100 символов</value>
+  </data>
+  <data name="ColumnTypeNameRequred" xml:space="preserve">
+    <value>Необходимо указать системное имя типа пути</value>
+  </data>
+  <data name="COLUMNTYPE_ADDRESS" xml:space="preserve">
+    <value>Адрес</value>
+  </data>
+  <data name="COLUMNTYPE_AREA" xml:space="preserve">
+    <value>Район</value>
+  </data>
+  <data name="COLUMNTYPE_CITY" xml:space="preserve">
+    <value>Город</value>
+  </data>
+  <data name="COLUMNTYPE_HOST" xml:space="preserve">
+    <value>Ссылка</value>
+  </data>
+  <data name="COLUMNTYPE_MARK" xml:space="preserve">
+    <value>Метка</value>
+  </data>
+  <data name="COLUMNTYPE_PHONE" xml:space="preserve">
+    <value>Телефон</value>
+  </data>
 </root>

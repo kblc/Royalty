@@ -18,6 +18,12 @@ namespace RoyaltyDataCalculator
     /// </summary>
     public class DataCalculator : IDisposable
     {
+        public DataCalculator(Account account = null, Repository repository = null)
+        {
+            Account = account;
+            Repository = repository;
+        }
+
         private Account account = null;
         public Account Account
         {
@@ -30,22 +36,20 @@ namespace RoyaltyDataCalculator
                 if (account != value)
                     account = value;
 
+                var columnNamesForTableValidation = Enumerable.Empty<string>();
+                var columnNamesForRowFilter = Enumerable.Empty<string>();
+
                 if (account != null)
                 {
-                    var cNames = value.Settings.GetType()
-                        .GetProperties()
-                        .Where(pi => pi.Name.EndsWith("ColumnName"));
-                    columnNamesForTableValidation = cNames
-                        .Where(pi => pi.GetCustomAttributes(typeof(IsRequiredForColumnImportAttribute), false).Length > 0)
-                        .Select(pi => pi.GetValue(value.Settings, null))
-                        .Where(pi => pi != null)
-                        .Select(pi => pi.ToString().ToLower());
+                    columnNamesForTableValidation = value.Settings.Columns
+                        .Where(c => c.ColumnType.ImportTableValidation)
+                        .Select(c => c.ColumnName.ToLower())
+                        .ToArray();
 
-                    columnNamesForRowFilter = cNames
-                        .Where(pi => pi.GetCustomAttributes(typeof(IsRequiredForColumnImportAttribute), false).Length > 0)
-                        .Select(pi => pi.GetValue(value.Settings, null))
-                        .Where(pi => pi != null)
-                        .Select(pi => pi.ToString().ToLower());
+                    columnNamesForRowFilter = value.Settings.Columns
+                        .Where(c => c.ColumnType.ImportRowValidation)
+                        .Select(c => c.ColumnName.ToLower())
+                        .ToArray();
                 } else
                 {
                     columnNamesForTableValidation = Enumerable.Empty<string>();
@@ -56,13 +60,12 @@ namespace RoyaltyDataCalculator
                 RowFilter = GetDefaultRowFilter(columnNamesForTableValidation, value);
             }
         }
-
         public Repository Repository { get; set; }
 
-        private IEnumerable<string> columnNamesForTableValidation = Enumerable.Empty<string>();
-        private IEnumerable<string> columnNamesForRowFilter = Enumerable.Empty<string>();
         public Action<DataTable> TableValidator { get; set; }
         public Func<DataRow, bool> RowFilter { get; set; }
+        
+        #region Static create default filters and validators
 
         private static Action<DataTable> GetDefaultDataTableValidator(IEnumerable<string> columnNames, Account account)
         {
@@ -86,17 +89,22 @@ namespace RoyaltyDataCalculator
         {
             return r => columnNames.Select(cN => (string)r[cN]).Any(c => string.IsNullOrWhiteSpace(c));
         }
-        public DataCalculator(Account account = null, Repository repository = null)
+
+        #endregion
+
+        public IDictionary<DataRow, DataPreviewRow> Preview(DataTable dataTable)
         {
-            Account = account;
-            Repository = repository;
-        }
+            if (dataTable == null)
+                throw new ArgumentNullException("dataTable");
 
+            var res = dataTable.Rows
+                .OfType<DataRow>()
+                .Select(dr => new
+                {
+                    Row = dr,
 
-
-        public IDictionary<DataRow, DataPreviewRow> Preview(DataTable dataTable, Repository repository)
-        {
-
+                })
+                ;
 
             throw new NotImplementedException();
         }

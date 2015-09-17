@@ -138,7 +138,8 @@ namespace RoyaltyRepository
                         "SeriesOfNumbers",
                         "State",
                         "Settings",
-                        "Settings.SheduleTimes"
+                        "Settings.SheduleTimes",
+                        "Settings.Columns"
                     });
                     if (defaultAccount != null)
                         AccountCopy(defaultAccount, res);
@@ -298,22 +299,20 @@ namespace RoyaltyRepository
             #region Settings
             if (copySettings)
             { 
-                to.Settings.AddressColumnName = from.Settings.AddressColumnName;
-                to.Settings.AreaColumnName = from.Settings.AreaColumnName;
                 to.Settings.DeleteFileAfterImport = from.Settings.DeleteFileAfterImport;
                 to.Settings.ExecuteAfterAnalizeCommand = from.Settings.ExecuteAfterAnalizeCommand;
                 to.Settings.FolderExportAnalize = from.Settings.FolderExportAnalize;
                 to.Settings.FolderExportPhones = from.Settings.FolderExportPhones;
                 to.Settings.FolderImportAnalize = from.Settings.FolderImportAnalize;
                 to.Settings.FolderImportMain = from.Settings.FolderImportMain;
-                to.Settings.HostColumnName = from.Settings.HostColumnName;
                 to.Settings.IgnoreExportTime = from.Settings.IgnoreExportTime;
-                to.Settings.MarkColumnName = from.Settings.MarkColumnName;
-                to.Settings.PhoneColumnName = from.Settings.PhoneColumnName;
-                to.Settings.CityColumnName = from.Settings.CityColumnName;
                 to.Settings.RecursiveFolderSearch = from.Settings.RecursiveFolderSearch;
                 to.Settings.TimeForTrust = from.Settings.TimeForTrust;
                 to.Settings.WaitExecutionAfterAnalize = from.Settings.WaitExecutionAfterAnalize;
+
+                foreach (var c in from.Settings.Columns)
+                    to.Settings.Columns.Add( new AccountSettingsColumn() { ColumnName = c.ColumnName, ColumnType = c.ColumnType } );
+
                 if (copySettingsShedule)
                     foreach (var t in from.Settings.SheduleTimes)
                         to.Settings.SheduleTimes.Add(new AccountSettingsSheduleTime() { Time = t.Time });

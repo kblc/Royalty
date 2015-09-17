@@ -41,18 +41,15 @@ namespace RoyaltyDataCalculatorTest
         [ExpectedException(typeof(Exception))]
         public void DataCalculator_Preview_ExceptOnTableValidation()
         {
-            var a = Rep.AccountGet(defAccountName);
+            var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings.Columns" });
             if (a != null)
                 using (var dc = new DataCalculator(a))
                 {
                     var columns = string.Empty;
-                    var colValues = a.Settings.GetType()
-                        .GetProperties()
-                        .Where(pi => pi.Name.EndsWith("ColumnName"))
-                        .Where(pi => pi.GetCustomAttributes(typeof(IsRequiredForColumnImportAttribute), false).Length > 0)
-                        .Select(pi => pi.GetValue(a.Settings, null))
-                        .Where(pi => pi != null)
-                        .Select(pi => pi.ToString().ToLower())
+                    var colValues = a.Settings.Columns
+                        .Where(c => c.ColumnType.ImportTableValidation)
+                        .Select(c => c.ColumnName.ToLower())
+                        .ToArray()
                         .Skip(1); //Skip one required row for take exception
 
                     foreach (var colName in colValues)
@@ -87,13 +84,10 @@ namespace RoyaltyDataCalculatorTest
                 using (var dc = new DataCalculator(a))
                 {
                     var columns = string.Empty;
-                    var colValues = a.Settings.GetType()
-                        .GetProperties()
-                        .Where(pi => pi.Name.EndsWith("ColumnName"))
-                        .Where(pi => pi.GetCustomAttributes(typeof(IsRequiredForColumnImportAttribute), false).Length > 0)
-                        .Select(pi => pi.GetValue(a.Settings, null))
-                        .Where(pi => pi != null)
-                        .Select(pi => pi.ToString().ToLower());
+                    var colValues = a.Settings.Columns
+                        .Where(c => c.ColumnType.ImportTableValidation)
+                        .Select(c => c.ColumnName.ToLower())
+                        .ToArray();
 
                     var csvLines = new List<string>();
 
@@ -101,7 +95,7 @@ namespace RoyaltyDataCalculatorTest
                         columns += (string.IsNullOrWhiteSpace(columns) ? string.Empty : ";") + colName;
                     csvLines.Add(columns);
 
-                    var cnt = 10000;
+                    var cnt = 100000;
                     var goodCnt = 0;
                     for(int i=0; i< cnt; i++)
                     {
