@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\DataImportAttributes.cs" />
+    <Compile Include="Logic\ColumnType.cs" />
     <Compile Include="Logic\Street.cs" />
     <Compile Include="Logic\File.cs" />
     <Compile Include="Logic\Message.cs" />

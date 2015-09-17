@@ -94,15 +94,18 @@ namespace RoyaltyDataCalculator
 
         public IDictionary<DataRow, DataPreviewRow> Preview(DataTable dataTable)
         {
+            var colTypes = Repository.ColumnTypeGet().ToArray();
+
             if (dataTable == null)
                 throw new ArgumentNullException("dataTable");
 
             var res = dataTable.Rows
                 .OfType<DataRow>()
+                .AsParallel()
                 .Select(dr => new
                 {
                     Row = dr,
-
+                    AddressText = dr[Account.Settings.Columns.First(c => c.ColumnTypeID == colTypes.First(ct => ct.SystemName == ColumnTypes.Address.ToString().ToUpper()).ColumnTypeID ).ColumnName]
                 })
                 ;
 
