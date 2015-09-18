@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoyaltyDataCalculator.AddressParser
+namespace RoyaltyDataCalculator.Parser
 {
     /// <summary>
     /// Additional part for house number (e.g '/11a')

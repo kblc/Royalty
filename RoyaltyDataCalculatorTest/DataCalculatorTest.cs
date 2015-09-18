@@ -20,7 +20,7 @@ namespace RoyaltyDataCalculatorTest
         [TestInitialize]
         public void Initialization()
         {
-            Rep = new Repository("connectionStringHome");
+            Rep = new Repository("connectionString");
             Rep.AccountRemove(Rep.AccountGet(defAccountName, true));
             Rep.AccountAdd(Rep.AccountNew(byDefault: true, accountName: defAccountName));
             Rep.Log = (s) => { Console.WriteLine(string.Format("{0}", s)); };
@@ -128,6 +128,125 @@ namespace RoyaltyDataCalculatorTest
 
                     Assert.AreEqual(goodCnt, l.Table.Rows.Count, "Good row count must equals");
                 }
+        }
+
+        [TestMethod]
+        public void DataCalculator_Preview_Preview()
+        {
+            var cityNames = new string[] { "defaultPreviewCity0" };
+            var areaNames = new string[] { "defaultPreviewArea0", "defaultPreviewArea1" };
+            var streetNames = new string[] { "defaultPreviewStreet0", "defaultPreviewStreet1" };
+            var hostNames = new string[] { "testhost0.ru", "testhost1.ru" };
+
+            hostNames.ToList().ForEach((h) =>
+                {
+                    Rep.HostRemove(Rep.HostGet(h), saveAfterRemove: false);
+                    var host = Rep.HostNew(h);
+                    Rep.HostAdd(host, saveAfterInsert: false);
+                });
+            Rep.SaveChanges();
+
+            cityNames.ToList().ForEach((s) =>
+            {
+                Rep.CityRemove(Rep.CityGet(s), saveAfterRemove: false);
+                var city = Rep.CityNew(s);
+                Rep.CityAdd(city);
+
+                areaNames.ToList().ForEach((a) =>
+                {
+                    var area = Rep.AreaNew(a, city);
+                    streetNames.ToList().ForEach((ss) =>
+                    {
+                        var street = Rep.StreetNew(ss, area);
+                    });
+                });
+            });
+
+            Rep.SaveChanges();
+
+            var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings.Columns.ColumnType" });
+            var addrCol = acc.Settings.GetColumnFor(RoyaltyRepository.Models.ColumnTypes.Address);
+            var areaCol = acc.Settings.GetColumnFor(RoyaltyRepository.Models.ColumnTypes.Area);
+            var cityCol = acc.Settings.GetColumnFor(RoyaltyRepository.Models.ColumnTypes.City);
+            var cityHost = acc.Settings.GetColumnFor(RoyaltyRepository.Models.ColumnTypes.Host);
+            var cityPhone = acc.Settings.GetColumnFor(RoyaltyRepository.Models.ColumnTypes.Phone);
+
+            var csvLines = new List<string>();
+
+            var colValues = acc.Settings.Columns
+                .Where(c => c.ColumnType.ImportTableValidation)
+                .Select(c => new { Name = c.ColumnName.ToLower(), Type = c.ColumnType })
+                .ToArray();
+
+            var columns = string.Empty;
+            foreach (var colName in colValues)
+                columns += (string.IsNullOrWhiteSpace(columns) ? string.Empty : ";") + colName.Name;
+            csvLines.Add(columns);
+
+            var lastAddedPhone = string.Empty;
+            var rnd = new Random();
+            rnd.Next();
+            var genNewData = new Func<RoyaltyRepository.Models.ColumnTypes, string>(
+                (ct) => 
+                {
+                    var res = string.Empty;
+                    switch(ct)
+                    {
+                        case RoyaltyRepository.Models.ColumnTypes.Phone:
+
+                            if (!string.IsNullOrWhiteSpace(lastAddedPhone) && rnd.Next(0, 5) == 0)
+                                res = lastAddedPhone;
+                            else
+                                for (int n = 0; n < 5; n++)
+                                    res += rnd.Next(10, 99).ToString();
+                            break;
+                        case RoyaltyRepository.Models.ColumnTypes.Address:
+                            res = streetNames.Union(new string[] { "defaultPreviewStreet2" }).ToArray()[rnd.Next(0, streetNames.Length + 1)] 
+                                + ((rnd.Next(0, 9) == 0) ? ", " + rnd.Next(1,99) : string.Empty);
+                            break;
+                        case RoyaltyRepository.Models.ColumnTypes.Area:
+                            res = areaNames.Union(new string[] { string.Empty, "defaultPreviewArea2" }).ToArray()[rnd.Next(0, areaNames.Length + 2)];
+                            break;
+                        case RoyaltyRepository.Models.ColumnTypes.City:
+                            res = cityNames.Union(new string[] { "defaultPreviewCity1" }).ToArray()[rnd.Next(0, cityNames.Length + 1)];
+                            break;
+                        case RoyaltyRepository.Models.ColumnTypes.Host:
+                            res = (rnd.Next(3) == 0 ? string.Empty : @"http://") 
+                                + hostNames.Union(new string[] { "testhost2.ru" }).ToArray()[rnd.Next(0, hostNames.Length + 1)]
+                                + "/" + Guid.NewGuid().ToString("N");
+                            break;
+                    }
+                    return res;
+                }
+                );
+
+            for (int i = 0; i < 10000; i++ )
+            {
+                columns = string.Empty;
+                foreach (var colName in colValues)
+                    columns += (string.IsNullOrWhiteSpace(columns) ? string.Empty : ";") + genNewData(colName.Type.Type);
+                csvLines.Add(columns);
+            }
+
+            using (var dc = new DataCalculator(acc, Rep))
+            {
+                var l = Helpers.CSV.CSVFile.Load(csvLines,
+                    tableName: "{virtual}",
+                    filePath: "{virtual}",
+                    tableValidator: dc.TableValidator,
+                    rowFilter: dc.RowFilter);
+
+                dc.Preview(l.Table);
+            }
+
+            hostNames.ToList().ForEach((s) =>
+            {
+                Rep.HostRemove(Rep.HostGet(s));
+            });
+            cityNames.ToList().ForEach((s) =>
+            {
+                Rep.CityRemove(Rep.CityGet(s));
+            });
         }
     }
 }

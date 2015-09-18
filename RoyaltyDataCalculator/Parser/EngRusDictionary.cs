@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoyaltyDataCalculator.AddressParser
+namespace RoyaltyDataCalculator.Parser
 {
     /// <summary>
     /// English to Russian dictionary static class for fix string with english characters. Use <b>Fix()</b> method to do this.

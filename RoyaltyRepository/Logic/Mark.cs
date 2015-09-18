@@ -40,6 +40,15 @@ namespace RoyaltyRepository
             return MarkGet().FirstOrDefault(a => string.Compare(systemName, a.SystemName, true) == 0);
         }
         /// <summary>
+        /// Get one mark by mark type
+        /// </summary>
+        /// <param name="markType">Mark type</param>
+        /// <returns>Mark</returns>
+        public Mark MarkGet(MarkTypes markType)
+        {
+            return MarkGet().FirstOrDefault(a => string.Compare(markType.ToString().ToUpper(), a.SystemName, true) == 0);
+        }
+        /// <summary>
         /// Get marks by identifiers
         /// </summary>
         /// <param name="instanceIds">Mark identifier array</param>

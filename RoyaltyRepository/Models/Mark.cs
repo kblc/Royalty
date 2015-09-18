@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Helpers.Linq;
+
 namespace RoyaltyRepository.Models
 {
     public partial class RepositoryContext
@@ -16,6 +18,37 @@ namespace RoyaltyRepository.Models
         /// Хранилище меток записей
         /// </summary>
         public DbSet<Mark> Marks { get; set; }
+    }
+
+    /// <summary>
+    /// Тип метки
+    /// </summary>
+    public enum MarkTypes
+    {
+        /// <summary>
+        /// Не установленная
+        /// </summary>
+        Default = 0,
+        /// <summary>
+        /// Полудоверенная
+        /// </summary>
+        HalfTrusted,
+        /// <summary>
+        /// Не доверенная
+        /// </summary>
+        NotTrusted,
+        /// <summary>
+        /// Подозрительная
+        /// </summary>
+        Suspicious,
+        /// <summary>
+        /// Доверенная
+        /// </summary>
+        Trusted,
+        /// <summary>
+        /// Неизвестная
+        /// </summary>
+        Unknown
     }
 
     /// <summary>
@@ -51,18 +84,46 @@ namespace RoyaltyRepository.Models
             } 
         }
 
+        public static string GetNameFromType(MarkTypes type)
+        {
+            var obj = RoyaltyRepository.Properties.Resources.ResourceManager.GetObject(string.Format("MARK_{0}", type.ToString().ToUpper()));
+            return obj == null ? type.ToString() : obj.ToString();
+        }
+
+        /// <summary>
+        /// Тип метки из существующих
+        /// </summary>
+        [NotMapped]
+        public MarkTypes Type
+        {
+            get
+            {
+                return typeof(MarkTypes).GetEnumValues().Cast<MarkTypes>().FirstOrDefault(ct => ct.ToString().ToUpper() == SystemName);
+            }
+            set
+            {
+                SystemName = value.ToString().ToUpper();
+            }
+        }
+
         void IDefaultRepositoryInitialization.InitializeDefault(RepositoryContext context)
         {
-            var resType = System.Reflection.Assembly.GetExecutingAssembly().GetType("RoyaltyRepository.Properties.Resources");
-            if (resType != null)
-            { 
-                foreach(var p in resType.GetProperties().Where(pi => pi.Name.StartsWith("MARK_")).Select(pi => pi.Name.Substring("MARK_".Length)))
-                {
-                    if (!context.Marks.Any(m => string.Compare(m.SystemName, p) == 0))
-                        context.Marks.Add(new Mark() { SystemName = p });
-                }
-                context.SaveChanges();
-            }
+            var defColumnTypes = new Mark[] 
+            {
+                new Mark() { Type = MarkTypes.Default },
+                new Mark() { Type = MarkTypes.HalfTrusted },
+                new Mark() { Type = MarkTypes.NotTrusted },
+                new Mark() { Type = MarkTypes.Suspicious },
+                new Mark() { Type = MarkTypes.Trusted },
+                new Mark() { Type = MarkTypes.Unknown },
+            };
+
+            context.Marks.AddRange(
+                defColumnTypes
+                    .LeftOuterJoin(context.Marks, ct => ct.SystemName, c => c.SystemName, (def, existed) => new { Default = def, Existed = existed })
+                    .Where(i => i.Existed == null)
+                    .Select(i => i.Default)
+                );
         }
 
         public override string ToString()

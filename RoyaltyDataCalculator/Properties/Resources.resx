@@ -120,4 +120,7 @@
   <data name="COLUMNS_NOT_FOUND_IN_IMPORT_FILE" xml:space="preserve">
     <value>This columns not found in imported data: {0}</value>
   </data>
+  <data name="DataCalculator_Preview_ColumnInSettingsNotSetted" xml:space="preserve">
+    <value>Column name in account settings for '{0}' not setted</value>
+  </data>
 </root>

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Helpers.Linq;
 
-namespace RoyaltyDataCalculator.AddressParser
+namespace RoyaltyDataCalculator.Parser
 {
     public static class AddressParser
     {

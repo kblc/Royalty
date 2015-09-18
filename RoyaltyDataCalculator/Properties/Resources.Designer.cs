@@ -68,5 +68,14 @@ namespace RoyaltyDataCalculator.Properties {
                 return ResourceManager.GetString("COLUMNS_NOT_FOUND_IN_IMPORT_FILE", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Column name in account settings for &apos;{0}&apos; not setted.
+        /// </summary>
+        internal static string DataCalculator_Preview_ColumnInSettingsNotSetted {
+            get {
+                return ResourceManager.GetString("DataCalculator_Preview_ColumnInSettingsNotSetted", resourceCulture);
+            }
+        }
     }
 }

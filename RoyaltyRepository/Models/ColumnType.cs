@@ -19,6 +19,9 @@ namespace RoyaltyRepository.Models
         public DbSet<ColumnType> ColumnTypes { get; set; }
     }
 
+    /// <summary>
+    /// Тип колонки
+    /// </summary>
     public enum ColumnTypes
     {
         Address = 0,
@@ -59,6 +62,28 @@ namespace RoyaltyRepository.Models
                 var obj = RoyaltyRepository.Properties.Resources.ResourceManager.GetObject(string.Format("COLUMNTYPE_{0}", SystemName.ToUpper()));
                 return obj == null ? SystemName : obj.ToString(); 
             } 
+        }
+
+        public static string GetNameFromType(ColumnTypes type)
+        {
+            var obj = RoyaltyRepository.Properties.Resources.ResourceManager.GetObject(string.Format("COLUMNTYPE_{0}", type.ToString().ToUpper()));
+            return obj == null ? type.ToString() : obj.ToString(); 
+        }
+
+        /// <summary>
+        /// Тип колонки из существующих
+        /// </summary>
+        [NotMapped]
+        public ColumnTypes Type
+        {
+            get
+            {
+                return typeof(ColumnTypes).GetEnumValues().Cast<ColumnTypes>().FirstOrDefault(ct => ct.ToString().ToUpper() == SystemName);
+            }
+            set
+            {
+                SystemName = value.ToString().ToUpper();
+            }
         }
 
         /// <summary>

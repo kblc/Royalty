@@ -120,4 +120,7 @@
   <data name="COLUMNS_NOT_FOUND_IN_IMPORT_FILE" xml:space="preserve">
     <value>Следующий колонки не найдены в импортируемой таблице данных: {0}</value>
   </data>
+  <data name="DataCalculator_Preview_ColumnInSettingsNotSetted" xml:space="preserve">
+    <value>Название колонки '{0}' не указано в настройках аккаунта</value>
+  </data>
 </root>

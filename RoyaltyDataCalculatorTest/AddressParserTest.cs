@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RoyaltyDataCalculator.AddressParser;
+using RoyaltyDataCalculator.Parser;
 
 namespace RoyaltyDataCalculatorTest
 {
@@ -10,13 +10,13 @@ namespace RoyaltyDataCalculatorTest
         [TestMethod]
         public void Address_Phone_Parse()
         {
-            var ph0 = Phone.Parse("1b2c3d00-45");
+            var ph0 = Phone.FromString("1b2c3d00-45");
             Assert.AreEqual("1230045", ph0);
 
-            var ph1 = Phone.Parse("456789", "0123");
+            var ph1 = Phone.FromString("456789", "0123");
             Assert.AreEqual("8-0123456789", ph1);
 
-            var ph2 = Phone.Parse("456789", "0123456");
+            var ph2 = Phone.FromString("456789", "0123456");
             Assert.AreEqual("8-0123456789", ph2);
         }
 

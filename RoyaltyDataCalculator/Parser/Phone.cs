@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoyaltyDataCalculator.AddressParser
+namespace RoyaltyDataCalculator.Parser
 {
-    public static class Phone
+    public class Phone
     {
+        public string PhoneNumber { get; private set; }
+
         private const string preffix = "8-";
         private static IDictionary<char, char> digitDictionary = Enumerable.Range(0, 10).Select(i => i.ToString().First()).ToDictionary(d => d);
         private const int phoneNumerLenghToAddPreffix = 10;
@@ -30,7 +32,7 @@ namespace RoyaltyDataCalculator.AddressParser
         /// </summary>
         /// <param name="incomingPhoneNumber">Incoming phone number string</param>
         /// <returns>Normalized phone number</returns>
-        public static string Parse(string incomingPhoneNumber, string cityDefaultPhoneCode = null)
+        public static Phone FromString(string incomingPhoneNumber, string cityDefaultPhoneCode = null)
         {
             //convert to digits only
             var result = new string(
@@ -64,7 +66,12 @@ namespace RoyaltyDataCalculator.AddressParser
                 //Add preffix to phone number
                 result = PreffixAdd(result);
             }
-            return result;
+            return new Phone { PhoneNumber = result };
+        }
+
+        public override string ToString()
+        {
+            return PhoneNumber;
         }
     }
 }
