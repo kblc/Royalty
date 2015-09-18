@@ -111,50 +111,78 @@ namespace RoyaltyDataCalculator
                 #region Get column names by column types
                 Log.Add("Get column names by column types");
 
-                var colAddressName = Account.Settings.GetColumnFor(ColumnTypes.Address).ColumnName;
-                if (string.IsNullOrWhiteSpace(colAddressName))
-                    throw new Exception(string.Format(Resources.DataCalculator_Preview_ColumnInSettingsNotSetted, ColumnType.GetNameFromType(ColumnTypes.Address)));
+                var columnNames = dataTable.Columns.OfType<DataColumn>().Select(c => c.ColumnName.ToUpper()).ToArray();
 
-                var colHostName = Account.Settings.GetColumnFor(ColumnTypes.Host).ColumnName;
-                if (string.IsNullOrWhiteSpace(colHostName))
-                    throw new Exception(string.Format(Resources.DataCalculator_Preview_ColumnInSettingsNotSetted, ColumnType.GetNameFromType(ColumnTypes.Host)));
+                var columnByTypes = typeof(ColumnTypes)
+                    .GetEnumValues()
+                    .Cast<ColumnTypes>()
+                    .Select(ct => new
+                    {
+                        Type = ct,
+                        Column = Account.Settings.GetColumnFor(ct),
+                    })
+                    .Select(i => new
+                    {
+                        i.Type,
+                        i.Column,
+                        ExistsInDataTable = columnNames.Contains(i.Column.ColumnName.ToUpper()),
+                    }).ToArray();
 
-                var colCityName = Account.Settings.GetColumnFor(ColumnTypes.City).ColumnName;
-                if (string.IsNullOrWhiteSpace(colCityName))
-                    throw new Exception(string.Format(Resources.DataCalculator_Preview_ColumnInSettingsNotSetted, ColumnType.GetNameFromType(ColumnTypes.City)));
+                var badColumns = string.Empty;
+                foreach (var badColumn in columnByTypes.Where(c => c.Column == null))
+                    badColumns += (string.IsNullOrWhiteSpace(badColumns) ? string.Empty : ", ") + ColumnType.GetNameFromType(badColumn.Type);
+                if (!string.IsNullOrWhiteSpace(badColumns))
+                    throw new Exception(string.Format(Resources.DataCalculator_Preview_ColumnInSettingsNotSetted, badColumns));
 
-                var colAreaName = Account.Settings.GetColumnFor(ColumnTypes.Area).ColumnName;
-                if (string.IsNullOrWhiteSpace(colAreaName))
-                    throw new Exception(string.Format(Resources.DataCalculator_Preview_ColumnInSettingsNotSetted, ColumnType.GetNameFromType(ColumnTypes.Area)));
+                var columnDict = columnByTypes.ToDictionary(i => i.Type, i => new { i.Column.ColumnName, i.ExistsInDataTable });
 
-                var colMarkName = Account.Settings.GetColumnFor(ColumnTypes.Mark).ColumnName;
-                if (string.IsNullOrWhiteSpace(colMarkName))
-                    throw new Exception(string.Format(Resources.DataCalculator_Preview_ColumnInSettingsNotSetted, ColumnType.GetNameFromType(ColumnTypes.Mark)));
-
-                var colPhoneName = Account.Settings.GetColumnFor(ColumnTypes.Phone).ColumnName;
-                if (string.IsNullOrWhiteSpace(colPhoneName))
-                    throw new Exception(string.Format(Resources.DataCalculator_Preview_ColumnInSettingsNotSetted, ColumnType.GetNameFromType(ColumnTypes.Phone)));
                 #endregion
+                #region Prepare data
                 Log.Add("Parse incoming data");
 
+                var excludes = Account.Dictionary.Excludes
+                    .Select(e => e.Exclude)
+                    .ToArray();
+
                 var subRes0 = dataTable.Rows
-                    .OfType<DataRow>()
+                    .Cast<DataRow>()
                     .AsParallel()
                     .Select(dr => new
                     {
                         Row = dr,
-                        IncomingAddress = Parser.Address.FromString(dr[colAddressName] == DBNull.Value ? string.Empty : dr[colAddressName].ToString()),
-                        IncomingHost = Parser.Host.FromString(dr[colHostName] == DBNull.Value ? string.Empty : dr[colHostName].ToString()),
-                        IncomingPhone = Parser.Phone.FromString(dr[colPhoneName] == DBNull.Value ? string.Empty : dr[colPhoneName].ToString()),
-                        IncomingCity = dr[colCityName] == DBNull.Value ? string.Empty : dr[colCityName].ToString(),
-                        IncomingArea = dr[colAreaName] == DBNull.Value ? string.Empty : dr[colAreaName].ToString(),
-                        IncomingMark = dr[colMarkName] == DBNull.Value ? string.Empty : dr[colMarkName].ToString(),
+                        IncomingAddressValue = columnDict[ColumnTypes.Address].ExistsInDataTable ? dr[columnDict[ColumnTypes.Address].ColumnName] : null,
+                        IncomingHostValue = columnDict[ColumnTypes.Host].ExistsInDataTable ? dr[columnDict[ColumnTypes.Host].ColumnName] : null,
+                        IncomingPhoneValue = columnDict[ColumnTypes.Phone].ExistsInDataTable ? dr[columnDict[ColumnTypes.Phone].ColumnName] : null,
+                        IncomingCityValue = columnDict[ColumnTypes.City].ExistsInDataTable ? dr[columnDict[ColumnTypes.City].ColumnName] : null,
+                        IncomingAreaValue = columnDict[ColumnTypes.Area].ExistsInDataTable ? dr[columnDict[ColumnTypes.Area].ColumnName] : null,
+                        IncomingMarkValue = columnDict[ColumnTypes.Mark].ExistsInDataTable ? dr[columnDict[ColumnTypes.Mark].ColumnName] : null,
+                    })
+                    .Select(dr => new
+                    {
+                        dr.Row,
+                        IncomingAddress = (dr.IncomingAddressValue == DBNull.Value || dr.IncomingAddressValue == null) ? string.Empty : dr.IncomingAddressValue.ToString(),
+                        IncomingHost = (dr.IncomingHostValue == DBNull.Value || dr.IncomingHostValue == null) ? string.Empty : dr.IncomingHostValue.ToString(),
+                        IncomingPhone = (dr.IncomingPhoneValue == DBNull.Value || dr.IncomingPhoneValue == null) ? string.Empty : dr.IncomingPhoneValue.ToString(),
+                        IncomingCity = (dr.IncomingCityValue == DBNull.Value || dr.IncomingCityValue == null) ? string.Empty : dr.IncomingCityValue.ToString(),
+                        IncomingArea = (dr.IncomingAreaValue == DBNull.Value || dr.IncomingAreaValue == null) ? string.Empty : dr.IncomingAreaValue.ToString(),
+                        IncomingMark = (dr.IncomingMarkValue == DBNull.Value || dr.IncomingMarkValue == null) ? string.Empty : dr.IncomingMarkValue.ToString(),
+                    })
+                    .Select(dr => new
+                    {
+                        dr.Row,
+                        IncomingAddress = Parser.Address.FromString(dr.IncomingAddress, excludes),
+                        IncomingHost = Parser.Host.FromString(dr.IncomingHost),
+                        IncomingPhone = Parser.Phone.FromString(dr.IncomingPhone),
+                        dr.IncomingCity,
+                        dr.IncomingArea,
+                        dr.IncomingMark,
                     });
 
+                #endregion
                 #region Join hostes or create new
                 Log.Add("Join hostes or create new");
 
-                var subRes2 = subRes0
+                var subRes1 = subRes0
                     .LeftOuterJoin(Repository.HostGet(), i => i.IncomingHost.Hostname, h => h.Name, (i, h) => new
                     {
                         i.Row,
@@ -185,7 +213,7 @@ namespace RoyaltyDataCalculator
                 #region Join phones or create new
                 Log.Add("Join phones or create new");
 
-                var subRes3 = subRes2
+                var subRes2 = subRes1
                     .LeftOuterJoin(Repository.PhoneGet(), i => i.IncomingPhone.PhoneNumber, p => p.PhoneNumber, (i, p) => new 
                     {
                         i.Row,
@@ -222,8 +250,8 @@ namespace RoyaltyDataCalculator
 
                 var defMark = Repository.MarkGet(MarkTypes.Unknown);
 
-                var subRes4 = subRes3
-                    .LeftOuterJoin(Repository.MarkGet(), i => i.IncomingMark, m => m.Name, (i, m) => new
+                var subRes3 = subRes2
+                    .LeftOuterJoin(Repository.MarkGet(), i => i.IncomingMark, m => m.SystemName, (i, m) => new
                     {
                         i.Row,
                         i.IncomingPhone,
@@ -242,8 +270,8 @@ namespace RoyaltyDataCalculator
                 #region Join cities or create new
                 Log.Add("Join cities or create new");
 
-                var res = subRes4
-                    .LeftOuterJoin(Repository.CityGet(), i => i.IncomingCity, c => c.Name, (i, c) => new
+                var res = subRes3
+                    .LeftOuterJoin(Repository.CityGet(), i => i.IncomingCity.ToUpper(), c => c.Name.ToUpper(), (i, c) => new
                     {
                         i.Row,
                         i.IncomingPhone,

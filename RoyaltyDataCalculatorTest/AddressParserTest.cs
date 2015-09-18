@@ -11,13 +11,13 @@ namespace RoyaltyDataCalculatorTest
         public void Address_Phone_Parse()
         {
             var ph0 = Phone.FromString("1b2c3d00-45");
-            Assert.AreEqual("1230045", ph0);
+            Assert.AreEqual("1230045", ph0.PhoneNumber);
 
             var ph1 = Phone.FromString("456789", "0123");
-            Assert.AreEqual("8-0123456789", ph1);
+            Assert.AreEqual("8-0123456789", ph1.PhoneNumber);
 
             var ph2 = Phone.FromString("456789", "0123456");
-            Assert.AreEqual("8-0123456789", ph2);
+            Assert.AreEqual("8-0123456789", ph2.PhoneNumber);
         }
 
         [TestMethod]

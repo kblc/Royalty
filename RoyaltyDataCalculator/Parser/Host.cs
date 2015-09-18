@@ -13,11 +13,16 @@ namespace RoyaltyDataCalculator.Parser
         public static Host FromString(string url)
         {
             Uri uri;
-            if (Uri.TryCreate(url, UriKind.Absolute, out uri))
+            if (Uri.TryCreate(url.StartsWith("http") ? url : @"http://" + url , UriKind.Absolute, out uri))
             {
                 return new Host() { Hostname = uri.Host.ToLower() };
             }
             return new Host() { Hostname = string.Empty };
+        }
+
+        public override string ToString()
+        {
+            return Hostname;
         }
     }
 }

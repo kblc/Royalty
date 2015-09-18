@@ -121,6 +121,6 @@
     <value>This columns not found in imported data: {0}</value>
   </data>
   <data name="DataCalculator_Preview_ColumnInSettingsNotSetted" xml:space="preserve">
-    <value>Column name in account settings for '{0}' not setted</value>
+    <value>Account settings not contains values for folowing columns: {0}</value>
   </data>
 </root>

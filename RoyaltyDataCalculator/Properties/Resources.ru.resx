@@ -121,6 +121,6 @@
     <value>Следующий колонки не найдены в импортируемой таблице данных: {0}</value>
   </data>
   <data name="DataCalculator_Preview_ColumnInSettingsNotSetted" xml:space="preserve">
-    <value>Название колонки '{0}' не указано в настройках аккаунта</value>
+    <value>В настройках аккаунта отсутствуют значения для следующих колонок: {0}</value>
   </data>
 </root>
