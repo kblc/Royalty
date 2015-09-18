@@ -39,8 +39,8 @@ namespace RoyaltyDataCalculatorTest
             var c = Rep.CityNew("testCity");
             Rep.CityAdd(c);
 
-            var a0 = Rep.AreaNew("test area0", c);
-            var a1 = Rep.AreaNew("test area1", c);
+            var a0 = Rep.AreaNew("test area0", city: c);
+            var a1 = Rep.AreaNew("test area1", city: c);
 
             Rep.AreaAdd(a0, saveAfterInsert: false);
             Rep.AreaAdd(a1, saveAfterInsert: false);

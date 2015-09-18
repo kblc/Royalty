@@ -191,6 +191,10 @@
     <Compile Include="Migrations\201509171740123_Migration_Settings_AddColumns.Designer.cs">
       <DependentUpon>201509171740123_Migration_Settings_AddColumns.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509181549382_Migration_ChangeRelationshipBetweenAreaAndCity.cs" />
+    <Compile Include="Migrations\201509181549382_Migration_ChangeRelationshipBetweenAreaAndCity.Designer.cs">
+      <DependentUpon>201509181549382_Migration_ChangeRelationshipBetweenAreaAndCity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountSettingsColumn.cs" />
@@ -327,6 +331,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509171740123_Migration_Settings_AddColumns.resx">
       <DependentUpon>201509171740123_Migration_Settings_AddColumns.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509181549382_Migration_ChangeRelationshipBetweenAreaAndCity.resx">
+      <DependentUpon>201509181549382_Migration_ChangeRelationshipBetweenAreaAndCity.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

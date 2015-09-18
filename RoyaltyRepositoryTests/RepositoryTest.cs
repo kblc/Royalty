@@ -45,22 +45,22 @@ namespace RoyaltyRepositoryTests
             Assert.AreEqual(cCnt + 1, Rep.CityGet().Count(), "City count must increase by 1");
 
             var aCnt = Rep.AreaGet().Count();
-            var a = Rep.AreaNew(defAreaName, c);
+            var a = Rep.AreaNew(defAreaName, city: c);
             Rep.AreaAdd(a);
             Assert.AreEqual(aCnt + 1, Rep.AreaGet().Count(), "Area count must increase by 1");
-
-            c.UndefinedArea = a;
-            Rep.SaveChanges();
 
             Rep.AreaRemove(a);
             Assert.AreEqual(aCnt, Rep.AreaGet().Count(), "Area count must decrease by 1");
 
-            Assert.AreEqual(null, c.UndefinedArea, "Default area for city must be NULL (we just delete it)");
+            Assert.AreEqual(0, c.Areas.Where(ar => ar.IsDefault).Count(), "Default area for city must be NULL (we just delete it)");
+
+            a = c.UndefinedArea;
+            Rep.SaveChanges();
+
+            Assert.AreEqual(aCnt + 1, Rep.AreaGet().Count(), "Area count must increase by 1 cause we create default area");
 
             Rep.CityRemove(c);
             Assert.AreEqual(cCnt, Rep.CityGet().Count(), "City count must decrease by 1");
-
-            Assert.AreEqual(aCnt - 1, Rep.AreaGet().Count(), "Area count must decrease by 1 because we delete city with 1 default area");
         }
 
         [TestMethod]
@@ -124,7 +124,7 @@ namespace RoyaltyRepositoryTests
             var ph = Rep.PhoneGet("00-000-000-0000") ?? Rep.PhoneNew("00-000-000-0000");
             var h = Rep.HostGet("test0.host.com") ?? Rep.HostNew("test0.host.com");
             var c = Rep.CityGet("new test city") ?? Rep.CityNew("new test city");
-            var a = Rep.AreaGet("new area test", c) ?? Rep.AreaNew("new area test", c);
+            var a = Rep.AreaGet("new area test", c) ?? Rep.AreaNew("new area test", city: c);
             var s = Rep.StreetGet("test street", a) ?? Rep.StreetNew("test street", a);
             var m = Rep.MarkGet().First();
 

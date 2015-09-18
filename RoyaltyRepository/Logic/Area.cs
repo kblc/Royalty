@@ -106,7 +106,7 @@ namespace RoyaltyRepository
         /// </summary>
         /// <param name="instanceName">Area name</param>
         /// <returns>Area instance</returns>
-        public Area AreaNew(string instanceName = null, City city = null)
+        public Area AreaNew(string instanceName = null, bool isDefault = false, City city = null)
         {
             try
             {

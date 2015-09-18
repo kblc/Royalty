@@ -50,15 +50,20 @@ namespace RoyaltyRepository.Models
         public string PhoneNumberCode { get; set; }
 
         #region UndefinedArea
-        /// <summary>
-        /// Идентификатор района, который используется в случае, когда район не определен
-        /// </summary>
-        [ForeignKey("UndefinedArea"), Column("undefined_area_id")]
-        public long? UndefinedAreaID { get; set; }
-        /// <summary>
-        /// Район, который используется в случае, когда район не определен
-        /// </summary>
-        public virtual Area UndefinedArea { get; set; }
+        [NotMapped]
+        public Area UndefinedArea
+        {
+            get
+            {
+                var a = Areas.FirstOrDefault(ar => ar.IsDefault);
+                if (a == null)
+                { 
+                    a = new Area() { Name = Area.defaultAreaName, IsDefault = true };
+                    Areas.Add(a);
+                }
+                return a;
+            }
+        }
         #endregion
 
         [InverseProperty("City")]

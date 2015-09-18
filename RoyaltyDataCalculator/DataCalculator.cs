@@ -310,7 +310,7 @@ namespace RoyaltyDataCalculator
                 #endregion
                 #region Join areas
 
-
+                    
 
                 #endregion
                 return res.ToDictionary(i => i.Row, i => new DataPreviewRow()

@@ -24,11 +24,10 @@ namespace RoyaltyRepository.Models
     [Table("area")]
     public partial class Area
     {
-        internal const string defaultAccountName = ".default";
+        internal const string defaultAreaName = ".default";
 
         public Area()
         {
-            DefaultForCities = new List<City>();
             Streets = new List<Street>();
         }
         /// <summary>
@@ -48,12 +47,11 @@ namespace RoyaltyRepository.Models
         /// </summary>
         public virtual City City { get; set; }
         #endregion
-        #region DefaultForCity
-        //[ForeignKey("DefaultForCity")]
-        //public long DefaultForCityID { get; set; }
-        [InverseProperty("UndefinedArea")]
-        public virtual ICollection<City> DefaultForCities { get; set; }
-        #endregion
+        /// <summary>
+        /// Данный район - район 'по умолчанию' для города
+        /// </summary>
+        [Column("is_default"), Required]
+        public bool IsDefault { get; set; }
         /// <summary>
         /// Название района
         /// </summary>

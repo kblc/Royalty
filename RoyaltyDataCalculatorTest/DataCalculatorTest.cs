@@ -124,10 +124,11 @@ namespace RoyaltyDataCalculatorTest
                         verboseLogAction: (s) =>
                         {
                             Console.WriteLine(s);
-                            if (s.Contains("good_data") && !s.Contains("bad_data"))
-                                throw new Exception("Good data filtered");
+                            if (s.Contains("good_data"))
+                                throw new Exception("Good data filtered: " + s);
                         },
-                        rowFilter: r => colValues.Select(c => r[c].ToString()).Any(i => i.Contains("bad_data")));
+                        rowFilter: r => colValues.Any(c => r[c].ToString().Contains("bad_data")) 
+                        );
 
                     Assert.AreEqual(goodCnt, l.Table.Rows.Count, "Good row count must equals");
                 }
@@ -160,7 +161,7 @@ namespace RoyaltyDataCalculatorTest
 
                     areaNames.ToList().ForEach((a) =>
                     {
-                        var area = Rep.AreaNew(a, city);
+                        var area = Rep.AreaNew(a, city: city);
                         streetNames.ToList().ForEach((ss) =>
                         {
                             var street = Rep.StreetNew(ss, area);
