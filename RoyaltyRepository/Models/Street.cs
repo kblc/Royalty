@@ -45,8 +45,7 @@ namespace RoyaltyRepository.Models
         /// Название улицы
         /// </summary>
         [Column("name"), Index("UIX_AREA_STREET_NAME", 2, IsUnique = true)]
-        [Required(ErrorMessageResourceName = "StreetNameRequred")]
-        [MaxLength(100, ErrorMessageResourceName = "StreetNameMaxLength")]
+        [Required(ErrorMessageResourceName = "StreetNameRequred"), MaxLength(100, ErrorMessageResourceName = "StreetNameMaxLength")]
         public string Name { get; set; }
 
         public override string ToString()

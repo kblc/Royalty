@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoyaltyDataCalculator.Parser;
 using RoyaltyRepository;
+using System.Linq;
 
 namespace RoyaltyDataCalculatorTest
 {
@@ -37,24 +38,24 @@ namespace RoyaltyDataCalculatorTest
             Rep.CityRemove(Rep.CityGet("testCity"));
 
             var c = Rep.CityNew("testCity");
-            Rep.CityAdd(c);
+            Rep.CityAdd(c, saveAfterInsert: false);
 
             var a0 = Rep.AreaNew("test area0", city: c);
             var a1 = Rep.AreaNew("test area1", city: c);
 
             Rep.AreaAdd(a0, saveAfterInsert: false);
             Rep.AreaAdd(a1, saveAfterInsert: false);
-            Rep.SaveChanges();
 
             var s00 = Rep.StreetNew("Ивановского", a0);
             var s01 = Rep.StreetNew("Пузановского", a0);
             var s10 = Rep.StreetNew("Победы", a1);
-            var s11 = Rep.StreetNew("Успеха", a1);
+            var s11 = Rep.StreetNew("Успеха и добра", a1);
 
             Rep.StreetAdd(s00, saveAfterInsert: false);
             Rep.StreetAdd(s01, saveAfterInsert: false);
             Rep.StreetAdd(s10, saveAfterInsert: false);
             Rep.StreetAdd(s11, saveAfterInsert: false);
+
             Rep.SaveChanges();
 
             var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Dictionary", "Dictionary.Records" });
@@ -66,28 +67,38 @@ namespace RoyaltyDataCalculatorTest
 
             Rep.SaveChanges();
 
-            var res0 = AddressParser.GetStreet(s00.Name, Rep, a.Dictionary, c, doNotAddAnyDataToDictionary: true);
-            Assert.AreEqual(s00.Name, res0, "res0: Values must equals");
+            var ap = new AddressParser(a, Rep);
 
-            var res1 = AddressParser.GetStreet(s01.Name, Rep, a.Dictionary, c, doNotAddAnyDataToDictionary: true);
-            Assert.AreEqual(s00.Name, res1, "res1: Values must equals");
+            var res0 = ap.GetStreetByDictionary(Address.FromString(s00.Name), c, doNotAddAnyDataToDictionary: true);
+            Assert.AreNotEqual(null, res0, "res0 must exists!");
+            Assert.AreEqual(s00.Name, res0.Name, "res0: Values must equals");
 
-            var res2 = AddressParser.GetStreet(s10.Name.Remove(0, 2), Rep, a.Dictionary, c, doNotAddAnyDataToDictionary: true);
-            Assert.AreEqual(s10.Name, res2, "res2: Values must equals");
+            var res1 = ap.GetStreetByDictionary(Address.FromString(s01.Name), c, doNotAddAnyDataToDictionary: true);
+            Assert.AreNotEqual(null, res1, "res1 must exists!");
+            Assert.AreEqual(s00.Name, res1.Name, "res1: Values must equals");
 
-            var res3 = AddressParser.GetStreet(s11.Name.Remove(2, 1), Rep, a.Dictionary, c, doNotAddAnyDataToDictionary: true);
-            Assert.AreEqual(s10.Name, res3, "res3: Values must equals");
+            var res2 = ap.GetStreetByDictionary(Address.FromString(s10.Name.Remove(0, 2)), c, doNotAddAnyDataToDictionary: true);
+            Assert.AreNotEqual(null, res2, "res2 must exists!");
+            Assert.AreEqual(s10.Name, res2.Name, "res2: Values must equals");
+
+            var res3 = ap.GetStreetByDictionary(Address.FromString(s11.Name.Remove(2, 1)), c, doNotAddAnyDataToDictionary: true);
+            Assert.AreNotEqual(null, res3, "res3 must exists!");
+            Assert.AreEqual(s10.Name, res3.Name, "res3: Values must equals");
 
             var d = DateTime.UtcNow;
 
-            var testName = "Тестовая улица";
+            var testName = "Тестовая Улица";
 
-            var res = AddressParser.GetStreets(new string[] { s00.Name, s01.Name, s10.Name, s11.Name, testName }, Rep, a.Dictionary, c);
-            var res01 = res[s00.Name];
-            var res02 = res[s01.Name];
-            var res03 = res[s10.Name];
-            var res04 = res[s11.Name];
-            var res05 = res[testName];
+            var res = ap.GetStreets(new string[] { s00.Name, s01.Name, s10.Name, s11.Name, testName }.Select(cc => Address.FromString(cc)), c, true)
+                .Select(k => k.Value)
+                .ToArray();
+            var res01 = res[0].Name;
+            var res02 = res[1].Name;
+            var res03 = res[2].Name;
+            var res04 = res[3].Name;
+            var res05 = res[4].Name;
+
+            Assert.AreEqual(0, res[4].StreetID, "res[4] must be new street");
 
             Assert.AreNotEqual(null, res01, "res01 cant be null");
             Assert.AreNotEqual(null, res02, "res02 cant be null");

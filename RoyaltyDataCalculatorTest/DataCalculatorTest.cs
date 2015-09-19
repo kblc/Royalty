@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Helpers;
+using System.Data;
 
 namespace RoyaltyDataCalculatorTest
 {
@@ -117,7 +118,7 @@ namespace RoyaltyDataCalculatorTest
                         csvLines.Add(columns);
                     }
 
-                    var l = Helpers.CSV.CSVFile.Load(csvLines,
+                    var l = Helpers.CSV.CSVFile.Load(csvLines, 
                         tableName: "{virtual}",
                         filePath: "{virtual}",
                         tableValidator: dc.TableValidator,
@@ -127,7 +128,7 @@ namespace RoyaltyDataCalculatorTest
                             if (s.Contains("good_data"))
                                 throw new Exception("Good data filtered: " + s);
                         },
-                        rowFilter: r => colValues.Any(c => r[c].ToString().Contains("bad_data")) 
+                        rowFilter: r => r.Table.Columns.OfType<DataColumn>().Any(c => r[c].ToString().Contains("bad_data")) 
                         );
 
                     Assert.AreEqual(goodCnt, l.Table.Rows.Count, "Good row count must equals");
@@ -153,25 +154,29 @@ namespace RoyaltyDataCalculatorTest
                     });
                 Rep.SaveChanges();
 
+                var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings.Columns.ColumnType" });
+
                 cityNames.ToList().ForEach((s) =>
                 {
                     Rep.CityRemove(Rep.CityGet(s), saveAfterRemove: false);
-                    var city = Rep.CityNew(s);
-                    Rep.CityAdd(city);
+                });
+                Rep.SaveChanges();
 
+                cityNames.ToList().ForEach((s) =>
+                {
+                    var city = Rep.CityNew(s);
                     areaNames.ToList().ForEach((a) =>
                     {
                         var area = Rep.AreaNew(a, city: city);
                         streetNames.ToList().ForEach((ss) =>
                         {
-                            var street = Rep.StreetNew(ss, area);
+                            var street = Rep.StreetNew(RoyaltyDataCalculator.Parser.Address.FromString(ss, area.Name, acc.Dictionary.Excludes.Select(e => e.Exclude)).Street, area);
                         });
                     });
                 });
 
                 Rep.SaveChanges();
 
-                var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings.Columns.ColumnType" });
                 var addrCol = acc.Settings.GetColumnFor(RoyaltyRepository.Models.ColumnTypes.Address);
                 var areaCol = acc.Settings.GetColumnFor(RoyaltyRepository.Models.ColumnTypes.Area);
                 var cityCol = acc.Settings.GetColumnFor(RoyaltyRepository.Models.ColumnTypes.City);
@@ -226,13 +231,15 @@ namespace RoyaltyDataCalculatorTest
                     }
                     );
 
-                for (int i = 0; i < 10000; i++ )
+                for (int i = 0; i < 1000; i++ )
                 {
                     columns = string.Empty;
                     foreach (var colName in colValues)
                         columns += (string.IsNullOrWhiteSpace(columns) ? string.Empty : ";") + genNewData(colName.Type.Type);
                     csvLines.Add(columns);
                 }
+
+                Rep.SaveChanges();
 
                 using (var dc = new DataCalculator(acc, Rep))
                 {
@@ -243,7 +250,8 @@ namespace RoyaltyDataCalculatorTest
                         rowFilter: dc.RowFilter);
 
                     var previewRes = dc.Preview(l.Table);
-                    Assert.AreNotEqual(0, previewRes.Count());
+                    Assert.AreEqual(l.Table.Rows.Count, previewRes.Count());
+                    Rep.SaveChanges();
                 }
 
                 hostNames.ToList().ForEach((s) =>

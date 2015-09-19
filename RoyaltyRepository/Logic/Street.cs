@@ -111,15 +111,13 @@ namespace RoyaltyRepository
         {
             try
             {
-                var res = new Street() { };
-                if (instanceName != null)
-                    res.Name = instanceName;
+                var res = new Street() { Area = area, Name = instanceName };
                 if (area != null)
                 {
-                    if (Context.Entry(area).State != EntityState.Detached)
+//                    if (Context.Entry(area).State != EntityState.Detached)
                         area.Streets.Add(res);
-                    else
-                        res.Area = area;
+                    //else
+                    //    res.Area = area;
                 }
                 return res;
             }

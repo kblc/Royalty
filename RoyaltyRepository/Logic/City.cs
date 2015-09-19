@@ -112,9 +112,7 @@ namespace RoyaltyRepository
         {
             try
             {
-                var res = new City() { };
-                if (instanceName != null)
-                    res.Name = instanceName;
+                var res = new City() { Name = instanceName };
                 return res;
             }
             catch (Exception ex)

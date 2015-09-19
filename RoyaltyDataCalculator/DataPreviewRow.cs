@@ -28,6 +28,7 @@ namespace RoyaltyDataCalculator
 
         public RoyaltyRepository.Models.Street Street { get; set; }
         public bool IsNewStreet { get; set; }
+        public bool IsNewArea { get; set; }
         public string House { get; set; }
     }
 }

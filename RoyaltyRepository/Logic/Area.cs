@@ -110,15 +110,13 @@ namespace RoyaltyRepository
         {
             try
             {
-                var res = new Area() { };
-                if (instanceName != null)
-                    res.Name = instanceName;
+                var res = new Area() { Name = instanceName, City = city };
                 if (city != null)
                 {
-                    if (Context.Entry(city).State != EntityState.Detached)
+                    //if (Context.Entry(city).State != EntityState.Detached)
                         city.Areas.Add(res);
-                    else
-                        res.City = city;
+                    //else
+                    //    res.City = city;
                 }
                 return res;
             }
@@ -161,11 +159,11 @@ namespace RoyaltyRepository
         /// <returns>Area array</returns>
         public IQueryable<Area> AreaGet(IEnumerable<string> instanceNames, City city)
         {
-            var res = AreaGet()
+            var res = city.Areas
                 .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
             if (city != null)
                 res = res.Join(new long[] { city.CityID }, a => a.CityID, i => i, (a,i) => a);
-            return res;
+            return res.AsQueryable();
         }
         /// <summary>
         /// Get areas by identifiers

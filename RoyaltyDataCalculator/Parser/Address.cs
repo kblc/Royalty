@@ -14,7 +14,7 @@ namespace RoyaltyDataCalculator.Parser
         internal static readonly string symbols = " ";
         private enum AddressPart { Symbol, Digit, Letter };
 
-
+        public string Area { get; private set; }
         public string Street { get; private set; }
         public House House { get; private set; }
 
@@ -32,11 +32,18 @@ namespace RoyaltyDataCalculator.Parser
         {
             this.House = House.FromString(house);
         }
+        public Address(string street, string house, string area)
+            : this(street, house)
+        {
+            this.Area = area;
+        }
 
-        public static Address FromString(string textAddress, IEnumerable<string> excludesStrings = null)
+        public static Address FromString(string textAddress, string area = null, IEnumerable<string> excludesStrings = null)
         {
             if (textAddress == null)
                 throw new Exception("textAddress");
+
+            area = area ?? string.Empty;
 
             string street = string.Empty;
             string house = string.Empty;
@@ -54,19 +61,21 @@ namespace RoyaltyDataCalculator.Parser
                     step = 1;
                     #region Remove excludes
 
-                    string textAddressBeforeExclude = textAddress;
+                    if (excludesStrings != null)
+                    { 
+                        string textAddressBeforeExclude = textAddress;
 
-                    foreach (string delimiter in excludesStrings.Where(s => !string.IsNullOrWhiteSpace(s)).OrderByDescending(s => s.Length))
-                        textAddress = textAddress.Replace(delimiter.ToLower(), " ");
+                        foreach (string delimiter in excludesStrings.Where(s => !string.IsNullOrWhiteSpace(s)).OrderByDescending(s => s.Length))
+                            textAddress = textAddress.Replace(delimiter.ToLower(), " ");
 
-                    while (textAddress.Contains("  "))
-                        textAddress = textAddress.Replace("  ", " ");
-                    textAddress = textAddress.Trim();
+                        while (textAddress.Contains("  "))
+                            textAddress = textAddress.Replace("  ", " ");
+                        textAddress = textAddress.Trim();
 
-                    // что бы после исключения символов не осталась пустая улица
-                    if (string.IsNullOrWhiteSpace(textAddress))
-                        textAddress = textAddressBeforeExclude;
-
+                        // что бы после исключения символов не осталась пустая улица
+                        if (string.IsNullOrWhiteSpace(textAddress))
+                            textAddress = textAddressBeforeExclude;
+                    }
                     #endregion
                     step = 2;
                     #region Reconstruct '123abc123' to '123 abc 123'
@@ -215,7 +224,7 @@ namespace RoyaltyDataCalculator.Parser
                     #endregion
                 }
 
-                return new Address(street, house);
+                return new Address(street, house, area);
             }
             catch (Exception ex)
             {
@@ -254,8 +263,11 @@ namespace RoyaltyDataCalculator.Parser
                 return false;
             }
 
+            if (!(obj is Address))
+                return false;
+
             // Return true if the fields match:
-            return this.ToString() == obj.ToString();
+            return this.ToString() == obj.ToString() && (string.Compare(this.Area,((Address)obj).Area) == 0);
         }
         public override int GetHashCode()
         {
