@@ -122,11 +122,16 @@ namespace RoyaltyRepository
         /// Create/Get new AccountDictionaryRecordCondition instance without any link to database
         /// </summary>
         /// <returns>AccountDictionaryRecordCondition instance</returns>
-        public AccountDictionaryRecordCondition AccountDictionaryRecordConditionNew(AccountDictionaryRecord accountDictionaryRecord = null, uint? from = null, uint? to = null)
+        public AccountDictionaryRecordCondition AccountDictionaryRecordConditionNew(AccountDictionaryRecord accountDictionaryRecord = null, uint? from = null, uint? to = null, bool? even = null)
         {
             try
             {
-                var res = new AccountDictionaryRecordCondition();
+                var res = new AccountDictionaryRecordCondition()
+                {
+                    Even = even,
+                    DictionaryRecord = accountDictionaryRecord,
+                };
+
                 if (from.HasValue)
                     res.From = from.Value;
                 if (to.HasValue)

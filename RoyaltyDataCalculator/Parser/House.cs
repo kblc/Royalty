@@ -9,12 +9,12 @@ namespace RoyaltyDataCalculator.Parser
     /// <summary>
     /// Additional part for house number (e.g '/11a')
     /// </summary>
-    public class HouseAdditionalPart
+    public class HouseAdditionalPart : IComparable<HouseAdditionalPart>
     {
         public uint? Number { get; private set; }
         public string Letter { get; private set; }
 
-        public HouseAdditionalPart() { }
+        public HouseAdditionalPart() : this(null, string.Empty) { }
         public HouseAdditionalPart(uint? number, string letter)
         {
             Number = number;
@@ -65,15 +65,11 @@ namespace RoyaltyDataCalculator.Parser
         {
             // If both are null, or both are same instance, return true.
             if (System.Object.ReferenceEquals(this, obj))
-            {
                 return true;
-            }
 
             // If one is null, but not both, return false.
             if (((object)this == null) || ((object)obj == null))
-            {
                 return false;
-            }
 
             // Return true if the fields match:
             return this.ToString() == obj.ToString();
@@ -82,17 +78,35 @@ namespace RoyaltyDataCalculator.Parser
         {
             return this.ToString().GetHashCode();
         }
+
+        public int CompareTo(HouseAdditionalPart other)
+        {
+            if (Number.HasValue && other.Number.HasValue)
+            {
+                if (Number.Value == other.Number.Value)
+                {
+                    return Letter.CompareTo(other.Letter);
+                }
+                else
+                    return Number.Value.CompareTo(other.Number.Value);
+            }
+            else
+                return ToString().CompareTo(other.ToString());
+        }
     }
 
     /// <summary>
     /// House formatter
     /// </summary>
-    public class House
+    public class House : IComparable<House>
     {
         public const string HousingDelimiter = "/";
         internal static readonly string digits = new string(Enumerable.Range(0, 10).Select(i => i.ToString().First()).ToArray());
 
         private uint? number = null;
+        /// <summary>
+        /// Номер дома
+        /// </summary>
         public uint? Number
         {
             get
@@ -105,12 +119,34 @@ namespace RoyaltyDataCalculator.Parser
             }
         }
 
+        /// <summary>
+        /// Дополнительная буква и прочее от номера дома
+        /// </summary>
         public readonly HouseAdditionalPart Additional = new HouseAdditionalPart();
 
+        /// <summary>
+        /// Создать новый экземпляр
+        /// </summary>
         public House() { }
-        public House(uint? number, string additional)
+
+        /// <summary>
+        /// Создать новый экземпляр
+        /// </summary>
+        /// <param name="number">Номер дома</param>
+        public House(uint number) 
+            : this()
         {
             Number = number;
+        }
+
+        /// <summary>
+        /// Создать новый экземпляр
+        /// </summary>
+        /// <param name="number">Номер дома</param>
+        /// <param name="additional"></param>
+        public House(uint number, string additional)
+            : this(number)
+        {
             Additional = HouseAdditionalPart.FromString(additional);
         }
 
@@ -128,7 +164,7 @@ namespace RoyaltyDataCalculator.Parser
 
             houseNumber = houseNumber.Trim();
 
-            uint? number = null;
+            uint number = 0;
             string add = string.Empty;
             if (!string.IsNullOrWhiteSpace(houseNumber))
             {
@@ -148,12 +184,12 @@ namespace RoyaltyDataCalculator.Parser
                         number = (uint)numb;
             }
 
-            return new House(number, add);
+            return number == 0 ? new House() : new House(number, add);
         }
 
         public static bool operator ==(House a, House b)
         {
-            return (a != null) ? a.Equals(b) : false;
+            return ((object)a != null) ? a.Equals(b) : false;
         }
         public static bool operator !=(House a, House b)
         {
@@ -163,15 +199,11 @@ namespace RoyaltyDataCalculator.Parser
         {
             // If both are null, or both are same instance, return true.
             if (System.Object.ReferenceEquals(this, obj))
-            {
                 return true;
-            }
 
             // If one is null, but not both, return false.
             if (((object)this == null) || ((object)obj == null))
-            {
                 return false;
-            }
 
             // Return true if the fields match:
             return this.ToString() == obj.ToString();
@@ -179,6 +211,21 @@ namespace RoyaltyDataCalculator.Parser
         public override int GetHashCode()
         {
             return this.ToString().GetHashCode();
+        }
+
+        public int CompareTo(House other)
+        {
+            if (Number.HasValue && other.Number.HasValue)
+            {
+                if (Number.Value == other.Number.Value)
+                {
+                    return Additional.CompareTo(other.Additional);
+                }
+                else
+                    return Number.Value.CompareTo(other.Number.Value);
+            }
+            else
+                return ToString().CompareTo(other.ToString());
         }
     }
 }

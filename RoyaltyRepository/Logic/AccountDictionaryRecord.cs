@@ -130,7 +130,8 @@ namespace RoyaltyRepository
                 var res = new AccountDictionaryRecord() 
                 {
                     Street = street,
-                    ChangeStreetTo = streetChangeTo
+                    ChangeStreetTo = streetChangeTo,
+                    Dictionary = accountDictionary,
                 };
                 if (anonymousObject != null)
                     res.FillFromAnonymousType(anonymousObject);

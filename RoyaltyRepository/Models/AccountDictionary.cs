@@ -40,6 +40,12 @@ namespace RoyaltyRepository.Models
         public decimal SimilarityForTrust { get; set; }
 
         /// <summary>
+        /// Процент (от 0 до 1), при котором считать номер дома попавшим в радиус домов
+        /// </summary>
+        [Column("condition_score_for_trust"), Required]
+        public decimal ConditionsScoreForTrust { get; set; }
+
+        /// <summary>
         /// Разрешить добавлять слова в словарь автоматически
         /// </summary>
         [Column("allow_add_to_dictionary_automatically"), Required]

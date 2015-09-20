@@ -145,7 +145,7 @@ namespace RoyaltyDataCalculator
 
                     var subRes0 = dataTable.Rows
                         .Cast<DataRow>()
-                        .AsParallel()
+                        //.AsParallel()
                         .Select(dr => new
                         {
                             Row = dr,

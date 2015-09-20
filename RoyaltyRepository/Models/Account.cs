@@ -99,7 +99,8 @@ namespace RoyaltyRepository.Models
                 {
                     AllowAddToDictionaryAutomatically = true,
                     AllowCalcAreasIfStreetExistsOnly = false,
-                    SimilarityForTrust = 0.6m
+                    SimilarityForTrust = 0.6m,
+                    ConditionsScoreForTrust = 0.9m
                 }
             };
 

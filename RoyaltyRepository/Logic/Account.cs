@@ -265,7 +265,8 @@ namespace RoyaltyRepository
                 to.Dictionary.AllowAddToDictionaryAutomatically = from.Dictionary.AllowAddToDictionaryAutomatically;
                 to.Dictionary.AllowCalcAreasIfStreetExistsOnly = from.Dictionary.AllowCalcAreasIfStreetExistsOnly;
                 to.Dictionary.SimilarityForTrust = from.Dictionary.SimilarityForTrust;
-                
+                to.Dictionary.ConditionsScoreForTrust = from.Dictionary.ConditionsScoreForTrust;
+
                 if (copyDictionaryExclude)
                 {
                     to.Dictionary.Excludes.Clear();

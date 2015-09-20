@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace RoyaltyDataCalculator.Parser
 {
-    public class Address
+    /// <summary>
+    /// Строковой адрес
+    /// </summary>
+    public class Address : IComparable<Address>
     {
         internal static readonly string digits = new string(Enumerable.Range(0, 10).Select(i => i.ToString().First()).ToArray());
         internal static readonly string alphabeet = "йцукенгшщзфывапролджэячсмитьбюё";
@@ -14,24 +17,51 @@ namespace RoyaltyDataCalculator.Parser
         internal static readonly string symbols = " ";
         private enum AddressPart { Symbol, Digit, Letter };
 
+        /// <summary>
+        /// Район
+        /// </summary>
         public string Area { get; private set; }
+        /// <summary>
+        /// Улица
+        /// </summary>
         public string Street { get; private set; }
+        /// <summary>
+        /// Дом
+        /// </summary>
         public House House { get; private set; }
 
+        /// <summary>
+        /// Создать новый экземпляр класса
+        /// </summary>
         public Address()
         {
             House = new House();
         }
+        /// <summary>
+        /// Создать новый экземпляр класса
+        /// </summary>
+        /// <param name="street">Улица</param>
         public Address(string street) 
             : this()
         {
             this.Street = street;
         }
+        /// <summary>
+        /// Создать новый экземпляр класса
+        /// </summary>
+        /// <param name="street">Улица</param>
+        /// <param name="house">Дом</param>
         public Address(string street, string house)
             : this(street)
         {
             this.House = House.FromString(house);
         }
+        /// <summary>
+        /// Создать новый экземпляр класса
+        /// </summary>
+        /// <param name="street">Улица</param>
+        /// <param name="house">Дом</param>
+        /// <param name="area">Район</param>
         public Address(string street, string house, string area)
             : this(street, house)
         {
@@ -236,14 +266,30 @@ namespace RoyaltyDataCalculator.Parser
             }
         }
 
+        /// <summary>
+        /// Get string address
+        /// </summary>
+        /// <returns>String address (with area by default)</returns>
         public override string ToString()
         {
-            var h = House.ToString();
-            return Street + (string.IsNullOrWhiteSpace(h) ? string.Empty : " " + h);
+            return ToString(true);
         }
+        /// <summary>
+        /// Get string address
+        /// </summary>
+        /// <param name="showArea">Add area to string result</param>
+        /// <returns>String address</returns>
+        public virtual string ToString(bool showArea = true)
+        {
+            var h = House.ToString();
+            return Street +
+                (string.IsNullOrWhiteSpace(h) ? string.Empty : " " + h) +
+                (string.IsNullOrWhiteSpace(Area) || !showArea ? string.Empty : ", " + Area);
+        }
+
         public static bool operator ==(Address a, Address b)
         {
-            return (a != null) ? a.Equals(b) : false;
+            return (((object)a) != null) ? a.Equals(b) : false;
         }
         public static bool operator !=(Address a, Address b)
         {
@@ -251,27 +297,41 @@ namespace RoyaltyDataCalculator.Parser
         }
         public override bool Equals(object obj)
         {
+            var addrObj = obj as Address;
+
             // If both are null, or both are same instance, return true.
             if (System.Object.ReferenceEquals(this, obj))
-            {
                 return true;
-            }
 
             // If one is null, but not both, return false.
             if (((object)this == null) || ((object)obj == null))
-            {
                 return false;
-            }
 
-            if (!(obj is Address))
+            // Object is not address
+            if (addrObj == null)
                 return false;
 
             // Return true if the fields match:
-            return this.ToString() == obj.ToString() && (string.Compare(this.Area,((Address)obj).Area) == 0);
+            return this.ToString(true) == addrObj.ToString(true);
         }
         public override int GetHashCode()
         {
             return this.ToString().GetHashCode();
+        }
+
+        public int CompareTo(Address other)
+        {
+            if (Street == other.Street)
+            {
+                if (House == other.House)
+                {
+                    return Area.CompareTo(other.Area);
+                }
+                else
+                    return House.CompareTo(other.House);
+            }
+            else
+                return Street.CompareTo(other.Street);
         }
     }
 }

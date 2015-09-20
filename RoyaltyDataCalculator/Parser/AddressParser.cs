@@ -106,10 +106,31 @@ namespace RoyaltyDataCalculator.Parser
         /// <param name="conditions">Условия</param>
         /// <param name="doNotAddAnyDataToDictionary">Флаг для отмены добавления данных в словарь</param>
         /// <returns>True если условия соблюдены</returns>
-        public bool ConditionsValid(uint houseNumber, ICollection<RoyaltyRepository.Models.AccountDictionaryRecordCondition> conditions, bool doNotAddAnyDataToDictionary)
+        public decimal GetConditionsScore(uint? houseNumber, ICollection<RoyaltyRepository.Models.AccountDictionaryRecordCondition> conditions, bool doNotAddAnyDataToDictionary)
         {
+            if (conditions == null || !conditions.Any() || !houseNumber.HasValue)
+                return 1m;
+            bool isHouseNumberEven = houseNumber.Value % 2 == 0;
+
+            var resultWeight = conditions
+                .AsParallel()
+                .Where(c => c.Even.HasValue ? (c.Even.Value == isHouseNumberEven) : true)
+                .Select(c => new { c.From, c.To, c.Even, IsInside = houseNumber.Value >= c.From && houseNumber <= c.To })
+                .Select(c => new
+                {
+                    LengthBetween = c.IsInside
+                        ? 0
+                        : new long[] { c.From, c.To }.Distinct().Select(i => AreaMap.LengthBetween(houseNumber.Value, (uint)i)).Union(new uint[] { uint.MaxValue }).Min(),
+                    Radius = Math.Abs(c.From - c.To),
+                    Even = c.Even,
+                })
+                .Where(c => c.LengthBetween != uint.MaxValue)
+                .Select(c => AreaMap.Weight(c.LengthBetween, c.Radius) + ((c.Even.HasValue ? (c.Even.Value == isHouseNumberEven) : false) ? 0.2m : 0.0m))
+                .OrderByDescending(i => i)
+                .FirstOrDefault();
+
             //TODO: Проверка и изменение условий
-            return true;
+            return resultWeight;
         }
 
         /// <summary>
@@ -122,32 +143,68 @@ namespace RoyaltyDataCalculator.Parser
         /// <returns>Улица из БД. Если NULL, значит улица в соответствии со словарем не найдена</returns>
         public RoyaltyRepository.Models.Street GetStreetByDictionary(Address address, RoyaltyRepository.Models.City city, bool doNotAddAnyDataToDictionary, Action<string> verboseLog = null)
         {
-            verboseLog = verboseLog ?? new Action<string>((s) => { });
-            var res = Account.Dictionary.Records
-                .Where(r => r.Street != null && r.Street.Area != null)
-                .Where(r => r.Street.Area.City == city)
-                .AsParallel()
-                .Select(i => new
+            try
+            { 
+                if (address == null)
+                    throw new ArgumentNullException(nameof(address));
+                if (city == null)
+                    throw new ArgumentNullException(nameof(city));
+
+                verboseLog = verboseLog ?? new Action<string>((str) => { });
+
+                verboseLog(string.Format(nameof(GetStreetByDictionary) + "() get all streets in city '{0}'", city));
+                var dictionary = city.Areas
+                    .SelectMany(a => a.Streets.Select(s => new
+                    {
+                        Area = a,
+                        Street = s
+                    }))
+                    .LeftOuterJoin(Account.Dictionary.Records, s => s.Street, r => r.Street, (s, r) => new
+                    {
+                        Street = s.Street,
+                        Area = s.Area,
+                        ChangeStreetTo = r != null ? r.ChangeStreetTo : null,
+                        Conditions = r != null ? r.Conditions : null,
+                        InDictionary = r != null,
+                    })
+                    .ToArray();
+
+                var res = dictionary //Account.Dictionary.Records
+                    //.Where(r => r.Street != null && r.Street.Area != null)
+                    //.Where(r => r.Street.Area.City == city)
+                    .AsParallel()
+                    .Select(i => new
+                    {
+                        Street = i.ChangeStreetTo ?? i.Street,
+                        i.Street.Area,
+                        ConditionsScore = GetConditionsScore(address.House.Number, i.Conditions, doNotAddAnyDataToDictionary),
+                        Score = (decimal)new WordsMatching.MatchsMaker(address.Street, i.Street.Name).Score,
+                        AreaScore = string.IsNullOrWhiteSpace(address.Area) 
+                            ? Account.Dictionary.SimilarityForTrust 
+                            : (decimal)new WordsMatching.MatchsMaker(address.Area, i.Street.Area.Name).Score,
+                        i.InDictionary,
+                    })
+                    .Where(i => i.Score + i.AreaScore >= Account.Dictionary.SimilarityForTrust * 2 && i.ConditionsScore >= Account.Dictionary.ConditionsScoreForTrust)
+                    .OrderByDescending(i => i.Score + i.AreaScore + i.ConditionsScore / 2m)
+                    .FirstOrDefault();
+
+                if (res == null)
+                    verboseLog(string.Format(nameof(GetStreetByDictionary) + "() street not found for address '{0}'", address.ToString()));
+                else
                 {
-                    Street = i.ChangeStreetTo ?? i.Street,
-                    i.Street.Area,
-                    AllowedConditions = i.Conditions.Any() && address.House.Number.HasValue ? ConditionsValid(address.House.Number.Value, i.Conditions, doNotAddAnyDataToDictionary) : true,
-                    Score = (decimal)new WordsMatching.MatchsMaker(address.Street, i.Street.Name).Score,
-                    AreaScore = string.IsNullOrWhiteSpace(address.Area) 
-                        ? Account.Dictionary.SimilarityForTrust 
-                        : (decimal)new WordsMatching.MatchsMaker(address.Area, i.Street.Area.Name).Score
-                })
-                .Where(i => i.AllowedConditions)
-                .Where(i => i.Score + i.AreaScore >= Account.Dictionary.SimilarityForTrust * 2)
-                .OrderByDescending(i => i.AreaScore)
-                .ThenByDescending(i => i.Score)
-                .Select(i => i.Street)
-                .FirstOrDefault();
-            if (res == null)
-                verboseLog(string.Format("street not found for address '{0}'", address.ToString()));
-            else
-                verboseLog(string.Format("founded street for address '{0}': '{1}'", address.ToString(), res.ToString()));
-            return res;
+                    verboseLog(string.Format(nameof(GetStreetByDictionary) + "() founded street {2}for address '{0}': '{1}'", address.ToString(), res.ToString(), res.InDictionary ? "in dictionary" : string.Empty));
+                    if (!res.InDictionary && Account.Dictionary.AllowAddToDictionaryAutomatically && !doNotAddAnyDataToDictionary)
+                    {
+                        verboseLog(nameof(GetStreetByDictionary) + "() Try add record to dictionary");
+                        verboseLog(string.Format(nameof(GetStreetByDictionary) + "() added dictionary record: {0}", Repository.AccountDictionaryRecordNew(Account.Dictionary, street: res.Street).ToString()));
+                    }
+                }
+                return res?.Street;
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -156,23 +213,35 @@ namespace RoyaltyDataCalculator.Parser
         /// <param name="address">Адрес</param>
         /// <param name="city">Город</param>
         /// <param name="doNotAddAnyDataToDictionary">Флаг для отмены добавления данных в словарь</param>
-        /// <param name="verboseLog">Action по логированию метода</param>
+        /// <param name="log">Action по логированию метода</param>
         /// <returns>Улицу</returns>
         public RoyaltyRepository.Models.Street GetNewStreet(Address address, RoyaltyRepository.Models.City city, bool doNotAddAnyDataToDictionary, Action<string> verboseLog = null)
         {
-            verboseLog = verboseLog ?? new Action<string>((str) => { });
-            verboseLog(string.Format("create new street with name '{0}' and area name '{1}'", address.Street, address.Area));
-            var a = address.Area == string.Empty
+            var log = new Action<string>((str) => { if (verboseLog != null) verboseLog(nameof(GetNewStreet) + "() " + str); });
+
+            log(string.Format("Create new street with name '{0}' and area name '{1}'", address.Street, address.Area));
+            var a = string.IsNullOrWhiteSpace(address.Area)
                 ? city.UndefinedArea
                 : Repository.AreaGet(address.Area, city) ?? Repository.AreaNew(address.Area, city: city);
-            verboseLog(string.Format("area for street: '{0}'", a.ToString()));
+            log(string.Format("Area for street: '{0}'", a.ToString()));
 
-            var s = Repository.StreetNew(address.Street, a);
-            verboseLog(string.Format("street: '{0}'", s.ToString()));
+            var s = Repository.StreetGet(address.Street, a) ?? Repository.StreetNew(address.Street, a);
+            log(string.Format("Street: '{0}'", s.ToString()));
             if (Account.Dictionary.AllowAddToDictionaryAutomatically && !doNotAddAnyDataToDictionary)
             {
-                verboseLog("Try add record to dictionary");
-                verboseLog(string.Format("added dictionary record: {0}", Repository.AccountDictionaryRecordNew(Account.Dictionary, street: s).ToString()));
+                log("Try add record to dictionary");
+                var adr = Account.Dictionary.Records.FirstOrDefault(ad => ad.Street == s);
+                if (adr == null)
+                    log(string.Format("Add dictionary record: {0}", Repository.AccountDictionaryRecordNew(Account.Dictionary, street: s).ToString())); else
+                {
+                    log(string.Format("Dictionary record already exists: '{0}'", adr.ToString()));
+                    if (address.House.Number != null)
+                    {
+                        log(string.Format("House number exists. Try to update conditions"));
+                        //TODO: Update conditions
+                    } else
+                        log(string.Format("House number not exists. Leave as is."));
+                }
             }
             return s;
         }
@@ -193,20 +262,25 @@ namespace RoyaltyDataCalculator.Parser
                 try
                 {
                     var result = incomingAddresses
-                        .Distinct()
-                        .LeftOuterJoin(Account.Dictionary.Records.Where(r => r.Street != null && r.Street.Area != null),
-                            s => new { Street = s.Street, Area = s.Area },
-                            d => new { Street = d.Street.Name, Area = d.Street.Area.Name },
+                        .Distinct(GenericEqualityComparer<Address>.Get(a => a.ToString()))
+                        .LeftOuterJoin(Account.Dictionary.Records, //.Where(r => r.Street != null && r.Street.Area != null),
+                            s => new { StreetName = s.Street, AreaName = s.Area },
+                            d => new { StreetName = d.Street.Name, AreaName = d.Street.Area.Name },
                             (s, d) => new
                             {
                                 IncomingAddress = s,
-                                Street = (d != null ? d.ChangeStreetTo ?? d.Street : null)
+                                Street = (d != null ? d.ChangeStreetTo ?? d.Street : null),
+                                ConditionsScore = GetConditionsScore(s.House.Number, d == null ? null : d.Conditions, doNotAddAnyDataToDictionary),
                             })
+                        //.GroupBy(i => i.IncomingAddress)
+                        ////Исключаем случаи, когда в словаре более одной записи на входящий адрес (2 разных условия)
+                        //.Select(g => new { IncomingAddress = g.Key, Items = g.OrderBy(i => i.IsConditionsValid ? 0 : 1) })
+                        //.Select(g => new { g.IncomingAddress, Street = (g.Items.Count() == 1 ? g.Items.FirstOrDefault().Street : null) })
                         .ToArray()
                         .Select(i => new
                         {
                             i.IncomingAddress,
-                            Street = i.Street 
+                            Street = i.Street
                                 ?? GetStreetByDictionary(i.IncomingAddress, city, doNotAddAnyDataToDictionary, (s) => logSession.Add(s)) 
                                 ?? GetNewStreet(i.IncomingAddress, city, doNotAddAnyDataToDictionary, (s) => logSession.Add(s))
                         })

@@ -15,22 +15,26 @@ namespace RoyaltyDataCalculator.Parser
                 : (uint)(Math.Abs(from.Number.Value - to.Number.Value));
         }
 
-        internal static decimal Weight(decimal lengthBetween, decimal maxLenght, decimal maxWeight)
+        internal static uint LengthBetween(uint fromHouseNumber, uint toHouseNumber)
         {
-            return -(1m / (1.5m * maxLenght * (1 / maxWeight))) * lengthBetween + maxWeight;
+            return (uint)Math.Abs((long)fromHouseNumber - (long)toHouseNumber);
         }
-        internal static decimal Weight(House from, House to, decimal maxLenght, decimal maxWeight)
+        internal static decimal Weight(decimal lengthBetween, decimal radiusLenght, decimal maxWeight = 1m)
         {
-            return Weight(LengthBetween(from, to), maxLenght, maxWeight);
+            return -(1m / (1.5m * radiusLenght * (1 / maxWeight))) * lengthBetween + maxWeight;
+        }
+        internal static decimal Weight(House from, House to, decimal radiusLenght, decimal maxWeight = 1m)
+        {
+            return Weight(LengthBetween(from, to), radiusLenght, maxWeight);
         }
 
-        public decimal Weight(House from, decimal radius, decimal maxWeight)
+        public decimal Weight(House from, decimal radiusLenght, decimal maxWeight = 1m)
         {
             return this
                 .Select(i => (decimal)LengthBetween(from, i))
-                .Where(i => i <= radius)
+                .Where(i => i <= radiusLenght)
                 .Union(new decimal[] { 0 })
-                .Sum(i => Weight(i, radius, maxWeight));
+                .Sum(i => Weight(i, radiusLenght, maxWeight));
         }
     }
 }
