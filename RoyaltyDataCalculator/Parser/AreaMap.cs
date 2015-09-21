@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoyaltyDataCalculator.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,9 @@ namespace RoyaltyDataCalculator.Parser
         }
         internal static decimal Weight(decimal lengthBetween, decimal radiusLenght, decimal maxWeight = 1m)
         {
+            if (radiusLenght == 0)
+                throw new ArgumentOutOfRangeException(nameof(radiusLenght), radiusLenght, Resources.AreaMap_Weight_RadiusLenghtCantEqualsZero);
+
             return -(1m / (1.5m * radiusLenght * (1 / maxWeight))) * lengthBetween + maxWeight;
         }
         internal static decimal Weight(House from, House to, decimal radiusLenght, decimal maxWeight = 1m)

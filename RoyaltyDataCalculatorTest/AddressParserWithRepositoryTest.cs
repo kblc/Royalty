@@ -93,16 +93,19 @@ namespace RoyaltyDataCalculatorTest
 
                 var testName = "Тестовая Улица";
 
-                var res = ap.GetStreets(new string[] { s00.Name, s01.Name, s10.Name, s11.Name, testName }.Select(cc => Address.FromString(cc)), c, true)
-                    .Select(k => k.Value)
+                var addrs = new string[] { s00.Name, s01.Name, s10.Name, s11.Name, testName }
+                    .Select(cc => Address.FromString(cc))
                     .ToArray();
-                var res01 = res[0].Name;
-                var res02 = res[1].Name;
-                var res03 = res[2].Name;
-                var res04 = res[3].Name;
-                var res05 = res[4].Name;
 
-                Assert.AreEqual(0, res[4].StreetID, "res[4] must be new street");
+                var res = ap.GetStreets(addrs, c, true);
+
+                var res01 = res[addrs[0]].Name;
+                var res02 = res[addrs[1]].Name;
+                var res03 = res[addrs[2]].Name;
+                var res04 = res[addrs[3]].Name;
+                var res05 = res[addrs[4]].Name;
+
+                Assert.AreEqual(0, res[addrs[4]].StreetID, "res[4] must be new street");
 
                 Assert.AreNotEqual(null, res01, "res01 cant be null");
                 Assert.AreNotEqual(null, res02, "res02 cant be null");
@@ -176,13 +179,11 @@ namespace RoyaltyDataCalculatorTest
                 Assert.AreEqual(s02.Name, res2.Name, "res0: Street names must equals");
                 Assert.AreEqual(a2.Name, res2.Area.Name, "res0: Area names must equals");
 
-                var res = ap.GetStreets(new Address[] { addr0, addr1, addr2 }, c, true)
-                    .Select(k => k.Value)
-                    .ToArray();
+                var res = ap.GetStreets(new Address[] { addr0, addr1, addr2 }, c, true);
 
-                var res01 = res[0]?.Area?.Name;
-                var res02 = res[1]?.Area?.Name;
-                var res03 = res[2]?.Area?.Name;
+                var res01 = res[addr0]?.Area?.Name;
+                var res02 = res[addr1]?.Area?.Name;
+                var res03 = res[addr2]?.Area?.Name;
 
                 Assert.AreNotEqual(null, res01, "res01 cant be null");
                 Assert.AreNotEqual(null, res02, "res02 cant be null");
@@ -191,6 +192,58 @@ namespace RoyaltyDataCalculatorTest
                 Assert.AreEqual(a1.Name, res02, "res02: Values must equals");
                 Assert.AreEqual(a2.Name, res03, "res03: Values must equals");
 
+                Rep.CityRemove(c);
+            }
+            finally
+            {
+                SqlLogEnabled = true;
+            }
+        }
+
+        [TestMethod]
+        public void AddressParser_GetStreetsBySettedAndUnsettedAreas()
+        {
+            SqlLogEnabled = false;
+            try
+            {
+                Rep.CityRemove(Rep.CityGet("testCity"));
+                var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Dictionary", "Dictionary.Records" });
+
+                var c = Rep.CityNew("testCity");
+                Rep.CityAdd(c, saveAfterInsert: false);
+
+                var a0 = Rep.AreaNew("test area0", city: c);
+
+                Rep.SaveChanges();
+
+                var ap = new AddressParser(a, Rep);
+
+                var addr0 = new Address("Ивановского","50");
+                var addr1 = new Address("Ивановского","150", "test area");
+
+                var res = ap.GetStreets(new Address[] { addr0, addr1 }, c, true)
+                    .Select(k => k.Value)
+                    .ToArray();
+
+                var res01 = res[0]?.Area?.Name;
+                var res02 = res[1]?.Area?.Name;
+
+                Assert.AreNotEqual(null, res01, "res01 cant be null");
+                Assert.AreNotEqual(null, res02, "res02 cant be null");
+                Assert.AreEqual("test area", res01, "res01: Values must equals");
+                Assert.AreEqual("test area", res02, "res02: Values must equals");
+
+                var addr2 = new Address("Петровского", "50");
+                var addr3 = new Address("Петровского", "150", "test area");
+
+                var res1 = ap.GetStreets(new Address[] { addr2 }, c, false)
+                    .Select(k => k.Value)
+                    .First();
+                var res2 = ap.GetStreets(new Address[] { addr3 }, c, false)
+                    .Select(k => k.Value)
+                    .First();
+
+                Assert.AreEqual(res1.Area, res2.Area, "re1 area must change area to res2 area");
                 Rep.CityRemove(c);
             }
             finally

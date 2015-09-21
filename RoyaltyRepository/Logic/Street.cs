@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RoyaltyRepository.Models;
 using Helpers;
+using Helpers.Linq;
 
 namespace RoyaltyRepository
 {
@@ -158,13 +159,29 @@ namespace RoyaltyRepository
         /// </summary>
         /// <param name="instanceNames">Streets name array</param>
         /// <returns>Street array</returns>
-        public IQueryable<Street> StreetGet(IEnumerable<string> instanceNames, Area area)
+        public IEnumerable<Street> StreetGet(IEnumerable<string> instanceNames, Area area)
         {
-            var res = StreetGet()
-                .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
             if (area != null)
-                res = res.Join(new long[] { area.AreaID }, a => a.AreaID, i => i, (a, i) => a);
-            return res;
+            {
+                var res2 = StreetGet()
+                    .Where(s => s.AreaID == area.AreaID)
+                    .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s)
+                    .ToArray();
+                var ent = Context.Entry(area);
+                if ((ent.State == EntityState.Added || ent.State == EntityState.Detached) || ((ent.State == EntityState.Modified || ent.State == EntityState.Unchanged) && !Context.Entry(area).Collection<Street>(nameof(area.Streets)).IsLoaded))
+                { 
+                    var subRes = area.Streets.Where(s => Context.Entry(s).State == EntityState.Added)
+                        .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
+                    return res2
+                        .Union(subRes)
+                        .Distinct();
+                }
+                return res2;
+            } else
+            {
+                return StreetGet()
+                    .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
+            }
         }
         /// <summary>
         /// Get Streets by identifiers

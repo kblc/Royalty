@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AreaMap_Weight_RadiusLenghtCantEqualsZero" xml:space="preserve">
+    <value>Параметр 'radiusLenght' не может быть равен 0</value>
+  </data>
   <data name="COLUMNS_NOT_FOUND_IN_IMPORT_FILE" xml:space="preserve">
     <value>Следующий колонки не найдены в импортируемой таблице данных: {0}</value>
   </data>

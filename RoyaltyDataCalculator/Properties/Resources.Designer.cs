@@ -61,6 +61,15 @@ namespace RoyaltyDataCalculator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parameter &apos;radiusLenght&apos; can&apos;t equals zero.
+        /// </summary>
+        internal static string AreaMap_Weight_RadiusLenghtCantEqualsZero {
+            get {
+                return ResourceManager.GetString("AreaMap_Weight_RadiusLenghtCantEqualsZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This columns not found in imported data: {0}.
         /// </summary>
         internal static string COLUMNS_NOT_FOUND_IN_IMPORT_FILE {

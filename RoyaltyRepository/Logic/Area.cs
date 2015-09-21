@@ -156,14 +156,32 @@ namespace RoyaltyRepository
         /// Get areas by names
         /// </summary>
         /// <param name="instanceNames">Area name array</param>
+        /// <param name="city">City for search</param>
         /// <returns>Area array</returns>
-        public IQueryable<Area> AreaGet(IEnumerable<string> instanceNames, City city)
+        public IEnumerable<Area> AreaGet(IEnumerable<string> instanceNames, City city)
         {
-            var res = city.Areas
-                .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
             if (city != null)
-                res = res.Join(new long[] { city.CityID }, a => a.CityID, i => i, (a,i) => a);
-            return res.AsQueryable();
+            {
+                var res2 = AreaGet()
+                    .Where(s => s.CityID == city.CityID)
+                    .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s)
+                    .ToArray();
+                var ent = Context.Entry(city);
+                if ((ent.State == EntityState.Added || ent.State == EntityState.Detached) || ((ent.State == EntityState.Modified || ent.State == EntityState.Unchanged) && !Context.Entry(city).Collection<Street>(nameof(city.Areas)).IsLoaded))
+                {
+                    var subRes = city.Areas.Where(s => Context.Entry(s).State == EntityState.Added)
+                        .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
+                    return res2
+                        .Union(subRes)
+                        .Distinct();
+                }
+                return res2;
+            }
+            else
+            {
+                return AreaGet()
+                    .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
+            }
         }
         /// <summary>
         /// Get areas by identifiers
