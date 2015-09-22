@@ -252,4 +252,10 @@
   <data name="COLUMNTYPE_PHONE" xml:space="preserve">
     <value>Phone</value>
   </data>
+  <data name="Logic_Street_StreetRemove_StreetContainsDataRecords" xml:space="preserve">
+    <value>Street {0} contains {1} data records.</value>
+  </data>
+  <data name="Logic_Street_StreetRemove_StreetContainsDataRecords_TerminateDeletion" xml:space="preserve">
+    <value>Terminate deletion.</value>
+  </data>
 </root>

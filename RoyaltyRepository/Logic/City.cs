@@ -82,8 +82,7 @@ namespace RoyaltyRepository
                 instances = instances.Where(i => i != null).ToArray();
                 try
                 {
-                    var areas = instances.SelectMany(c => c.Areas);
-                    AreaRemove(areas.ToArray());
+                    AreaRemove(instances.SelectMany(c => c.Areas), saveAfterRemove: false);
 
                     this.Context.Cities.RemoveRange(instances);
                     if (saveAfterRemove)

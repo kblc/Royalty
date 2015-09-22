@@ -286,6 +286,24 @@ namespace RoyaltyRepository.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Street {0} contains {1} data records..
+        /// </summary>
+        public static string Logic_Street_StreetRemove_StreetContainsDataRecords {
+            get {
+                return ResourceManager.GetString("Logic_Street_StreetRemove_StreetContainsDataRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Terminate deletion..
+        /// </summary>
+        public static string Logic_Street_StreetRemove_StreetContainsDataRecords_TerminateDeletion {
+            get {
+                return ResourceManager.GetString("Logic_Street_StreetRemove_StreetContainsDataRecords_TerminateDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not setted.
         /// </summary>
         public static string MARK_DEFAULT {

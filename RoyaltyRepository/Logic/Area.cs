@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RoyaltyRepository.Models;
 using Helpers;
+using Helpers.Linq;
 
 namespace RoyaltyRepository
 {
@@ -83,6 +84,7 @@ namespace RoyaltyRepository
 
                 try
                 {
+                    StreetRemove(instances.SelectMany(a => a.Streets), saveAfterRemove: false);
                     this.Context.Areas.RemoveRange(instances);
                     if (saveAfterRemove)
                         this.SaveChanges(waitUntilSaving);
@@ -158,30 +160,33 @@ namespace RoyaltyRepository
         /// <param name="instanceNames">Area name array</param>
         /// <param name="city">City for search</param>
         /// <returns>Area array</returns>
-        public IEnumerable<Area> AreaGet(IEnumerable<string> instanceNames, City city)
+        public IQueryable<Area> AreaGet(IEnumerable<string> instanceNames, City city)
         {
+            var inst = instanceNames.Select(n => n.ToUpper()).Distinct();
+            var res = AreaGet()
+                    .Where(s => inst.Contains(s.Name.ToUpper()));
             if (city != null)
             {
-                var res2 = AreaGet()
-                    .Where(s => s.CityID == city.CityID)
-                    .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s)
-                    .ToArray();
-                var ent = Context.Entry(city);
-                if ((ent.State == EntityState.Added || ent.State == EntityState.Detached) || ((ent.State == EntityState.Modified || ent.State == EntityState.Unchanged) && !Context.Entry(city).Collection<Street>(nameof(city.Areas)).IsLoaded))
+                //var res2 = res.Where(s => s.CityID == city.CityID);
+                //var ent = Context.Entry(city);
+                //if ((ent.State == EntityState.Added || ent.State == EntityState.Detached) || ((ent.State == EntityState.Modified || ent.State == EntityState.Unchanged) && Context.Entry(city).Collection(nameof(city.Areas)).IsLoaded))
                 {
-                    var subRes = city.Areas.Where(s => Context.Entry(s).State == EntityState.Added)
-                        .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
-                    return res2
-                        .Union(subRes)
-                        .Distinct();
+                    var subRes = city.Areas
+                        //.Select(a => new { Area = a, State = Context.Entry(a).State })
+                        //.Where(s => s.State == EntityState.Detached || s.State == EntityState.Added)
+                        //.Select(s => s.Area)
+                        .Join(inst, s => s.Name.ToUpper(), i => i, (s, i) => s);
+                    return subRes.AsQueryable();
+                        //res2
+                        //.ToArray()
+                        //.Union(subRes)
+                        //.Distinct()
+                        //.AsQueryable();
                 }
-                return res2;
+                //return res2;
             }
             else
-            {
-                return AreaGet()
-                    .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
-            }
+                return res;
         }
         /// <summary>
         /// Get areas by identifiers

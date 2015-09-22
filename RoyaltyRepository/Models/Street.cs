@@ -24,6 +24,13 @@ namespace RoyaltyRepository.Models
     [Table("street")]
     public partial class Street
     {
+        public Street()
+        {
+            DataRecords = new List<AccountDataRecord>();
+            DictionaryRecords = new List<AccountDictionaryRecord>();
+            DictionaryRecordsChangeTo = new List<AccountDictionaryRecord>();
+        }
+
         /// <summary>
         /// Идентификатор записи
         /// </summary>
@@ -47,6 +54,12 @@ namespace RoyaltyRepository.Models
         [Column("name"), Index("UIX_AREA_STREET_NAME", 2, IsUnique = true)]
         [Required(ErrorMessageResourceName = "StreetNameRequred"), MaxLength(100, ErrorMessageResourceName = "StreetNameMaxLength")]
         public string Name { get; set; }
+
+        public virtual ICollection<AccountDataRecord> DataRecords { get; set; }
+        [InverseProperty("Street")]
+        public virtual ICollection<AccountDictionaryRecord> DictionaryRecords { get; set; }
+        [InverseProperty("ChangeStreetTo")]
+        public virtual ICollection<AccountDictionaryRecord> DictionaryRecordsChangeTo { get; set; }
 
         public override string ToString()
         {

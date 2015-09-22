@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Helpers;
+using Helpers.Linq;
 using System.Data;
 
 namespace RoyaltyDataCalculatorTest
@@ -139,13 +140,20 @@ namespace RoyaltyDataCalculatorTest
         public void DataCalculator_Preview_Preview()
         {
             SqlLogEnabled = false;
+
+            var rnd = new Random();
+            rnd.Next();
+
+            var alph = "йцукенгшщзфывапролдячсмить";
+
+            var maxCnt = 10000;
+            var cityNames = Enumerable.Range(0, 3).Select(i => $"TestCity{i}").ToArray();
+            var areaNames = Enumerable.Range(0, 10).Select(i => $"TestArea{i}").ToArray();
+            var streetNames = Enumerable.Range(0, 100).Select(i => Enumerable.Range(0, 6).Select(n => alph[rnd.Next(alph.Length)].ToString()).Concat(c => c)).ToArray();
+            var hostNames = new string[] { "testhost0.ru", "testhost1.ru" };
+
             try
             {
-                var cityNames = new string[] { "defaultPreviewCity0" };
-                var areaNames = new string[] { "defaultPreviewArea0", "defaultPreviewArea1" };
-                var streetNames = new string[] { "defaultPreviewStreet0", "defaultPreviewStreet1" };
-                var hostNames = new string[] { "testhost0.ru", "testhost1.ru" };
-
                 hostNames.ToList().ForEach((h) =>
                     {
                         Rep.HostRemove(Rep.HostGet(h), saveAfterRemove: false);
@@ -170,7 +178,8 @@ namespace RoyaltyDataCalculatorTest
                         var area = Rep.AreaNew(a, city: city);
                         streetNames.ToList().ForEach((ss) =>
                         {
-                            var street = Rep.StreetNew(RoyaltyDataCalculator.Parser.Address.FromString(ss, area.Name, acc.Dictionary.Excludes.Select(e => e.Exclude)).Street, area);
+                            if (rnd.Next(5) != 0)
+                                Rep.StreetNew(RoyaltyDataCalculator.Parser.Address.FromString(ss, area.Name, acc.Dictionary.Excludes.Select(e => e.Exclude)).Street, area);
                         });
                     });
                 });
@@ -196,8 +205,6 @@ namespace RoyaltyDataCalculatorTest
                 csvLines.Add(columns);
 
                 var lastAddedPhone = string.Empty;
-                var rnd = new Random();
-                rnd.Next();
                 var genNewData = new Func<RoyaltyRepository.Models.ColumnTypes, string>(
                     (ct) => 
                     {
@@ -231,7 +238,7 @@ namespace RoyaltyDataCalculatorTest
                     }
                     );
 
-                for (int i = 0; i < 100000; i++ )
+                for (int i = 0; i < maxCnt; i++ )
                 {
                     columns = string.Empty;
                     foreach (var colName in colValues)
@@ -249,22 +256,22 @@ namespace RoyaltyDataCalculatorTest
                         tableValidator: dc.TableValidator,
                         rowFilter: dc.RowFilter);
 
-                    var previewRes = dc.Preview(l.Table);
+                    var previewRes = dc.Preview(l.Table, false, (p) => Helpers.Log.Add($"Progress: {p.ToString("N2")}"));
                     Assert.AreEqual(l.Table.Rows.Count, previewRes.Count());
                     Rep.SaveChanges();
                 }
-
-                hostNames.ToList().ForEach((s) =>
-                {
-                    Rep.HostRemove(Rep.HostGet(s));
-                });
-                cityNames.ToList().ForEach((s) =>
-                {
-                    Rep.CityRemove(Rep.CityGet(s));
-                });
             }
             finally
             {
+                hostNames.ToList().ForEach((s) =>
+                {
+                    Rep.HostRemove(Rep.HostGet(s), saveAfterRemove: false);
+                });
+                cityNames.ToList().ForEach((s) =>
+                {
+                    Rep.CityRemove(Rep.CityGet(s), saveAfterRemove: false);
+                });
+                Rep.SaveChanges();
                 SqlLogEnabled = true;
             }
         }

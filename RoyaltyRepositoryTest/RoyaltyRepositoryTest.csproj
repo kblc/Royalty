@@ -61,6 +61,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RoyaltyDataCalculatorTest\RoyaltyDataCalculatorTest.csproj">
+      <Project>{8e028a84-e9ac-449d-b2a3-0d76adde48e6}</Project>
+      <Name>RoyaltyDataCalculatorTest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RoyaltyRepositoryTests\RoyaltyRepositoryTests.csproj">
+      <Project>{827e3a72-5e15-4f76-82e6-fa9ececce174}</Project>
+      <Name>RoyaltyRepositoryTests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RoyaltyRepository\RoyaltyRepository.csproj">
       <Project>{9fc94fda-b3fb-441d-9baa-40252da7e067}</Project>
       <Name>RoyaltyRepository</Name>

@@ -49,23 +49,26 @@ namespace WordsMatching
 		{
 			
 			float dis=ComputeDistance(string1, string2);
-			float maxLen=string1.Length;
-			if (maxLen < (float) string2.Length)
-				maxLen = string2.Length;
+            var maxLen = Math.Max(string1.Length, string2.Length);
+            return maxLen == 0 ? 0f : (float)maxLen - dis;
 
-			float minLen=string1.Length;
-			if (minLen > (float) string2.Length)
-				minLen = string2.Length;
 
+			//float maxLen=string1.Length;
+			//if (maxLen < (float) string2.Length)
+			//	maxLen = string2.Length;
+
+			//float minLen=string1.Length;
+			//if (minLen > (float) string2.Length)
+			//	minLen = string2.Length;
 			
-			if (maxLen == 0.0F)
-				return 1.0F;
-			else
-			{
-				return maxLen - dis;
-				//return 1.0F - dis/maxLen ;
-				//return (float) Math.Round(1.0F - dis/maxLen, 1) * 10 ;
-			}
+			//if (maxLen == 0.0F)
+			//	return 1.0F;
+			//else
+			//{
+			//	return maxLen - dis;
+			//	//return 1.0F - dis/maxLen ;
+			//	//return (float) Math.Round(1.0F - dis/maxLen, 1) * 10 ;
+			//}
 		}
 
 		public Leven()

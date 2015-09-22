@@ -19,7 +19,7 @@ namespace RoyaltyDataCalculator
     /// <summary>
     /// Задача калькулятора - взять данные (импортируемые и существующие), обработать их и объединить
     /// </summary>
-    public class DataCalculator : IDisposable
+    public sealed class DataCalculator : IDisposable
     {
         public DataCalculator(Account account = null, Repository repository = null)
         {
@@ -95,7 +95,7 @@ namespace RoyaltyDataCalculator
 
         #endregion
 
-        public IDictionary<DataRow, DataPreviewRow> Preview(DataTable dataTable)
+        public IDictionary<DataRow, DataPreviewRow> Preview(DataTable dataTable, bool doNotAddAnyDataToDictionary = false, Action<decimal> reportProgress = null)
         {
             using (var logSession = Log.Session(this.GetType().Name + ".Preview()", false))
                 try
@@ -106,6 +106,16 @@ namespace RoyaltyDataCalculator
                         throw new ArgumentNullException("Account");
                     if (Repository == null)
                         throw new ArgumentNullException("Repository");
+
+                    var pp = new Helpers.PercentageProgress();
+                    pp.Change += (s, e) => { if (reportProgress != null) reportProgress(e.Value); };
+                    var ppPrepare = pp.GetChild(weight: 0.1m);
+                    var ppHostes = pp.GetChild(weight: 0.1m);
+                    var ppPhones = pp.GetChild(weight: 0.1m);
+                    var ppMarks = pp.GetChild(weight: 0.1m);
+                    var ppCities = pp.GetChild(weight: 0.1m);
+                    var ppStreets = pp.GetChild(weight: 0.5m);
+
 
                     #region Get column names by column types
                     Log.Add("Get column names by column types");
@@ -145,7 +155,7 @@ namespace RoyaltyDataCalculator
 
                     var subRes0 = dataTable.Rows
                         .Cast<DataRow>()
-                        //.AsParallel()
+                        .AsParallel()
                         .Select(dr => new
                         {
                             Row = dr,
@@ -177,17 +187,22 @@ namespace RoyaltyDataCalculator
                         })
                         .ToArray();
 
+                    ppPrepare.Value = 100;
+
                     #endregion
                     #region Join hostes or create new
                     Log.Add("Join hostes or create new");
 
                     var hosts = subRes0
+                        .AsParallel()
                         .Select(i => i.IncomingHost.Hostname)
                         .Distinct()
                         .LeftOuterJoin(Repository.HostGet(), h => h, h => h.Name, (h, host) => new { HostName = h, Host = host })
                         .ToArray()
                         .Select(i => i.Host ?? Repository.HostNew(i.HostName))
                         .ToArray();
+
+                    ppHostes.Value = 50;
 
                     var subRes1 = subRes0
                         .Join(hosts, i => i.IncomingHost.Hostname, h => h.Name, (i, h) => new
@@ -201,17 +216,22 @@ namespace RoyaltyDataCalculator
                             Host = h,
                             IsNewHost = h.HostID == 0
                         });
+
+                    ppHostes.Value = 100;
                     #endregion
                     #region Join phones or create new
                     Log.Add("Join phones or create new");
 
                     var phones = subRes0
+                        .AsParallel()
                         .Select(i => i.IncomingPhone.PhoneNumber)
                         .Distinct()
                         .LeftOuterJoin(Repository.PhoneGet(), p => p, p => p.PhoneNumber, (p, phone) => new { PhoneNumber = p, Phone = phone })
                         .ToArray()
                         .Select(i => i.Phone ?? Repository.PhoneNew(i.PhoneNumber))
                         .ToArray();
+
+                    ppPhones.Value = 50;
 
                     var subRes2 = subRes1
                         .Join(phones, i => i.IncomingPhone.PhoneNumber, p => p.PhoneNumber, (i, p) => new
@@ -227,6 +247,8 @@ namespace RoyaltyDataCalculator
                             Phone = p,
                             IsNewPhone = p.PhoneID == 0
                         });
+
+                    ppPhones.Value = 100;
                     #endregion
                     #region Join marks or create new
                     Log.Add("Join marks");
@@ -248,17 +270,23 @@ namespace RoyaltyDataCalculator
                             i.IsNewPhone,
                             Mark = m ?? defMark,
                         });
+
+                    ppMarks.Value = 100;
+
                     #endregion
                     #region Join cities or create new
                     Log.Add("Join cities or create new");
 
                     var cities = subRes0
+                        .AsParallel()
                         .Select(i => i.IncomingCity)
                         .Distinct()
                         .LeftOuterJoin(Repository.CityGet(), c => c.ToUpper(), c => c.Name.ToUpper(), (c, city) => new { CityName = c, City = city })
                         .ToArray()
                         .Select(i => i.City ?? Repository.CityNew(i.CityName))
                         .ToArray();
+
+                    ppCities.Value = 50;
 
                     var subRes4 = subRes3
                         .Join(cities, i => i.IncomingCity.ToUpper(), c => c.Name.ToUpper(), (i, c) => new
@@ -278,10 +306,12 @@ namespace RoyaltyDataCalculator
                             IsNewCity = c.CityID == 0
                         });
 
+                    ppCities.Value = 100;
                     #endregion
                     #region Join streets
 
                     var aP = new Parser.AddressParser(Account, Repository);
+
                     var aPR = aP.Parse(subRes4
                         .GroupBy(i => new { i.City, i.IncomingAddress.Street, House = i.IncomingAddress.House.ToString(), i.IncomingAddress.Area })
                         .Select(g => new
@@ -294,7 +324,9 @@ namespace RoyaltyDataCalculator
                             City = g.City,
                             Address = g.Address
                         })
-                        .ToArray());
+                        .ToArray(),
+                        doNotAddAnyDataToDictionary,
+                        (progress) => ppStreets.Value = progress);
 
                     var res = subRes4
                         .LeftOuterJoin(aPR,

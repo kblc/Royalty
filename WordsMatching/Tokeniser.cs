@@ -6,6 +6,7 @@ Copyright (c) 2005 by Thanh Ngoc Dao.
 
 using System;
 using System.Collections;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace WordsMatching
@@ -67,30 +68,35 @@ namespace WordsMatching
 			}
 		}
 
-		public string[] Partition(string input)
+        //private static Regex regex = new Regex("([ \\t{}():;])");
+
+        private static char[] sepChars = " \\t{}():;".ToArray();
+
+        public string[] Partition(string input)
 		{
-			Regex r=new Regex("([ \\t{}():;])");
+            Normalize_Casing(ref input);
+            return input.ToLower().Split(sepChars, StringSplitOptions.RemoveEmptyEntries);
+
+   //         Regex r = regex;// new Regex("([ \\t{}():;])");
 			
-			Normalize_Casing(ref input);
-			//normalization to the lower case
-			input=input.ToLower() ;
+			////normalization to the lower case
+			//input=input.ToLower() ;
 
-			String [] tokens=r.Split(input); 									
+			//String [] tokens=r.Split(input); 									
 
-			ArrayList filter=new ArrayList() ;
+			//ArrayList filter=new ArrayList() ;
 
-			for (int i=0; i < tokens.Length ; i++)
-			{
-				MatchCollection mc=r.Matches(tokens[i]);
-				if (mc.Count <= 0 && tokens[i].Trim().Length > 0 )				
-					filter.Add(tokens[i]) ;
-				
-			}
+			//for (int i=0; i < tokens.Length ; i++)
+			//{
+			//	MatchCollection mc=r.Matches(tokens[i]);
+			//	if (mc.Count <= 0 && tokens[i].Trim().Length > 0 )				
+			//		filter.Add(tokens[i]) ;
+			//}
 
-			tokens=new string[filter.Count] ;
-			for(int i=0; i < filter.Count ; i++) tokens[i]=(string) filter[i];
+			//tokens=new string[filter.Count] ;
+			//for(int i=0; i < filter.Count ; i++) tokens[i]=(string) filter[i];
 			
-			return tokens;
+			//return tokens;
 		}
 
 

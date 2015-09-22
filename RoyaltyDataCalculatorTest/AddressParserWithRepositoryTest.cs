@@ -207,7 +207,7 @@ namespace RoyaltyDataCalculatorTest
             try
             {
                 Rep.CityRemove(Rep.CityGet("testCity"));
-                var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Dictionary", "Dictionary.Records" });
+                var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Dictionary.Records.Street.Area.City" });
 
                 var c = Rep.CityNew("testCity");
                 Rep.CityAdd(c, saveAfterInsert: false);

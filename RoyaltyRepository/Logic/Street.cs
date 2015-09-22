@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using RoyaltyRepository.Models;
 using Helpers;
 using Helpers.Linq;
+using RoyaltyRepository.Properties;
 
 namespace RoyaltyRepository
 {
@@ -84,6 +85,12 @@ namespace RoyaltyRepository
 
                 try
                 {
+                    var instancesWithData = instances
+                        .Select(s => new { Name = s, Count = s.DataRecords.Count })
+                        .Where(s => s.Count > 0);
+                    if (instancesWithData.Any())
+                        throw new Exception(instancesWithData.Concat(s => string.Format(Resources.Logic_Street_StreetRemove_StreetContainsDataRecords, s, s.Count), Environment.NewLine) + Environment.NewLine + " " + Resources.Logic_Street_StreetRemove_StreetContainsDataRecords_TerminateDeletion);
+
                     this.Context.Streets.RemoveRange(instances);
                     if (saveAfterRemove)
                         this.SaveChanges(waitUntilSaving);
@@ -159,29 +166,25 @@ namespace RoyaltyRepository
         /// </summary>
         /// <param name="instanceNames">Streets name array</param>
         /// <returns>Street array</returns>
-        public IEnumerable<Street> StreetGet(IEnumerable<string> instanceNames, Area area)
+        public IQueryable<Street> StreetGet(IEnumerable<string> instanceNames, Area area)
         {
+            var inst = instanceNames.Select(n => n.ToUpper()).Distinct();
+            var res = StreetGet()
+                    .Where(s => inst.Contains(s.Name.ToUpper()));
             if (area != null)
             {
-                var res2 = StreetGet()
-                    .Where(s => s.AreaID == area.AreaID)
-                    .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s)
-                    .ToArray();
-                var ent = Context.Entry(area);
-                if ((ent.State == EntityState.Added || ent.State == EntityState.Detached) || ((ent.State == EntityState.Modified || ent.State == EntityState.Unchanged) && !Context.Entry(area).Collection<Street>(nameof(area.Streets)).IsLoaded))
-                { 
-                    var subRes = area.Streets.Where(s => Context.Entry(s).State == EntityState.Added)
-                        .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
-                    return res2
-                        .Union(subRes)
-                        .Distinct();
-                }
-                return res2;
+                //var res2 = res.Where(s => s.AreaID == area.AreaID);
+                //var ent = Context.Entry(area);
+                //if ((ent.State == EntityState.Added || ent.State == EntityState.Detached) || ((ent.State == EntityState.Modified || ent.State == EntityState.Unchanged) && Context.Entry(area).Collection(nameof(area.Streets)).IsLoaded))
+                //{
+                    var subRes = area.Streets
+                        .Join(inst, s => s.Name.ToUpper(), i => i, (s, i) => s);
+                    return subRes.AsQueryable();
+                //}
+                //else
+                //    return res2;
             } else
-            {
-                return StreetGet()
-                    .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
-            }
+                return res;
         }
         /// <summary>
         /// Get Streets by identifiers

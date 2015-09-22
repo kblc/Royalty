@@ -55,18 +55,29 @@ namespace RoyaltyDataCalculator.Parser
         /// </summary>
         /// <param name="incomingData">Входные параметры (Адрес и город)</param>
         /// <returns>Соответствующие выходные параметры (Найденные и созданные улицы и прочее)</returns>
-        public IEnumerable<AddressParserResult> Parse(IEnumerable<AddressParserIncomingParameter> incomingData)
+        public IEnumerable<AddressParserResult> Parse(IEnumerable<AddressParserIncomingParameter> incomingData, bool doNotAddAnyDataToDictionary = false, Action<decimal> reportProgress = null)
         {
             using (var logSession = Helpers.Log.Session(GetType().Name + ".Parse()", isEnabled: false))
                 try
                 {
+                    var pp = new Helpers.PercentageProgress();
+                    pp.Change += (s, e) => { if (reportProgress != null) reportProgress(e.Value); };
+
                     var res = incomingData
                         .GroupBy(i => i.City)
                         .Select(g => new
                         {
-                            City = g.FirstOrDefault().City,
-                            Streets = GetStreets(g.Select(i => i.Address), g.FirstOrDefault().City),
-                            Items = g,
+                            City = g.Key,
+                            Items = g.ToArray(),
+                            Progress = pp.GetChild()
+                        })
+                        .ToArray()
+                        .AsParallel()
+                        .Select(g => new
+                        {
+                            g.City,
+                            Streets = GetStreets(g.Items.Select(i => i.Address), g.City, doNotAddAnyDataToDictionary, (progress) => g.Progress.Value = progress),
+                            g.Items,
                         })
                         .SelectMany(g => g.Items.Join(g.Streets, r => r.Address, i => i.Key, (r, i) => new
                         {
@@ -112,30 +123,35 @@ namespace RoyaltyDataCalculator.Parser
                 return 1m;
             bool isHouseNumberEven = houseNumber.Value % 2 == 0;
 
-            var resultWeight = conditions
-                .AsParallel()
+            var resultLength = conditions
                 .Where(c => c.Even.HasValue ? (c.Even.Value == isHouseNumberEven) : true)
                 .Select(c => new { c.From, c.To, c.Even, IsInside = houseNumber.Value >= c.From && houseNumber <= c.To })
+                .AsParallel()
                 .Select(c => new
                 {
                     LengthBetween = c.IsInside
                         ? 0
-                        : new long[] { c.From, c.To }.Distinct().Select(i => AreaMap.LengthBetween(houseNumber.Value, (uint)i)).Union(new uint[] { uint.MaxValue }).Min(),
+                        : new long[] { c.From, c.To }
+                            .Distinct()
+                            .Select(i => AreaMap.LengthBetween(houseNumber.Value, (uint)i))
+                            .Min(),
                     Radius = Math.Abs(c.From - c.To) + 1,
                     Even = c.Even,
                 })
-                .Where(c => c.LengthBetween != uint.MaxValue)
+                .ToArray();
+
+            var resultWeight = resultLength
+                .AsParallel()
                 .Select(c => (c.LengthBetween == 0 ? 1m : AreaMap.Weight(c.LengthBetween, c.Radius)) +
                              (c.Even.HasValue ? 0.2m : 0.0m))
                 .OrderByDescending(i => i)
                 .FirstOrDefault();
 
-            //TODO: Проверка и изменение условий
             return resultWeight;
         }
 
         /// <summary>
-        /// ПОлучает услицу по адресу в соответствии со словарем
+        /// Получает улицу по адресу в соответствии со словарем
         /// </summary>
         /// <param name="address">Адрес для поиска</param>
         /// <param name="city">Город</param>
@@ -144,37 +160,50 @@ namespace RoyaltyDataCalculator.Parser
         /// <returns>Улица из БД. Если NULL, значит улица в соответствии со словарем не найдена</returns>
         public RoyaltyRepository.Models.Street GetStreetByDictionary(Address address, RoyaltyRepository.Models.City city, bool doNotAddAnyDataToDictionary, Action<string> verboseLog = null)
         {
+            if (address == null)
+                throw new ArgumentNullException(nameof(address));
+            if (city == null)
+                throw new ArgumentNullException(nameof(city));
+
+            var log = new Action<string>((str) => { if (verboseLog != null) verboseLog($"{GetType().Name}.{nameof(GetStreetByDictionary)}() {str}"); });
+
+            //lock (Account.Dictionary)
             try
             { 
-                if (address == null)
-                    throw new ArgumentNullException(nameof(address));
-                if (city == null)
-                    throw new ArgumentNullException(nameof(city));
-
-                var t = System.Threading.Thread.CurrentThread.ManagedThreadId;
-
-                var log = new Action<string>((str) => { if (verboseLog != null) verboseLog($"{GetType().Name}.{nameof(GetStreetByDictionary)}() {str}"); });
-
                 log($"Get all streets in city '{city}'");
+
+                ICollection<RoyaltyRepository.Models.AccountDictionaryRecord> recs = null;
+                lock (Account.Dictionary)
+                {
+                    recs = Account.Dictionary.Records.ToArray();
+                }
                 var dictionary = city.Areas
                     .SelectMany(a => a.Streets.Select(s => new
                     {
                         Area = a,
                         Street = s
                     }))
-                    .LeftOuterJoin(Account.Dictionary.Records, s => s.Street, r => r.Street, (s, r) => new
+                    .LeftOuterJoin(recs, s => s.Street, r => r.Street, (s, r) => new
                     {
                         Street = s.Street,
                         Area = s.Area,
                         ChangeStreetTo = r != null ? r.ChangeStreetTo : null,
                         Conditions = r != null ? r.Conditions : null,
-                        InDictionary = r != null,
+                        DictionaryRecord = r,
                     })
                     .ToArray();
 
-                var res = dictionary //Account.Dictionary.Records
-                    //.Where(r => r.Street != null && r.Street.Area != null)
-                    //.Where(r => r.Street.Area.City == city)
+                var dS = dictionary.Where(i => i.Street.Name.ToUpper() == address.Street.ToUpper()).ToArray();
+                if (dS.Any())
+                    dictionary = dS;
+
+                if (!string.IsNullOrWhiteSpace(address.Area))
+                { 
+                    var dA = dictionary.Where(i => i.Area.Name.ToUpper() == address.Area.ToUpper()).ToArray();
+                    if (dA.Any())
+                        dictionary = dA;
+                }
+                var subRes = dictionary
                     .AsParallel()
                     .Select(i => new
                     {
@@ -182,14 +211,16 @@ namespace RoyaltyDataCalculator.Parser
                         i.Street.Area,
                         ConditionsScore = GetConditionsScore(address.House.Number, i.Conditions, doNotAddAnyDataToDictionary),
                         StreetScore = (decimal)new WordsMatching.MatchsMaker(address.Street, i.Street.Name).Score,
-                        AreaScore = string.IsNullOrWhiteSpace(address.Area) 
-                            ? Account.Dictionary.SimilarityForTrust 
+                        AreaScore = string.IsNullOrWhiteSpace(address.Area)
+                            ? Account.Dictionary.SimilarityForTrust
                             : (decimal)new WordsMatching.MatchsMaker(address.Area, i.Street.Area.Name).Score,
-                        i.InDictionary,
-                    })
+                        i.DictionaryRecord,
+                    });
+
+                var res = subRes
                     .Where(i => i.StreetScore + i.AreaScore >= Account.Dictionary.SimilarityForTrust * 2 && i.ConditionsScore >= Account.Dictionary.ConditionsScoreForTrust)
                     .OrderByDescending(i => i.StreetScore + i.AreaScore + i.ConditionsScore / 2m)
-                    .ThenByDescending(i => i.InDictionary ? 1 : 0)
+                    .ThenByDescending(i => i.DictionaryRecord != null ? 1 : 0)
                     .ThenByDescending(i => i.Area.Streets.Count)
                     .FirstOrDefault();
 
@@ -197,12 +228,16 @@ namespace RoyaltyDataCalculator.Parser
                     log($"Street not found for address '{address}'");
                 else
                 {
-                    log($"Founded street {(res.InDictionary ? "in dictionary" : string.Empty)}for address '{address}': '{res}'");
-                    if (!res.InDictionary && Account.Dictionary.AllowAddToDictionaryAutomatically && !doNotAddAnyDataToDictionary)
+                    log($"Founded street {(res.DictionaryRecord != null ? "in dictionary" : string.Empty)}for address '{address}': '{res}'");
+                    if (Account.Dictionary.AllowAddToDictionaryAutomatically && !doNotAddAnyDataToDictionary)
                     {
-                        log($"Try add record to dictionary");
-                        var adr = Repository.AccountDictionaryRecordNew(Account.Dictionary, street: res.Street);
-                        log($"Added dictionary record: {adr}");
+                        if (res.DictionaryRecord == null)
+                        {
+                            lock (Account.Dictionary)
+                               AddNewOrUpdateDictionaryRecord(address, res.Street, (str) => log(str));
+                        }
+                        else
+                            ConcatDictionaryRecordConditions(address, new RoyaltyRepository.Models.AccountDictionaryRecord[] { res.DictionaryRecord }, (str) => log(str));
                     }
                 }
                 return res?.Street;
@@ -210,6 +245,118 @@ namespace RoyaltyDataCalculator.Parser
             catch(Exception)
             {
                 throw;
+            }
+        }
+
+        public void ConcatDictionaryRecordConditions(Address address, IEnumerable<RoyaltyRepository.Models.AccountDictionaryRecord> dictionaryRecords, Action<string> verboseLog = null)
+        {
+            if (address == null)
+                throw new ArgumentNullException(nameof(address));
+
+            var log = new Action<string>((str) => { if (verboseLog != null) verboseLog($"{GetType().Name}.{nameof(ConcatDictionaryRecordConditions)}() {str}"); });
+
+            log(dictionaryRecords.Concat(i => $"Dictionary record already exists: '{i}'", Environment.NewLine));
+            if (address.House.Number.HasValue)
+            {
+                // Если записей больше 1, то нужно определить, которую из них выбрать
+                log("House number exists. Try to update conditions");
+                var rowAndCondition = dictionaryRecords
+                    .Select(ad => new
+                    {
+                        Record = ad,
+                        Conditions = ad.Conditions.Select(c => new { Condition = c, Score = GetConditionsScore(address.House.Number, new RoyaltyRepository.Models.AccountDictionaryRecordCondition[] { c }, false) })
+                    })
+                    .Select(i => new
+                    {
+                        i.Record,
+                        NearestCondition = i.Conditions.OrderByDescending(c => c.Score).FirstOrDefault()
+                    })
+                    .Select(i => new
+                    {
+                        i.Record,
+                        NearestCondition = i.NearestCondition?.Condition,
+                        NearestScore = i.NearestCondition?.Score ?? 0,
+                    })
+                    .OrderByDescending(i => i.NearestScore)
+                    .OrderByDescending(i => i.Record.ChangeStreetTo == null ? 1 : 0)
+                    .FirstOrDefault();
+
+                var nearestCondition = rowAndCondition?.NearestScore >= Account.Dictionary.ConditionsScoreForTrust ? rowAndCondition?.NearestCondition : null;
+                var adr = rowAndCondition.Record;
+
+                if (nearestCondition != null)
+                {
+                    log($"Condition found: '{nearestCondition}'");
+                    var isUpdated = false;
+                    if (address.House.Number.Value < nearestCondition.From)
+                    {
+                        nearestCondition.From = address.House.Number.Value;
+                        isUpdated = true;
+                    }
+                    else
+                    if (address.House.Number.Value > nearestCondition.To)
+                    {
+                        nearestCondition.To = address.House.Number.Value;
+                        isUpdated = true;
+                    }
+
+                    if (isUpdated)
+                    {
+                        log($"Condition update to '{nearestCondition}'");
+                        log("Try to concat conditions");
+                        var condLst = adr.Conditions.OrderBy(c => c.From).ToList();
+                        for (int i = condLst.Count - 1; i >= 1; i--)
+                        {
+                            var lengthBetween = AreaMap.LengthBetween((uint)condLst[i - 1].To, (uint)condLst[i].From);
+                            var maxScore = new decimal[] { AreaMap.Weight(lengthBetween, Math.Abs(condLst[i - 1].From - condLst[i - 1].To) + 1m), AreaMap.Weight(lengthBetween, Math.Abs(condLst[i].From - condLst[i].To) + 1m) }.Max();
+
+                            if (maxScore >= Account.Dictionary.ConditionsScoreForTrust || condLst[i - 1].To >= condLst[i].From)
+                            {
+                                log($"Concat conditions '{condLst[i]}' and '{condLst[i - 1]}'");
+                                condLst[i - 1].To = condLst[i].To;
+                                condLst[i - 1].From = Math.Min(condLst[i].From, condLst[i - 1].From);
+                                log($"New condition is '{condLst[i - 1]}'");
+                                adr.Conditions.Remove(condLst[i]);
+                            }
+                        }
+                    } else
+                        log($"No one update needed");
+                }
+                else
+                {
+                    var cond = Repository.AccountDictionaryRecordConditionNew(adr, address.House.Number, address.House.Number);
+                    log($"Add condition for dictionary record {cond}");
+                }
+            }
+            else
+            {
+                log("House number not setted. Leave as is.");
+            }
+        }
+
+        public void AddNewOrUpdateDictionaryRecord(Address address, RoyaltyRepository.Models.Street street, Action<string> verboseLog = null)
+        {
+            if (address == null)
+                throw new ArgumentNullException(nameof(address));
+
+            var log = new Action<string>((str) => { if (verboseLog != null) verboseLog($"{GetType().Name}.{nameof(AddNewOrUpdateDictionaryRecord)}() {str}"); });
+
+            log("Try get record to dictionary");
+            var dictionaryRecords = Account.Dictionary.Records.Where(ad => ad.Street == street);
+            if (!dictionaryRecords.Any())
+            {
+                log("Dictionary record not found. Create new and add it");
+                var adr = Repository.AccountDictionaryRecordNew(Account.Dictionary, street: street);
+                if (address.House.Number.HasValue)
+                {
+                    var cond = Repository.AccountDictionaryRecordConditionNew(adr, address.House.Number, address.House.Number);
+                    log($"Add condition for dictionary record {cond.ToString()}");
+                }
+                log($"Add dictionary record: {adr.ToString()}");
+            }
+            else
+            {
+                ConcatDictionaryRecordConditions(address, dictionaryRecords, (str) => log(str));
             }
         }
 
@@ -231,112 +378,64 @@ namespace RoyaltyDataCalculator.Parser
             var log = new Action<string>((str) => { if (verboseLog != null) verboseLog($"{GetType().Name}.{nameof(GetNewStreet)}() {str}"); });
             bool isNewArea = false;
 
-            log($"Incoming parameters: address is '{address}' and city is '{city}'");
-            RoyaltyRepository.Models.Area a = null;
-            if (string.IsNullOrWhiteSpace(address.Area))
-            {
-                log($"Area is unsetted. Use default aread for city: '{city.UndefinedArea}'");
-                a = city.UndefinedArea;
-            } else
-            {
-                log($"Try get area with name '{address.Area}' from database");
-                a = Repository.AreaGet(address.Area, city);
-                if (a == null)
+            try
                 {
-                    log($"Area not found. Create new");
-                    a = Repository.AreaNew(address.Area, city: city);
-                    log($"New area for addres is {a}");
-                    isNewArea = true;
-                } else
-                    log($"Area found: {a}");
-            }
-
-            RoyaltyRepository.Models.Street s = null;
-            if (!isNewArea)
-            {
-                log($"Try to get street from database");
-                s = Repository.StreetGet(address.Street, a);
-                if (s != null)
-                    log($"Street found in database: {s}"); else
-                    log($"Street '{address.Street}' with area '{a}' not found in database");
-            }
-            if (s == null)
-            {
-                s = a != city.UndefinedArea ? Repository.StreetGet(address.Street, city.UndefinedArea) : null;
-                if (s != null)
-                {
-                    log($"Street found in undefined area in database: {s}. Change area for this street to '{a}'");
-                    s.Area = a;
-                }
-                else
-                {
-                    s = Repository.StreetNew(address.Street, a);
-                    log($"New street created: {s}");
-                }
-            }
-            else
-                log($"Street found in database: {s}");
-
-            if (Account.Dictionary.AllowAddToDictionaryAutomatically && !doNotAddAnyDataToDictionary)
-            {
-                log("Try get record to dictionary");
-                var adr = Account.Dictionary.Records.FirstOrDefault(ad => ad.Street == s);
-                if (adr == null)
-                {
-                    log("Dictionary record not found. Create new and add it");
-                    adr = Repository.AccountDictionaryRecordNew(Account.Dictionary, street: s);
-                    if (address.House.Number.HasValue)
+                    log($"Incoming parameters: address is '{address}' and city is '{city}'");
+                    RoyaltyRepository.Models.Area a = null;
+                    if (string.IsNullOrWhiteSpace(address.Area))
                     {
-                        var cond = Repository.AccountDictionaryRecordConditionNew(adr, address.House.Number, address.House.Number);
-                        log($"Add condition for dictionary record {cond.ToString()}");
-                    } 
-                    log($"Add dictionary record: {adr.ToString()}");
-                } else
-                {
-                    log($"Dictionary record already exists: '{adr.ToString()}'");
-                    if (address.House.Number.HasValue)
+                        log($"Area is unsetted. Use default aread for city: '{city.UndefinedArea}'");
+                        a = city.UndefinedArea;
+                    } else
                     {
-                        log("House number exists. Try to update conditions");
-                        var nearestCondition = adr.Conditions
-                            .Select(c => new { Condition = c, Score = GetConditionsScore(address.House.Number, new RoyaltyRepository.Models.AccountDictionaryRecordCondition[] { c }, doNotAddAnyDataToDictionary) })
-                            .OrderByDescending(i => i.Score)
-                            .Where(i => i.Score > Account.Dictionary.ConditionsScoreForTrust)
-                            .Select(i => i.Condition)
-                            .FirstOrDefault();
-
-                        if (nearestCondition != null)
+                        log($"Try get area with name '{address.Area}' from database");
+                        a = Repository.AreaGet(address.Area, city);
+                        if (a == null)
                         {
-                            if (address.House.Number.Value < nearestCondition.From)
-                                nearestCondition.From = address.House.Number.Value;
-                            else
-                            if (address.House.Number.Value > nearestCondition.To)
-                                nearestCondition.To = address.House.Number.Value;
-                            log($"Condition found and update to '{nearestCondition.ToString()}'");
-                            log("Try to concat conditions");
+                            log($"Area not found. Create new");
+                            a = Repository.AreaNew(address.Area, city: city);
+                            log($"New area for addres is {a}");
+                            isNewArea = true;
+                        } else
+                            log($"Area found: {a}");
+                    }
 
-                            var condLst = adr.Conditions.OrderBy(c => c.From).ToList();
-                            for (int i = condLst.Count - 1; i >= 1; i--)
-                            {
-                                var lengthBetween = AreaMap.LengthBetween((uint)condLst[i - 1].To, (uint)condLst[i].From);
-                                if (new decimal[] { AreaMap.Weight(lengthBetween, Math.Abs(condLst[i - 1].From - condLst[i - 1].To) + 1m), AreaMap.Weight(lengthBetween, Math.Abs(condLst[i].From - condLst[i].To) + 1m) }.Max() >= Account.Dictionary.ConditionsScoreForTrust)
-                                {
-                                    log($"Concat conditions '{condLst[i].ToString()}' and '{condLst[i-1].ToString()}'");
-                                    condLst[i - 1].To = condLst[i].To;
-                                    log($"New condition is '{condLst[i - 1].To}'");
-                                    adr.Conditions.Remove(condLst[i]);
-                                }
-                            }
+                    RoyaltyRepository.Models.Street s = null;
+                    if (!isNewArea)
+                    {
+                        log($"Try to get street from database");
+                        s = Repository.StreetGet(address.Street, a);
+                        if (s != null)
+                            log($"Street found in database: {s}"); else
+                            log($"Street '{address.Street}' with area '{a}' not found in database");
+                    }
+                    if (s == null)
+                    {
+                        s = a != city.UndefinedArea ? Repository.StreetGet(address.Street, city.UndefinedArea) : null;
+                        if (s != null)
+                        {
+                            log($"Street found in undefined area in database: {s}. Change area for this street to '{a}'");
+                            s.Area = a;
                         }
                         else
                         {
-                            var cond = Repository.AccountDictionaryRecordConditionNew(adr, address.House.Number, address.House.Number);
-                            log($"Add condition for dictionary record {cond.ToString()}");
+                            s = Repository.StreetNew(address.Street, a);
+                            log($"New street created: {s}");
                         }
-                    } else
-                        log("House number not setted. Leave as is.");
+                    }
+                    else
+                        log($"Street found in database: {s}");
+
+                    if (Account.Dictionary.AllowAddToDictionaryAutomatically && !doNotAddAnyDataToDictionary)
+                    lock (Account.Dictionary)
+                        AddNewOrUpdateDictionaryRecord(address, s, (str) => log(str));
+
+                    return s;
                 }
-            }
-            return s;
+                catch(Exception)
+                {
+                    throw;
+                }
         }
 
         /// <summary>
@@ -349,13 +448,17 @@ namespace RoyaltyDataCalculator.Parser
         public IDictionary<Address, RoyaltyRepository.Models.Street> GetStreets(
             IEnumerable<Address> incomingAddresses,
             RoyaltyRepository.Models.City city,
-            bool doNotAddAnyDataToDictionary = false)
+            bool doNotAddAnyDataToDictionary = false,
+            Action<decimal> reportProgress = null)
         {
+            var pp = new Helpers.PercentageProgress();
+            pp.Change += (s, e) => { if (reportProgress != null) reportProgress(e.Value); };
+
             using (var logSession = Helpers.Log.Session($"{GetType().Name}.{nameof(GetStreets)}()", true))
                 try
                 {
-                    var res = incomingAddresses
-                        //.Distinct(GenericEqualityComparer<Address>.Get(a => a.ToString()))
+                    var findStreet = incomingAddresses
+                        .Distinct()
                         .OrderByDescending(a => a.Area)
                         .ThenByDescending(a => a.Street)
                         .ThenByDescending(a => a.House.ToString())
@@ -368,7 +471,11 @@ namespace RoyaltyDataCalculator.Parser
                                 Street = (d != null ? d.ChangeStreetTo ?? d.Street : null),
                                 ConditionsScore = GetConditionsScore(s.House.Number, d == null ? null : d.Conditions, doNotAddAnyDataToDictionary),
                             })
-                        .ToArray()
+                        .ToArray();
+
+                    pp.Value = 25;
+
+                    var res = findStreet
                         .Select(i => new
                         {
                             i.IncomingAddress,
@@ -376,8 +483,6 @@ namespace RoyaltyDataCalculator.Parser
                                 ?? GetStreetByDictionary(i.IncomingAddress, city, doNotAddAnyDataToDictionary, (s) => logSession.Add(s)) 
                                 ?? GetNewStreet(i.IncomingAddress, city, doNotAddAnyDataToDictionary, (s) => logSession.Add(s))
                         })
-                        //Если было 2 одинаковых входящих адреса (речь об объектах, а не о строке с адресом)
-                        .Distinct()
                         .GroupBy(i => i.IncomingAddress)
                         .Select(g => new { IncomingAddress = g.Key, Items = g })
                         //Исключаем случаи, когда в словаре более одной записи на входящий адрес (что-то пошло не так, и мы генерируем ошибку)
@@ -401,6 +506,7 @@ namespace RoyaltyDataCalculator.Parser
                         })
                         .ToArray();
 
+                    pp.Value = 90;
                     logSession.Add($"Array constructed with {res.Length} elements for city '{city}'. Try to create dictionary.");
                     return res.ToDictionary(i => i.IncomingAddress, i => i.Street);
                 }
@@ -409,6 +515,10 @@ namespace RoyaltyDataCalculator.Parser
                     logSession.Add(ex);
                     logSession.Enabled = true;
                     throw;
+                }
+                finally
+                {
+                    pp.Value = 100;
                 }
         }
     }

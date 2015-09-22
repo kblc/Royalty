@@ -47,13 +47,18 @@ namespace RoyaltyRepository
                 Context.SaveChangesAsync();
         }
 
-        public void Dispose()
+        protected virtual void Dispose(bool disposing)
         {
-            if (Context != null)
+            if (disposing && Context != null)
             {
                 Context.Dispose();
                 Context = null;
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(false);
         }
 
         public Action<string> Log

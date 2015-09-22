@@ -12,6 +12,7 @@ Please test carefully before using.
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace WordsMatching
@@ -99,10 +100,19 @@ namespace WordsMatching
 
 		private void Initialize()
 		{
-			cost=new float[leftLen+1, rightLen+1];			
-			for (int i=0; i <= leftLen; i++)		
-				for(int j=0; j <= rightLen; j++)				
-					cost[i, j]=getSimilarity(_leftTokens[i], _rightTokens[j]);															
+			cost=new float[leftLen+1, rightLen+1];
+
+            Enumerable.Range(0, leftLen + 1).SelectMany(l => Enumerable.Range(0, rightLen + 1).Select(r => new { Left = l, Right = r }))
+                .ToArray()
+                .AsParallel()
+                .ForAll(i =>
+                {
+                    cost[i.Left, i.Right] = getSimilarity(_leftTokens[i.Left], _rightTokens[i.Right]);
+                });
+            	
+			//for (int i=0; i <= leftLen; i++)		
+			//	for(int j=0; j <= rightLen; j++)				
+			//		cost[i, j]=getSimilarity(_leftTokens[i], _rightTokens[j]);															
 		}
 
 

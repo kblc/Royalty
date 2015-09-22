@@ -12,82 +12,11 @@ namespace RoyaltyRepositoryTest
     {
         static void Main(string[] args)
         {
+            var t = new RoyaltyDataCalculatorTest.DataCalculatorTest();
             try
             {
-                using (var rc = new RoyaltyRepository.Repository("connectionStringHome"))
-                {
-                    rc.Log = (s) => { Console.WriteLine(string.Format("[~] SQL: {0}", s)); };
-
-                    rc.AccountRemove(rc.AccountGet("default0", true));
-                    //rc.AccountRemove(rc.AccountGet("default1", true));
-                    //rc.AccountRemove(rc.AccountGet("default2", true));
-
-                    foreach (var m in rc.MarkGet())
-                        Console.WriteLine(string.Format("[~] mark found: {0}", m.ToString()));
-
-                    #region Account
-                    var acc = rc.AccountNew(byDefault: true, accountName: "default0");
-                    rc.AccountAdd(acc);
-                    try
-                    {
-                        acc.State.IsActive = true;
-                        acc.State.LastBatch = DateTime.Now;
-                        rc.SaveChanges();
-
-                        rc.AccountSettingsSheduleTimeNew(acc.Settings, new TimeSpan(09, 00, 00));
-                        rc.AccountSettingsSheduleTimeNew(acc.Settings, new TimeSpan(12, 00, 00));
-                        rc.AccountSettingsSheduleTimeNew(acc.Settings, new TimeSpan(18, 00, 00));
-                        var st = rc.AccountSettingsSheduleTimeNew(acc.Settings, new TimeSpan(20, 00, 00));
-                        rc.SaveChanges();
-                        rc.AccountSettingsSheduleTimeRemove(st);
-
-                        if (acc.Settings.SheduleTimes.Count() != 3)
-                            throw new Exception("Shedule time error");
-
-                        rc.AccountSeriesOfNumbersRecordNew(acc, TimeSpan.FromDays(600), 5);
-                        rc.AccountSeriesOfNumbersRecordNew(acc, TimeSpan.FromDays(300), 4);
-                        rc.SaveChanges();
-                        var son = acc.SeriesOfNumbers.FirstOrDefault();
-                        rc.AccountSeriesOfNumbersRecordRemove(son);
-
-                        if (acc.SeriesOfNumbers.Count() != 1)
-                            throw new Exception("Series of numbers error");
-                    }
-                    finally
-                    {
-                        rc.AccountRemove(acc);
-                    }
-                    #endregion
-                    #region Host
-
-                    var hCnt = rc.HostGet().Count();
-                    var h = rc.HostNew("test0.host.com");
-                    rc.HostAdd(h);
-
-                    if (rc.HostGet().Count() != hCnt + 1)
-                        throw new Exception("Host error");
-
-                    rc.HostRemove(h);
-
-                    if (rc.HostGet().Count() != hCnt)
-                        throw new Exception("Host error");
-
-                    #endregion
-                    #region Phone
-
-                    var hPhn = rc.PhoneGet().Count();
-                    var p = rc.PhoneNew("08-000-000-0000");
-                    rc.PhoneAdd(p);
-
-                    if (rc.PhoneGet().Count() != hPhn + 1)
-                        throw new Exception("Phone error");
-
-                    rc.PhoneRemove(p);
-
-                    if (rc.PhoneGet().Count() != hPhn)
-                        throw new Exception("Phone error");
-                    #endregion
-                }
+                t.Initialization();
+                t.DataCalculator_Preview_Preview();
             }
             catch(Exception ex)
             {
@@ -106,6 +35,10 @@ namespace RoyaltyRepositoryTest
 
                     e = e.InnerException;
                 }
+            }
+            finally
+            {
+                t.Finalization();
             }
             Console.WriteLine("[~] Test end");
             Console.ReadKey();
