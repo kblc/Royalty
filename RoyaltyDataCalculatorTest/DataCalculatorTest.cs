@@ -250,12 +250,11 @@ namespace RoyaltyDataCalculatorTest
 
                 using (var dc = new DataCalculator(acc, Rep)
                 {
-                    Progress = (p) => Helpers.Log.Add($"Progress: {p.ToString("N2")}")
+                    Progress = (p) => Helpers.Log.Add($"Progress: {p.ToString("N2")}"),
+                    Output = (str) => Helpers.Log.Add(str)
                 })
                 {
-                    var l = Helpers.CSV.CSVFile.Load(csvLines,
-                        tableName: "{virtual}",
-                        filePath: "{virtual}",
+                    var l = Helpers.CSV.CSVFile.Load(csvLines.AsEnumerable(),
                         tableValidator: dc.TableValidator,
                         rowFilter: dc.RowFilter);
 
@@ -275,6 +274,51 @@ namespace RoyaltyDataCalculatorTest
                     Rep.CityRemove(Rep.CityGet(s), saveAfterRemove: false);
                 });
                 Rep.SaveChanges();
+                SqlLogEnabled = true;
+            }
+        }
+
+        [TestMethod]
+        public void DataCalculator_Preview_Prepare()
+        {
+            SqlLogEnabled = false;
+            try
+            {
+                var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings.Columns.ColumnType" });
+                var csvLines = new List<string>();
+
+                var colValues = acc.Settings.Columns
+                    .Where(c => c.ColumnType.ImportTableValidation)
+                    .Select(c => new { Name = c.ColumnName.ToLower(), Type = c.ColumnType })
+                    .ToArray();
+
+                var columns = string.Empty;
+                foreach (var colName in colValues)
+                    columns += (string.IsNullOrWhiteSpace(columns) ? string.Empty : ";") + colName.Name;
+
+                columns += ";test_column";
+
+                csvLines.Add(columns);
+
+                using (var dc = new DataCalculator(acc, Rep)
+                {
+                    Progress = (p) => Helpers.Log.Add($"Progress: {p.ToString("N2")}"),
+                    Output = (str) => Helpers.Log.Add(str)
+                })
+                {
+                    var l = Helpers.CSV.CSVFile.Load(csvLines.AsEnumerable(),
+                        tableValidator: dc.TableValidator,
+                        rowFilter: dc.RowFilter);
+
+                    dc.Prepare(l.Table);
+                    Assert.AreEqual(true, acc.AdditionalColumns.Any(ad => ad.ColumnName == "test_column"));
+                    Rep.SaveChanges();
+
+                    Rep.AccountDataRecordAdditionalColumnRemove(acc.AdditionalColumns);
+                }
+            }
+            finally
+            {
                 SqlLogEnabled = true;
             }
         }

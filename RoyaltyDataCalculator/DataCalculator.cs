@@ -69,6 +69,12 @@ namespace RoyaltyDataCalculator
         /// Action для отображения текущего прогресса
         /// </summary>
         public Action<decimal> Progress { get; set; }
+
+        private Action<string> output = (str) => { };
+        /// <summary>
+        /// Action для вывода лога
+        /// </summary>
+        public Action<string> Output { get { return output; } set { if (value == null) throw new ArgumentNullException(nameof(Output)); output = value; } }
         /// <summary>
         /// Использовать ли словарь при обработке данных (возможно добавление данных в сам словарь)
         /// </summary>
@@ -93,6 +99,8 @@ namespace RoyaltyDataCalculator
             using (var logSession = Log.Session(this.GetType().Name + ".Preview()", false))
                 try
                 {
+                    logSession.Output = (strs) => strs.ToList().ForEach(s => Output(s));
+
                     if (dataTable == null)
                         throw new ArgumentNullException("dataTable");
                     if (Account == null)
@@ -336,6 +344,56 @@ namespace RoyaltyDataCalculator
                     return res.ToDictionary(i => i.Row, i => i.LoadedRow);
                 }
                 catch(Exception ex)
+                {
+                    logSession.Add(ex);
+                    logSession.Enabled = true;
+                    throw;
+                }
+        }
+
+        public void Prepare(DataTable dataTable)
+        {
+            using (var logSession = Log.Session($"{GetType().Name}.{nameof(Prepare)}()", false))
+                try
+                {
+                    if (dataTable == null)
+                        throw new ArgumentNullException(nameof(dataTable));
+
+                    logSession.Output = (strs) => strs.ToList().ForEach(s => Output(s));
+
+                    logSession.Add($"Get ignore columns");
+                    var columnNamesToIgnore = Account.Settings.Columns.Select(c => c.ColumnName.ToUpper());
+
+                    logSession.Add($"Get columns to add from data table");
+                    var dataColumnNamesToAdd = dataTable.Columns.OfType<DataColumn>().Select(dc => dc.ColumnName).Where(dc => !columnNamesToIgnore.Contains(dc.ToUpper()));
+
+                    logSession.Add($"Join additional columns with columns to add");
+                    var namesToAdd = dataColumnNamesToAdd
+                        .LeftOuterJoin(Account.AdditionalColumns, n => n.ToUpper(), c => c.ColumnName.ToUpper(), (n, c) => new { ColumnName = n, AdditionalColumn = c })
+                        .Where(c => c.AdditionalColumn == null)
+                        .Select(c => c.ColumnName).ToArray()
+                        .ToArray();
+
+                    logSession.Add($"Get existed additional columns");
+                    var existingColumnSystemNames = Account.AdditionalColumns.Select(ac => ac.ColumnSystemName).ToArray();
+
+                    logSession.Add($"Check free additional columns");
+                    var freeColumnNames = Enumerable.Range(0, (int)AccountDataRecordAdditional.ColumnCount)
+                        .Select(i => new { Index = i, ColumnName = $"Column{i.ToString("00")}" })
+                        .LeftOuterJoin(existingColumnSystemNames, n => n.ColumnName.ToUpper(), n => n?.ToUpper(), (n0, n1) => new { n0.Index, n0.ColumnName, Exists = n1 != null })
+                        .Where(i => !i.Exists)
+                        .OrderBy(i => i.Index)
+                        .Select(i => i.ColumnName)
+                        .ToArray();
+
+                    logSession.Add($"Free columns count: {freeColumnNames.Length} and need to add folowing ({namesToAdd.Length}) columns: {namesToAdd.Select(c => $"'{c}'").Concat(i => i, ", ")}");
+                    for (int i = 0; i < Math.Min(namesToAdd.Length, freeColumnNames.Length); i++)
+                    {
+                        var adrac = Repository.AccountDataRecordAdditionalColumnNew(Account, namesToAdd[i], freeColumnNames[i]);
+                        logSession.Add($"Additional column added: '{adrac}'");
+                    }
+                }
+                catch (Exception ex)
                 {
                     logSession.Add(ex);
                     logSession.Enabled = true;

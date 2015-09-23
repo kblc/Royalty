@@ -21,6 +21,8 @@ namespace RoyaltyRepository.Models
     [Table("data_additional")]
     public partial class AccountDataRecordAdditional
     {
+        public const uint ColumnCount = 20;
+
         #region AccountDataRecord
         /// <summary>
         /// Идентификатор записи, которой принадлежат расширенные данные

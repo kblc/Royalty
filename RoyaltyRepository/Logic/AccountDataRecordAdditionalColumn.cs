@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RoyaltyRepository.Models;
 using Helpers;
+using Helpers.Linq;
 
 namespace RoyaltyRepository
 {
@@ -84,6 +85,47 @@ namespace RoyaltyRepository
         {
             AccountDataRecordAdditionalColumnRemove(new AccountDataRecordAdditionalColumn[] { instance }, saveAfterRemove, waitUntilSaving);
         }
+
+        /// <summary>
+        /// Execute stored procedure for clear column in datarecoird additional
+        /// </summary>
+        /// <param name="columnNames">Column names to clear</param>
+        private async void AccountDataRecordAdditionalColumnClear(IEnumerable<string> columnNames)
+        {
+            try
+            {
+                if (this.Context.Database.Connection.State == System.Data.ConnectionState.Closed)
+                    this.Context.Database.Connection.Open();
+                foreach (var columnName in columnNames)
+                    using (var cmd = this.Context.Database.Connection.CreateCommand())
+                        try
+                        {
+                            if (this.Context.Database.CurrentTransaction != null)
+                                cmd.Transaction = this.Context.Database.CurrentTransaction.UnderlyingTransaction;
+                            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                            cmd.CommandText = "AccountDataRecordAdditional_ClearColumn";
+
+                            var prm = cmd.CreateParameter();
+                            prm.ParameterName = "@Name";
+                            prm.Value = columnName;
+                            cmd.Parameters.Add(prm);
+
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+                        catch(Exception ex)
+                        {
+                            var e = new Exception("Stored procedure call error. See inner exception for details.", ex);
+                            e.Data.Add("Column name", columnName);
+                            throw e;
+                        }
+            }
+            catch (Exception ex)
+            {
+                Helpers.Log.Add(ex, string.Format($"{GetType().Name}.{nameof(AccountDataRecordAdditionalColumnClear)}(columnNames=[{columnNames.Concat(i => i, ", ")}])"));
+                throw;
+            }
+        }
+
         /// <summary>
         /// Remove AccountDataRecordAdditionalColumns from database
         /// </summary>
@@ -103,8 +145,9 @@ namespace RoyaltyRepository
                     this.Context.AccountDataRecordAdditionalColumns.RemoveRange(instances);
                     if (saveAfterRemove)
                         this.SaveChanges(waitUntilSaving);
+                    AccountDataRecordAdditionalColumnClear(instances.Select(i => i.ColumnSystemName));
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     var e = new Exception(ex.Message, ex);
                     for (int i = 0; i < instances.Count(); i++)
