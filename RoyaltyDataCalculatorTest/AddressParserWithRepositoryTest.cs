@@ -73,19 +73,19 @@ namespace RoyaltyDataCalculatorTest
 
                 var ap = new AddressParser(a, Rep);
 
-                var res0 = ap.GetStreetByDictionary(Address.FromString(s00.Name), c, doNotAddAnyDataToDictionary: true);
+                var res0 = ap.GetStreetByDictionary(Address.FromString(s00.Name), c);
                 Assert.AreNotEqual(null, res0, "res0 must exists!");
                 Assert.AreEqual(s00.Name, res0.Name, "res0: Values must equals");
 
-                var res1 = ap.GetStreetByDictionary(Address.FromString(s01.Name), c, doNotAddAnyDataToDictionary: true);
+                var res1 = ap.GetStreetByDictionary(Address.FromString(s01.Name), c);
                 Assert.AreNotEqual(null, res1, "res1 must exists!");
                 Assert.AreEqual(s00.Name, res1.Name, "res1: Values must equals");
 
-                var res2 = ap.GetStreetByDictionary(Address.FromString(s10.Name.Remove(0, 2)), c, doNotAddAnyDataToDictionary: true);
+                var res2 = ap.GetStreetByDictionary(Address.FromString(s10.Name.Remove(0, 2)), c);
                 Assert.AreNotEqual(null, res2, "res2 must exists!");
                 Assert.AreEqual(s10.Name, res2.Name, "res2: Values must equals");
 
-                var res3 = ap.GetStreetByDictionary(Address.FromString(s11.Name.Remove(2, 1)), c, doNotAddAnyDataToDictionary: true);
+                var res3 = ap.GetStreetByDictionary(Address.FromString(s11.Name.Remove(2, 1)), c);
                 Assert.AreNotEqual(null, res3, "res3 must exists!");
                 Assert.AreEqual(s11.Name, res3.Name, "res3: Values must equals");
 
@@ -97,7 +97,7 @@ namespace RoyaltyDataCalculatorTest
                     .Select(cc => Address.FromString(cc))
                     .ToArray();
 
-                var res = ap.GetStreets(addrs, c, true);
+                var res = ap.GetStreets(addrs, c);
 
                 var res01 = res[addrs[0]].Name;
                 var res02 = res[addrs[1]].Name;
@@ -164,22 +164,22 @@ namespace RoyaltyDataCalculatorTest
                 var addr1 = Address.FromString(s01.Name + " 150");
                 var addr2 = Address.FromString(s02.Name + " 250");
 
-                var res0 = ap.GetStreetByDictionary(addr0, c, false, ss => Console.WriteLine(ss) );
+                var res0 = ap.GetStreetByDictionary(addr0, c, ss => Console.WriteLine(ss) );
                 Assert.AreNotEqual(null, res0, "res0 must exists!");
                 Assert.AreEqual(s00.Name, res0.Name, "res0: Street names must equals");
                 Assert.AreEqual(a0.Name, res0.Area.Name, "res0: Area names must equals");
 
-                var res1 = ap.GetStreetByDictionary(addr1, c, false, ss => Console.WriteLine(ss));
+                var res1 = ap.GetStreetByDictionary(addr1, c, ss => Console.WriteLine(ss));
                 Assert.AreNotEqual(null, res1, "res1 must exists!");
                 Assert.AreEqual(s01.Name, res1.Name, "res0: Street names must equals");
                 Assert.AreEqual(a1.Name, res1.Area.Name, "res0: Area names must equals");
 
-                var res2 = ap.GetStreetByDictionary(addr2, c, false, ss => Console.WriteLine(ss));
+                var res2 = ap.GetStreetByDictionary(addr2, c, ss => Console.WriteLine(ss));
                 Assert.AreNotEqual(null, res2, "res2 must exists!");
                 Assert.AreEqual(s02.Name, res2.Name, "res0: Street names must equals");
                 Assert.AreEqual(a2.Name, res2.Area.Name, "res0: Area names must equals");
 
-                var res = ap.GetStreets(new Address[] { addr0, addr1, addr2 }, c, true);
+                var res = ap.GetStreets(new Address[] { addr0, addr1, addr2 }, c);
 
                 var res01 = res[addr0]?.Area?.Name;
                 var res02 = res[addr1]?.Area?.Name;
@@ -221,7 +221,7 @@ namespace RoyaltyDataCalculatorTest
                 var addr0 = new Address("Ивановского","50");
                 var addr1 = new Address("Ивановского","150", "test area");
 
-                var res = ap.GetStreets(new Address[] { addr0, addr1 }, c, true)
+                var res = ap.GetStreets(new Address[] { addr0, addr1 }, c)
                     .Select(k => k.Value)
                     .ToArray();
 
@@ -236,10 +236,10 @@ namespace RoyaltyDataCalculatorTest
                 var addr2 = new Address("Петровского", "50");
                 var addr3 = new Address("Петровского", "150", "test area");
 
-                var res1 = ap.GetStreets(new Address[] { addr2 }, c, false)
+                var res1 = ap.GetStreets(new Address[] { addr2 }, c)
                     .Select(k => k.Value)
                     .First();
-                var res2 = ap.GetStreets(new Address[] { addr3 }, c, false)
+                var res2 = ap.GetStreets(new Address[] { addr3 }, c)
                     .Select(k => k.Value)
                     .First();
 

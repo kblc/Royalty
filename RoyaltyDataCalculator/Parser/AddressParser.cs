@@ -4,26 +4,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Helpers.Linq;
+using RoyaltyRepository.Models;
+using Helpers;
 
 namespace RoyaltyDataCalculator.Parser
 {
+    /// <summary>
+    /// Входящий параметр для парсинга данных
+    /// </summary>
     public class AddressParserIncomingParameter
     {
+        /// <summary>
+        /// Адрес
+        /// </summary>
         public Address Address { get; set; }
+        /// <summary>
+        /// Город
+        /// </summary>
         public RoyaltyRepository.Models.City City { get; set; }
     }
 
+    /// <summary>
+    /// Экземпляр результата парсинга
+    /// </summary>
     public class AddressParserResult
     {
-        #region AddressParserIncomingParameter
-        public Address IncomingAddress { get; set; }
-        public RoyaltyRepository.Models.City City { get; set; }
-        #endregion
+        /// <summary>
+        /// Адрес
+        /// </summary>
         public Address Address { get; set; }
-        public RoyaltyRepository.Models.Area Area { get; set; }
+        /// <summary>
+        /// Найденная улица
+        /// </summary>
         public RoyaltyRepository.Models.Street Street { get; set; }
-        public bool IsNewArea { get; set; }
-        public bool IsNewStreet { get; set; }
     }
 
     /// <summary>
@@ -31,7 +44,13 @@ namespace RoyaltyDataCalculator.Parser
     /// </summary>
     public class AddressParser
     {
+        /// <summary>
+        /// Аккаунт, к которому привязан парсер адресов
+        /// </summary>
         public RoyaltyRepository.Models.Account Account { get; private set; }
+        /// <summary>
+        /// Репозиторий
+        /// </summary>
         public RoyaltyRepository.Repository Repository { get; private set; }
 
         /// <summary>
@@ -55,69 +74,60 @@ namespace RoyaltyDataCalculator.Parser
         /// </summary>
         /// <param name="incomingData">Входные параметры (Адрес и город)</param>
         /// <returns>Соответствующие выходные параметры (Найденные и созданные улицы и прочее)</returns>
-        public IEnumerable<AddressParserResult> Parse(IEnumerable<AddressParserIncomingParameter> incomingData, bool doNotAddAnyDataToDictionary = false, Action<decimal> reportProgress = null)
+        public IDictionary<AddressParserIncomingParameter, AddressParserResult> Parse(IEnumerable<AddressParserIncomingParameter> incomingData, bool doNotAddAnyDataToDictionary = false, Action<decimal> reportProgress = null, Action<string> verboseLog = null)
         {
-            using (var logSession = Helpers.Log.Session(GetType().Name + ".Parse()", isEnabled: false))
-                try
-                {
-                    var pp = new Helpers.PercentageProgress();
-                    pp.Change += (s, e) => { if (reportProgress != null) reportProgress(e.Value); };
+            if (incomingData == null)
+                throw new ArgumentNullException(nameof(incomingData));
 
-                    var res = incomingData
-                        .GroupBy(i => i.City)
-                        .Select(g => new
-                        {
-                            City = g.Key,
-                            Items = g.ToArray(),
-                            Progress = pp.GetChild()
-                        })
-                        .ToArray()
-                        .AsParallel()
-                        .Select(g => new
-                        {
-                            g.City,
-                            Streets = GetStreets(g.Items.Select(i => i.Address), g.City, doNotAddAnyDataToDictionary, (progress) => g.Progress.Value = progress),
-                            g.Items,
-                        })
-                        .SelectMany(g => g.Items.Join(g.Streets, r => r.Address, i => i.Key, (r, i) => new
-                        {
-                            IncomingParameters = r,
-                            Data = new
-                            {
-                                Address = i.Key,
-                                Street = i.Value
-                            }
-                        }))
-                        .Select(item => new AddressParserResult()
-                        {
-                            City = item.IncomingParameters.City,
-                            IncomingAddress = item.IncomingParameters.Address,
-                            Address = item.Data.Address,
-                            Street = item.Data.Street,
-                            Area = item.Data.Street.Area,
-                            IsNewStreet = item.Data.Street.StreetID == 0,
-                            IsNewArea = item.Data.Street.Area.AreaID == 0
-                        })
-                        .ToArray();
+            var log = new Action<string>((str) => { if (verboseLog != null) verboseLog($"{GetType().Name}.{nameof(Parse)}() {str}"); });
 
-                    return res;
-                }
-                catch(Exception ex)
+            log($"Incoming data length: {incomingData.Count()}");
+
+            var pp = new Helpers.PercentageProgress();
+            pp.Change += (s, e) => { if (reportProgress != null) reportProgress(e.Value); };
+
+            var res = incomingData
+                .GroupBy(i => i.City)
+                .Select(g => new
                 {
-                    logSession.Add(ex);
-                    logSession.Enabled = true;
-                    throw;
-                }
+                    City = g.Key,
+                    Items = g.ToArray(),
+                    Progress = pp.GetChild()
+                })
+                .ToArray()
+                .AsParallel()
+                .Select(g => new
+                {
+                    g.City,
+                    Streets = GetStreets(g.Items.Select(i => i.Address), g.City, doNotAddAnyDataToDictionary, (progress) => g.Progress.Value = progress, str => log(str)),
+                    g.Items,
+                })
+                .SelectMany(g => g.Items.Join(g.Streets, r => r.Address, i => i.Key, (r, i) => new
+                {
+                    IncomingParameters = r,
+                    Data = new
+                    {
+                        Address = i.Key,
+                        Street = i.Value
+                    }
+                }))
+                .ToDictionary(item => item.IncomingParameters, item => new AddressParserResult()
+                {
+                    Address = item.Data.Address,
+                    Street = item.Data.Street
+                });
+
+            return res;
         }
 
         /// <summary>
-        /// Проверяет условия, при которых назначается адрес. Если условия немного не совпадают - обновляет условия
+        /// Находит отношение адреса к условиям из словаря
         /// </summary>
         /// <param name="houseNumber">Номер дома</param>
         /// <param name="conditions">Условия</param>
         /// <param name="doNotAddAnyDataToDictionary">Флаг для отмены добавления данных в словарь</param>
         /// <returns>True если условия соблюдены</returns>
-        public decimal GetConditionsScore(uint? houseNumber, IEnumerable<RoyaltyRepository.Models.AccountDictionaryRecordCondition> conditions, bool doNotAddAnyDataToDictionary)
+        internal decimal GetConditionsScore(uint? houseNumber, IEnumerable<RoyaltyRepository.Models.AccountDictionaryRecordCondition> conditions, bool doNotAddAnyDataToDictionary)
         {
             if (conditions == null || !conditions.Any() || !houseNumber.HasValue)
                 return 1m;
@@ -158,7 +168,7 @@ namespace RoyaltyDataCalculator.Parser
         /// <param name="doNotAddAnyDataToDictionary">Флаг для отмены добавления данных в словарь</param>
         /// <param name="log">Action по логированию поиска</param>
         /// <returns>Улица из БД. Если NULL, значит улица в соответствии со словарем не найдена</returns>
-        public RoyaltyRepository.Models.Street GetStreetByDictionary(Address address, RoyaltyRepository.Models.City city, bool doNotAddAnyDataToDictionary, Action<string> verboseLog = null)
+        internal RoyaltyRepository.Models.Street GetStreetByDictionary(Address address, RoyaltyRepository.Models.City city, bool doNotAddAnyDataToDictionary, Action<string> verboseLog = null)
         {
             if (address == null)
                 throw new ArgumentNullException(nameof(address));
@@ -170,14 +180,16 @@ namespace RoyaltyDataCalculator.Parser
             //lock (Account.Dictionary)
             try
             { 
-                log($"Get all streets in city '{city}'");
+                log($"Get all account records");
 
                 ICollection<RoyaltyRepository.Models.AccountDictionaryRecord> recs = null;
                 lock (Account.Dictionary)
-                {
                     recs = Account.Dictionary.Records.ToArray();
-                }
+
+                log($"Get all streets in city '{city}'");
+
                 var dictionary = city.Areas
+                    //.AsParallel()
                     .SelectMany(a => a.Streets.Select(s => new
                     {
                         Area = a,
@@ -187,22 +199,33 @@ namespace RoyaltyDataCalculator.Parser
                     {
                         Street = s.Street,
                         Area = s.Area,
-                        ChangeStreetTo = r != null ? r.ChangeStreetTo : null,
-                        Conditions = r != null ? r.Conditions : null,
+                        ChangeStreetTo = r?.ChangeStreetTo,
+                        Conditions = r?.Conditions,
                         DictionaryRecord = r,
                     })
                     .ToArray();
 
-                var dS = dictionary.Where(i => i.Street.Name.ToUpper() == address.Street.ToUpper()).ToArray();
+                log($"Try to add street for sort dictionary");
+
+                var dS = dictionary.AsParallel().Where(i => i.Street.Name.ToUpper() == address.Street.ToUpper()).ToArray();
                 if (dS.Any())
+                {
                     dictionary = dS;
+                    log($"Street added for sort");
+                }
 
                 if (!string.IsNullOrWhiteSpace(address.Area))
-                { 
-                    var dA = dictionary.Where(i => i.Area.Name.ToUpper() == address.Area.ToUpper()).ToArray();
+                {
+                    log($"Try to add area for sort dictionary");
+                    var dA = dictionary.AsParallel().Where(i => i.Area.Name.ToUpper() == address.Area.ToUpper()).ToArray();
                     if (dA.Any())
+                    {
                         dictionary = dA;
+                        log($"Area added for sort");
+                    }
                 }
+
+                log($"Get scores for dictionary and incoming address '{address}'");
                 var subRes = dictionary
                     .AsParallel()
                     .Select(i => new
@@ -217,6 +240,7 @@ namespace RoyaltyDataCalculator.Parser
                         i.DictionaryRecord,
                     });
 
+                log($"Get nearest data");
                 var res = subRes
                     .Where(i => i.StreetScore + i.AreaScore >= Account.Dictionary.SimilarityForTrust * 2 && i.ConditionsScore >= Account.Dictionary.ConditionsScoreForTrust)
                     .OrderByDescending(i => i.StreetScore + i.AreaScore + i.ConditionsScore / 2m)
@@ -242,10 +266,23 @@ namespace RoyaltyDataCalculator.Parser
                 }
                 return res?.Street;
             }
-            catch(Exception)
+            catch(Exception ex)
             {
+                log(ex.GetExceptionText());
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Получает улицу по адресу в соответствии со словарем
+        /// </summary>
+        /// <param name="address">Адрес для поиска</param>
+        /// <param name="city">Город</param>
+        /// <param name="verboseLog">Action по логированию поиска</param>
+        /// <returns>Улица из БД. Если NULL, значит улица в соответствии со словарем не найдена</returns>
+        public RoyaltyRepository.Models.Street GetStreetByDictionary(Address address, RoyaltyRepository.Models.City city, Action<string> verboseLog = null)
+        {
+            return GetStreetByDictionary(address, city, true, verboseLog);
         }
 
         /// <summary>
@@ -254,7 +291,7 @@ namespace RoyaltyDataCalculator.Parser
         /// <param name="address">Адрес</param>
         /// <param name="dictionaryRecords">Список из записей в словаре, куда добавлять условие</param>
         /// <param name="verboseLog">Action по логированию метода</param>
-        public void ConcatDictionaryRecordConditions(Address address, IEnumerable<RoyaltyRepository.Models.AccountDictionaryRecord> dictionaryRecords, Action<string> verboseLog = null)
+        internal void ConcatDictionaryRecordConditions(Address address, IEnumerable<RoyaltyRepository.Models.AccountDictionaryRecord> dictionaryRecords, Action<string> verboseLog = null)
         {
             if (address == null)
                 throw new ArgumentNullException(nameof(address));
@@ -346,7 +383,7 @@ namespace RoyaltyDataCalculator.Parser
         /// <param name="address">Адрес</param>
         /// <param name="street">Улица</param>
         /// <param name="verboseLog">Action по логированию метода</param>
-        public void AddNewOrUpdateDictionaryRecord(Address address, RoyaltyRepository.Models.Street street, Action<string> verboseLog = null)
+        internal void AddNewOrUpdateDictionaryRecord(Address address, RoyaltyRepository.Models.Street street, Action<string> verboseLog = null)
         {
             if (address == null)
                 throw new ArgumentNullException(nameof(address));
@@ -380,7 +417,7 @@ namespace RoyaltyDataCalculator.Parser
         /// <param name="doNotAddAnyDataToDictionary">Флаг для отмены добавления данных в словарь</param>
         /// <param name="verboseLog">Action по логированию метода</param>
         /// <returns>Улицу</returns>
-        public RoyaltyRepository.Models.Street GetNewStreet(Address address, RoyaltyRepository.Models.City city, bool doNotAddAnyDataToDictionary, Action<string> verboseLog = null)
+        internal RoyaltyRepository.Models.Street GetNewStreet(Address address, RoyaltyRepository.Models.City city, bool doNotAddAnyDataToDictionary, Action<string> verboseLog = null)
         {
             if (address == null)
                 throw new ArgumentNullException(nameof(address));
@@ -455,23 +492,28 @@ namespace RoyaltyDataCalculator.Parser
         /// </summary>
         /// <param name="incomingAddresses">Адреса, для которых нужно определить улицы</param>
         /// <param name="city">Город</param>
-        /// <param name="doNotAddAnyDataToDictionary"></param>
-        /// <returns>Флаг для отмены добавления данных в словарь</returns>
-        public IDictionary<Address, RoyaltyRepository.Models.Street> GetStreets(
+        /// <param name="doNotAddAnyDataToDictionary">Флаг для отмены добавления данных в словарь</param>
+        /// <param name="reportProgress">Action для отслеживания процесса выполнения</param>
+        /// <returns>Список соответствия входящему адресу найденной улицы</returns>
+        internal IDictionary<Address, RoyaltyRepository.Models.Street> GetStreets(
             IEnumerable<Address> incomingAddresses,
             RoyaltyRepository.Models.City city,
             bool doNotAddAnyDataToDictionary = false,
-            Action<decimal> reportProgress = null)
+            Action<decimal> reportProgress = null,
+            Action<string> verboseLog = null)
         {
             var pp = new Helpers.PercentageProgress();
             var ppLoad = pp.GetChild(weight: 0.5m);
             var ppSubitem = pp.GetChild(weight: 9m);
             var ppEnd = pp.GetChild(weight: 0.5m);
             pp.Change += (s, e) => { if (reportProgress != null) reportProgress(e.Value); };
+            verboseLog = verboseLog ?? new Action<string>(s => { });
 
-            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{nameof(GetStreets)}()", true))
+            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{nameof(GetStreets)}()"))
                 try
                 {
+                    logSession.Output = new Action<IEnumerable<string>>( (strs) => strs.ToList().ForEach(s => verboseLog(s)) );
+
                     var findStreet = incomingAddresses
                         .Distinct()
                         .OrderByDescending(a => a.Area)
@@ -545,6 +587,22 @@ namespace RoyaltyDataCalculator.Parser
                 {
                     ppEnd.Value = 100;
                 }
+        }
+
+        /// <summary>
+        /// Получение списка улиц в соответствии с адресами
+        /// </summary>
+        /// <param name="incomingAddresses">Адреса, для которых нужно определить улицы</param>
+        /// <param name="city">Город</param>
+        /// <param name="reportProgress">Action для отслеживания процесса выполнения</param>
+        /// <returns>Список соответствия входящему адресу найденной улицы</returns>
+        public IDictionary<Address, RoyaltyRepository.Models.Street> GetStreets(
+            IEnumerable<Address> incomingAddresses,
+            RoyaltyRepository.Models.City city,
+            Action<decimal> reportProgress = null,
+            Action<string> verboseLog = null)
+        {
+            return GetStreets(incomingAddresses, city, true, reportProgress, verboseLog);
         }
     }
 }

@@ -48,7 +48,7 @@ namespace RoyaltyDataCalculatorTest
         {
             var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings.Columns" });
             if (a != null)
-                using (var dc = new DataCalculator(a))
+                using (var dc = new DataCalculator(a, Rep))
                 {
                     var columns = string.Empty;
                     var colValues = a.Settings.Columns
@@ -86,7 +86,7 @@ namespace RoyaltyDataCalculatorTest
         {
             var a = Rep.AccountGet(defAccountName);
             if (a != null)
-                using (var dc = new DataCalculator(a))
+                using (var dc = new DataCalculator(a, Rep))
                 {
                     var columns = string.Empty;
                     var colValues = a.Settings.Columns
@@ -248,7 +248,10 @@ namespace RoyaltyDataCalculatorTest
 
                 Rep.SaveChanges();
 
-                using (var dc = new DataCalculator(acc, Rep))
+                using (var dc = new DataCalculator(acc, Rep)
+                {
+                    Progress = (p) => Helpers.Log.Add($"Progress: {p.ToString("N2")}")
+                })
                 {
                     var l = Helpers.CSV.CSVFile.Load(csvLines,
                         tableName: "{virtual}",
@@ -256,7 +259,7 @@ namespace RoyaltyDataCalculatorTest
                         tableValidator: dc.TableValidator,
                         rowFilter: dc.RowFilter);
 
-                    var previewRes = dc.Preview(l.Table, false, (p) => Helpers.Log.Add($"Progress: {p.ToString("N2")}"));
+                    var previewRes = dc.Preview(l.Table);
                     Assert.AreEqual(l.Table.Rows.Count, previewRes.Count());
                     Rep.SaveChanges();
                 }

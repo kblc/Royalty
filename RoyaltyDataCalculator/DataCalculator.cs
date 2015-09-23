@@ -13,89 +13,82 @@ using RoyaltyRepository.Extensions;
 
 using Helpers;
 using Helpers.Linq;
+using RoyaltyDataCalculator.Model;
 
 namespace RoyaltyDataCalculator
 {
     /// <summary>
     /// Задача калькулятора - взять данные (импортируемые и существующие), обработать их и объединить
     /// </summary>
-    public sealed class DataCalculator : IDisposable
+    public class DataCalculator : IDisposable
     {
-        public DataCalculator(Account account = null, Repository repository = null)
+        /// <summary>
+        /// Создание экземпляра класса
+        /// </summary>
+        /// <param name="account">Аккаунт</param>
+        /// <param name="repository">Репозитарий</param>
+        public DataCalculator(Account account, Repository repository)
         {
+            if (account == null)
+                throw new ArgumentNullException(nameof(account));
+            if (repository == null)
+                throw new ArgumentNullException(nameof(repository));
+
             Account = account;
             Repository = repository;
+
+            Init();
         }
 
-        private Account account = null;
-        public Account Account
+        private void Init()
         {
-            get
-            {
-                return account;
-            }
-            set
-            {
-                if (account != value)
-                    account = value;
+            var columnNamesForTableValidation = Account.Settings.Columns
+                .Where(c => c.ColumnType.ImportTableValidation)
+                .Select(c => c.ColumnName.ToLower())
+                .ToArray();
 
-                var columnNamesForTableValidation = Enumerable.Empty<string>();
-                var columnNamesForRowFilter = Enumerable.Empty<string>();
+            var columnNamesForRowFilter = Account.Settings.Columns
+                .Where(c => c.ColumnType.ImportRowValidation)
+                .Select(c => c.ColumnName.ToLower())
+                .ToArray();
 
-                if (account != null)
-                {
-                    columnNamesForTableValidation = value.Settings.Columns
-                        .Where(c => c.ColumnType.ImportTableValidation)
-                        .Select(c => c.ColumnName.ToLower())
-                        .ToArray();
-
-                    columnNamesForRowFilter = value.Settings.Columns
-                        .Where(c => c.ColumnType.ImportRowValidation)
-                        .Select(c => c.ColumnName.ToLower())
-                        .ToArray();
-                } else
-                {
-                    columnNamesForTableValidation = Enumerable.Empty<string>();
-                    columnNamesForRowFilter = Enumerable.Empty<string>();
-                }
-
-                TableValidator = GetDefaultDataTableValidator(columnNamesForTableValidation, value);
-                RowFilter = GetDefaultRowFilter(columnNamesForTableValidation, value);
-            }
+            TableValidator = GetDefaultDataTableValidator(columnNamesForTableValidation, Account);
+            RowFilter = GetDefaultRowFilter(columnNamesForTableValidation, Account);
         }
-        public Repository Repository { get; set; }
 
+        /// <summary>
+        /// Текущий аккаунт
+        /// </summary>
+        public Account Account { get; private set; }
+        /// <summary>
+        /// Репозитарий
+        /// </summary>
+        public Repository Repository { get; private set; }
+
+        /// <summary>
+        /// Action для отображения текущего прогресса
+        /// </summary>
+        public Action<decimal> Progress { get; set; }
+        /// <summary>
+        /// Использовать ли словарь при обработке данных (возможно добавление данных в сам словарь)
+        /// </summary>
+        public bool UseDictionary { get; set; } = true;
+
+        /// <summary>
+        /// Default table validator
+        /// </summary>
         public Action<DataTable> TableValidator { get; set; }
+        /// <summary>
+        /// Default row filter
+        /// </summary>
         public Expression<Func<DataRow, bool>> RowFilter { get; set; }
         
-        #region Static create default filters and validators
-
-        private static Action<DataTable> GetDefaultDataTableValidator(IEnumerable<string> columnNames, Account account)
-        {
-            return (account == null)
-                ? new Action<DataTable>((t) => { })
-                : new Action<DataTable>((t) =>
-            {
-                var columns = t.Columns.OfType<DataColumn>().Select(c => c.ColumnName);
-
-                var notExistsedColumns = string.Empty;
-                foreach (var cn in columnNames.Where(i => !columns.Contains(i.ToString())))
-                    notExistsedColumns += (string.IsNullOrWhiteSpace(notExistsedColumns) 
-                        ? string.Empty 
-                        : ", ") + string.Format("'{0}'", cn);
-
-                if (!string.IsNullOrWhiteSpace(notExistsedColumns))
-                    throw new Exception(string.Format(Resources.COLUMNS_NOT_FOUND_IN_IMPORT_FILE, notExistsedColumns));
-            });
-        }
-        private static Expression<Func<DataRow, bool>> GetDefaultRowFilter(IEnumerable<string> columnNames, Account account)
-        {
-            return r => columnNames.Select(cN => r[cN] is DBNull ? (string)null : r[cN].ToString()).Any(c => string.IsNullOrWhiteSpace(c));
-        }
-
-        #endregion
-
-        public IDictionary<DataRow, DataPreviewRow> Preview(DataTable dataTable, bool doNotAddAnyDataToDictionary = false, Action<decimal> reportProgress = null)
+        /// <summary>
+        /// Получить соответствия данным из загружаемой таблицы
+        /// </summary>
+        /// <param name="dataTable">Загружаемая таблица</param>
+        /// <returns>Словарь соответсвия найденных данных для каждой строки таблицы</returns>
+        public IDictionary<DataRow, DataPreviewRow> Preview(DataTable dataTable)
         {
             using (var logSession = Log.Session(this.GetType().Name + ".Preview()", false))
                 try
@@ -114,8 +107,7 @@ namespace RoyaltyDataCalculator
                     var ppMarks = pp.GetChild(weight: 0.1m);
                     var ppCities = pp.GetChild(weight: 0.1m);
                     var ppStreets = pp.GetChild(weight: 0.5m);
-                    pp.Change += (s, e) => { if (reportProgress != null) reportProgress(e.Value); };
-
+                    pp.Change += (s, e) => { if (Progress != null) Progress(e.Value); };
 
                     #region Get column names by column types
                     Log.Add("Get column names by column types");
@@ -214,7 +206,6 @@ namespace RoyaltyDataCalculator
                             i.IncomingHost,
                             i.IncomingMark,
                             Host = h,
-                            IsNewHost = h.HostID == 0
                         });
 
                     ppHostes.Value = 100;
@@ -243,9 +234,7 @@ namespace RoyaltyDataCalculator
                             i.IncomingHost,
                             i.IncomingMark,
                             i.Host,
-                            i.IsNewHost,
                             Phone = p,
-                            IsNewPhone = p.PhoneID == 0
                         });
 
                     ppPhones.Value = 100;
@@ -265,9 +254,7 @@ namespace RoyaltyDataCalculator
                             i.IncomingHost,
                             i.IncomingMark,
                             i.Host,
-                            i.IsNewHost,
                             i.Phone,
-                            i.IsNewPhone,
                             Mark = m ?? defMark,
                         });
 
@@ -298,12 +285,9 @@ namespace RoyaltyDataCalculator
                             i.IncomingHost,
                             i.IncomingMark,
                             i.Host,
-                            i.IsNewHost,
                             i.Phone,
-                            i.IsNewPhone,
                             i.Mark,
-                            City = c,
-                            IsNewCity = c.CityID == 0
+                            City = c
                         });
 
                     ppCities.Value = 100;
@@ -325,55 +309,31 @@ namespace RoyaltyDataCalculator
                             Address = g.Address
                         })
                         .ToArray(),
-                        doNotAddAnyDataToDictionary,
-                        (progress) => ppStreets.Value = progress);
+                        !UseDictionary,
+                        (progress) => ppStreets.Value = progress,
+                        (str) => logSession.Add(str));
 
                     var res = subRes4
                         .LeftOuterJoin(aPR,
                             r => new { r.IncomingAddress.Street, House = r.IncomingAddress.House.ToString(), r.IncomingAddress.Area, r.City.Name },
-                            i => new { i.IncomingAddress.Street, House = i.IncomingAddress.House.ToString(), i.IncomingAddress.Area, i.City.Name },
+                            i => new { i.Key.Address.Street, House = i.Key.Address.House.ToString(), i.Key.Address.Area, i.Key.City.Name },
                             (r, i) => new
                             {
                                 r.Row,
-                                IncomingAddress = i.Address,
-                                r.IncomingCity,
-                                r.IncomingHost,
-                                r.IncomingMark,
-                                r.IncomingPhone,
-                                r.IsNewCity,
-                                r.IsNewHost,
-                                r.IsNewPhone,
-                                i.IsNewArea,
-                                i.IsNewStreet,
-                                r.Mark,
-                                r.Phone,
-                                r.City,
-                                i.Area,
-                                i.Street,
-                                r.Host,
+                                LoadedRow = new DataPreviewRow()
+                                {
+                                    Address = i.Value.Address, //change old address to new address
+                                    Street = i.Value.Street,
+                                    Mark = r.Mark,
+                                    Phone = r.Phone,
+                                    City = r.City,
+                                    Host = r.Host,
+                                },
                             });
 
                     #endregion
 
-                    return res.ToDictionary(i => i.Row, i => new DataPreviewRow()
-                    {
-                        IncomingPhone = i.IncomingPhone,
-                        IncomingAddress = i.IncomingAddress,
-                        IncomingCity = i.IncomingCity,
-                        IncomingHost = i.IncomingHost,
-                        IncomingMark = i.IncomingMark,
-                        House = i.IncomingAddress.House.ToString(),
-                        Host = i.Host,
-                        IsNewHost = i.IsNewHost,
-                        Phone = i.Phone,
-                        IsNewPhone = i.IsNewPhone,
-                        Mark = i.Mark,
-                        City = i.City,
-                        IsNewCity = i.IsNewCity,
-                        Street = i.Street,
-                        IsNewStreet = i.IsNewStreet,
-                        IsNewArea = i.IsNewArea,
-                    });
+                    return res.ToDictionary(i => i.Row, i => i.LoadedRow);
                 }
                 catch(Exception ex)
                 {
@@ -383,11 +343,61 @@ namespace RoyaltyDataCalculator
                 }
         }
 
+        #region Static create default filters and validators
+
+        private static Action<DataTable> GetDefaultDataTableValidator(IEnumerable<string> columnNames, Account account)
+        {
+            return (account == null)
+                ? new Action<DataTable>((t) => { })
+                : new Action<DataTable>((t) =>
+                {
+                    var columns = t.Columns.OfType<DataColumn>().Select(c => c.ColumnName);
+
+                    var notExistsedColumns = string.Empty;
+                    foreach (var cn in columnNames.Where(i => !columns.Contains(i.ToString())))
+                        notExistsedColumns += (string.IsNullOrWhiteSpace(notExistsedColumns)
+                            ? string.Empty
+                            : ", ") + string.Format("'{0}'", cn);
+
+                    if (!string.IsNullOrWhiteSpace(notExistsedColumns))
+                        throw new Exception(string.Format(Resources.COLUMNS_NOT_FOUND_IN_IMPORT_FILE, notExistsedColumns));
+                });
+        }
+        private static Expression<Func<DataRow, bool>> GetDefaultRowFilter(IEnumerable<string> columnNames, Account account)
+        {
+            return r => columnNames.Select(cN => r[cN] is DBNull ? (string)null : r[cN].ToString()).Any(c => string.IsNullOrWhiteSpace(c));
+        }
+
+        #endregion
         #region IDisposable
+
+        // Flag: Has Dispose already been called?
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+
+            if (disposing)
+            {
+                Account = null;
+                Repository = null;
+            }
+            disposed = true;
+        }
+
         public void Dispose()
         {
-            Account = null;
-            Repository = null;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // Use C# destructor syntax for finalization code.
+        ~DataCalculator()
+        {
+            // Simply call Dispose(false).
+            Dispose(false);
         }
         #endregion
     }
