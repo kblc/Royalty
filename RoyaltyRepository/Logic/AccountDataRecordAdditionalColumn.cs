@@ -126,12 +126,12 @@ namespace RoyaltyRepository
         {
             try
             {
-                var res = new AccountDataRecordAdditionalColumn();
-
-                if (columnName != null)
-                    res.ColumnName = columnName;
-                if (columnSystemName != null)
-                    res.ColumnSystemName = columnSystemName;
+                var res = new AccountDataRecordAdditionalColumn()
+                {
+                    ColumnName = columnName,
+                    ColumnSystemName = columnSystemName,
+                    Account = account,
+                };
                 if (account != null)
                     account.AdditionalColumns.Add(res);
                 return res;

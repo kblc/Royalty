@@ -45,6 +45,9 @@ namespace RoyaltyRepository.Models
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "DataAdditionalColumnNameRequired"), MaxLength(250, ErrorMessageResourceName = "DataAdditionalColumnNameMaxLength")]
         public string ColumnName { get; set; }
 
+        [Column("export"), Required]
+        public bool Export { get; set; }
+
         public override string ToString()
         {
             return this.GetColumnPropertiesForEntity();
