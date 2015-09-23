@@ -108,13 +108,13 @@ namespace RoyaltyDataCalculator
                         throw new ArgumentNullException("Repository");
 
                     var pp = new Helpers.PercentageProgress();
-                    pp.Change += (s, e) => { if (reportProgress != null) reportProgress(e.Value); };
                     var ppPrepare = pp.GetChild(weight: 0.1m);
                     var ppHostes = pp.GetChild(weight: 0.1m);
                     var ppPhones = pp.GetChild(weight: 0.1m);
                     var ppMarks = pp.GetChild(weight: 0.1m);
                     var ppCities = pp.GetChild(weight: 0.1m);
                     var ppStreets = pp.GetChild(weight: 0.5m);
+                    pp.Change += (s, e) => { if (reportProgress != null) reportProgress(e.Value); };
 
 
                     #region Get column names by column types

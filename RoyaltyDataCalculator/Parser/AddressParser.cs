@@ -248,6 +248,12 @@ namespace RoyaltyDataCalculator.Parser
             }
         }
 
+        /// <summary>
+        /// Добавляет к условиям в словаре новое по адресу
+        /// </summary>
+        /// <param name="address">Адрес</param>
+        /// <param name="dictionaryRecords">Список из записей в словаре, куда добавлять условие</param>
+        /// <param name="verboseLog">Action по логированию метода</param>
         public void ConcatDictionaryRecordConditions(Address address, IEnumerable<RoyaltyRepository.Models.AccountDictionaryRecord> dictionaryRecords, Action<string> verboseLog = null)
         {
             if (address == null)
@@ -334,6 +340,12 @@ namespace RoyaltyDataCalculator.Parser
             }
         }
 
+        /// <summary>
+        /// Добавляет новую запись или обновляет существующую запись в словаре для адреса
+        /// </summary>
+        /// <param name="address">Адрес</param>
+        /// <param name="street">Улица</param>
+        /// <param name="verboseLog">Action по логированию метода</param>
         public void AddNewOrUpdateDictionaryRecord(Address address, RoyaltyRepository.Models.Street street, Action<string> verboseLog = null)
         {
             if (address == null)
@@ -366,7 +378,7 @@ namespace RoyaltyDataCalculator.Parser
         /// <param name="address">Адрес</param>
         /// <param name="city">Город</param>
         /// <param name="doNotAddAnyDataToDictionary">Флаг для отмены добавления данных в словарь</param>
-        /// <param name="log">Action по логированию метода</param>
+        /// <param name="verboseLog">Action по логированию метода</param>
         /// <returns>Улицу</returns>
         public RoyaltyRepository.Models.Street GetNewStreet(Address address, RoyaltyRepository.Models.City city, bool doNotAddAnyDataToDictionary, Action<string> verboseLog = null)
         {
@@ -452,6 +464,9 @@ namespace RoyaltyDataCalculator.Parser
             Action<decimal> reportProgress = null)
         {
             var pp = new Helpers.PercentageProgress();
+            var ppLoad = pp.GetChild(weight: 0.5m);
+            var ppSubitem = pp.GetChild(weight: 9m);
+            var ppEnd = pp.GetChild(weight: 0.5m);
             pp.Change += (s, e) => { if (reportProgress != null) reportProgress(e.Value); };
 
             using (var logSession = Helpers.Log.Session($"{GetType().Name}.{nameof(GetStreets)}()", true))
@@ -473,16 +488,25 @@ namespace RoyaltyDataCalculator.Parser
                             })
                         .ToArray();
 
-                    pp.Value = 25;
+                    var count = findStreet.Length;
+                    int current = 0;
+                    ppLoad.Value = 90;
 
                     var res = findStreet
-                        .Select(i => new
+                        .Select(i =>
                         {
-                            i.IncomingAddress,
-                            Street = i.Street
-                                ?? GetStreetByDictionary(i.IncomingAddress, city, doNotAddAnyDataToDictionary, (s) => logSession.Add(s)) 
-                                ?? GetNewStreet(i.IncomingAddress, city, doNotAddAnyDataToDictionary, (s) => logSession.Add(s))
-                        })
+                            var subRes = new
+                            {
+                                i.IncomingAddress,
+                                Street = i.Street
+                                    ?? GetStreetByDictionary(i.IncomingAddress, city, doNotAddAnyDataToDictionary, (s) => logSession.Add(s))
+                                    ?? GetNewStreet(i.IncomingAddress, city, doNotAddAnyDataToDictionary, (s) => logSession.Add(s))
+                            };
+                            current++;
+                            ppSubitem.Value = (decimal)current / (decimal)count * 100m;
+                            return subRes;
+                        }
+                        )
                         .GroupBy(i => i.IncomingAddress)
                         .Select(g => new { IncomingAddress = g.Key, Items = g })
                         //Исключаем случаи, когда в словаре более одной записи на входящий адрес (что-то пошло не так, и мы генерируем ошибку)
@@ -506,7 +530,8 @@ namespace RoyaltyDataCalculator.Parser
                         })
                         .ToArray();
 
-                    pp.Value = 90;
+                    ppLoad.Value = 100;
+
                     logSession.Add($"Array constructed with {res.Length} elements for city '{city}'. Try to create dictionary.");
                     return res.ToDictionary(i => i.IncomingAddress, i => i.Street);
                 }
@@ -518,7 +543,7 @@ namespace RoyaltyDataCalculator.Parser
                 }
                 finally
                 {
-                    pp.Value = 100;
+                    ppEnd.Value = 100;
                 }
         }
     }
