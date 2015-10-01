@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RoyaltyRepository.Models;
 using Helpers;
-using EntityFramework.BulkInsert.Extensions;
+using EntityFramework.Utilities;
 
 namespace RoyaltyRepository
 {
@@ -71,19 +71,19 @@ namespace RoyaltyRepository
                 instances = instances.Where(i => i != null).ToArray();
 
                 using(var ts = new System.Transactions.TransactionScope())
-                try
-                {
-                    this.Context.BulkInsert(instances);
-                    this.SaveChanges(true);
-                    ts.Complete();
-                }
-                catch (Exception ex)
-                {
-                    var e = new Exception(ex.Message, ex);
-                    for (int i = 0; i < instances.Count(); i++)
-                        e.Data.Add(string.Format("instance_{0}", i), instances.ElementAt(i).ToString());
-                    throw e;
-                }
+                    try
+                    {
+                        EFBatchOperation.For(this.Context, Context.Hosts).InsertAll(instances);
+                        this.SaveChanges(true);
+                        ts.Complete();
+                    }
+                    catch (Exception ex)
+                    {
+                        var e = new Exception(ex.Message, ex);
+                        for (int i = 0; i < instances.Count(); i++)
+                            e.Data.Add(string.Format("instance_{0}", i), instances.ElementAt(i).ToString());
+                        throw e;
+                    }
             }
             catch (Exception ex)
             {
@@ -132,6 +132,40 @@ namespace RoyaltyRepository
             catch (Exception ex)
             {
                 Helpers.Log.Add(ex, string.Format("Repository.HostRemove(instances=[{0}],saveAfterRemove={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterRemove, waitUntilSaving));
+                throw;
+            }
+        }
+        /// <summary>
+        /// Remove Hosts from database
+        /// </summary>
+        /// <param name="instances">Host instance array</param>
+        public void HostRemoveBulk(IEnumerable<Host> instances)
+        {
+            try
+            {
+                if (instances == null)
+                    throw new ArgumentNullException("instances");
+                instances = instances.Where(i => i != null).ToArray();
+
+                using (var ts = new System.Transactions.TransactionScope())
+                    try
+                    {
+                        var ids = instances.ToDictionary(i => i.HostID).Keys.Cast<long>();
+                        EFBatchOperation.For(this.Context, this.Context.Hosts).Where(i => ids.Contains(i.HostID)).Delete();
+                        this.SaveChanges(true);
+                        ts.Complete();
+                    }
+                    catch (Exception ex)
+                    {
+                        var e = new Exception(ex.Message, ex);
+                        for (int i = 0; i < instances.Count(); i++)
+                            e.Data.Add(string.Format("instance_{0}", i), instances.ElementAt(i).ToString());
+                        throw e;
+                    }
+            }
+            catch (Exception ex)
+            {
+                Helpers.Log.Add(ex, string.Format("Repository.HostRemoveBulk(instances=[{0}])", instances == null ? "NULL" : instances.Count().ToString()));
                 throw;
             }
         }

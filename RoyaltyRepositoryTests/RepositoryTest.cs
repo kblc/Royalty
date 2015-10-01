@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoyaltyRepository;
+using System.Collections.Generic;
 
 namespace RoyaltyRepositoryTests
 {
@@ -256,12 +257,30 @@ namespace RoyaltyRepositoryTests
         [TestMethod]
         public void Host_AddBulk()
         {
+            var rnd = new Random();
+            var str = "qwertyuiopasdfghjklzxcvbnm";
+            int cnt = 10000;
+
+            var names = new List<string>();
+            for (int i = 0; i < cnt; i++)
+            {
+                var name = string.Empty;
+                for (int n = 0; n < rnd.Next(4, 10); n++)
+                    name += str[rnd.Next(str.Length - 1)];
+                while(names.Contains(name))
+                    name += str[rnd.Next(str.Length - 1)];
+                names.Add(name);
+            }
+
+            Rep.HostRemoveBulk(Rep.HostGet().Join(names, n => n.Name, h => h, (n, h) => n).ToArray());
+
             var oldCnt = Rep.HostGet().Count();
-            var names = new string[] { "qwe", "wer", "ert" };
+
             var items = names.Select(n => Rep.HostNew(n)).ToArray();
             Rep.HostAddBulk(items);
             Assert.AreEqual(oldCnt + names.Count(), Rep.HostGet().Count(), "Count must equals");
-            Rep.HostRemove(items);
+
+            Rep.HostRemoveBulk(Rep.HostGet().Join(names, n => n.Name, h => h, (n, h) => n).ToArray());
             Assert.AreEqual(oldCnt, Rep.HostGet().Count(), "Count must equals");
         }
     }
