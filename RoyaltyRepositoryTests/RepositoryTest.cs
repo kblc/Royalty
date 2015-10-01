@@ -259,7 +259,7 @@ namespace RoyaltyRepositoryTests
         {
             var rnd = new Random();
             var str = "qwertyuiopasdfghjklzxcvbnm";
-            int cnt = 10000;
+            int cnt = 3000;
 
             var names = new List<string>();
             for (int i = 0; i < cnt; i++)
@@ -272,16 +272,28 @@ namespace RoyaltyRepositoryTests
                 names.Add(name);
             }
 
-            Rep.HostRemoveBulk(Rep.HostGet().Join(names, n => n.Name, h => h, (n, h) => n).ToArray());
+            using(var logSession = Helpers.Log.Session(isEnabled: false, output: (ss) => { ss.ToList().ForEach(s => Console.WriteLine(s)); }))
+                try
+                {
+                    var itemsToDelete = Rep.HostGet(names).ToList();
+                    Rep.HostRemoveBulk(itemsToDelete);
 
-            var oldCnt = Rep.HostGet().Count();
+                    var oldCnt = Rep.HostGet().Count();
 
-            var items = names.Select(n => Rep.HostNew(n)).ToArray();
-            Rep.HostAddBulk(items);
-            Assert.AreEqual(oldCnt + names.Count(), Rep.HostGet().Count(), "Count must equals");
+                    var items = names.Select(n => Rep.HostNew(n)).ToArray();
+                    Rep.HostAddBulk(items);
+                    Assert.AreEqual(oldCnt + names.Count(), Rep.HostGet().Count(), "Count must equals");
 
-            Rep.HostRemoveBulk(Rep.HostGet().Join(names, n => n.Name, h => h, (n, h) => n).ToArray());
-            Assert.AreEqual(oldCnt, Rep.HostGet().Count(), "Count must equals");
+                    itemsToDelete = Rep.HostGet(names).ToList();
+                    Rep.HostRemoveBulk(itemsToDelete);
+                    Assert.AreEqual(oldCnt, Rep.HostGet().Count(), "Count must equals");
+                }
+                catch(Exception ex)
+                {
+                    logSession.Enabled = true;
+                    logSession.Add(ex);
+                    throw ex;
+                }
         }
     }
 }
