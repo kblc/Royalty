@@ -252,5 +252,17 @@ namespace RoyaltyRepositoryTests
             Rep.AccountSettingsSheduleTimeRemove(st);
             Assert.AreEqual(cShd + 2, acc.Settings.SheduleTimes.Count, "Shedule count must be decrease by 1");
         }
+
+        [TestMethod]
+        public void Host_AddBulk()
+        {
+            var oldCnt = Rep.HostGet().Count();
+            var names = new string[] { "qwe", "wer", "ert" };
+            var items = names.Select(n => Rep.HostNew(n)).ToArray();
+            Rep.HostAddBulk(items);
+            Assert.AreEqual(oldCnt + names.Count(), Rep.HostGet().Count(), "Count must equals");
+            Rep.HostRemove(items);
+            Assert.AreEqual(oldCnt, Rep.HostGet().Count(), "Count must equals");
+        }
     }
 }

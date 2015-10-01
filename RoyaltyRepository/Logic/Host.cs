@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RoyaltyRepository.Models;
 using Helpers;
+using EntityFramework.BulkInsert.Extensions;
 
 namespace RoyaltyRepository
 {
@@ -54,6 +55,39 @@ namespace RoyaltyRepository
             catch (Exception ex)
             {
                 Helpers.Log.Add(ex, string.Format("Repository.HostAdd(instances=[{0}],saveAfterInsert={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterInsert, waitUntilSaving));
+                throw;
+            }
+        }
+        /// <summary>
+        /// Add Hosts to database
+        /// </summary>
+        /// <param name="instances">Host instance array</param>
+        public void HostAddBulk(IEnumerable<Host> instances)
+        {
+            try
+            {
+                if (instances == null)
+                    throw new ArgumentNullException("instances");
+                instances = instances.Where(i => i != null).ToArray();
+
+                using(var ts = new System.Transactions.TransactionScope())
+                try
+                {
+                    this.Context.BulkInsert(instances);
+                    this.SaveChanges(true);
+                    ts.Complete();
+                }
+                catch (Exception ex)
+                {
+                    var e = new Exception(ex.Message, ex);
+                    for (int i = 0; i < instances.Count(); i++)
+                        e.Data.Add(string.Format("instance_{0}", i), instances.ElementAt(i).ToString());
+                    throw e;
+                }
+            }
+            catch (Exception ex)
+            {
+                Helpers.Log.Add(ex, string.Format("Repository.HostAddBulk(instances=[{0}])", instances == null ? "NULL" : instances.Count().ToString()));
                 throw;
             }
         }
