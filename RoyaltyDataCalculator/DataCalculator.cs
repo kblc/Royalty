@@ -103,10 +103,6 @@ namespace RoyaltyDataCalculator
 
                     if (dataTable == null)
                         throw new ArgumentNullException("dataTable");
-                    if (Account == null)
-                        throw new ArgumentNullException("Account");
-                    if (Repository == null)
-                        throw new ArgumentNullException("Repository");
 
                     var pp = new Helpers.PercentageProgress();
                     var ppPrepare = pp.GetChild(weight: 0.1m);
