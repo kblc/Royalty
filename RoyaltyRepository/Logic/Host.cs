@@ -62,33 +62,23 @@ namespace RoyaltyRepository
         /// Add Hosts to database
         /// </summary>
         /// <param name="instances">Host instance array</param>
-        public void HostAddBulk(IEnumerable<Host> instances)
+        /// <param name="refreshRecords">Refresh records after insertion</param>
+        public void HostAddBulk(IEnumerable<Host> instances, bool refreshRecords = true)
         {
-            try
+            BulkInsert(instances);
+            if (refreshRecords)
             {
-                if (instances == null)
-                    throw new ArgumentNullException("instances");
-                instances = instances.Where(i => i != null).ToArray();
-
-                using(var ts = new System.Transactions.TransactionScope())
-                    try
+                var instNames = instances.Select(h => h.Name);
+                var newHosts = HostGet(instNames);
+                newHosts.ToList()
+                    .Join(instances, i => i.Name.ToUpper(), i => i.Name.ToUpper(), (n, o) => new { New = n, Old = o })
+                    .ToList()
+                    .ForEach(i =>
                     {
-                        EFBatchOperation.For(this.Context, Context.Hosts).InsertAll(instances);
-                        this.SaveChanges(true);
-                        ts.Complete();
-                    }
-                    catch (Exception ex)
-                    {
-                        var e = new Exception(ex.Message, ex);
-                        for (int i = 0; i < instances.Count(); i++)
-                            e.Data.Add(string.Format("instance_{0}", i), instances.ElementAt(i).ToString());
-                        throw e;
-                    }
-            }
-            catch (Exception ex)
-            {
-                Helpers.Log.Add(ex, string.Format("Repository.HostAddBulk(instances=[{0}])", instances == null ? "NULL" : instances.Count().ToString()));
-                throw;
+                        i.New.CopyObject(i.Old);
+                        Context.Entry(i.New).State = EntityState.Detached;
+                        Context.Entry(i.Old).State = EntityState.Unchanged;
+                    });
             }
         }
         /// <summary>
@@ -141,47 +131,28 @@ namespace RoyaltyRepository
         /// <param name="instances">Host instance array</param>
         public void HostRemoveBulk(IEnumerable<Host> instances)
         {
-            try
-            {
-                if (instances == null)
-                    throw new ArgumentNullException("instances");
-                instances = instances.Where(i => i != null).ToArray();
-
-                using (var ts = new System.Transactions.TransactionScope())
-                    try
-                    {
-                        var ids = instances.ToDictionary(i => i.HostID).Keys.Cast<long>();
-                        EFBatchOperation.For(this.Context, this.Context.Hosts).Where(i => ids.Contains(i.HostID)).Delete();
-                        this.SaveChanges(true);
-                        ts.Complete();
-                    }
-                    catch (Exception ex)
-                    {
-                        var e = new Exception(ex.Message, ex);
-                        for (int i = 0; i < instances.Count(); i++)
-                            e.Data.Add(string.Format("instance_{0}", i), instances.ElementAt(i).ToString());
-                        throw e;
-                    }
-            }
-            catch (Exception ex)
-            {
-                Helpers.Log.Add(ex, string.Format("Repository.HostRemoveBulk(instances=[{0}])", instances == null ? "NULL" : instances.Count().ToString()));
-                throw;
-            }
+            var ids = instances.Select(c => c.HostID).Distinct();
+            BulkDelete<Host>(i => ids.Contains(i.HostID));
+        }
+        /// <summary>
+        /// Remove Hosts from database
+        /// </summary>
+        /// <param name="instances">Host name array</param>
+        public void HostRemoveBulk(IEnumerable<string> instances)
+        {
+            var names = instances.Select(c => c.ToUpper()).Distinct();
+            BulkDelete<Host>(i => names.Contains(i.Name.ToUpper()));
         }
         /// <summary>
         /// Create/Get new Host without any link to database
         /// </summary>
-        /// <param name="HostNumber">Host number</param>
+        /// <param name="hostName">Host name</param>
         /// <returns>Host instance</returns>
         public Host HostNew(string hostName = null)
         {
             try
             {
-                var res = new Host() { };
-                if (hostName != null)
-                    res.Name = hostName;
-                return res;
+                return new Host() { Name = hostName };
             }
             catch (Exception ex)
             {
@@ -223,7 +194,8 @@ namespace RoyaltyRepository
         public IQueryable<Host> HostGet(IEnumerable<string> hostNames)
         {
             return HostGet()
-                .Join(hostNames.Select(h => h.ToUpper()), p => p.Name.ToUpper(), i => i, (p, i) => p);
+                .Where(h => hostNames.Contains(h.Name));
+                //.Join(hostNames.Select(h => h.ToUpper()), p => p.Name.ToUpper(), i => i, (p, i) => p);
         }
         /// <summary>
         /// Get Hosts by identifiers

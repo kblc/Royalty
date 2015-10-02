@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RoyaltyRepository.Models;
 using Helpers;
+using EntityFramework.Utilities;
 
 namespace RoyaltyRepository
 {
@@ -58,11 +59,18 @@ namespace RoyaltyRepository
             }
         }
         /// <summary>
-        /// Remove City from database
+        /// Add cities to database
         /// </summary>
-        /// <param name="instance">City instance</param>
-        /// <param name="saveAfterRemove">Save database after removing</param>
-        /// <param name="waitUntilSaving">Wait until saving</param>
+        /// <param name="instances">City instance array</param>
+        public void CityAddBulk(IEnumerable<City> instances)
+        {
+            this.BulkInsert(instances);
+        }/// <summary>
+         /// Remove City from database
+         /// </summary>
+         /// <param name="instance">City instance</param>
+         /// <param name="saveAfterRemove">Save database after removing</param>
+         /// <param name="waitUntilSaving">Wait until saving</param>
         public void CityRemove(City instance, bool saveAfterRemove = true, bool waitUntilSaving = true)
         {
             CityRemove(new City[] { instance }, saveAfterRemove, waitUntilSaving);
@@ -103,16 +111,34 @@ namespace RoyaltyRepository
             }
         }
         /// <summary>
+        /// Remove cities from database
+        /// </summary>
+        /// <param name="instances">City instance array</param>
+        public void CityRemoveBulk(IEnumerable<City> instances)
+        {
+            var ids = instances.Select(c => c.CityID);
+            BulkDelete<City>(i => ids.Contains(i.CityID));
+        }
+        /// <summary>
+        /// Remove cities from database
+        /// </summary>
+        /// <param name="instances">City name array</param>
+        public void CityRemoveBulk(IEnumerable<string> instances)
+        {
+            var names = instances.Select(c => c.ToUpper());
+            BulkDelete<City>(i => names.Contains(i.Name.ToUpper()));
+        }
+
+        /// <summary>
         /// Create/Get new City without any link to database
         /// </summary>
         /// <param name="instanceName">City name</param>
         /// <returns>City instance</returns>
-        public City CityNew(string instanceName = null)
+        public City CityNew(string instanceName = null, string phoneNumerCode = null)
         {
             try
             {
-                var res = new City() { Name = instanceName };
-                return res;
+                return new City() { Name = instanceName, PhoneNumberCode = phoneNumerCode }; 
             }
             catch (Exception ex)
             {
@@ -153,8 +179,10 @@ namespace RoyaltyRepository
         /// <returns>City array</returns>
         public IQueryable<City> CityGet(IEnumerable<string> instanceNames)
         {
+            var names = instanceNames.Select(n => n.ToUpper());
             return CityGet()
-                .Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
+                .Where(c => names.Contains(c.Name.ToUpper()));
+                //.Join(instanceNames.Select(c => c.ToUpper()), s => s.Name.ToUpper(), i => i, (s, i) => s);
         }
         /// <summary>
         /// Get Cities by identifiers
@@ -163,7 +191,9 @@ namespace RoyaltyRepository
         /// <returns>City queriable collection</returns>
         public IQueryable<City> CityGet(IEnumerable<long> instanceIds)
         {
-            return CityGet().Join(instanceIds, s => s.CityID, i => i, (s, i) => s);
+            return CityGet()
+                .Where(c => instanceIds.Contains(c.CityID));
+                //.Join(instanceIds, s => s.CityID, i => i, (s, i) => s);
         }
     }
 }

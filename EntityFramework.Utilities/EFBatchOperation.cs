@@ -21,9 +21,11 @@ namespace EntityFramework.Utilities
         /// <param name="items">The items to insert</param>
         /// <param name="connection">The DbConnection to use for the insert. Only needed when for example a profiler wraps the connection. Then you need to provide a connection of the type the provider use.</param>
         /// <param name="batchSize">The size of each batch. Default depends on the provider. SqlProvider uses 15000 as default</param>        
-        void InsertAll<TEntity>(IEnumerable<TEntity> items, DbConnection connection = null, int? batchSize = null) where TEntity : class, T; 
-        IEFBatchOperationFiltered<TContext, T> Where(Expression<Func<T, bool>> predicate);
+        void InsertAll<TEntity>(IEnumerable<TEntity> items, DbConnection connection = null, int? batchSize = null) where TEntity : class, T;
 
+
+
+        IEFBatchOperationFiltered<TContext, T> Where(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// Bulk update all items if the Provider supports it. Otherwise it will use the default update unless Configuration.DisableDefaultFallback is set to true in which case it would throw an exception.
@@ -57,6 +59,7 @@ namespace EntityFramework.Utilities
         int Delete();
         int Update<TP>(Expression<Func<T, TP>> prop, Expression<Func<T, TP>> modifier);
     }
+
     public static class EFBatchOperation
     {
         public static IEFBatchOperationBase<TContext, T> For<TContext, T>(TContext context, IDbSet<T> set)
@@ -65,13 +68,22 @@ namespace EntityFramework.Utilities
         {
             return EFBatchOperation<TContext, T>.For(context, set);
         }
+
+        public static IEFBatchOperationFiltered<TContext, T> For<TContext, T>(TContext context, IQueryable<T> items)
+            where TContext : DbContext
+            where T : class
+        {
+            return EFBatchOperation<TContext, T>.For(context, items) as IEFBatchOperationFiltered<TContext, T>;
+        }
     }
+
     public class EFBatchOperation<TContext, T> : IEFBatchOperationBase<TContext, T>, IEFBatchOperationFiltered<TContext, T> 
         where T : class
         where TContext : DbContext
     {
         private ObjectContext context;
         private DbContext dbContext;
+        private IQueryable<T> items;
         private IDbSet<T> set;
         private Expression<Func<T, bool>> predicate;
 
@@ -82,11 +94,27 @@ namespace EntityFramework.Utilities
             this.set = set;
         }
 
-        public static IEFBatchOperationBase<TContext, T> For<TContext, T>(TContext context, IDbSet<T> set)
-            where TContext : DbContext
-            where T : class
+        private EFBatchOperation(TContext context, IQueryable<T> items)
+        {
+            this.dbContext = context;
+            this.context = (context as IObjectContextAdapter).ObjectContext;
+            this.items = items;
+        }
+
+        public static IEFBatchOperationBase<TContext, T> For(TContext context, IDbSet<T> set)
+        //public static IEFBatchOperationBase<TContext, T> For<TContext, T>(TContext context, IDbSet<T> set)
+        //where TContext : DbContext
+        //where T : class
         {
             return new EFBatchOperation<TContext, T>(context, set);
+        }
+
+        public static IEFBatchOperationBase<TContext, T> For(TContext context, IQueryable<T> items)
+        //public static IEFBatchOperationBase<TContext, T> For<TContext, T>(TContext context, IDbSet<T> set)
+        //where TContext : DbContext
+        //where T : class
+        {
+            return new EFBatchOperation<TContext, T>(context, items);
         }
 
         /// <summary>
@@ -135,7 +163,6 @@ namespace EntityFramework.Utilities
             }
         }
 
-
         public void UpdateAll<TEntity>(IEnumerable<TEntity> items, Action<UpdateSpecification<TEntity>> updateSpecification, DbConnection connection = null, int? batchSize = null) where TEntity : class, T
         {
             var con = context.Connection as EntityConnection;
@@ -181,7 +208,7 @@ namespace EntityFramework.Utilities
             return this;
         }
 
-        public int Delete()
+        int IEFBatchOperationFiltered<TContext, T>.Delete()
         {
             var con = context.Connection as EntityConnection;
             if (con == null)
@@ -194,12 +221,21 @@ namespace EntityFramework.Utilities
             if (provider != null && provider.CanDelete)
             {
                 var set = context.CreateObjectSet<T>();
-                var query = (ObjectQuery<T>)set.Where(this.predicate);
+                var query = (ObjectQuery<T>)(
+                        items != null 
+                        ? set.Join(items, i => i, i => i, (i0, i1) => i0) 
+                        : set.Where(this.predicate)
+                    );
                 var queryInformation = provider.GetQueryInformation<T>(query);
 
-                var delete = provider.GetDeleteQuery(queryInformation);
-                var parameters = query.Parameters.Select(p => new SqlParameter { Value = p.Value, ParameterName = p.Name }).ToArray<object>();
-                return context.ExecuteStoreCommand(delete, parameters);
+                if (!string.IsNullOrWhiteSpace(queryInformation.Table))
+                {
+                    var delete = provider.GetDeleteQuery(queryInformation);
+                    var parameters = query.Parameters.Select(p => new SqlParameter { Value = p.Value, ParameterName = p.Name }).ToArray<object>();
+                    return context.ExecuteStoreCommand(delete, parameters);
+                }
+                else
+                    return 0;
             }
             else
             {
@@ -208,7 +244,7 @@ namespace EntityFramework.Utilities
             }
         }
 
-        public int Update<TP>(Expression<Func<T, TP>> prop, Expression<Func<T, TP>> modifier)
+        int IEFBatchOperationFiltered<TContext, T>.Update<TP>(Expression<Func<T, TP>> prop, Expression<Func<T, TP>> modifier)
         {
             var con = context.Connection as EntityConnection;
             if (con == null)
@@ -222,8 +258,15 @@ namespace EntityFramework.Utilities
             {
                 var set = context.CreateObjectSet<T>();
 
-                var query = (ObjectQuery<T>)set.Where(this.predicate);
+                var query = (ObjectQuery<T>)(
+                        items != null
+                        ? set.Join(items, i => i, i => i, (i0, i1) => i0)
+                        : set.Where(this.predicate)
+                    );
                 var queryInformation = provider.GetQueryInformation<T>(query);
+
+                if (!query.Any())
+                    return 0;
 
                 var updateExpression = ExpressionHelper.CombineExpressions<T, TP>(prop, modifier);
 
@@ -245,8 +288,5 @@ namespace EntityFramework.Utilities
                 return Fallbacks.DefaultUpdate(context, this.predicate, prop, modifier);
             }
         }
-
-
-     
     }
 }

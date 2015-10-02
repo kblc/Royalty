@@ -96,7 +96,7 @@ namespace RoyaltyDataCalculator
         /// <returns>Словарь соответсвия найденных данных для каждой строки таблицы</returns>
         public IDictionary<DataRow, DataPreviewRow> Preview(DataTable dataTable)
         {
-            using (var logSession = Log.Session(this.GetType().Name + ".Preview()", false))
+            using (var logSession = Log.Session($"{this.GetType().Name}.{nameof(Preview)}()", false))
                 try
                 {
                     logSession.Output = (strs) => strs.ToList().ForEach(s => Output(s));
@@ -114,7 +114,8 @@ namespace RoyaltyDataCalculator
                     var ppPhones = pp.GetChild(weight: 0.1m);
                     var ppMarks = pp.GetChild(weight: 0.1m);
                     var ppCities = pp.GetChild(weight: 0.1m);
-                    var ppStreets = pp.GetChild(weight: 0.5m);
+                    var ppStreets = pp.GetChild(weight: 0.7m);
+                    var ppRows = pp.GetChild(weight: 0.3m);
                     pp.Change += (s, e) => { if (Progress != null) Progress(e.Value); };
 
                     #region Get column names by column types
@@ -321,26 +322,65 @@ namespace RoyaltyDataCalculator
                         (progress) => ppStreets.Value = progress,
                         (str) => logSession.Add(str));
 
-                    var res = subRes4
+                    var subRes5 = subRes4
                         .LeftOuterJoin(aPR,
                             r => new { r.IncomingAddress.Street, House = r.IncomingAddress.House.ToString(), r.IncomingAddress.Area, r.City.Name },
                             i => new { i.Key.Address.Street, House = i.Key.Address.House.ToString(), i.Key.Address.Area, i.Key.City.Name },
                             (r, i) => new
                             {
                                 r.Row,
-                                LoadedRow = new DataPreviewRow()
+                                LoadedRow = new
                                 {
-                                    Address = i.Value.Address, //change old address to new address
-                                    Street = i.Value.Street,
-                                    Mark = r.Mark,
-                                    Phone = r.Phone,
-                                    City = r.City,
-                                    Host = r.Host,
+                                    i.Value.Address, //change old address to new address
+                                    i.Value.Street,
+                                    r.Mark,
+                                    r.Phone,
+                                    r.City,
+                                    r.Host,
                                 },
                             });
 
                     #endregion
+                    #region Load rows
+                    var ppRowsPrepare = ppRows.GetChild();
+                    var ppRowsLoad = ppRows.GetChild();
 
+                    var rowCount0 = (decimal)subRes5.Count();
+                    var currentIndex0 = 0m;
+
+                    var res = subRes5.Select(r => new
+                    {
+                        r.Row,
+                        DataRecord = Repository.AccountDataRecordNew(Account, r.LoadedRow),
+                        Index = (ppRowsPrepare.Value = (currentIndex0++) /rowCount0)
+                    })
+                    .Select(r => new
+                    {
+                        r.Row,
+                        LoadedRow = new DataPreviewRow()
+                        {
+                            DataRecord = r.DataRecord,
+                            DataRecordAdditional = Repository.AccountDataRecordAdditionalNew(r.DataRecord),
+                        },
+                    }
+                    )
+                    .ToArray();
+
+                    var rowCount1 = (decimal)dataTable.Rows.Count;
+                    var currentIndex1 = 0m;
+                    var columns = Account.AdditionalColumns.Where(c => !string.IsNullOrWhiteSpace(c.ColumnName));
+
+                    res.ToList()
+                        .ForEach(r =>
+                        {
+                            foreach(var c in columns)
+                            {
+                                var pi = r.LoadedRow.DataRecordAdditional.GetType().GetProperty(c.ColumnSystemName);
+                                pi.SetValue(r.LoadedRow.DataRecordAdditional, r.Row[c.ColumnName]);
+                            }
+                            ppRowsLoad.Value = currentIndex1++ / rowCount1;
+                        });
+                    #endregion
                     return res.ToDictionary(i => i.Row, i => i.LoadedRow);
                 }
                 catch(Exception ex)

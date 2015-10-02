@@ -25,7 +25,7 @@ namespace RoyaltyDataCalculatorTest
         public void Initialization()
         {
             SqlLogEnabled = true;
-            Rep = new Repository("connectionStringHome");
+            Rep = new Repository("connectionString");
             Rep.AccountRemove(Rep.AccountGet(defAccountName, true));
             Rep.AccountAdd(Rep.AccountNew(byDefault: true, accountName: defAccountName));
             Rep.Log = (s) => { if (SqlLogEnabled) Console.WriteLine(string.Format("{0}", s)); };

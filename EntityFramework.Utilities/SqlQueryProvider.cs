@@ -53,9 +53,8 @@ namespace EntityFramework.Utilities
             {
                 var con = storeConnection as SqlConnection;
                 if (con.State != System.Data.ConnectionState.Open)
-                {
                     con.Open();
-                }
+                
                 using (SqlBulkCopy copy = new SqlBulkCopy(con))
                 {
                     copy.BatchSize = Math.Min(reader.RecordsAffected, batchSize ?? 15000); //default batch size
@@ -71,9 +70,8 @@ namespace EntityFramework.Utilities
                     copy.NotifyAfter = 0;
 
                     foreach (var i in Enumerable.Range(0, reader.FieldCount))
-                    {
                         copy.ColumnMappings.Add(i, properties[i].NameInDatabase);
-                    }
+                    
                     copy.WriteToServer(reader);
                     copy.Close();
                 }
@@ -122,7 +120,6 @@ namespace EntityFramework.Utilities
 
             
         }
-
 
         public bool CanHandle(System.Data.Common.DbConnection storeConnection)
         {

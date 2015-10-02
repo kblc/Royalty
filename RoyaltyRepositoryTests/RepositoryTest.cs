@@ -15,7 +15,7 @@ namespace RoyaltyRepositoryTests
         [TestInitialize]
         public void Initialization()
         {
-            Rep = new Repository("connectionStringHome");
+            Rep = new Repository("connectionString");
             Rep.AccountRemove(Rep.AccountGet(defAccountName, true));
             Rep.AccountAdd(Rep.AccountNew(byDefault: true, accountName: defAccountName));
             Console.WriteLine("############################## Initialization done");
@@ -275,7 +275,7 @@ namespace RoyaltyRepositoryTests
             using(var logSession = Helpers.Log.Session(isEnabled: false, output: (ss) => { ss.ToList().ForEach(s => Console.WriteLine(s)); }))
                 try
                 {
-                    var itemsToDelete = Rep.HostGet(names).ToList();
+                    var itemsToDelete = Rep.HostGet(names);
                     Rep.HostRemoveBulk(itemsToDelete);
 
                     var oldCnt = Rep.HostGet().Count();
@@ -284,8 +284,8 @@ namespace RoyaltyRepositoryTests
                     Rep.HostAddBulk(items);
                     Assert.AreEqual(oldCnt + names.Count(), Rep.HostGet().Count(), "Count must equals");
 
-                    itemsToDelete = Rep.HostGet(names).ToList();
-                    Rep.HostRemoveBulk(itemsToDelete);
+                    var itemsToDelete2 = Rep.HostGet(names);
+                    Rep.HostRemoveBulk(itemsToDelete2);
                     Assert.AreEqual(oldCnt, Rep.HostGet().Count(), "Count must equals");
                 }
                 catch(Exception ex)
