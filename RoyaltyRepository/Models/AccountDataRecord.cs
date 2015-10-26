@@ -19,7 +19,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("data")]
-    public partial class AccountDataRecord
+    public partial class AccountDataRecord: IHistoryRecordSource
     {
         /// <summary>
         /// Идентификатор записи
@@ -75,17 +75,6 @@ namespace RoyaltyRepository.Models
         [Column("house_number"), MaxLength(20, ErrorMessageResourceName = "HouseNumberMaxLength")]
         public string HouseNumber { get; set; }
         #endregion
-        #region Mark
-        /// <summary>
-        /// Идентификатор метки
-        /// </summary>
-        [ForeignKey("Mark"), Column("mark_id"), Required]
-        public long MarkID { get; set; }
-        /// <summary>
-        /// Метка
-        /// </summary>
-        public virtual Mark Mark { get; set; }
-        #endregion
 
         [Column("created"), Required]
         public DateTime Created { get; set; }
@@ -98,9 +87,20 @@ namespace RoyaltyRepository.Models
 
         public virtual AccountDataRecordAdditional DataAdditional { get; set; }
 
+        #region IHistoryRecordSource
+
+        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)Account).SourceId; } }
+
+        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountData; } }
+
+        #endregion
+        #region ToString()
+
         public override string ToString()
         {
             return this.GetColumnPropertiesForEntity();
         }
+
+        #endregion
     }
 }

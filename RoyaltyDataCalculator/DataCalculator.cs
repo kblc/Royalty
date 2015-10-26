@@ -249,6 +249,7 @@ namespace RoyaltyDataCalculator
 
                     var defMark = Repository.MarkGet(MarkTypes.Unknown);
 
+#pragma warning disable 618
                     var subRes3 = subRes2
                         .LeftOuterJoin(Repository.MarkGet(), i => i.IncomingMark, m => m.SystemName, (i, m) => new
                         {
@@ -262,7 +263,7 @@ namespace RoyaltyDataCalculator
                             i.Phone,
                             Mark = m ?? defMark,
                         });
-
+#pragma warning restore 618
                     ppMarks.Value = 100;
 
                     #endregion

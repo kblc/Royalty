@@ -16,7 +16,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("dictionary_exclude")]
-    public partial class AccountDictionaryExclude
+    public partial class AccountDictionaryExclude : IHistoryRecordSource
     {
         /// <summary>
         /// Идентификатор записи
@@ -39,9 +39,20 @@ namespace RoyaltyRepository.Models
         [MinLength(1, ErrorMessageResourceName = "AccountDictionaryExcludeMinLength"), MaxLength(250, ErrorMessageResourceName = "AccountDictionaryExcludeMaxLength")]
         public string Exclude { get; set; }
 
+        #region IHistoryRecordSource
+
+        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)Dictionary).SourceId; } }
+
+        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountDictionary; } }
+
+        #endregion
+        #region ToString()
+
         public override string ToString()
         {
             return this.GetColumnPropertiesForEntity();
         }
+
+        #endregion
     }
 }

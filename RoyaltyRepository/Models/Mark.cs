@@ -7,8 +7,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Helpers.Linq;
+using System.ComponentModel;
 
 namespace RoyaltyRepository.Models
 {
@@ -28,26 +28,32 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Не установленная
         /// </summary>
+        [Description("MARK_Default")]
         Default = 0,
         /// <summary>
         /// Полудоверенная
         /// </summary>
+        [Description("MARK_HalfTrusted")]
         HalfTrusted,
         /// <summary>
         /// Не доверенная
         /// </summary>
+        [Description("MARK_NotTrusted")]
         NotTrusted,
         /// <summary>
         /// Подозрительная
         /// </summary>
+        [Description("MARK_Suspicious")]
         Suspicious,
         /// <summary>
         /// Доверенная
         /// </summary>
+        [Description("MARK_Trusted")]
         Trusted,
         /// <summary>
         /// Неизвестная
         /// </summary>
+        [Description("MARK_Unknown")]
         Unknown
     }
 
@@ -69,26 +75,14 @@ namespace RoyaltyRepository.Models
         [Column("system_name"), Index("UIX_MARK_SYSTEMNAME", IsUnique = true)]
         [Required(ErrorMessageResourceName = "MarkNameRequred")]
         [MinLength(1, ErrorMessageResourceName = "MarkNameMinLength"), MaxLength(100, ErrorMessageResourceName = "MarkNameMaxLength")]
+        [Obsolete("Use Type property instead")]
         public string SystemName { get; set; }
 
         /// <summary>
         /// Название метки (из файла ресурса)
         /// </summary>
         [NotMapped]
-        public string Name 
-        { 
-            get 
-            {
-                var obj = RoyaltyRepository.Properties.Resources.ResourceManager.GetObject(string.Format("MARK_{0}", SystemName.ToUpper()));
-                return obj == null ? SystemName : obj.ToString(); 
-            } 
-        }
-
-        public static string GetNameFromType(MarkTypes type)
-        {
-            var obj = RoyaltyRepository.Properties.Resources.ResourceManager.GetObject(string.Format("MARK_{0}", type.ToString().ToUpper()));
-            return obj == null ? type.ToString() : obj.ToString();
-        }
+        public string Name { get { return Type.GetEnumNameFromType(); } }
 
         /// <summary>
         /// Тип метки из существующих
@@ -96,39 +90,35 @@ namespace RoyaltyRepository.Models
         [NotMapped]
         public MarkTypes Type
         {
-            get
-            {
-                return typeof(MarkTypes).GetEnumValues().Cast<MarkTypes>().FirstOrDefault(ct => ct.ToString().ToUpper() == SystemName);
-            }
-            set
-            {
-                SystemName = value.ToString().ToUpper();
-            }
+#pragma warning disable 618
+            get { return RoyaltyRepository.Extensions.Helpers.GetEnumValueByName<MarkTypes>(SystemName); }
+            set { SystemName = value.ToString().ToUpper(); }
+#pragma warning restore 618
         }
+
+        #region IDefaultRepositoryInitialization
 
         void IDefaultRepositoryInitialization.InitializeDefault(RepositoryContext context)
         {
-            var defColumnTypes = new Mark[] 
-            {
-                new Mark() { Type = MarkTypes.Default },
-                new Mark() { Type = MarkTypes.HalfTrusted },
-                new Mark() { Type = MarkTypes.NotTrusted },
-                new Mark() { Type = MarkTypes.Suspicious },
-                new Mark() { Type = MarkTypes.Trusted },
-                new Mark() { Type = MarkTypes.Unknown },
-            };
-
+            var defColumnTypes = typeof(MarkTypes).GetEnumValues().Cast<MarkTypes>().Select(t => new Mark() { Type = t });
+#pragma warning disable 618
             context.Marks.AddRange(
                 defColumnTypes
                     .LeftOuterJoin(context.Marks, ct => ct.SystemName, c => c.SystemName, (def, existed) => new { Default = def, Existed = existed })
                     .Where(i => i.Existed == null)
                     .Select(i => i.Default)
                 );
+#pragma warning restore 618
         }
+
+        #endregion
+        #region ToString()
 
         public override string ToString()
         {
             return this.GetColumnPropertiesForEntity();
         }
+
+        #endregion
     }
 }

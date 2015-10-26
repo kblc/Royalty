@@ -37,7 +37,9 @@ namespace RoyaltyRepository
         /// <returns>Mark</returns>
         public Mark MarkGet(string systemName)
         {
+#pragma warning disable 618
             return MarkGet().FirstOrDefault(a => string.Compare(systemName, a.SystemName, true) == 0);
+#pragma warning restore 618
         }
         /// <summary>
         /// Get one mark by mark type
@@ -46,7 +48,7 @@ namespace RoyaltyRepository
         /// <returns>Mark</returns>
         public Mark MarkGet(MarkTypes markType)
         {
-            return MarkGet().FirstOrDefault(a => string.Compare(markType.ToString().ToUpper(), a.SystemName, true) == 0);
+            return MarkGet(markType.ToString());
         }
         /// <summary>
         /// Get marks by identifiers

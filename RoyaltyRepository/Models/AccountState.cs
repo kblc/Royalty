@@ -12,11 +12,17 @@ namespace RoyaltyRepository.Models
 {
     public partial class RepositoryContext
     {
+        /// <summary>
+        /// Состояния аккаунтов
+        /// </summary>
         public DbSet<AccountState> AccountStates { get; set; }
     }
 
+    /// <summary>
+    /// Состояние аккаунта
+    /// </summary>
     [Table("account_state")]
-    public partial class AccountState
+    public partial class AccountState : IHistoryRecordSource
     {
         #region Account
         /// <summary>
@@ -40,9 +46,20 @@ namespace RoyaltyRepository.Models
         [Column("is_active"), Required]
         public bool IsActive { get; set; }
 
+        #region IHistoryRecordSource
+
+        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)Account).SourceId; } }
+
+        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountSettings; } }
+
+        #endregion
+        #region ToString()
+
         public override string ToString()
         {
             return this.GetColumnPropertiesForEntity();
         }
+
+        #endregion
     }
 }

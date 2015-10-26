@@ -259,6 +259,78 @@ namespace RoyaltyRepository.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Record added.
+        /// </summary>
+        public static string HISTORYACTIONTYPE_Add {
+            get {
+                return ResourceManager.GetString("HISTORYACTIONTYPE_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Record changed.
+        /// </summary>
+        public static string HISTORYACTIONTYPE_Change {
+            get {
+                return ResourceManager.GetString("HISTORYACTIONTYPE_Change", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Record removed.
+        /// </summary>
+        public static string HISTORYACTIONTYPE_Remove {
+            get {
+                return ResourceManager.GetString("HISTORYACTIONTYPE_Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account.
+        /// </summary>
+        public static string HISTORYSOURCETYPE_Account {
+            get {
+                return ResourceManager.GetString("HISTORYSOURCETYPE_Account", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account data records.
+        /// </summary>
+        public static string HISTORYSOURCETYPE_AccountData {
+            get {
+                return ResourceManager.GetString("HISTORYSOURCETYPE_AccountData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account dictionary.
+        /// </summary>
+        public static string HISTORYSOURCETYPE_AccountDictionary {
+            get {
+                return ResourceManager.GetString("HISTORYSOURCETYPE_AccountDictionary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account settings.
+        /// </summary>
+        public static string HISTORYSOURCETYPE_AccountSettings {
+            get {
+                return ResourceManager.GetString("HISTORYSOURCETYPE_AccountSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Qeueu.
+        /// </summary>
+        public static string HISTORYSOURCETYPE_Queue {
+            get {
+                return ResourceManager.GetString("HISTORYSOURCETYPE_Queue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Host name length must be less or equals 250.
         /// </summary>
         public static string HostNameMaxLength {

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RoyaltyRepository.Models;
 using Helpers;
+using System.Transactions;
 
 namespace RoyaltyRepository
 {
@@ -85,7 +86,7 @@ namespace RoyaltyRepository
                     .ToArray();
 
                 try
-                { 
+                {
                     this.Context.Accounts.RemoveRange(instances);
                     if (saveAfterRemove)
                         this.SaveChanges(waitUntilSaving);
@@ -158,6 +159,7 @@ namespace RoyaltyRepository
                 throw;
             }
         }
+        
         /// <summary>
         /// Copy account information (withou IDs) from one Account to 'to' account
         /// </summary>
@@ -173,7 +175,8 @@ namespace RoyaltyRepository
             bool copyDictionaryExclude = true,
             bool copySettings = true,
             bool copySettingsShedule = true,
-            bool copyState = true)
+            bool copyState = true,
+            bool copyPhoneMarks = true)
         {
             if (from == null)
                 throw new ArgumentNullException("from");
@@ -204,6 +207,20 @@ namespace RoyaltyRepository
                     });
             }
             #endregion
+            #region Phone marks
+            if (copyPhoneMarks)
+            { 
+                to.PhoneMarks.Clear();
+                foreach (var i in to.PhoneMarks)
+                    to.PhoneMarks.Add(new AccountPhoneMark()
+                    {
+                        Account = to,
+                        Mark = i.Mark,
+                        Phone = i.Phone,
+                    }
+                );
+            }
+            #endregion
             #region Data
             if (copyData)
             {
@@ -217,18 +234,20 @@ namespace RoyaltyRepository
                             ColumnSystemName = ac.ColumnSystemName
                         });
                 }
-                
+
+                #region Data
+
                 to.Data.Clear();
                 foreach (var d in from.Data)
                     to.Data.Add(new AccountDataRecord()
                     {
+                        Account = to,
                         HouseNumber = d.HouseNumber,
                         Street = d.Street,
                         Changed = d.Changed,
                         Created = d.Created,
                         Exported = d.Exported,
                         Host = d.Host,
-                        Mark = d.Mark,
                         Phone = d.Phone,
                         DataAdditional = d.DataAdditional != null && copyDataAdditionalColumns
                         ? new AccountDataRecordAdditional()
@@ -257,6 +276,7 @@ namespace RoyaltyRepository
                         : null,
                     }
                     );
+                #endregion
             }
             #endregion
             #region Dictionary

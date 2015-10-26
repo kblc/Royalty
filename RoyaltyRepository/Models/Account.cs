@@ -16,13 +16,14 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("account")]
-    public partial class Account : IDefaultRepositoryInitialization
+    public partial class Account : IDefaultRepositoryInitialization, IHistoryRecordSource
     {
         internal const string defaultAccountName = ".default";
 
         public Account()
         {
             Data = new List<AccountDataRecord>();
+            PhoneMarks = new List<AccountPhoneMark>();
             AdditionalColumns = new List<AccountDataRecordAdditionalColumn>();
             SeriesOfNumbers = new List<AccountSeriesOfNumbersRecord>();
             ExportTypes = new List<AccountExportType>();
@@ -48,6 +49,16 @@ namespace RoyaltyRepository.Models
         public virtual ICollection<AccountSeriesOfNumbersRecord> SeriesOfNumbers { get; set; }
         public virtual ICollection<AccountExportType> ExportTypes { get; set; }
         public virtual ICollection<ImportQueueRecord> ImportQueue { get; set; }
+        public virtual ICollection<AccountPhoneMark> PhoneMarks { get; set; }
+
+        #region IHistoryRecord
+
+        object IHistoryRecordSource.SourceId { get { return this.AccountUID; } }
+
+        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.Account; } }
+
+        #endregion
+        #region IDefaultRepositoryInitialization
 
         void IDefaultRepositoryInitialization.InitializeDefault(RepositoryContext context)
         {
@@ -137,9 +148,14 @@ namespace RoyaltyRepository.Models
             return acc;
         }
 
+        #endregion
+        #region ToString()
+
         public override string ToString()
         {
             return this.GetColumnPropertiesForEntity();
         }
+
+        #endregion
     }
 }

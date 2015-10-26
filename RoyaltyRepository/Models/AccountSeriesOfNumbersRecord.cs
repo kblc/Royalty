@@ -19,7 +19,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("series_of_numbers")]
-    public partial class AccountSeriesOfNumbersRecord
+    public partial class AccountSeriesOfNumbersRecord : IHistoryRecordSource
     {
         /// <summary>
         /// Идентификатор записи
@@ -63,9 +63,20 @@ namespace RoyaltyRepository.Models
 #pragma warning restore 618
         }
 
+        #region IHistoryRecordSource
+
+        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)Account).SourceId; } }
+
+        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.Account; } }
+
+        #endregion
+        #region ToString()
+
         public override string ToString()
         {
             return this.GetColumnPropertiesForEntity();
         }
+
+        #endregion
     }
 }

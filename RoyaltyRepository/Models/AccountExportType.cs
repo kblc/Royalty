@@ -19,7 +19,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("export_type")]
-    public partial class AccountExportType
+    public partial class AccountExportType : IHistoryRecordSource
     {
         /// <summary>
         /// Идентификатор записи
@@ -56,9 +56,20 @@ namespace RoyaltyRepository.Models
         [Column("filename"), Required]
         public string FileName { get; set; }
 
+        #region IHistoryRecordSource
+
+        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)Account).SourceId; } }
+
+        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.Account; } }
+
+        #endregion
+        #region ToString()
+
         public override string ToString()
         {
             return this.GetColumnPropertiesForEntity();
         }
+
+        #endregion
     }
 }

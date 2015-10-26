@@ -16,7 +16,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("account_settings_column")]
-    public partial class AccountSettingsColumn
+    public partial class AccountSettingsColumn : IHistoryRecordSource
     {
         #region AccountSettings
         /// <summary>
@@ -46,9 +46,20 @@ namespace RoyaltyRepository.Models
         [Column("column_name"), Required]
         public string ColumnName { get; set; }
 
+        #region IHistoryRecordSource
+
+        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)AccountSettings).SourceId; } }
+
+        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountSettings; } }
+
+        #endregion
+        #region ToString()
+
         public override string ToString()
         {
             return this.GetColumnPropertiesForEntity();
         }
+
+        #endregion
     }
 }

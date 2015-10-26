@@ -57,6 +57,8 @@
     <Compile Include="Extensions\AccountSettingsExtensions.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\DataImportAttributes.cs" />
+    <Compile Include="Extensions\Helpers.cs" />
+    <Compile Include="Logic\History.cs" />
     <Compile Include="Logic\ColumnType.cs" />
     <Compile Include="Logic\Street.cs" />
     <Compile Include="Logic\File.cs" />
@@ -204,10 +206,21 @@
     <Compile Include="Migrations\201509231654213_Migration_AddExportColumnToAdditionalColumn.Designer.cs">
       <DependentUpon>201509231654213_Migration_AddExportColumnToAdditionalColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510260301206_Migration_AccountAndAccountPhoneMarks.cs" />
+    <Compile Include="Migrations\201510260301206_Migration_AccountAndAccountPhoneMarks.Designer.cs">
+      <DependentUpon>201510260301206_Migration_AccountAndAccountPhoneMarks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510260454118_Migration_History.cs" />
+    <Compile Include="Migrations\201510260454118_Migration_History.Designer.cs">
+      <DependentUpon>201510260454118_Migration_History.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountSettingsColumn.cs" />
     <Compile Include="Models\ColumnType.cs" />
+    <Compile Include="Models\AccountPhoneMark.cs" />
+    <Compile Include="Models\IHistoryRecord.cs" />
+    <Compile Include="Models\History.cs" />
     <Compile Include="Models\Street.cs" />
     <Compile Include="Models\File.cs" />
     <Compile Include="Models\ImportQueueRecordFile.cs" />
@@ -349,6 +362,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509231654213_Migration_AddExportColumnToAdditionalColumn.resx">
       <DependentUpon>201509231654213_Migration_AddExportColumnToAdditionalColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510260301206_Migration_AccountAndAccountPhoneMarks.resx">
+      <DependentUpon>201510260301206_Migration_AccountAndAccountPhoneMarks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510260454118_Migration_History.resx">
+      <DependentUpon>201510260454118_Migration_History.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

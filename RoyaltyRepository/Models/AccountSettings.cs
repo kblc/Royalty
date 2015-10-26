@@ -16,7 +16,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("account_settings")]
-    public partial class AccountSettings
+    public partial class AccountSettings : IHistoryRecordSource
     {
         public AccountSettings()
         {
@@ -130,9 +130,20 @@ namespace RoyaltyRepository.Models
         [Column("recursive_folder_search_for_csv_files")]
         public bool? RecursiveFolderSearch { get; set; }
 
+        #region IHistoryRecordSource
+
+        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)Account).SourceId; } }
+
+        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountSettings; } }
+
+        #endregion
+        #region ToString()
+
         public override string ToString()
         {
             return this.GetColumnPropertiesForEntity();
         }
+
+        #endregion
     }
 }

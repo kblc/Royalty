@@ -16,13 +16,15 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("dictionary")]
-    public partial class AccountDictionary
+    public partial class AccountDictionary : IHistoryRecordSource
     {
         public AccountDictionary()
         {
             Excludes = new List<AccountDictionaryExclude>();
             Records = new List<AccountDictionaryRecord>();
         }
+
+        #region Account
         /// <summary>
         /// Идентификатор аккаунта, которому принадлежат данные настройки
         /// </summary>
@@ -32,7 +34,9 @@ namespace RoyaltyRepository.Models
         /// Аккаунт, которому принадлежат данные настройки
         /// </summary>
         public virtual Account Account { get; set; }
-
+        
+        #endregion
+        
         /// <summary>
         /// Процент (от 0 до 1) совпадения, для использования 
         /// </summary>
@@ -60,9 +64,20 @@ namespace RoyaltyRepository.Models
         public virtual ICollection<AccountDictionaryExclude> Excludes { get; set; }
         public virtual ICollection<AccountDictionaryRecord> Records { get; set; }
 
+        #region IHistoryRecordSource
+
+        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)Account).SourceId; } }
+
+        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountDictionary; } }
+
+        #endregion
+        #region ToString()
+
         public override string ToString()
         {
             return this.GetColumnPropertiesForEntity();
         }
+
+        #endregion
     }
 }

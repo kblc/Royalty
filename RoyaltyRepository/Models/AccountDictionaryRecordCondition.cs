@@ -19,7 +19,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("dictionary_record_conditions")]
-    public partial class AccountDictionaryRecordCondition
+    public partial class AccountDictionaryRecordCondition : IHistoryRecordSource
     {
         /// <summary>
         /// Идентификатор записи
@@ -52,9 +52,20 @@ namespace RoyaltyRepository.Models
         [Column("even")]
         public bool? Even { get; set; }
 
+        #region IHistoryRecordSource
+
+        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)DictionaryRecord).SourceId; } }
+
+        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountDictionary; } }
+
+        #endregion
+        #region ToString()
+
         public override string ToString()
         {
             return this.GetColumnPropertiesForEntity();
         }
+
+        #endregion
     }
 }
