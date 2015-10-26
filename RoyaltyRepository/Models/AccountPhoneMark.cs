@@ -22,7 +22,7 @@ namespace RoyaltyRepository.Models
     /// Метка для телефона в аккаунте
     /// </summary>
     [Table("account_phone_mark")]
-    public partial class AccountPhoneMark : IHistoryRecordSource
+    public partial class AccountPhoneMark : HistoryEntityBase
     {
         #region Account
         /// <summary>
@@ -58,19 +58,10 @@ namespace RoyaltyRepository.Models
         public virtual Mark Mark { get; set; }
         #endregion
 
-        #region IHistoryRecordSource
+        #region Abstract implementation
 
-        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)Account).SourceId; } }
-
-        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountData; } }
-
-        #endregion
-        #region ToString()
-
-        public override string ToString()
-        {
-            return this.GetColumnPropertiesForEntity();
-        }
+        protected override object GetSourceId() => ((IHistoryRecordSource)Account).SourceId;
+        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountSettings;
 
         #endregion
     }

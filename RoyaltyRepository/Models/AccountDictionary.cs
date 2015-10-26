@@ -16,7 +16,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("dictionary")]
-    public partial class AccountDictionary : IHistoryRecordSource
+    public partial class AccountDictionary : HistoryEntityBase
     {
         public AccountDictionary()
         {
@@ -64,19 +64,10 @@ namespace RoyaltyRepository.Models
         public virtual ICollection<AccountDictionaryExclude> Excludes { get; set; }
         public virtual ICollection<AccountDictionaryRecord> Records { get; set; }
 
-        #region IHistoryRecordSource
+        #region Abstract implementation
 
-        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)Account).SourceId; } }
-
-        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountDictionary; } }
-
-        #endregion
-        #region ToString()
-
-        public override string ToString()
-        {
-            return this.GetColumnPropertiesForEntity();
-        }
+        protected override object GetSourceId() => ((IHistoryRecordSource)Account).SourceId;
+        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountDictionary;
 
         #endregion
     }

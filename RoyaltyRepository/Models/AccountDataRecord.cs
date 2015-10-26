@@ -19,8 +19,13 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("data")]
-    public partial class AccountDataRecord: IHistoryRecordSource
+    public partial class AccountDataRecord: HistoryEntityBase
     {
+        public AccountDataRecord()
+        {
+            LoadedByQueueFiles = new List<ImportQueueRecordFileAccountDataRecord>();
+        }
+
         /// <summary>
         /// Идентификатор записи
         /// </summary>
@@ -42,7 +47,7 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Идентификатор телефона
         /// </summary>
-        [ForeignKey("Phone"), Column("phone_id"), Required]
+        [ForeignKey("Phone"), Column("phone_id"), Required, Index("UX_DATA_ACCOUNT_PHONE_STREET_HOUSE", IsUnique = true, Order = 1)]
         public long PhoneID { get; set; }
         /// <summary>
         /// Телефон
@@ -64,7 +69,7 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Идентификатор улицы
         /// </summary>
-        [ForeignKey("Street"), Column("street_id"), Required]
+        [ForeignKey("Street"), Column("street_id"), Index("UX_DATA_ACCOUNT_PHONE_STREET_HOUSE", IsUnique = true, Order = 2), Required]
         public long StreetID { get; set; }
         /// <summary>
         /// Улица
@@ -72,7 +77,7 @@ namespace RoyaltyRepository.Models
         public virtual Street Street { get; set; }
         #endregion        
         #region House number
-        [Column("house_number"), MaxLength(20, ErrorMessageResourceName = "HouseNumberMaxLength")]
+        [Column("house_number"), MaxLength(20, ErrorMessageResourceName = "HouseNumberMaxLength"), Index("UX_DATA_ACCOUNT_PHONE_STREET_HOUSE", IsUnique = true, Order = 3)]
         public string HouseNumber { get; set; }
         #endregion
 
@@ -87,19 +92,15 @@ namespace RoyaltyRepository.Models
 
         public virtual AccountDataRecordAdditional DataAdditional { get; set; }
 
-        #region IHistoryRecordSource
+        /// <summary>
+        /// Файлы очереди, в которых загружался данный файл
+        /// </summary>
+        public virtual ICollection<ImportQueueRecordFileAccountDataRecord> LoadedByQueueFiles { get; set; }
 
-        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)Account).SourceId; } }
+        #region Abstract implementation
 
-        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountData; } }
-
-        #endregion
-        #region ToString()
-
-        public override string ToString()
-        {
-            return this.GetColumnPropertiesForEntity();
-        }
+        protected override object GetSourceId() => ((IHistoryRecordSource)Account).SourceId;
+        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountData;
 
         #endregion
     }

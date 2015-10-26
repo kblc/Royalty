@@ -22,7 +22,7 @@ namespace RoyaltyRepository.Models
     /// Запись очереди загрузки
     /// </summary>
     [Table("import_queue")]
-    public partial class ImportQueueRecord
+    public partial class ImportQueueRecord : HistoryEntityBase
     {
         private const string IX_NAME = "IX_DATA_ACCOUNT_UID_AND_PROCESSED";
 
@@ -69,9 +69,11 @@ namespace RoyaltyRepository.Models
 
         public virtual ICollection<ImportQueueRecordFile> Files { get; set; }
 
-        public override string ToString()
-        {
-            return this.GetColumnPropertiesForEntity();
-        }
+        #region Abstract implementation
+
+        protected override object GetSourceId() => ImportQueueRecordUID;
+        protected override HistorySourceType GetSourceType() => HistorySourceType.Queue;
+
+        #endregion
     }
 }

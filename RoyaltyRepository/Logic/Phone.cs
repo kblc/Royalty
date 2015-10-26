@@ -105,14 +105,17 @@ namespace RoyaltyRepository
         /// Create/Get new phone without any link to database
         /// </summary>
         /// <param name="phoneNumber">Phone number</param>
+        /// <param name="account">Account to add account-phone-mark instance</param>
         /// <returns>Phone instance</returns>
-        public Phone PhoneNew(string phoneNumber = null)
+        public Phone PhoneNew(string phoneNumber = null, Account account = null)
         {
             try
             {
                 var res = new Phone() { };
                 if (phoneNumber != null)
                     res.PhoneNumber = phoneNumber;
+                if (account != null)
+                    AccountPhoneMarkNew(res, account);
                 return res;
             }
             catch (Exception ex)

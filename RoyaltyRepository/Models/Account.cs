@@ -16,7 +16,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("account")]
-    public partial class Account : IDefaultRepositoryInitialization, IHistoryRecordSource
+    public partial class Account : HistoryEntityBase, IDefaultRepositoryInitialization
     {
         internal const string defaultAccountName = ".default";
 
@@ -51,13 +51,6 @@ namespace RoyaltyRepository.Models
         public virtual ICollection<ImportQueueRecord> ImportQueue { get; set; }
         public virtual ICollection<AccountPhoneMark> PhoneMarks { get; set; }
 
-        #region IHistoryRecord
-
-        object IHistoryRecordSource.SourceId { get { return this.AccountUID; } }
-
-        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.Account; } }
-
-        #endregion
         #region IDefaultRepositoryInitialization
 
         void IDefaultRepositoryInitialization.InitializeDefault(RepositoryContext context)
@@ -149,12 +142,10 @@ namespace RoyaltyRepository.Models
         }
 
         #endregion
-        #region ToString()
+        #region Abstract implementation
 
-        public override string ToString()
-        {
-            return this.GetColumnPropertiesForEntity();
-        }
+        protected override object GetSourceId() => this.AccountUID;
+        protected override HistorySourceType GetSourceType() => HistorySourceType.Account;
 
         #endregion
     }

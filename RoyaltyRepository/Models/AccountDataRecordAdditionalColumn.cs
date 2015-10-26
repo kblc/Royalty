@@ -19,7 +19,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("data_additional_column")]
-    public partial class AccountDataRecordAdditionalColumn : IHistoryRecordSource
+    public partial class AccountDataRecordAdditionalColumn : HistoryEntityBase
     {
         /// <summary>
         /// Идентификатор записи
@@ -48,19 +48,10 @@ namespace RoyaltyRepository.Models
         [Column("export"), Required]
         public bool Export { get; set; }
 
-        #region IHistoryRecordSource
+        #region Abstract implementation
 
-        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)Account).SourceId; } }
-
-        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountData; } }
-
-        #endregion
-        #region ToString()
-
-        public override string ToString()
-        {
-            return this.GetColumnPropertiesForEntity();
-        }
+        protected override object GetSourceId() => ((IHistoryRecordSource)Account).SourceId;
+        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountData;
 
         #endregion
     }

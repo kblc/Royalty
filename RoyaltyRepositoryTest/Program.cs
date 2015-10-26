@@ -16,7 +16,7 @@ namespace RoyaltyRepositoryTest
             try
             {
                 t.Initialization();
-                t.DataCalculator_Preview_Preview();
+                t.DataCalculator_Preview();
             }
             catch(Exception ex)
             {

@@ -16,7 +16,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("account_settings")]
-    public partial class AccountSettings : IHistoryRecordSource
+    public partial class AccountSettings : HistoryEntityBase
     {
         public AccountSettings()
         {
@@ -130,19 +130,10 @@ namespace RoyaltyRepository.Models
         [Column("recursive_folder_search_for_csv_files")]
         public bool? RecursiveFolderSearch { get; set; }
 
-        #region IHistoryRecordSource
+        #region Abstract implementation
 
-        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)Account).SourceId; } }
-
-        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountSettings; } }
-
-        #endregion
-        #region ToString()
-
-        public override string ToString()
-        {
-            return this.GetColumnPropertiesForEntity();
-        }
+        protected override object GetSourceId() => ((IHistoryRecordSource)Account).SourceId;
+        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountSettings;
 
         #endregion
     }

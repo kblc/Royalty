@@ -65,12 +65,13 @@ namespace RoyaltyRepository
         public void CityAddBulk(IEnumerable<City> instances)
         {
             this.BulkInsert(instances);
-        }/// <summary>
-         /// Remove City from database
-         /// </summary>
-         /// <param name="instance">City instance</param>
-         /// <param name="saveAfterRemove">Save database after removing</param>
-         /// <param name="waitUntilSaving">Wait until saving</param>
+        }
+        /// <summary>
+        /// Remove City from database
+        /// </summary>
+        /// <param name="instance">City instance</param>
+        /// <param name="saveAfterRemove">Save database after removing</param>
+        /// <param name="waitUntilSaving">Wait until saving</param>
         public void CityRemove(City instance, bool saveAfterRemove = true, bool waitUntilSaving = true)
         {
             CityRemove(new City[] { instance }, saveAfterRemove, waitUntilSaving);

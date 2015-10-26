@@ -19,7 +19,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("data_additional")]
-    public partial class AccountDataRecordAdditional : IHistoryRecordSource
+    public partial class AccountDataRecordAdditional : HistoryEntityBase
     {
         public const uint ColumnCount = 20;
 
@@ -76,19 +76,10 @@ namespace RoyaltyRepository.Models
         [Column("column19")]
         public string Column19 { get; set; }
 
-        #region IHistoryRecordSource
+        #region Abstract implementation
 
-        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)AccountDataRecord).SourceId; } }
-
-        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountData; } }
-
-        #endregion
-        #region ToString()
-
-        public override string ToString()
-        {
-            return this.GetColumnPropertiesForEntity();
-        }
+        protected override object GetSourceId() => ((IHistoryRecordSource)AccountDataRecord).SourceId;
+        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountData;
 
         #endregion
     }

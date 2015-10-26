@@ -25,7 +25,7 @@ namespace RoyaltyDataCalculatorTest
         public void Initialization()
         {
             SqlLogEnabled = true;
-            Rep = new Repository("connectionString");
+            Rep = new Repository("connectionStringHome");
             Rep.AccountRemove(Rep.AccountGet(defAccountName, true));
             Rep.AccountAdd(Rep.AccountNew(byDefault: true, accountName: defAccountName));
             Rep.Log = (s) => { if (SqlLogEnabled) Console.WriteLine(string.Format("{0}", s)); };
@@ -137,7 +137,7 @@ namespace RoyaltyDataCalculatorTest
         }
 
         [TestMethod]
-        public void DataCalculator_Preview_Preview()
+        public void DataCalculator_Preview()
         {
             SqlLogEnabled = false;
 
@@ -260,7 +260,12 @@ namespace RoyaltyDataCalculatorTest
 
                     var previewRes = dc.Preview(l.Table);
                     Assert.AreEqual(l.Table.Rows.Count, previewRes.Count());
+
+                    dc.Insert(previewRes.Values, null);
+
                     Rep.SaveChanges();
+
+                    Rep.AccountDataRecordRemove(acc.Data);
                 }
             }
             finally
@@ -279,7 +284,7 @@ namespace RoyaltyDataCalculatorTest
         }
 
         [TestMethod]
-        public void DataCalculator_Preview_Prepare()
+        public void DataCalculator_Prepare()
         {
             SqlLogEnabled = false;
             try

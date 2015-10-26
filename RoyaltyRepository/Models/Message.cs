@@ -42,6 +42,9 @@ namespace RoyaltyRepository.Models
         public string MessageText { get; set; }
 
 
+        /// <summary>
+        /// Файлы в сообщении
+        /// </summary>
         public ICollection<File> Files { get; set; }
 
         public override string ToString()

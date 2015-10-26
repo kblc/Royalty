@@ -65,10 +65,11 @@ namespace RoyaltyDataCalculator
         /// </summary>
         public Repository Repository { get; private set; }
 
+        public Action<decimal> progress = (dec) => { };
         /// <summary>
         /// Action для отображения текущего прогресса
         /// </summary>
-        public Action<decimal> Progress { get; set; }
+        public Action<decimal> Progress { get { return progress; } set { if (value == null) throw new ArgumentNullException(nameof(Progress)); progress = value; } }
 
         private Action<string> output = (str) => { };
         /// <summary>
@@ -88,7 +89,7 @@ namespace RoyaltyDataCalculator
         /// Default row filter
         /// </summary>
         public Expression<Func<DataRow, bool>> RowFilter { get; set; }
-        
+
         /// <summary>
         /// Получить соответствия данным из загружаемой таблицы
         /// </summary>
@@ -111,11 +112,12 @@ namespace RoyaltyDataCalculator
                     var ppMarks = pp.GetChild(weight: 0.1m);
                     var ppCities = pp.GetChild(weight: 0.1m);
                     var ppStreets = pp.GetChild(weight: 0.7m);
+                    var ppAddresses = pp.GetChild(weight: 0.15m);
                     var ppRows = pp.GetChild(weight: 0.3m);
-                    pp.Change += (s, e) => { if (Progress != null) Progress(e.Value); };
+                    pp.Change += (s, e) => Progress(e.Value);
 
                     #region Get column names by column types
-                    Log.Add("Get column names by column types");
+                    logSession.Add("Get column names by column types");
 
                     var columnNames = dataTable.Columns.OfType<DataColumn>().Select(c => c.ColumnName.ToUpper()).ToArray();
 
@@ -144,7 +146,7 @@ namespace RoyaltyDataCalculator
 
                     #endregion
                     #region Prepare data
-                    Log.Add("Parse incoming data");
+                    logSession.Add("Parse incoming data");
 
                     var excludes = Account.Dictionary.Excludes
                         .Select(e => e.Exclude)
@@ -188,13 +190,13 @@ namespace RoyaltyDataCalculator
 
                     #endregion
                     #region Join hostes or create new
-                    Log.Add("Join hostes or create new");
+                    logSession.Add("Join hostes or create new");
 
                     var hosts = subRes0
                         .AsParallel()
                         .Select(i => i.IncomingHost.Hostname)
                         .Distinct()
-                        .LeftOuterJoin(Repository.HostGet(), h => h, h => h.Name, (h, host) => new { HostName = h, Host = host })
+                        .LeftOuterJoin(Repository.HostGet(), h => h.ToUpper(), h => h.Name.ToUpper(), (h, host) => new { HostName = h, Host = host })
                         .ToArray()
                         .Select(i => i.Host ?? Repository.HostNew(i.HostName))
                         .ToArray();
@@ -216,7 +218,7 @@ namespace RoyaltyDataCalculator
                     ppHostes.Value = 100;
                     #endregion
                     #region Join phones or create new
-                    Log.Add("Join phones or create new");
+                    logSession.Add("Join phones or create new");
 
                     var phones = subRes0
                         .AsParallel()
@@ -224,7 +226,7 @@ namespace RoyaltyDataCalculator
                         .Distinct()
                         .LeftOuterJoin(Repository.PhoneGet(), p => p, p => p.PhoneNumber, (p, phone) => new { PhoneNumber = p, Phone = phone })
                         .ToArray()
-                        .Select(i => i.Phone ?? Repository.PhoneNew(i.PhoneNumber))
+                        .Select(i => i.Phone ?? Repository.PhoneNew(i.PhoneNumber, Account))
                         .ToArray();
 
                     ppPhones.Value = 50;
@@ -244,14 +246,14 @@ namespace RoyaltyDataCalculator
 
                     ppPhones.Value = 100;
                     #endregion
-                    #region Join marks or create new
-                    Log.Add("Join marks");
+                    #region Join marks
+                    logSession.Add("Join marks");
 
                     var defMark = Repository.MarkGet(MarkTypes.Unknown);
 
 #pragma warning disable 618
                     var subRes3 = subRes2
-                        .LeftOuterJoin(Repository.MarkGet(), i => i.IncomingMark, m => m.SystemName, (i, m) => new
+                        .LeftOuterJoin(Repository.MarkGet(), i => i.IncomingMark.ToUpper(), m => m.SystemName.ToUpper(), (i, m) => new
                         {
                             i.Row,
                             i.IncomingPhone,
@@ -268,7 +270,7 @@ namespace RoyaltyDataCalculator
 
                     #endregion
                     #region Join cities or create new
-                    Log.Add("Join cities or create new");
+                    logSession.Add("Join cities or create new");
 
                     var cities = subRes0
                         .AsParallel()
@@ -299,6 +301,8 @@ namespace RoyaltyDataCalculator
                     ppCities.Value = 100;
                     #endregion
                     #region Join streets
+
+                    logSession.Add("Join streets");
 
                     var aP = new Parser.AddressParser(Account, Repository);
 
@@ -338,18 +342,61 @@ namespace RoyaltyDataCalculator
                             });
 
                     #endregion
+                    #region Update addresses
+
+                    logSession.Add("Update house numbers");
+
+                    var expectedData = Account.Data
+                        .Where(d => !string.IsNullOrWhiteSpace(d.HouseNumber))
+                        .GroupBy(d => new { d.Phone, d.Street })
+                        .Select(d => new { d.Key.Phone, d.Key.Street, Houses = d.Select(i => i.HouseNumber), Cnt = d.Count() })
+                        .Where(i => i.Cnt == 1)
+                        .Select(i => new { i.Phone, i.Street, HouseNumber = i.Houses.FirstOrDefault() });
+
+                    var currentData = subRes5
+                        .Where(d => !string.IsNullOrWhiteSpace(d.LoadedRow.Address.House.ToString()))
+                        .GroupBy(d => new { d.LoadedRow.Phone, d.LoadedRow.Street })
+                        .Select(d => new { d.Key.Phone, d.Key.Street, Houses = d.Select(i => i.LoadedRow.Address.House.Number), Cnt = d.Count() })
+                        .Where(i => i.Cnt == 1)
+                        .Select(i => new { i.Phone, i.Street, HouseNumber = i.Houses.FirstOrDefault() });
+
+                    ppAddresses.Value = 50;
+
+                    var subRes6 = subRes5
+                        .LeftOuterJoin(currentData, r => new { r.LoadedRow.Phone.PhoneNumber, r.LoadedRow.Street }, d => new { d.Phone.PhoneNumber, d.Street }, (r, d) => new { Data = r, Grouped = d })
+                        .LeftOuterJoin(expectedData, r => new { r.Data.LoadedRow.Phone.PhoneNumber, r.Data.LoadedRow.Street }, d => new { d.Phone.PhoneNumber, d.Street },
+                            (r, d) => new
+                            {
+                                r.Data.Row,
+                                LoadedRow = new
+                                {
+                                    Address = new Parser.Address(r.Data.LoadedRow.Address.Street, (r.Data.LoadedRow.Address.House.Number?.ToString() ?? r.Grouped.HouseNumber?.ToString() ?? d.HouseNumber ?? string.Empty), r.Data.LoadedRow.Address.Area),
+                                    r.Data.LoadedRow.Street,
+                                    r.Data.LoadedRow.Mark,
+                                    r.Data.LoadedRow.Phone,
+                                    r.Data.LoadedRow.City,
+                                    r.Data.LoadedRow.Host,
+                                }
+                            });
+
+                    ppAddresses.Value = 100;
+
+                    #endregion
                     #region Load rows
+
+                    logSession.Add("Load rows");
+
                     var ppRowsPrepare = ppRows.GetChild();
                     var ppRowsLoad = ppRows.GetChild();
 
-                    var rowCount0 = (decimal)subRes5.Count();
+                    var rowCount0 = (decimal)subRes6.Count();
                     var currentIndex0 = 0m;
 
-                    var res = subRes5.Select(r => new
+                    var res = subRes6.Select(r => new
                     {
                         r.Row,
                         DataRecord = Repository.AccountDataRecordNew(Account, r.LoadedRow),
-                        Index = (ppRowsPrepare.Value = (currentIndex0++) /rowCount0)
+                        Index = (ppRowsPrepare.Value = (currentIndex0++) / rowCount0)
                     })
                     .Select(r => new
                     {
@@ -370,7 +417,7 @@ namespace RoyaltyDataCalculator
                     res.ToList()
                         .ForEach(r =>
                         {
-                            foreach(var c in columns)
+                            foreach (var c in columns)
                             {
                                 var pi = r.LoadedRow.DataRecordAdditional.GetType().GetProperty(c.ColumnSystemName);
                                 pi.SetValue(r.LoadedRow.DataRecordAdditional, r.Row[c.ColumnName]);
@@ -380,7 +427,7 @@ namespace RoyaltyDataCalculator
                     #endregion
                     return res.ToDictionary(i => i.Row, i => i.LoadedRow);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     logSession.Add(ex);
                     logSession.Enabled = true;
@@ -388,6 +435,10 @@ namespace RoyaltyDataCalculator
                 }
         }
 
+        /// <summary>
+        /// Подготовка таблицы аккаунта для импорта
+        /// </summary>
+        /// <param name="dataTable">Загружаемая таблица</param>
         public void Prepare(DataTable dataTable)
         {
             using (var logSession = Log.Session($"{GetType().Name}.{nameof(Prepare)}()", false))
@@ -429,6 +480,200 @@ namespace RoyaltyDataCalculator
                         var adrac = Repository.AccountDataRecordAdditionalColumnNew(Account, namesToAdd[i], freeColumnNames[i]);
                         logSession.Add($"Additional column added: '{adrac}'");
                     }
+                }
+                catch (Exception ex)
+                {
+                    logSession.Add(ex);
+                    logSession.Enabled = true;
+                    throw;
+                }
+        }
+
+        /// <summary>
+        /// Вставить записи в основную таблицу данных аккаунта
+        /// </summary>
+        /// <param name="previewRows">Rows to insert</param>
+        /// <param name="importFile">Import queue file</param>
+        public void Insert(IEnumerable<DataPreviewRow> previewRows, ImportQueueRecordFile importFile)
+        {
+            using (var logSession = Log.Session($"{this.GetType().Name}.{nameof(Insert)}()", false))
+                try
+                {
+                    logSession.Output = (strs) => strs.ToList().ForEach(s => Output(s));
+
+                    if (previewRows == null)
+                        throw new ArgumentNullException(nameof(previewRows));
+
+                    var groupedImportData = previewRows
+                        .GroupBy(i => new { i.DataRecord.Phone, i.DataRecord.Street, i.DataRecord.HouseNumber })
+                        .Select(i => i.LastOrDefault());
+
+                    var dataToImport = groupedImportData
+                        .LeftOuterJoin(Account.Data, g => new { g.DataRecord.Phone, g.DataRecord.Street, g.DataRecord.HouseNumber }, d => new { d.Phone, d.Street, d.HouseNumber }, (g, d) => new
+                        {
+                            Existed = d,
+                            Insert = g
+                        })
+                        .ToList();
+
+
+                    if (importFile != null)
+                        dataToImport.ForEach(r => Repository.ImportQueueRecordFileAccountDataRecordNew(importFile, r.Existed ?? r.Insert.DataRecord));
+
+                    dataToImport.ForEach(i =>
+                    {
+                        if (i.Existed == null)
+                        {
+                            Repository.AccountDataRecordAdd(i.Insert.DataRecord, saveAfterInsert: false);
+                        }
+                        else
+                        {
+                            i.Insert.CopyObject(i.Existed, new string[] { nameof(i.Insert.DataRecordAdditional), nameof(i.Insert.DataRecord.LoadedByQueueFiles), nameof(i.Insert.DataRecord.AccountDataRecordID), nameof(i.Insert.DataRecord.Created) });
+                            i.Insert.DataRecordAdditional.CopyObject(i.Existed.DataAdditional, new string[] { nameof(i.Insert.DataRecordAdditional.AccountDataRecordID) });
+                        }
+                    });
+
+                    UpdateMarks(dataToImport.Select(i => i.Insert.DataRecord.Phone).Distinct());
+                    //TODO: Prepare to export
+                }
+                catch (Exception ex)
+                {
+                    logSession.Add(ex);
+                    logSession.Enabled = true;
+                    throw;
+                }
+        }
+
+        /// <summary>
+        /// Обновление меток в данных
+        /// </summary>
+        /// <param name="phonesToUpdate">Телефоны, которые нужно проверить для обновления меток</param>
+        private void UpdateMarks(IEnumerable<Phone> phonesToUpdate)
+        {
+            using (var logSession = Log.Session($"{this.GetType().Name}.{nameof(UpdateMarks)}()", false))
+                try
+                {
+                    if (phonesToUpdate == null)
+                        throw new ArgumentNullException(nameof(phonesToUpdate));
+
+                    var progress = new Helpers.PercentageProgress();
+                    var quickMarkdsProgress = progress.GetChild();
+                    var similarityPhonesProgress = progress.GetChild();
+                    progress.Change += (s, e) => Progress(e.Value);
+
+                    var phones = phonesToUpdate.Select(p => new { Phone = p, Progress = similarityPhonesProgress.GetChild() }).ToList();
+
+                    logSession.Output = (strs) => strs.ToList().ForEach(s => Output(s));
+                    logSession.Add($"update marks for ({phones.Count}) phones start...");
+
+                    var now = DateTime.UtcNow;
+                    var startFindDate = now - (Account.Settings.TimeForTrust ?? new TimeSpan());
+                    var numberSeries = Account.SeriesOfNumbers.Where(s => s.DigitCount > 0).ToList();
+
+                    #region Get default marks
+
+                    var phoneMarksDictionary = phonesToUpdate
+                        .Join(Account.Data, p => p, d => d.Phone, (p, d) => d)
+                        .GroupBy(i => i.Phone)
+                        .Select(g => new { Phone = g.Key, CountWithoutConstraint = g.Count(), CountWithConstraint = g.Count(d => d.Created <= startFindDate) })
+                        .Select(i =>
+                        {
+                            var markType = MarkTypes.Default;
+                            if (i.CountWithoutConstraint >= 3)
+                            {
+                                markType = MarkTypes.NotTrusted;
+                            }
+                            else
+                            {
+                                if (i.CountWithConstraint > 0)
+                                {
+                                    if (i.CountWithoutConstraint == 1)
+                                    {
+                                        markType = MarkTypes.Trusted;
+                                    }
+                                    else
+                                    {
+                                        if (i.CountWithoutConstraint == 2)
+                                            markType = MarkTypes.HalfTrusted;
+                                    }
+                                }
+                                else
+                                {
+                                    if (i.CountWithoutConstraint == 2)
+                                        markType = MarkTypes.Suspicious;
+                                }
+                            }
+                            return new { i.Phone, markType };
+                        })
+                        .ToDictionary(i => i.Phone, i => i.markType);
+
+                    quickMarkdsProgress.Value = 100;
+
+                    #endregion
+
+                    Parallel.ForEach(phones, phoneItem =>
+                    {
+                        var phone = phoneItem.Phone;
+                        var currentMarkType = phoneMarksDictionary[phone];
+                        logSession.Add($"mark selected for phone '{phone}' is '{currentMarkType}'");
+
+                        #region Serial numbers
+
+                        if (currentMarkType == MarkTypes.Default)
+                        {
+                            var validNumberSeries = numberSeries
+                                .Where(ns => phone.PhoneNumber.Length >= ns.DigitCount)
+                                .Select(ns => new { NumberSeries = ns, Progress = phoneItem.Progress.GetChild() })
+                                .ToList();
+
+                            validNumberSeries.ForEach(ns =>
+                            {
+                                logSession.Add($"similarity action start for phone '{phone}'...");
+                                var startFindSimilarityDate = now - ns.NumberSeries.Delay;
+
+                                string phoneSimilarity = phone.PhoneNumber.Substring(0, phone.PhoneNumber.Length - (int)ns.NumberSeries.DigitCount);
+                                var similaryDataQuery = Account.Data
+                                    .Where(r => r.Phone.PhoneNumber.StartsWith(phoneSimilarity));
+                                if (ns.NumberSeries.Delay.Ticks > 0)
+                                    similaryDataQuery = similaryDataQuery.Where(r => r.Created >= startFindSimilarityDate);
+
+                                var similarytyPhones = similaryDataQuery.Select(sd => sd.Phone).Distinct().Except(new Phone[] { phone }).ToList();
+                                if (similarytyPhones.Count > 0)
+                                {
+                                    currentMarkType = MarkTypes.Suspicious;
+                                    lock (phoneMarksDictionary)
+                                    {
+                                        phoneMarksDictionary[phone] = currentMarkType;
+                                        similarytyPhones.ForEach(sp =>
+                                        {
+                                            if (phoneMarksDictionary.ContainsKey(sp))
+                                                phoneMarksDictionary[sp] = currentMarkType;
+                                            else
+                                                phoneMarksDictionary.Add(sp, currentMarkType);
+                                        });
+                                    }
+                                }
+
+                                ns.Progress.Value = 100;
+                            });
+                        }
+                        else
+                        {
+                            phoneItem.Progress.Value = 100;
+                        }
+                        #endregion
+
+                        logSession.Add($"mark detection done for phone '{phone}'. Finally mark is '{currentMarkType}'.");
+                    });
+
+                    var allMarks = Repository.MarkGet().ToArray();
+
+                    var phoneMarksToUpdate = Account.PhoneMarks
+                        .Join(phoneMarksDictionary, pm => pm.Phone, md => md.Key, (pm, md) => new { Item = pm, NewMarkType = md.Value })
+                        .Join(allMarks, i => i.NewMarkType, m => m.Type, (i, m) => new { i.Item, NewMark = m })
+                        .ToList();
+
+                    phoneMarksToUpdate.ForEach(i => i.Item.Mark = i.NewMark);
                 }
                 catch (Exception ex)
                 {

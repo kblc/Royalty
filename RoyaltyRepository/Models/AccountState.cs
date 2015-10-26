@@ -22,7 +22,7 @@ namespace RoyaltyRepository.Models
     /// Состояние аккаунта
     /// </summary>
     [Table("account_state")]
-    public partial class AccountState : IHistoryRecordSource
+    public partial class AccountState : HistoryEntityBase
     {
         #region Account
         /// <summary>
@@ -46,19 +46,10 @@ namespace RoyaltyRepository.Models
         [Column("is_active"), Required]
         public bool IsActive { get; set; }
 
-        #region IHistoryRecordSource
+        #region Abstract implementation
 
-        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)Account).SourceId; } }
-
-        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountSettings; } }
-
-        #endregion
-        #region ToString()
-
-        public override string ToString()
-        {
-            return this.GetColumnPropertiesForEntity();
-        }
+        protected override object GetSourceId() => ((IHistoryRecordSource)Account).SourceId;
+        protected override HistorySourceType GetSourceType() => HistorySourceType.Account;
 
         #endregion
     }

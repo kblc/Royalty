@@ -19,8 +19,13 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("import_queue_file")]
-    public partial class ImportQueueRecordFile
+    public partial class ImportQueueRecordFile : HistoryEntityBase
     {
+        public ImportQueueRecordFile()
+        {
+            LoadedRecords = new List<ImportQueueRecordFileAccountDataRecord>();
+        }
+
         /// <summary>
         /// Идентификатор записи
         /// </summary>
@@ -99,9 +104,16 @@ namespace RoyaltyRepository.Models
         [Column("for_analize"), Required]
         public bool ForAnalize { get; set; }
 
-        public override string ToString()
-        {
-            return this.GetColumnPropertiesForEntity();
-        }
+        /// <summary>
+        /// Записи, загруженные в этом файле
+        /// </summary>
+        public virtual ICollection<ImportQueueRecordFileAccountDataRecord> LoadedRecords { get; set; }
+
+        #region Abstract implementation
+
+        protected override object GetSourceId() => ImportQueueRecordUID;
+        protected override HistorySourceType GetSourceType() => HistorySourceType.Queue;
+
+        #endregion
     }
 }

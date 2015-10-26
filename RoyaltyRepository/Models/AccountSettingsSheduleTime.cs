@@ -16,7 +16,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("shedule_time")]
-    public partial class AccountSettingsSheduleTime : IHistoryRecordSource
+    public partial class AccountSettingsSheduleTime : HistoryEntityBase
     {
         /// <summary>
         /// Идентификатор таймера
@@ -52,19 +52,10 @@ namespace RoyaltyRepository.Models
             #pragma warning restore 618
         }
 
-        #region IHistoryRecordSource
+        #region Abstract implementation
 
-        object IHistoryRecordSource.SourceId { get { return ((IHistoryRecordSource)AccountSettings).SourceId; } }
-
-        HistorySourceType IHistoryRecordSource.SourceType { get { return HistorySourceType.AccountSettings; } }
-
-        #endregion
-        #region ToString()
-
-        public override string ToString()
-        {
-            return this.GetColumnPropertiesForEntity();
-        }
+        protected override object GetSourceId() => ((IHistoryRecordSource)AccountSettings).SourceId;
+        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountSettings;
 
         #endregion
     }
