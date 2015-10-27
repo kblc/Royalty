@@ -101,6 +101,7 @@ namespace RoyaltyRepository
 
                 try
                 {
+                    AccountDataRecordAdditionalRemove(instances.Select(i => i.DataAdditional), false, false);
                     this.Context.AccountDataRecords.RemoveRange(instances);
                     if (saveAfterRemove)
                         this.SaveChanges(waitUntilSaving);

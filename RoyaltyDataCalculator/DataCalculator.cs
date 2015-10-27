@@ -65,21 +65,12 @@ namespace RoyaltyDataCalculator
         /// </summary>
         public Repository Repository { get; private set; }
 
-        public Action<decimal> progress = (dec) => { };
-        /// <summary>
-        /// Action для отображения текущего прогресса
-        /// </summary>
-        public Action<decimal> Progress { get { return progress; } set { if (value == null) throw new ArgumentNullException(nameof(Progress)); progress = value; } }
-
-        private Action<string> output = (str) => { };
-        /// <summary>
-        /// Action для вывода лога
-        /// </summary>
-        public Action<string> Output { get { return output; } set { if (value == null) throw new ArgumentNullException(nameof(Output)); output = value; } }
         /// <summary>
         /// Использовать ли словарь при обработке данных (возможно добавление данных в сам словарь)
         /// </summary>
         public bool UseDictionary { get; set; } = true;
+
+        public bool VerboseLog { get; set; } = false;
 
         /// <summary>
         /// Default table validator
@@ -94,16 +85,21 @@ namespace RoyaltyDataCalculator
         /// Получить соответствия данным из загружаемой таблицы
         /// </summary>
         /// <param name="dataTable">Загружаемая таблица</param>
+        /// <param name="progressAction">Действие для отображения прогресса</param>
+        /// <param name="logAction">Действие для отображения лога</param>
         /// <returns>Словарь соответсвия найденных данных для каждой строки таблицы</returns>
-        public IDictionary<DataRow, DataPreviewRow> Preview(DataTable dataTable)
+        public IDictionary<DataRow, DataPreviewRow> Preview(DataTable dataTable, Action<decimal> progressAction = null, Action<string> logAction = null)
         {
-            using (var logSession = Log.Session($"{this.GetType().Name}.{nameof(Preview)}()", false))
+            progressAction = progressAction ?? new Action<decimal>((i) => { });
+            logAction = logAction ?? new Action<string>((i) => { });
+
+            using (var logSession = Log.Session($"{this.GetType().Name}.{nameof(Preview)}()", VerboseLog))
                 try
                 {
-                    logSession.Output = (strs) => strs.ToList().ForEach(s => Output(s));
+                    logSession.Output = (strs) => strs.ToList().ForEach(s => logAction(s));
 
                     if (dataTable == null)
-                        throw new ArgumentNullException("dataTable");
+                        throw new ArgumentNullException(nameof(dataTable));
 
                     var pp = new Helpers.PercentageProgress();
                     var ppPrepare = pp.GetChild(weight: 0.1m);
@@ -114,7 +110,7 @@ namespace RoyaltyDataCalculator
                     var ppStreets = pp.GetChild(weight: 0.7m);
                     var ppAddresses = pp.GetChild(weight: 0.15m);
                     var ppRows = pp.GetChild(weight: 0.3m);
-                    pp.Change += (s, e) => Progress(e.Value);
+                    pp.Change += (s, e) => progressAction(e.Value);
 
                     #region Get column names by column types
                     logSession.Add("Get column names by column types");
@@ -363,14 +359,15 @@ namespace RoyaltyDataCalculator
                     ppAddresses.Value = 50;
 
                     var subRes6 = subRes5
-                        .LeftOuterJoin(currentData, r => new { r.LoadedRow.Phone.PhoneNumber, r.LoadedRow.Street }, d => new { d.Phone.PhoneNumber, d.Street }, (r, d) => new { Data = r, Grouped = d })
-                        .LeftOuterJoin(expectedData, r => new { r.Data.LoadedRow.Phone.PhoneNumber, r.Data.LoadedRow.Street }, d => new { d.Phone.PhoneNumber, d.Street },
+                        .LeftOuterJoin(currentData, r => new { r.LoadedRow.Phone.PhoneNumber, r.LoadedRow.Street }, d => new { d?.Phone?.PhoneNumber, d?.Street }, (r, d) => new { Data = r, Grouped = d })
+                        .LeftOuterJoin(expectedData, r => new { r.Data.LoadedRow.Phone.PhoneNumber, r.Data.LoadedRow.Street }, d => new { d?.Phone?.PhoneNumber, d?.Street },
                             (r, d) => new
                             {
                                 r.Data.Row,
                                 LoadedRow = new
                                 {
-                                    Address = new Parser.Address(r.Data.LoadedRow.Address.Street, (r.Data.LoadedRow.Address.House.Number?.ToString() ?? r.Grouped.HouseNumber?.ToString() ?? d.HouseNumber ?? string.Empty), r.Data.LoadedRow.Address.Area),
+                                    //Address = new Parser.Address(r.Data.LoadedRow.Address.Street, (r.Data.LoadedRow.Address.House.Number?.ToString() ?? r.Grouped?.HouseNumber?.ToString() ?? d?.HouseNumber ?? string.Empty), r.Data.LoadedRow.Address.Area),
+                                    HouseNumber = (r.Data.LoadedRow.Address.House.Number?.ToString() ?? r.Grouped?.HouseNumber?.ToString() ?? d?.HouseNumber ?? string.Empty),
                                     r.Data.LoadedRow.Street,
                                     r.Data.LoadedRow.Mark,
                                     r.Data.LoadedRow.Phone,
@@ -389,14 +386,14 @@ namespace RoyaltyDataCalculator
                     var ppRowsPrepare = ppRows.GetChild();
                     var ppRowsLoad = ppRows.GetChild();
 
-                    var rowCount0 = (decimal)subRes6.Count();
+                    var rowCount0 = (decimal)subRes6.Count() - 1;
                     var currentIndex0 = 0m;
 
                     var res = subRes6.Select(r => new
                     {
                         r.Row,
                         DataRecord = Repository.AccountDataRecordNew(Account, r.LoadedRow),
-                        Index = (ppRowsPrepare.Value = (currentIndex0++) / rowCount0)
+                        Index = (ppRowsPrepare.Value = (currentIndex0++) / rowCount0 * 100m)
                     })
                     .Select(r => new
                     {
@@ -410,7 +407,7 @@ namespace RoyaltyDataCalculator
                     )
                     .ToArray();
 
-                    var rowCount1 = (decimal)dataTable.Rows.Count;
+                    var rowCount1 = (decimal)dataTable.Rows.Count - 1;
                     var currentIndex1 = 0m;
                     var columns = Account.AdditionalColumns.Where(c => !string.IsNullOrWhiteSpace(c.ColumnName));
 
@@ -422,7 +419,7 @@ namespace RoyaltyDataCalculator
                                 var pi = r.LoadedRow.DataRecordAdditional.GetType().GetProperty(c.ColumnSystemName);
                                 pi.SetValue(r.LoadedRow.DataRecordAdditional, r.Row[c.ColumnName]);
                             }
-                            ppRowsLoad.Value = currentIndex1++ / rowCount1;
+                            ppRowsLoad.Value = currentIndex1++ / rowCount1 * 100m;
                         });
                     #endregion
                     return res.ToDictionary(i => i.Row, i => i.LoadedRow);
@@ -439,21 +436,31 @@ namespace RoyaltyDataCalculator
         /// Подготовка таблицы аккаунта для импорта
         /// </summary>
         /// <param name="dataTable">Загружаемая таблица</param>
-        public void Prepare(DataTable dataTable)
+        /// <param name="progressAction">Действие для отображения прогресса</param>
+        /// <param name="logAction">Действие для отображения лога</param>
+        public void Prepare(DataTable dataTable, Action<decimal> progressAction = null, Action<string> logAction = null)
         {
-            using (var logSession = Log.Session($"{GetType().Name}.{nameof(Prepare)}()", false))
+            progressAction = progressAction ?? new Action<decimal>((i) => { });
+            logAction = logAction ?? new Action<string>((i) => { });
+
+            using (var logSession = Log.Session($"{GetType().Name}.{nameof(Prepare)}()", VerboseLog))
                 try
                 {
+                    logSession.Output = (strs) => strs.ToList().ForEach(s => logAction(s));
+
                     if (dataTable == null)
                         throw new ArgumentNullException(nameof(dataTable));
 
-                    logSession.Output = (strs) => strs.ToList().ForEach(s => Output(s));
+                    var progress = new Helpers.PercentageProgress();
+                    progress.Change += (s, e) => progressAction(e.Value);
 
                     logSession.Add($"Get ignore columns");
                     var columnNamesToIgnore = Account.Settings.Columns.Select(c => c.ColumnName.ToUpper());
+                    progress.Value = 10;
 
                     logSession.Add($"Get columns to add from data table");
                     var dataColumnNamesToAdd = dataTable.Columns.OfType<DataColumn>().Select(dc => dc.ColumnName).Where(dc => !columnNamesToIgnore.Contains(dc.ToUpper()));
+                    progress.Value = 20;
 
                     logSession.Add($"Join additional columns with columns to add");
                     var namesToAdd = dataColumnNamesToAdd
@@ -461,9 +468,11 @@ namespace RoyaltyDataCalculator
                         .Where(c => c.AdditionalColumn == null)
                         .Select(c => c.ColumnName).ToArray()
                         .ToArray();
+                    progress.Value = 30;
 
                     logSession.Add($"Get existed additional columns");
                     var existingColumnSystemNames = Account.AdditionalColumns.Select(ac => ac.ColumnSystemName).ToArray();
+                    progress.Value = 40;
 
                     logSession.Add($"Check free additional columns");
                     var freeColumnNames = Enumerable.Range(0, (int)AccountDataRecordAdditional.ColumnCount)
@@ -473,6 +482,7 @@ namespace RoyaltyDataCalculator
                         .OrderBy(i => i.Index)
                         .Select(i => i.ColumnName)
                         .ToArray();
+                    progress.Value = 50;
 
                     logSession.Add($"Free columns count: {freeColumnNames.Length} and need to add folowing ({namesToAdd.Length}) columns: {namesToAdd.Select(c => $"'{c}'").Concat(i => i, ", ")}");
                     for (int i = 0; i < Math.Min(namesToAdd.Length, freeColumnNames.Length); i++)
@@ -480,6 +490,7 @@ namespace RoyaltyDataCalculator
                         var adrac = Repository.AccountDataRecordAdditionalColumnNew(Account, namesToAdd[i], freeColumnNames[i]);
                         logSession.Add($"Additional column added: '{adrac}'");
                     }
+                    progress.Value = 100;
                 }
                 catch (Exception ex)
                 {
@@ -494,31 +505,48 @@ namespace RoyaltyDataCalculator
         /// </summary>
         /// <param name="previewRows">Rows to insert</param>
         /// <param name="importFile">Import queue file</param>
-        public void Insert(IEnumerable<DataPreviewRow> previewRows, ImportQueueRecordFile importFile)
+        /// <param name="progressAction">Действие для отображения прогресса</param>
+        /// <param name="logAction">Действие для отображения лога</param>
+        /// <returns>Возвращает обработанные данные, которые можно экспортировать</returns>
+        public IEnumerable<AccountDataRecord> Import(IEnumerable<DataPreviewRow> previewRows, ImportQueueRecordFile importFile, Action<decimal> progressAction = null, Action<string> logAction = null)
         {
-            using (var logSession = Log.Session($"{this.GetType().Name}.{nameof(Insert)}()", false))
+            progressAction = progressAction ?? new Action<decimal>((i) => { });
+            logAction = logAction ?? new Action<string>((i) => { });
+
+            using (var logSession = Log.Session($"{this.GetType().Name}.{nameof(Import)}()", VerboseLog))
                 try
                 {
-                    logSession.Output = (strs) => strs.ToList().ForEach(s => Output(s));
+                    logSession.Output = (strs) => strs.ToList().ForEach(s => logAction(s));
 
                     if (previewRows == null)
                         throw new ArgumentNullException(nameof(previewRows));
 
-                    var groupedImportData = previewRows
-                        .GroupBy(i => new { i.DataRecord.Phone, i.DataRecord.Street, i.DataRecord.HouseNumber })
-                        .Select(i => i.LastOrDefault());
+                    var progress = new Helpers.PercentageProgress();
+                    var prgPreparation = progress.GetChild(weight: 0.3m);
+                    var prgUpdateMarks = progress.GetChild(weight: 0.6m);
+                    var prgPrepareExport = progress.GetChild(weight: 0.1m);
+                    progress.Change += (s, e) => progressAction(e.Value);
 
-                    var dataToImport = groupedImportData
-                        .LeftOuterJoin(Account.Data, g => new { g.DataRecord.Phone, g.DataRecord.Street, g.DataRecord.HouseNumber }, d => new { d.Phone, d.Street, d.HouseNumber }, (g, d) => new
+                    logSession.Add($"grouping {previewRows.Count()} rows...");
+
+                    var dataToImport = previewRows
+                        .GroupBy(i => new { i.DataRecord.Phone, i.DataRecord.Street, i.DataRecord.HouseNumber })
+                        .Select(i => i.LastOrDefault())
+                        .LeftOuterJoin(Account.Data, g => new { g.DataRecord.Phone, g.DataRecord.Street, g.DataRecord.HouseNumber }, d => new { d.Phone, d.Street, d.HouseNumber }, 
+                        (g, d) => new
                         {
                             Existed = d,
                             Insert = g
                         })
                         .ToList();
 
-
                     if (importFile != null)
                         dataToImport.ForEach(r => Repository.ImportQueueRecordFileAccountDataRecordNew(importFile, r.Existed ?? r.Insert.DataRecord));
+
+                    prgPreparation.Value = 50;
+                    logSession.Add($"grouping rows done. Insert it in account data.");
+
+                    //Repository.AccountDataRecordAdd(dataToImport.Where(i => i.Existed == null).Select(i => i.Insert.DataRecord), Account, false);
 
                     dataToImport.ForEach(i =>
                     {
@@ -528,13 +556,27 @@ namespace RoyaltyDataCalculator
                         }
                         else
                         {
-                            i.Insert.CopyObject(i.Existed, new string[] { nameof(i.Insert.DataRecordAdditional), nameof(i.Insert.DataRecord.LoadedByQueueFiles), nameof(i.Insert.DataRecord.AccountDataRecordID), nameof(i.Insert.DataRecord.Created) });
+                            i.Insert.DataRecord.CopyObject(i.Existed, new string[] { nameof(i.Insert.DataRecord.DataAdditional), nameof(i.Insert.DataRecord.LoadedByQueueFiles), nameof(i.Insert.DataRecord.AccountDataRecordID), nameof(i.Insert.DataRecord.Created), nameof(i.Insert.DataRecord.Exported) });
+                            i.Existed.CopyObject(i.Insert.DataRecord, new string[] { nameof(i.Insert.DataRecord.DataAdditional), nameof(i.Insert.DataRecord.LoadedByQueueFiles), nameof(i.Insert.DataRecord.AccountDataRecordID) });
+
                             i.Insert.DataRecordAdditional.CopyObject(i.Existed.DataAdditional, new string[] { nameof(i.Insert.DataRecordAdditional.AccountDataRecordID) });
                         }
                     });
 
-                    UpdateMarks(dataToImport.Select(i => i.Insert.DataRecord.Phone).Distinct());
-                    //TODO: Prepare to export
+                    prgPreparation.Value = 100;
+
+                    UpdateMarks(dataToImport.Select(i => i.Insert.DataRecord.Phone).Distinct(), (i) => prgUpdateMarks.Value = i, s => logSession.Add($"update marks: {s}"));
+
+                    var exportStart = DateTime.UtcNow - (Account.Settings.IgnoreExportTime ?? new TimeSpan());
+
+                    logSession.Add($"prepare results to return records older then '{exportStart}'");
+                    var rowsToExport = dataToImport
+                        .Where(r => (r.Insert.DataRecord.Exported ?? DateTime.MinValue) <= exportStart)
+                        .Select(r => r.Insert.DataRecord);
+
+                    prgPrepareExport.Value = 100;
+
+                    return rowsToExport;
                 }
                 catch (Exception ex)
                 {
@@ -548,22 +590,28 @@ namespace RoyaltyDataCalculator
         /// Обновление меток в данных
         /// </summary>
         /// <param name="phonesToUpdate">Телефоны, которые нужно проверить для обновления меток</param>
-        private void UpdateMarks(IEnumerable<Phone> phonesToUpdate)
+        /// <param name="progressAction">Действие для отображения прогресса</param>
+        /// <param name="logAction">Действие для отображения лога</param>
+        private void UpdateMarks(IEnumerable<Phone> phonesToUpdate, Action<decimal> progressAction = null, Action<string> logAction = null)
         {
-            using (var logSession = Log.Session($"{this.GetType().Name}.{nameof(UpdateMarks)}()", false))
+            progressAction = progressAction ?? new Action<decimal>((i) => { });
+            logAction = logAction ?? new Action<string>((i) => { });
+
+            using (var logSession = Log.Session($"{this.GetType().Name}.{nameof(UpdateMarks)}()", VerboseLog))
                 try
                 {
+                    logSession.Output = (strs) => strs.ToList().ForEach(s => logAction(s));
+
                     if (phonesToUpdate == null)
                         throw new ArgumentNullException(nameof(phonesToUpdate));
 
                     var progress = new Helpers.PercentageProgress();
-                    var quickMarkdsProgress = progress.GetChild();
+                    var quickMarksProgress = progress.GetChild();
                     var similarityPhonesProgress = progress.GetChild();
-                    progress.Change += (s, e) => Progress(e.Value);
+                    progress.Change += (s, e) => progressAction(e.Value);
 
                     var phones = phonesToUpdate.Select(p => new { Phone = p, Progress = similarityPhonesProgress.GetChild() }).ToList();
 
-                    logSession.Output = (strs) => strs.ToList().ForEach(s => Output(s));
                     logSession.Add($"update marks for ({phones.Count}) phones start...");
 
                     var now = DateTime.UtcNow;
@@ -607,11 +655,15 @@ namespace RoyaltyDataCalculator
                         })
                         .ToDictionary(i => i.Phone, i => i.markType);
 
-                    quickMarkdsProgress.Value = 100;
+                    quickMarksProgress.Value = 100;
 
                     #endregion
 
+#if DEBUG
+                    phones.ForEach(phoneItem =>
+#else
                     Parallel.ForEach(phones, phoneItem =>
+#endif
                     {
                         var phone = phoneItem.Phone;
                         var currentMarkType = phoneMarksDictionary[phone];
@@ -621,11 +673,12 @@ namespace RoyaltyDataCalculator
 
                         if (currentMarkType == MarkTypes.Default)
                         {
+                            var prgPrepare = phoneItem.Progress.GetChild();
                             var validNumberSeries = numberSeries
                                 .Where(ns => phone.PhoneNumber.Length >= ns.DigitCount)
                                 .Select(ns => new { NumberSeries = ns, Progress = phoneItem.Progress.GetChild() })
                                 .ToList();
-
+                            prgPrepare.Value = 100;
                             validNumberSeries.ForEach(ns =>
                             {
                                 logSession.Add($"similarity action start for phone '{phone}'...");
@@ -685,60 +738,60 @@ namespace RoyaltyDataCalculator
 
         #region Static create default filters and validators
 
-        private static Action<DataTable> GetDefaultDataTableValidator(IEnumerable<string> columnNames, Account account)
-        {
-            return (account == null)
-                ? new Action<DataTable>((t) => { })
-                : new Action<DataTable>((t) =>
+                private static Action<DataTable> GetDefaultDataTableValidator(IEnumerable<string> columnNames, Account account)
                 {
-                    var columns = t.Columns.OfType<DataColumn>().Select(c => c.ColumnName);
+                    return (account == null)
+                        ? new Action<DataTable>((t) => { })
+                        : new Action<DataTable>((t) =>
+                        {
+                            var columns = t.Columns.OfType<DataColumn>().Select(c => c.ColumnName);
 
-                    var notExistsedColumns = string.Empty;
-                    foreach (var cn in columnNames.Where(i => !columns.Contains(i.ToString())))
-                        notExistsedColumns += (string.IsNullOrWhiteSpace(notExistsedColumns)
-                            ? string.Empty
-                            : ", ") + string.Format("'{0}'", cn);
+                            var notExistsedColumns = string.Empty;
+                            foreach (var cn in columnNames.Where(i => !columns.Contains(i.ToString())))
+                                notExistsedColumns += (string.IsNullOrWhiteSpace(notExistsedColumns)
+                                    ? string.Empty
+                                    : ", ") + string.Format("'{0}'", cn);
 
-                    if (!string.IsNullOrWhiteSpace(notExistsedColumns))
-                        throw new Exception(string.Format(Resources.COLUMNS_NOT_FOUND_IN_IMPORT_FILE, notExistsedColumns));
-                });
-        }
-        private static Expression<Func<DataRow, bool>> GetDefaultRowFilter(IEnumerable<string> columnNames, Account account)
-        {
-            return r => columnNames.Select(cN => r[cN] is DBNull ? (string)null : r[cN].ToString()).Any(c => string.IsNullOrWhiteSpace(c));
-        }
+                            if (!string.IsNullOrWhiteSpace(notExistsedColumns))
+                                throw new Exception(string.Format(Resources.COLUMNS_NOT_FOUND_IN_IMPORT_FILE, notExistsedColumns));
+                        });
+                }
+                private static Expression<Func<DataRow, bool>> GetDefaultRowFilter(IEnumerable<string> columnNames, Account account)
+                {
+                    return r => columnNames.Select(cN => r[cN] is DBNull ? (string)null : r[cN].ToString()).Any(c => string.IsNullOrWhiteSpace(c));
+                }
 
         #endregion
         #region IDisposable
 
-        // Flag: Has Dispose already been called?
-        private bool disposed = false;
+                // Flag: Has Dispose already been called?
+                private bool disposed = false;
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposed)
-                return;
+                protected virtual void Dispose(bool disposing)
+                {
+                    if (disposed)
+                        return;
 
-            if (disposing)
-            {
-                Account = null;
-                Repository = null;
-            }
-            disposed = true;
-        }
+                    if (disposing)
+                    {
+                        Account = null;
+                        Repository = null;
+                    }
+                    disposed = true;
+                }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+                public void Dispose()
+                {
+                    Dispose(true);
+                    GC.SuppressFinalize(this);
+                }
 
-        // Use C# destructor syntax for finalization code.
-        ~DataCalculator()
-        {
-            // Simply call Dispose(false).
-            Dispose(false);
-        }
+                // Use C# destructor syntax for finalization code.
+                ~DataCalculator()
+                {
+                    // Simply call Dispose(false).
+                    Dispose(false);
+                }
         #endregion
     }
 }

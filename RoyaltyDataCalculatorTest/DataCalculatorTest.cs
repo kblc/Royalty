@@ -146,7 +146,7 @@ namespace RoyaltyDataCalculatorTest
 
             var alph = "йцукенгшщзфывапролдячсмить";
 
-            var maxCnt = 10000;
+            var maxCnt = 100;
             var cityNames = Enumerable.Range(0, 3).Select(i => $"TestCity{i}").ToArray();
             var areaNames = Enumerable.Range(0, 10).Select(i => $"TestArea{i}").ToArray();
             var streetNames = Enumerable.Range(0, 100).Select(i => Enumerable.Range(0, 6).Select(n => alph[rnd.Next(alph.Length)].ToString()).Concat(c => c)).ToArray();
@@ -220,7 +220,7 @@ namespace RoyaltyDataCalculatorTest
                                 break;
                             case RoyaltyRepository.Models.ColumnTypes.Address:
                                 res = streetNames.Union(new string[] { "defaultPreviewStreet2" }).ToArray()[rnd.Next(0, streetNames.Length + 1)] 
-                                    + ((rnd.Next(0, 9) == 0) ? ", " + rnd.Next(1,99) : string.Empty);
+                                    + ((rnd.Next(0, 5) != 0) ? ", " + rnd.Next(1,99) : string.Empty);
                                 break;
                             case RoyaltyRepository.Models.ColumnTypes.Area:
                                 res = areaNames.Union(new string[] { string.Empty, "defaultPreviewArea2" }).ToArray()[rnd.Next(0, areaNames.Length + 2)];
@@ -248,22 +248,27 @@ namespace RoyaltyDataCalculatorTest
 
                 Rep.SaveChanges();
 
-                using (var dc = new DataCalculator(acc, Rep)
+                using (var dc = new DataCalculator(acc, Rep))
                 {
-                    Progress = (p) => Helpers.Log.Add($"Progress: {p.ToString("N2")}"),
-                    Output = (str) => Helpers.Log.Add(str)
-                })
-                {
+                    var prg0 = new Helpers.PercentageProgress();
+                    var prg1 = prg0.GetChild();
+                    var prg2 = prg0.GetChild();
+                    var prg3 = prg0.GetChild();
+                    prg0.Change += (s, e) => Helpers.Log.Add($"Progress: {e.Value.ToString("N2")}");
+                    var log = new Action<string>((s) => Helpers.Log.Add(s));
+
                     var l = Helpers.CSV.CSVFile.Load(csvLines.AsEnumerable(),
                         tableValidator: dc.TableValidator,
                         rowFilter: dc.RowFilter);
 
-                    var previewRes = dc.Preview(l.Table);
+                    dc.Prepare(l.Table, i => prg1.Value = i, log);
+                    var previewRes = dc.Preview(l.Table, i => prg2.Value = i, log);
                     Assert.AreEqual(l.Table.Rows.Count, previewRes.Count());
 
-                    dc.Insert(previewRes.Values, null);
-
+                    var readyToExport = dc.Import(previewRes.Values, null, i => prg3.Value = i, log);
                     Rep.SaveChanges();
+
+                    Helpers.Log.Add($"Data imported and ready to export");
 
                     Rep.AccountDataRecordRemove(acc.Data);
                 }
@@ -305,17 +310,17 @@ namespace RoyaltyDataCalculatorTest
 
                 csvLines.Add(columns);
 
-                using (var dc = new DataCalculator(acc, Rep)
+                using (var dc = new DataCalculator(acc, Rep))
                 {
-                    Progress = (p) => Helpers.Log.Add($"Progress: {p.ToString("N2")}"),
-                    Output = (str) => Helpers.Log.Add(str)
-                })
-                {
+                    var prg0 = new Helpers.PercentageProgress();
+                    prg0.Change += (s, e) => Helpers.Log.Add($"Progress: {e.Value.ToString("N2")}");
+                    var log = new Action<string>((s) => Helpers.Log.Add(s));
+
                     var l = Helpers.CSV.CSVFile.Load(csvLines.AsEnumerable(),
                         tableValidator: dc.TableValidator,
                         rowFilter: dc.RowFilter);
 
-                    dc.Prepare(l.Table);
+                    dc.Prepare(l.Table, i => prg0.Value = i, log);
                     Assert.AreEqual(true, acc.AdditionalColumns.Any(ad => ad.ColumnName == "test_column"));
                     Rep.SaveChanges();
 
