@@ -28,13 +28,6 @@ namespace RoyaltyFileStorage
         FileInfo FilePut(Guid fileId, Stream stream, string fileName);
 
         /// <summary>
-        /// Put file to file storage
-        /// </summary>
-        /// <param name="fileId">File identifier</param>
-        /// <param name="stream">Input file stream</param>
-        FileInfo FilePut(Guid fileId, Stream stream);
-
-        /// <summary>
         /// Delete file from file storage
         /// </summary>
         /// <param name="fileId">File identifier</param>

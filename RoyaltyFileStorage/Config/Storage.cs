@@ -9,7 +9,7 @@ namespace RoyaltyFileStorage.Config
 {
     public class StorageConfigSection : ConfigurationSection
     {
-        [ConfigurationProperty("location", IsRequired = true)]
+        [ConfigurationProperty("location", IsRequired = true, DefaultValue = "")]
         public string Location
         {
             get
@@ -18,16 +18,7 @@ namespace RoyaltyFileStorage.Config
             }
         }
 
-        [ConfigurationProperty("defaultExtension", IsRequired = true)]
-        public string DefaultExtention
-        {
-            get
-            {
-                return this["defaultExtension"] as string;
-            }
-        }
-
-        [ConfigurationProperty("verboseLog")]
+        [ConfigurationProperty("verboseLog", IsRequired = false, DefaultValue = false)]
         public bool VerboseLog
         {
             get

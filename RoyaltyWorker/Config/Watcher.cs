@@ -31,13 +31,13 @@ namespace RoyaltyWorker.Config
             }
         }
 
-        [ConfigurationProperty("exceptionOnNoOneFileInQueue", IsRequired = false, DefaultValue = true)]
-        public bool ExceptionOnNoOneFileInQueue
+        [ConfigurationProperty("exceptionIfNoOneFileInQueue", IsRequired = false, DefaultValue = true)]
+        public bool ExceptionIfNoOneFileInQueue
         {
             get
             {
                 var res = true;
-                bool.TryParse(this["exceptionOnNoOneFileInQueue"] as string, out res);
+                bool.TryParse(this["exceptionIfNoOneFileInQueue"] as string, out res);
                 return res;
             }
         }

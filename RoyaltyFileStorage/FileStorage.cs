@@ -20,17 +20,11 @@ namespace RoyaltyFileStorage
             if (Config.Config.IsStorageConfigured)
             try
             {
-                DefaultExtension = Config.Config.StorageConfig.DefaultExtention;
                 Location = Config.Config.StorageConfig.Location;
                 VerboseLog = Config.Config.StorageConfig.VerboseLog;
             }
             catch { }
         }
-
-        /// <summary>
-        /// Default extension for files without mime type
-        /// </summary>
-        public string DefaultExtension { get; set; } = ".bin";
 
         /// <summary>
         /// File storage location
@@ -112,16 +106,6 @@ namespace RoyaltyFileStorage
                     RaiseExceptionEvent(ex);
                     throw ex;
                 }
-        }
-
-        /// <summary>
-        /// Put file to file storage
-        /// </summary>
-        /// <param name="fileId">File identifier</param>
-        /// <param name="stream">Input file stream</param>
-        public FileInfo FilePut(Guid fileId, Stream stream)
-        {
-            return FilePutWithExtension(fileId, stream, DefaultExtension);
         }
 
         /// <summary>

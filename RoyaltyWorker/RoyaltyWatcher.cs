@@ -41,7 +41,7 @@ namespace RoyaltyWorker
         /// <summary>
         /// Throws exception when no one file in queue
         /// </summary>
-        public bool ExceptionOnNoOneFileInQueue { get; set; } = true;
+        public bool ExceptionIfNoOneFileInQueue { get; set; } = true;
 
         private TimeSpan checkTimerInterval = new TimeSpan(0, 0, 30);
 
@@ -93,7 +93,7 @@ namespace RoyaltyWorker
                 this.VerboseLog = Config.Config.WatcherConfig.VerboseLog;
                 this.WatchOnlyTopDirectory = Config.Config.WatcherConfig.WatchOnlyTopDirectory;
                 this.CheckTimerInterval = Config.Config.WatcherConfig.CheckTimerInterval;
-                this.ExceptionOnNoOneFileInQueue = Config.Config.WatcherConfig.ExceptionOnNoOneFileInQueue;
+                this.ExceptionIfNoOneFileInQueue = Config.Config.WatcherConfig.ExceptionIfNoOneFileInQueue;
                 this.FileMaskForAddFileInQeueue = Config.Config.WatcherConfig.FileMaskForAddFileInQeueue ?? FileMaskForAddFileInQeueue;
             }
         }
@@ -193,7 +193,7 @@ namespace RoyaltyWorker
                     if (System.IO.Directory.Exists(importQueue.Account.Settings.FolderImportAnalize))
                         ProcessAccount(importQueue, repository, importQueue.Account.Settings.FolderImportAnalize, true, logSession);
 
-                    if (importQueue.Files.Count == 0 && ExceptionOnNoOneFileInQueue)
+                    if (importQueue.Files.Count == 0 && ExceptionIfNoOneFileInQueue)
                         throw new System.Exception(Properties.Resources.ROYALTYWATCHER_NoOneFilesInQueue);
 
                     if (importQueue.Files.All(f => f.Finished != null))
