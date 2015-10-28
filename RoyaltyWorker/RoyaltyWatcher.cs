@@ -16,12 +16,12 @@ namespace RoyaltyWorker
         /// <summary>
         /// Royalty repository
         /// </summary>
-        private Func<Repository> getNewRepository = null;
+        private readonly Func<Repository> getNewRepository = null;
 
         /// <summary>
         /// File storage
         /// </summary>
-        public IFileStorage FileStorage { get; private set; }
+        private readonly IFileStorage fileStorage = null;
 
         /// <summary>
         /// Is verbose log enabled
@@ -77,7 +77,7 @@ namespace RoyaltyWorker
                 throw new ArgumentNullException(nameof(fileStorage));
 
             this.getNewRepository = getNewRepository;
-            this.FileStorage = fileStorage;
+            this.fileStorage = fileStorage;
 
             Init();
         }
@@ -88,6 +88,14 @@ namespace RoyaltyWorker
         private void Init()
         {
             checkTimer = new System.Threading.Timer(CheckTimerCallback, null, new TimeSpan(), checkTimerInterval);
+            if (Config.Config.IsWatcherConfigured)
+            {
+                this.VerboseLog = Config.Config.WatcherConfig.VerboseLog;
+                this.WatchOnlyTopDirectory = Config.Config.WatcherConfig.WatchOnlyTopDirectory;
+                this.CheckTimerInterval = Config.Config.WatcherConfig.CheckTimerInterval;
+                this.ExceptionOnNoOneFileInQueue = Config.Config.WatcherConfig.ExceptionOnNoOneFileInQueue;
+                this.FileMaskForAddFileInQeueue = Config.Config.WatcherConfig.FileMaskForAddFileInQeueue ?? FileMaskForAddFileInQeueue;
+            }
         }
 
         private bool callBackCalled = false;
@@ -231,7 +239,7 @@ namespace RoyaltyWorker
                                 logSession.Add($"Try put file '{file.FileName}' into storage");
                                 using (var fileStream = System.IO.File.OpenRead(filePath))
                                 {
-                                    var fileInfo = FileStorage.FilePut(file.FileID, fileStream, file.FileName);
+                                    var fileInfo = fileStorage.FilePut(file.FileID, fileStream, file.FileName);
                                     file.FilePath = fileInfo.FullName;
                                     file.FileSize = fileInfo.Length;
                                     file.MimeType = MimeTypes.GetMimeTypeFromFileName(file.FileName);
