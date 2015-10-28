@@ -24,10 +24,6 @@ namespace RoyaltyRepository.Models
     [Table("file")]
     public partial class File
     {
-        public File()
-        {
-            Messages = new HashSet<Message>();
-        }
         /// <summary>
         /// Идентификатор записи
         /// </summary>
@@ -58,10 +54,6 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("date"), Required]
         public DateTime Date { get; set; }
-        /// <summary>
-        /// Сообщения, в которых встречаются данные файла
-        /// </summary>
-        public ICollection<Message> Messages { get; set; }
 
         public override string ToString()
         {

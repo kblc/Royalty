@@ -37,9 +37,19 @@ namespace RoyaltyRepository
         /// <returns>Instance by name</returns>
         public ImportQueueRecordState ImportQueueRecordStateGet(string systemName)
         {
+#pragma warning disable 618
             return ImportQueueRecordStateGet().FirstOrDefault(a => string.Compare(systemName, a.SystemName, true) == 0);
+#pragma warning restore 618
         }
-
+        /// <summary>
+        /// Get instance by name
+        /// </summary>
+        /// <param name="systemName">Mark system name</param>
+        /// <returns>Instance by name</returns>
+        public ImportQueueRecordState ImportQueueRecordStateGet(ImportQueueRecordStateType type)
+        {
+            return ImportQueueRecordStateGet(type.ToString());
+        }
         private ImportQueueRecordState defaultState = null;
         /// <summary>
         /// Get default state
@@ -47,7 +57,7 @@ namespace RoyaltyRepository
         /// <returns>Default state</returns>
         public ImportQueueRecordState ImportQueueRecordStateGetDefault()
         {
-            return defaultState ?? (defaultState = ImportQueueRecordStateGet(ImportQueueRecordState.DefaultSystemName));
+            return defaultState ?? (defaultState = ImportQueueRecordStateGet(ImportQueueRecordStateType.Wait));
         }
 
         /// <summary>

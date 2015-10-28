@@ -187,37 +187,13 @@ namespace RoyaltyRepositoryTests
             var hCnt = Rep.FileGet().Count();
             var h = Rep.FileNew();
             h.FileName = "test";
-            h.FilePath = @"c:\test";
+            //h.FilePath = @"c:\test";
             h.FileSize = 0;
             h.MimeType = @"csv/plain";
             Rep.FileAdd(h);
             Assert.AreEqual(hCnt + 1, Rep.FileGet().Count(), "File count must be increase by 1");
             Rep.FileRemove(h);
             Assert.AreEqual(hCnt, Rep.FileGet().Count(), "File count must be decrease by 1");
-        }
-
-        [TestMethod]
-        public void Message_Insert_Remove()
-        {
-            var hCnt = Rep.MessageGet().Count();
-            var fCnt = Rep.FileGet().Count();
-            var h = Rep.MessageNew("test message");
-
-            var f = Rep.FileNew(new
-            {
-                FileName = "test.csv",
-                FilePath = @"c:\test.csv",
-                MimeType = @"csv/plain"
-            });
-
-            h.Files.Add(f);
-
-            Rep.MessageAdd(h);
-            Assert.AreEqual(hCnt + 1, Rep.MessageGet().Count(), "Message count must be increase by 1");
-            Assert.AreEqual(fCnt + 1, Rep.FileGet().Count(), "File count must be increase by 1");
-            Rep.MessageRemove(h);
-            Assert.AreEqual(hCnt, Rep.MessageGet().Count(), "Message count must be decrease by 1");
-            Assert.AreEqual(fCnt, Rep.FileGet().Count(), "File count must be decrease by 1");
         }
 
         [TestMethod]

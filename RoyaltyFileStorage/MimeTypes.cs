@@ -16,7 +16,7 @@ namespace RoyaltyFileStorage
         public static string GetExtensionFromMimeType(string mimeType)
         {
             var mimeInfo = Config.Config.MimeTypes.FirstOrDefault(i => string.Compare(i.Name, mimeType, true) == 0);
-            return mimeInfo?.Extension;
+            return mimeInfo?.Extension ?? UnknownExtension;
         }
 
         /// <summary>
@@ -28,7 +28,10 @@ namespace RoyaltyFileStorage
         {
             var fileExtension = System.IO.Path.GetExtension(fileName); //with dot
             var mimeInfo = Config.Config.MimeTypes.FirstOrDefault(i => string.Compare(i.Extension, fileExtension, true) == 0);
-            return mimeInfo?.Name;
+            return mimeInfo?.Name ?? UnknownMimeType;
         }
+
+        public const string UnknownMimeType = "unknown";
+        public const string UnknownExtension = ".unknown";
     }
 }

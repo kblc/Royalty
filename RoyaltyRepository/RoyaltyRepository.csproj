@@ -64,7 +64,6 @@
     <Compile Include="Logic\ImportQueueRecordFileAccountDataRecord.cs" />
     <Compile Include="Logic\Street.cs" />
     <Compile Include="Logic\File.cs" />
-    <Compile Include="Logic\Message.cs" />
     <Compile Include="Logic\ImportQueueRecordFile.cs" />
     <Compile Include="Logic\AccountDataRecordAdditionalColumn.cs" />
     <Compile Include="Logic\AccountDataRecordAdditional.cs" />
@@ -220,6 +219,18 @@
     <Compile Include="Migrations\201510261219457_Migration_SomeChanges.Designer.cs">
       <DependentUpon>201510261219457_Migration_SomeChanges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510280730280_Migration_AddErrorTextToQueueRecord.cs" />
+    <Compile Include="Migrations\201510280730280_Migration_AddErrorTextToQueueRecord.Designer.cs">
+      <DependentUpon>201510280730280_Migration_AddErrorTextToQueueRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510280937021_Migration_RemoveMessage.cs" />
+    <Compile Include="Migrations\201510280937021_Migration_RemoveMessage.Designer.cs">
+      <DependentUpon>201510280937021_Migration_RemoveMessage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510281013281_Migration_AddSourceFilePathToQueueFileRecord.cs" />
+    <Compile Include="Migrations\201510281013281_Migration_AddSourceFilePathToQueueFileRecord.Designer.cs">
+      <DependentUpon>201510281013281_Migration_AddSourceFilePathToQueueFileRecord.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountSettingsColumn.cs" />
@@ -257,7 +268,6 @@
     <Compile Include="Models\Area.cs" />
     <Compile Include="Models\Host.cs" />
     <Compile Include="Models\City.cs" />
-    <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Phone.cs" />
     <Compile Include="Models\Mark.cs" />
     <Compile Include="Models\RepositoryContext.cs" />
@@ -379,6 +389,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510261219457_Migration_SomeChanges.resx">
       <DependentUpon>201510261219457_Migration_SomeChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510280730280_Migration_AddErrorTextToQueueRecord.resx">
+      <DependentUpon>201510280730280_Migration_AddErrorTextToQueueRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510280937021_Migration_RemoveMessage.resx">
+      <DependentUpon>201510280937021_Migration_RemoveMessage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510281013281_Migration_AddSourceFilePathToQueueFileRecord.resx">
+      <DependentUpon>201510281013281_Migration_AddSourceFilePathToQueueFileRecord.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

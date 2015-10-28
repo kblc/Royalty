@@ -116,6 +116,9 @@ namespace RoyaltyRepository
                     Account = account,
                     CreatedDate = DateTime.UtcNow,
                 };
+
+                if (account != null)
+                    account.ImportQueue.Add(res);
                 return res;
             }
             catch (Exception ex)

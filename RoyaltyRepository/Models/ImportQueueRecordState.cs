@@ -1,12 +1,14 @@
 ﻿using RoyaltyRepository.Extensions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Helpers.Linq;
 
 namespace RoyaltyRepository.Models
 {
@@ -18,12 +20,36 @@ namespace RoyaltyRepository.Models
         public DbSet<ImportQueueRecordState> ImportQueueRecordStates { get; set; }
     }
 
+    public enum ImportQueueRecordStateType
+    {
+        /// <summary>
+        /// Wait
+        /// </summary>
+        [Description("QUEUERECORDSTATE_WAIT")]
+        Wait = 0,
+
+        /// <summary>
+        /// Error
+        /// </summary>
+        [Description("QUEUERECORDSTATE_ERROR")]
+        Error,
+
+        /// <summary>
+        /// Processed
+        /// </summary>
+        [Description("QUEUERECORDSTATE_PROCESSED")]
+        Processed,
+
+        /// <summary>
+        /// Try to process
+        /// </summary>
+        [Description("QUEUERECORDSTATE_TRYTOPROCESS")]
+        TryToProcess
+    }
+
     [Table("import_queue_record_state")]
     public partial class ImportQueueRecordState : IDefaultRepositoryInitialization
     {
-        public const string DefaultSystemName = "WAIT";
-        private const string strStart = "QUEUERECORDSTATE_";
-
         /// <summary>
         /// Идентификатор записи
         /// </summary>
@@ -36,32 +62,39 @@ namespace RoyaltyRepository.Models
         [Column("system_name"), Index("UIX_IMPORT_QUEUE_RECORD_STATE_SYSTEMNAME", IsUnique = true)]
         [Required(ErrorMessageResourceName = "QueueRecordStateNameRequred")]
         [MaxLength(40, ErrorMessageResourceName = "QueueRecordStateNameMaxLength")]
+        [Obsolete("Use Type property instead")]
         public string SystemName { get; set; }
 
         /// <summary>
         /// Название метки (из файла ресурса)
         /// </summary>
         [NotMapped]
-        public string Name
+        public string Name { get { return Extensions.Extensions.GetEnumNameFromType(Type); } }
+
+        /// <summary>
+        /// Record type
+        /// </summary>
+        [NotMapped]
+        public ImportQueueRecordStateType Type
         {
-            get
-            {
-                var obj = RoyaltyRepository.Properties.Resources.ResourceManager.GetObject(string.Format("{0}{1}", strStart, SystemName.ToUpper()));
-                return obj == null ? SystemName : obj.ToString();
-            }
+#pragma warning disable 618
+            get { return Extensions.Helpers.GetEnumValueByName<ImportQueueRecordStateType>(SystemName); }
+            set { SystemName = Type.ToString().ToUpper(); }
+#pragma warning restore 618
         }
 
         void IDefaultRepositoryInitialization.InitializeDefault(RepositoryContext context)
         {
-            
-            var resType = System.Reflection.Assembly.GetExecutingAssembly().GetType("RoyaltyRepository.Properties.Resources");
-            if (resType != null)
-            {
-                foreach (var p in resType.GetProperties().Where(pi => pi.Name.ToUpper().StartsWith(strStart)).Select(pi => pi.Name.Substring(strStart.Length)))
-                    if (!context.ImportQueueRecordStates.Any(m => string.Compare(m.SystemName, p) == 0))
-                        context.ImportQueueRecordStates.Add(new ImportQueueRecordState() { SystemName = p });
-                context.SaveChanges();
-            }
+#pragma warning disable 618
+            var defValues = typeof(ImportQueueRecordStateType)
+                .GetEnumValues()
+                .Cast<ImportQueueRecordStateType>()
+                .Select(t => new ImportQueueRecordState() { Type = t })
+                .LeftOuterJoin(context.ImportQueueRecordStates, d => d.SystemName, e => e.SystemName, (d,e) => new { Default = d, Existed = e })
+                .Where(i => i.Existed == null)
+                .Select(i => i.Default);
+            context.ImportQueueRecordStates.AddRange(defValues);
+#pragma warning restore 618
         }
 
         public override string ToString()

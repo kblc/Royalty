@@ -67,6 +67,12 @@ namespace RoyaltyRepository.Models
         [Column("has_error"), Required]
         public bool HasError { get; set; }
 
+        /// <summary>
+        /// Ошибка обработки самой очереди
+        /// </summary>
+        [Column("record_error")]
+        public string Error { get; set; }
+
         public virtual ICollection<ImportQueueRecordFile> Files { get; set; }
 
         #region Abstract implementation

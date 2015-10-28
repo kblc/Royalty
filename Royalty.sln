@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoyaltyFileStorage", "Royal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoyaltyFileStorage.Tests", "RoyaltyFileStorage.Tests\RoyaltyFileStorage.Tests.csproj", "{086196FF-2701-426B-9263-760104A64EF9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoyaltyWorker.Tests", "RoyaltyWorker.Tests\RoyaltyWorker.Tests.csproj", "{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}"
+EndProject
 Global
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
@@ -246,6 +248,22 @@ Global
 		{086196FF-2701-426B-9263-760104A64EF9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{086196FF-2701-426B-9263-760104A64EF9}.Release|x86.ActiveCfg = Release|Any CPU
 		{086196FF-2701-426B-9263-760104A64EF9}.Release|x86.Build.0 = Release|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Debug|x86.Build.0 = Debug|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Release.x64|Any CPU.ActiveCfg = Release|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Release.x64|Any CPU.Build.0 = Release|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Release.x64|x86.ActiveCfg = Release|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Release.x64|x86.Build.0 = Release|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Release.x86|Any CPU.ActiveCfg = Release|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Release.x86|Any CPU.Build.0 = Release|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Release.x86|x86.ActiveCfg = Release|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Release.x86|x86.Build.0 = Release|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Release|x86.ActiveCfg = Release|Any CPU
+		{F3493D01-75C8-4057-8CBD-AA9B0A3FCAFF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -138,5 +138,14 @@ namespace RoyaltyRepository
                 throw;
             }
         }
+
+        /// <summary>
+        /// Get account settings shedule times
+        /// </summary>
+        /// <returns>AccountSettingsSheduleTime queriable collection</returns>
+        public IQueryable<AccountSettingsSheduleTime> AccountSettingsSheduleTimeGet()
+        {
+            return this.Context.AccountSettingsSheduleTimes;
+        }
     }
 }

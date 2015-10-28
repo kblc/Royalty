@@ -43,17 +43,6 @@ namespace RoyaltyRepository.Models
         /// </summary>
         public virtual ImportQueueRecord ImportQueueRecord { get; set; }
         #endregion
-        #region Message
-        /// <summary>
-        /// Идентификатор сообщения, содержащего комментарий к текущей очереди загрузки
-        /// </summary>
-        [ForeignKey("Message"), Column("message_uid")]
-        public Guid? MessageID { get; set; }
-        /// <summary>
-        /// Cообщение, содержащее комментарий к текущей очереди загрузки
-        /// </summary>
-        public virtual Message Message { get; set; }
-        #endregion
         #region State
         /// <summary>
         /// Идентификатор состояния загрузки файла
@@ -87,6 +76,18 @@ namespace RoyaltyRepository.Models
         /// </summary>
         public virtual File LogFile { get; set; }
         #endregion
+
+        /// <summary>
+        /// Ошибка при загрузке файла
+        /// </summary>
+        [Column("error")]
+        public string Error { get; set; }
+
+        /// <summary>
+        /// Загружаемый файл
+        /// </summary>
+        [Column("source_file_path"), Required]
+        public string SourceFilePath { get; set; }
 
         /// <summary>
         /// Дата начала обработки
