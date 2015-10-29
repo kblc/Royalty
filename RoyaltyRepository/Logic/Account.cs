@@ -319,17 +319,31 @@ namespace RoyaltyRepository
             #endregion
             #region Settings
             if (copySettings)
-            { 
-                to.Settings.DeleteFileAfterImport = from.Settings.DeleteFileAfterImport;
-                to.Settings.ExecuteAfterAnalizeCommand = from.Settings.ExecuteAfterAnalizeCommand;
-                to.Settings.FolderExportAnalize = from.Settings.FolderExportAnalize;
-                to.Settings.FolderExportPhones = from.Settings.FolderExportPhones;
-                to.Settings.FolderImportAnalize = from.Settings.FolderImportAnalize;
-                to.Settings.FolderImportMain = from.Settings.FolderImportMain;
+            {
                 to.Settings.IgnoreExportTime = from.Settings.IgnoreExportTime;
-                to.Settings.RecursiveFolderSearch = from.Settings.RecursiveFolderSearch;
                 to.Settings.TimeForTrust = from.Settings.TimeForTrust;
-                to.Settings.WaitExecutionAfterAnalize = from.Settings.WaitExecutionAfterAnalize;
+
+                foreach (var i in from.Settings.ImportFolders)
+                    to.Settings.ImportFolders.Add(new AccountSettingsImportDirectory()
+                    {
+                        DeleteFileAfterImport = i.DeleteFileAfterImport,
+                        Encoding = i.Encoding,
+                        Filter = i.Filter,
+                        ForAnalize = i.ForAnalize,
+                        Path = i.Path,
+                        RecursiveFolderSearch = i.RecursiveFolderSearch,
+                    });
+
+                foreach (var i in from.Settings.ExportFolders)
+                    to.Settings.ExportFolders.Add(new AccountSettingsExportDirectory()
+                    {
+                        Encoding = i.Encoding,
+                        Path = i.Path,
+                        ExecuteAfterAnalizeCommand = i.ExecuteAfterAnalizeCommand,
+                        ExportData = i.ExportData,
+                        ExportPhones = i.ExportPhones,
+                        WaitExecutionAfterAnalize = i.WaitExecutionAfterAnalize
+                    });
 
                 foreach (var c in from.Settings.Columns)
                     to.Settings.Columns.Add( new AccountSettingsColumn() { ColumnName = c.ColumnName, ColumnType = c.ColumnType } );

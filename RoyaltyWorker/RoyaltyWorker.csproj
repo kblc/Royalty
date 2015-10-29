@@ -45,7 +45,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\Config.cs" />
+    <Compile Include="Config\Worker.cs" />
     <Compile Include="Config\Watcher.cs" />
+    <Compile Include="Extensions\RepositoryFileStorage.cs" />
+    <Compile Include="Model\WorkerProcessElement.cs" />
     <Compile Include="Properties\Resources.ru.Designer.cs">
       <DependentUpon>Resources.ru.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -56,12 +59,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Queue\RoyaltyQueue.cs" />
-    <Compile Include="IRoyaltyWorker.cs" />
+    <Compile Include="RoyaltyWorker.cs" />
     <Compile Include="RoyaltyWatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RoyaltyDataCalculator\RoyaltyDataCalculator.csproj">
+      <Project>{39b6125a-3f96-4e77-b090-3bfb7c788423}</Project>
+      <Name>RoyaltyDataCalculator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RoyaltyFileStorage\RoyaltyFileStorage.csproj">
       <Project>{89aa1f08-470c-4e95-954b-8cf88b858dac}</Project>
       <Name>RoyaltyFileStorage</Name>

@@ -209,8 +209,6 @@ namespace RoyaltyRepositoryTests
         public void Account_Settings()
         {
             var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings" });
-            acc.Settings.DeleteFileAfterImport = false;
-            acc.Settings.ExecuteAfterAnalizeCommand = "C:\abc.bat";
             acc.Settings.TimeForTrust = TimeSpan.FromDays(30);
             Rep.SaveChanges();
         }

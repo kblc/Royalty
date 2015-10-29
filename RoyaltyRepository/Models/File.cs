@@ -54,6 +54,23 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("date"), Required]
         public DateTime Date { get; set; }
+        /// <summary>
+        /// Кодировка файла
+        /// </summary>
+        [Column("encoding"), MaxLength(100)]
+        [Obsolete("Use Encoding property")]
+        public string EncodingName { get; set; }
+        /// <summary>
+        /// Кодировка для текстовых файлов
+        /// </summary>
+        [NotMapped]
+        public Encoding Encoding
+        {
+#pragma warning disable 618
+            get { return string.IsNullOrWhiteSpace(EncodingName) ? Encoding.Default : Encoding.GetEncoding(EncodingName); }
+            set { EncodingName = value?.EncodingName; }
+#pragma warning restore 618
+        }
 
         public override string ToString()
         {

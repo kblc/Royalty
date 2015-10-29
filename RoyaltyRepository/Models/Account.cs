@@ -75,16 +75,8 @@ namespace RoyaltyRepository.Models
                 IsHidden = true,
                 Settings = new AccountSettings()
                 {
-                    ExecuteAfterAnalizeCommand = string.Empty,
-                    FolderExportAnalize = string.Empty,
-                    FolderExportPhones = string.Empty,
-                    FolderImportAnalize = string.Empty,
-                    FolderImportMain = string.Empty,
                     IgnoreExportTime = TimeSpan.FromHours(1),
-                    DeleteFileAfterImport = false,
-                    RecursiveFolderSearch = true,
                     TimeForTrust = TimeSpan.FromDays(30),
-                    WaitExecutionAfterAnalize = true,
                     Columns = new AccountSettingsColumn[]
                     {
                         new AccountSettingsColumn() { ColumnName = "Адрес объекта", ColumnType = cts.FirstOrDefault(c => c.SystemName == ColumnTypes.Address.ToString().ToUpper()) },

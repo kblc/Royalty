@@ -42,7 +42,7 @@ namespace RoyaltyFileStorage.Config
         {
             get
             {
-                return ConfigurationManager.GetSection("storageConfig") as StorageConfigSection;
+                return ConfigurationManager.GetSection(StorageConfigSection.SectionName) as StorageConfigSection;
             }
         }
     }

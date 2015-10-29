@@ -48,9 +48,10 @@ namespace RoyaltyWorker.Tests
             var storage = new FileStorage();
             storage.Log += (s, e) => Console.WriteLine("[FILESTORAGE] {0}", e);
 
-            var a = Rep.AccountGet(defAccountName);
-            a.Settings.FolderImportMain = "D:\\filestorage.import.main";
-            a.Settings.FolderExportAnalize = "D:\\filestorage.import.analize";
+            var storeFolder = "D:\\filestorage.import.main";
+
+            var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings" });
+            Rep.AccountSettingsImportDirectoryNew(a.Settings, new { Path = storeFolder, Filter = "*.csv" });
 
             var dtStart = DateTime.UtcNow;
             var dtCurrent = dtStart;
@@ -68,8 +69,8 @@ namespace RoyaltyWorker.Tests
             {
                 w.Log += (s, e) => Console.WriteLine("[WORKER] {0}", e);
                 var lines = new string[] { "Column0;Column1;Column2", "data0;data1;data2" };
-                System.IO.File.WriteAllLines(System.IO.Path.Combine(a.Settings.FolderImportMain, "test.csv"), lines);
-                System.Threading.Thread.Sleep(20000);
+                System.IO.File.WriteAllLines(System.IO.Path.Combine(storeFolder, "test.csv"), lines);
+                System.Threading.Thread.Sleep(5000);
             }
 
             var newRecordCount = Rep.ImportQueueRecordGet().Where(i => i.Account.AccountUID == a.AccountUID).Count();

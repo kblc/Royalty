@@ -8,10 +8,11 @@ using RoyaltyFileStorage;
 using Helpers.Linq;
 using RoyaltyRepository.Models;
 using Helpers;
+using System.Threading;
 
 namespace RoyaltyWorker
 {
-    public class RoyaltyWatcher : IDisposable //IRoyaltyWorker, 
+    public class RoyaltyWatcher : IDisposable 
     {
         /// <summary>
         /// Royalty repository
@@ -23,20 +24,13 @@ namespace RoyaltyWorker
         /// </summary>
         private readonly IFileStorage fileStorage = null;
 
+        private Thread checkQueueThread = null;
+        private object checkLockObject = new object();
+
         /// <summary>
         /// Is verbose log enabled
         /// </summary>
         public bool VerboseLog { get; set; } = false;
-
-        /// <summary>
-        /// File mask for add in queue
-        /// </summary>
-        public string FileMaskForAddFileInQeueue { get; set; } = "*.csv";
-
-        /// <summary>
-        /// Watch only top directory
-        /// </summary>
-        public bool WatchOnlyTopDirectory { get; set; } = true;
 
         /// <summary>
         /// Throws exception when no one file in queue
@@ -87,88 +81,85 @@ namespace RoyaltyWorker
         /// </summary>
         private void Init()
         {
-            checkTimer = new System.Threading.Timer(CheckTimerCallback, null, new TimeSpan(), checkTimerInterval);
             if (Config.Config.IsWatcherConfigured)
             {
                 this.VerboseLog = Config.Config.WatcherConfig.VerboseLog;
-                this.WatchOnlyTopDirectory = Config.Config.WatcherConfig.WatchOnlyTopDirectory;
                 this.CheckTimerInterval = Config.Config.WatcherConfig.CheckTimerInterval;
                 this.ExceptionIfNoOneFileInQueue = Config.Config.WatcherConfig.ExceptionIfNoOneFileInQueue;
-                this.FileMaskForAddFileInQeueue = Config.Config.WatcherConfig.FileMaskForAddFileInQeueue ?? FileMaskForAddFileInQeueue;
             }
+            checkTimer = new System.Threading.Timer(CheckTimerCallback, null, new TimeSpan(), checkTimerInterval);
         }
-
-        private bool callBackCalled = false;
-        private object callBackCalledObject = new object();
-
+          
         /// <summary>
         /// Check timer callback
         /// </summary>
         /// <param name="state"></param>
         private void CheckTimerCallback(object state)
         {
-            lock(callBackCalledObject)
+            lock (checkLockObject)
             {
-                if (callBackCalled)
+                if (checkQueueThread != null && checkQueueThread.IsAlive)
                     return;
-                callBackCalled = true;
+                checkQueueThread = new Thread(new ParameterizedThreadStart(ProcessAccountsThread));
+                checkQueueThread.Start(new { GetNewRepository = this.getNewRepository, FileStorage = this.fileStorage, VerboseLog, ExceptionIfNoOneFileInQueue });
             }
+        }
 
-            try
-            {
-                using (var logSession = Helpers.Log.Session($"{GetType().Name}.{nameof(CheckTimerCallback)}()", VerboseLog, RaiseLogEvent))
-                    try
+        private void ProcessAccountsThread(object prm)
+        {
+            var getNewRep = ((dynamic)prm).GetNewRepository as Func<Repository>;
+            var storage = ((dynamic)prm).FileStorage as IFileStorage;
+            var verboseLog = (bool)((dynamic)prm).VerboseLog;
+            var exceptionIfNoOneFileInQueue = (bool)((dynamic)prm).ExceptionIfNoOneFileInQueue;
+
+            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{nameof(ProcessAccountsThread)}()", verboseLog, RaiseLogEvent))
+                try
+                {
+                    var currentTime = DateTime.UtcNow;
+                    var utcTs = new TimeSpan(currentTime.Hour, currentTime.Minute, currentTime.Second);
+
+                    logSession.Add($"Ckeck started at '{currentTime}'");
+
+                    using (var rep = getNewRep())
                     {
-                        var currentTime = DateTime.UtcNow;
-                        var utcTs = new TimeSpan(currentTime.Hour, currentTime.Minute, currentTime.Second);
-
-                        logSession.Add($"Ckeck started at '{currentTime}'");
-
-                        using (var rep = getNewRepository())
-                        {
 #pragma warning disable 618
-                            var accountsToProcess = rep
-                                .AccountSettingsSheduleTimeGet()
-                                .Where(i => (long)utcTs.TotalMilliseconds - i.TimeTicks < (long)checkTimerInterval.TotalMilliseconds)
-                                .Join(rep.AccountGet(), st => st.AccountUID, a => a.AccountUID, (st, a) => a)
-                                .Distinct()
-                                .ToList();
+                        var accountsToProcess = rep
+                            .AccountSettingsSheduleTimeGet()
+                            .Where(i => (long)utcTs.TotalMilliseconds - i.TimeTicks < (long)checkTimerInterval.TotalMilliseconds)
+                            .Join(rep.AccountGet(), st => st.AccountUID, a => a.AccountUID, (st, a) => a)
+                            .Distinct()
+                            .ToList();
 #pragma warning restore 618
-                            if (accountsToProcess.Count > 0)
+                        if (accountsToProcess.Count > 0)
+                        {
+                            logSession.Add($"Accounts to process: {accountsToProcess.Concat(a => $"'{a.Name}'", ",")}");
+                            accountsToProcess.ForEach(account =>
                             {
-                                logSession.Add($"Accounts to process: {accountsToProcess.Concat(a => $"'{a.Name}'", ",")}");
-                                accountsToProcess.ForEach(account =>
+                                try
                                 {
-                                    try
-                                    {
-                                        logSession.Add($"Proceed account '{account.Name}'");
-                                        var queueRecord = rep.ImportQueueRecordNew(account);
-                                        ProcessAccount(queueRecord, rep, logSession);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        ex.Data.Add(nameof(account), account?.Name ?? "NULL");
-                                        throw ex;
-                                    }
-                                });
-                                rep.SaveChanges();
-                            }
-                            logSession.Add($"All account processed");
+                                    logSession.Add($"Proceed account '{account.Name}'");
+                                    var queueRecord = rep.ImportQueueRecordNew(account);
+                                    ProcessAccount(queueRecord, rep, storage, logSession);
+                                    RaiseOnQueueRecordAdded(queueRecord);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ex.Data.Add(nameof(account), account?.Name ?? "NULL");
+                                    throw ex;
+                                }
+                            });
+                            rep.SaveChanges();
                         }
+                        logSession.Add($"All account processed");
                     }
-                    catch (Exception ex)
-                    {
-                        logSession.Enabled = true;
-                        logSession.Add(ex);
-                        RaiseExceptionEvent(ex);
-                        throw ex;
-                    }
-            }
-            finally
-            {
-                lock(callBackCalledObject)
-                    callBackCalled = false;
-            }
+                }
+                catch (Exception ex)
+                {
+                    logSession.Enabled = true;
+                    logSession.Add(ex);
+                    RaiseExceptionEvent(ex);
+                    throw ex;
+                }
         }
 
         /// <summary>
@@ -177,9 +168,9 @@ namespace RoyaltyWorker
         /// <param name="importQueue">Запись в очереди</param>
         /// <param name="repository">Репозиторий</param>
         /// <param name="upperLogSession">Лог сессия верхнего уровня</param>
-        private void ProcessAccount(ImportQueueRecord importQueue, Repository repository, Helpers.Log.SessionInfo upperLogSession)
+        private void ProcessAccount(ImportQueueRecord importQueue, Repository repository, IFileStorage storage, Helpers.Log.SessionInfo upperLogSession)
         {
-            using(var logSession = Helpers.Log.Session($"{GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, s => s.ToList().ForEach(str => upperLogSession.Add(str))))
+            using(var logSession = Helpers.Log.Session($"{GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", upperLogSession.Enabled, s => s.ToList().ForEach(str => upperLogSession.Add(str))))
                 try
                 {
                     if (importQueue == null)
@@ -187,11 +178,8 @@ namespace RoyaltyWorker
                     if (repository == null)
                         throw new ArgumentNullException(nameof(repository));
 
-                    if (System.IO.Directory.Exists(importQueue.Account.Settings.FolderImportMain))
-                    ProcessAccount(importQueue, repository, importQueue.Account.Settings.FolderImportMain, false, logSession);
-
-                    if (System.IO.Directory.Exists(importQueue.Account.Settings.FolderImportAnalize))
-                        ProcessAccount(importQueue, repository, importQueue.Account.Settings.FolderImportAnalize, true, logSession);
+                    importQueue.Account.Settings.ImportFolders.ToList()
+                        .ForEach(f => ProcessAccount(importQueue, repository, storage, f, logSession));
 
                     if (importQueue.Files.Count == 0 && ExceptionIfNoOneFileInQueue)
                         throw new System.Exception(Properties.Resources.ROYALTYWATCHER_NoOneFilesInQueue);
@@ -221,28 +209,32 @@ namespace RoyaltyWorker
         /// <param name="folderPath">Путь до диреткории с файлами</param>
         /// <param name="forAnalize">Данные используются для анализа</param>
         /// <param name="upperLogSession">Лог сессия верхнего уровня</param>
-        private void ProcessAccount(ImportQueueRecord importQueue, Repository rep, string folderPath, bool forAnalize, Helpers.Log.SessionInfo upperLogSession)
+        private void ProcessAccount(ImportQueueRecord importQueue, Repository rep, IFileStorage storage, AccountSettingsImportDirectory importDirectory, Helpers.Log.SessionInfo upperLogSession)
         {
             using (var logSession = Helpers.Log.Session($"{GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, s => s.ToList().ForEach(str => upperLogSession.Add(str))))
                 try
                 {
-                    var filesInFolder = System.IO.Directory.GetFiles(folderPath, FileMaskForAddFileInQeueue, WatchOnlyTopDirectory ? System.IO.SearchOption.TopDirectoryOnly : System.IO.SearchOption.AllDirectories);
-                    logSession.Add($"Founded files count: {filesInFolder.Length} for analize: {forAnalize} in folder '{folderPath}'");
+                    if (!System.IO.Directory.Exists(importDirectory.Path))
+                        throw new Exception($"Folder '{importDirectory.Path}' not found");
+
+                    var filesInFolder = System.IO.Directory.GetFiles(importDirectory.Path, importDirectory.Filter, importDirectory.RecursiveFolderSearch ? System.IO.SearchOption.AllDirectories : System.IO.SearchOption.TopDirectoryOnly);
+                    logSession.Add($"Founded files count: {filesInFolder.Length} for analize: {importDirectory.ForAnalize} in folder '{importDirectory.Path}'");
                     foreach (var filePath in filesInFolder)
                         try
                         {
                             logSession.Add($"File to process: {filePath}");
-                            var importFileRecord = rep.ImportQueueRecordFileNew(importQueue, new { ForAnalize = forAnalize, SourceFilePath = filePath });
+                            var importFileRecord = rep.ImportQueueRecordFileNew(importQueue, new { ForAnalize = importDirectory.ForAnalize, SourceFilePath = filePath });
                             try
                             {
                                 var file = rep.FileNew(new { FileName = System.IO.Path.GetFileName(filePath) });
                                 logSession.Add($"Try put file '{file.FileName}' into storage");
                                 using (var fileStream = System.IO.File.OpenRead(filePath))
                                 {
-                                    var fileInfo = fileStorage.FilePut(file.FileID, fileStream, file.FileName);
+                                    var fileInfo = storage.FilePut(file.FileID, fileStream, file.FileName);
                                     file.FilePath = fileInfo.FullName;
                                     file.FileSize = fileInfo.Length;
                                     file.MimeType = MimeTypes.GetMimeTypeFromFileName(file.FileName);
+                                    file.Encoding = importDirectory.Encoding;
                                     logSession.Add($"File '{file.FileName}' (size:{file.FileSize}) stored into storage with path: '{file.FilePath}'");
                                 }
                                 importFileRecord.ImportFile = file;
@@ -259,7 +251,8 @@ namespace RoyaltyWorker
                             }
                             finally
                             {
-                                importQueue.Files.Add(importFileRecord);
+                                //importQueue.Files.Add(importFileRecord);
+                                if (importDirectory.DeleteFileAfterImport)
                                 try
                                 {
                                     System.IO.File.Delete(filePath);
@@ -294,8 +287,13 @@ namespace RoyaltyWorker
         #region Events
 
         public event EventHandler<string> Log;
-        public event EventHandler<Exception> Exception;
+        public event EventHandler<Exception> ExceptionLog;
+        public event EventHandler<ImportQueueRecord> OnQueueRecordAdded;
 
+        private void RaiseOnQueueRecordAdded(ImportQueueRecord record)
+        {
+            OnQueueRecordAdded?.Invoke(this, record);
+        }
         private void RaiseLogEvent(IEnumerable<string> logTexts)
         {
             logTexts?.ToList().ForEach(s => RaiseLogEvent(s));
@@ -306,7 +304,7 @@ namespace RoyaltyWorker
         }
         private void RaiseExceptionEvent(Exception ex)
         {
-            Exception?.Invoke(this, ex);
+            ExceptionLog?.Invoke(this, ex);
         }
 
         #endregion
@@ -321,6 +319,10 @@ namespace RoyaltyWorker
                 {
                     if (checkTimer != null)
                         checkTimer.Dispose();
+
+                    if (checkQueueThread != null && checkQueueThread.IsAlive)
+                        checkQueueThread.Abort();
+                    checkQueueThread = null;
                 }
                 disposedValue = true;
             }

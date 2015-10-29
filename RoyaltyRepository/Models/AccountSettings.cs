@@ -22,6 +22,8 @@ namespace RoyaltyRepository.Models
         {
             SheduleTimes = new List<AccountSettingsSheduleTime>();
             Columns = new HashSet<AccountSettingsColumn>();
+            ImportFolders = new HashSet<AccountSettingsImportDirectory>();
+            ExportFolders = new HashSet<AccountSettingsExportDirectory>();
         }
         #region Account
         /// <summary>
@@ -34,29 +36,6 @@ namespace RoyaltyRepository.Models
         /// </summary>
         public virtual Account Account { get; set; }
         #endregion
-        /// <summary>
-        /// Директория для импорта файлов
-        /// </summary>
-        [Column("folder_import_main"), Required(AllowEmptyStrings = true)]
-        public string FolderImportMain { get; set; }
-
-        /// <summary>
-        /// Директория для импорта файлов для анализа
-        /// </summary>
-        [Column("folder_import_analize"), Required(AllowEmptyStrings = true)]
-        public string FolderImportAnalize { get; set; }
-
-        /// <summary>
-        /// Директория для экспорта анализированных данных
-        /// </summary>
-        [Column("folder_export_analize"), Required(AllowEmptyStrings = true)]
-        public string FolderExportAnalize { get; set; }
-
-        /// <summary>
-        /// Директория для экспорта номеров телефонов
-        /// </summary>
-        [Column("folder_export_phones"), Required(AllowEmptyStrings = true)]
-        public string FolderExportPhones { get; set; }
 
         /// <summary>
         /// Время, в которое должна запускаться обработка файлов
@@ -67,6 +46,16 @@ namespace RoyaltyRepository.Models
         /// Настройка колонок для импорта
         /// </summary>
         public virtual ICollection<AccountSettingsColumn> Columns { get; set; }
+
+        /// <summary>
+        /// Директории импорта
+        /// </summary>
+        public virtual ICollection<AccountSettingsImportDirectory> ImportFolders { get; set; }
+
+        /// <summary>
+        /// Директории экспорта
+        /// </summary>
+        public virtual ICollection<AccountSettingsExportDirectory> ExportFolders { get; set; }
 
         /// <summary>
         /// Игнорирование времени экспорта (используйте IgnoreExportTime)
@@ -105,30 +94,6 @@ namespace RoyaltyRepository.Models
             set { TimeForTrustTicks = value == null ? (long?)null : (long)value.Value.TotalMilliseconds; }
             #pragma warning restore 618
         }
-
-        /// <summary>
-        /// Удалять файлы после импорта
-        /// </summary>
-        [Column("delete_file_after_import")]
-        public bool? DeleteFileAfterImport { get; set; }
-
-        /// <summary>
-        /// Запускать комманду после анализа данных
-        /// </summary>
-        [Column("execute_after_analize_command")]
-        public string ExecuteAfterAnalizeCommand { get; set; }
-
-        /// <summary>
-        /// Ожидать окончания выполнения запущенной команды
-        /// </summary>
-        [Column("wait_execution_after_analize")]
-        public bool? WaitExecutionAfterAnalize { get; set; }
-
-        /// <summary>
-        /// Рекурсивный обход директории при поиске .csv-файлов
-        /// </summary>
-        [Column("recursive_folder_search_for_csv_files")]
-        public bool? RecursiveFolderSearch { get; set; }
 
         #region Abstract implementation
 

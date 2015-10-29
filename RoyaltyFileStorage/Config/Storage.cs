@@ -9,6 +9,8 @@ namespace RoyaltyFileStorage.Config
 {
     public class StorageConfigSection : ConfigurationSection
     {
+        public const string SectionName = "storageConfig";
+
         [ConfigurationProperty("location", IsRequired = true, DefaultValue = "")]
         public string Location
         {
