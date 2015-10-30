@@ -68,5 +68,14 @@ namespace RoyaltyWorker.Properties {
                 return ResourceManager.GetString("ROYALTYWATCHER_NoOneFilesInQueue", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import file not found in database.
+        /// </summary>
+        public static string ROYALTYWORKER_ImportFileNotFound {
+            get {
+                return ResourceManager.GetString("ROYALTYWORKER_ImportFileNotFound", resourceCulture);
+            }
+        }
     }
 }

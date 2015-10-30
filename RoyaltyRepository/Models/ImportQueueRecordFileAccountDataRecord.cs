@@ -30,7 +30,7 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Очереди загрузки, которой принадлежит данный файл
         /// </summary>
-        public virtual ImportQueueRecordFile ImportQueueRecordFile { get; set; }
+        public virtual ImportQueueRecordFileInfo ImportQueueRecordFile { get; set; }
         #endregion
         #region AccountDataRecord
         /// <summary>

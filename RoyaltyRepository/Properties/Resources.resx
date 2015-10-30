@@ -282,4 +282,25 @@
   <data name="HISTORYSOURCETYPE_AccountSettings" xml:space="preserve">
     <value>Account settings</value>
   </data>
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_Export" xml:space="preserve">
+    <value>Exported file</value>
+  </data>
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_ExportPhones" xml:space="preserve">
+    <value>Exported phones file</value>
+  </data>
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_Import" xml:space="preserve">
+    <value>Imported file</value>
+  </data>
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_Log" xml:space="preserve">
+    <value>Log file</value>
+  </data>
+  <data name="COLUMNTYPE_CHANGED" xml:space="preserve">
+    <value>Changed date</value>
+  </data>
+  <data name="COLUMNTYPE_CREATED" xml:space="preserve">
+    <value>Created date</value>
+  </data>
+  <data name="COLUMNTYPE_EXPORTED" xml:space="preserve">
+    <value>Exported date</value>
+  </data>
 </root>

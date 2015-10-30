@@ -120,4 +120,7 @@
   <data name="ROYALTYWATCHER_NoOneFilesInQueue" xml:space="preserve">
     <value>В очереди нет ни одного файла</value>
   </data>
+  <data name="ROYALTYWORKER_ImportFileNotFound" xml:space="preserve">
+    <value>Файл импорта не найден в базе данных</value>
+  </data>
 </root>

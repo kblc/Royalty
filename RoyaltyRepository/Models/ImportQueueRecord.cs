@@ -28,7 +28,7 @@ namespace RoyaltyRepository.Models
 
         public ImportQueueRecord()
         {
-            Files = new List<ImportQueueRecordFile>();
+            FileInfoes = new List<ImportQueueRecordFileInfo>();
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace RoyaltyRepository.Models
         [Column("record_error")]
         public string Error { get; set; }
 
-        public virtual ICollection<ImportQueueRecordFile> Files { get; set; }
+        public virtual ICollection<ImportQueueRecordFileInfo> FileInfoes { get; set; }
 
         #region Abstract implementation
 

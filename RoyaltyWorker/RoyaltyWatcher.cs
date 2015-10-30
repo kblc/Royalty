@@ -9,6 +9,7 @@ using Helpers.Linq;
 using RoyaltyRepository.Models;
 using Helpers;
 using System.Threading;
+using RoyaltyWorker.Extensions;
 
 namespace RoyaltyWorker
 {
@@ -57,6 +58,11 @@ namespace RoyaltyWorker
         /// Check timer
         /// </summary>
         private System.Threading.Timer checkTimer = null;
+
+        /// <summary>
+        /// Is watcher busy
+        /// </summary>
+        public bool IsBusy { get { return (checkQueueThread != null && checkQueueThread.IsAlive); } }
 
         /// <summary>
         /// Create new worker instance
@@ -158,7 +164,7 @@ namespace RoyaltyWorker
                     logSession.Enabled = true;
                     logSession.Add(ex);
                     RaiseExceptionEvent(ex);
-                    throw ex;
+                    //throw ex;
                 }
         }
 
@@ -178,13 +184,13 @@ namespace RoyaltyWorker
                     if (repository == null)
                         throw new ArgumentNullException(nameof(repository));
 
-                    importQueue.Account.Settings.ImportFolders.ToList()
+                    importQueue.Account.Settings.ImportDirectories.ToList()
                         .ForEach(f => ProcessAccount(importQueue, repository, storage, f, logSession));
 
-                    if (importQueue.Files.Count == 0 && ExceptionIfNoOneFileInQueue)
+                    if (importQueue.FileInfoes.Count == 0 && ExceptionIfNoOneFileInQueue)
                         throw new System.Exception(Properties.Resources.ROYALTYWATCHER_NoOneFilesInQueue);
 
-                    if (importQueue.Files.All(f => f.Finished != null))
+                    if (importQueue.FileInfoes.All(f => f.Finished != null))
                         importQueue.ProcessedDate = DateTime.UtcNow;
                 } 
                 catch(Exception ex)
@@ -223,21 +229,13 @@ namespace RoyaltyWorker
                         try
                         {
                             logSession.Add($"File to process: {filePath}");
-                            var importFileRecord = rep.ImportQueueRecordFileNew(importQueue, new { ForAnalize = importDirectory.ForAnalize, SourceFilePath = filePath });
+                            var importFileRecord = rep.ImportQueueRecordFileInfoNew(importQueue, new { ForAnalize = importDirectory.ForAnalize, SourceFilePath = filePath });
                             try
                             {
-                                var file = rep.FileNew(new { FileName = System.IO.Path.GetFileName(filePath) });
-                                logSession.Add($"Try put file '{file.FileName}' into storage");
-                                using (var fileStream = System.IO.File.OpenRead(filePath))
-                                {
-                                    var fileInfo = storage.FilePut(file.FileID, fileStream, file.FileName);
-                                    file.FilePath = fileInfo.FullName;
-                                    file.FileSize = fileInfo.Length;
-                                    file.MimeType = MimeTypes.GetMimeTypeFromFileName(file.FileName);
-                                    file.Encoding = importDirectory.Encoding;
-                                    logSession.Add($"File '{file.FileName}' (size:{file.FileSize}) stored into storage with path: '{file.FilePath}'");
-                                }
-                                importFileRecord.ImportFile = file;
+                                logSession.Add($"Try put file '{filePath}' into storage");
+                                var file = rep.FilePut(storage, filePath, importDirectory.Encoding);
+                                rep.ImportQueueRecordFileInfoFileNew(ImportQueueRecordFileInfoFileType.Import, importFileRecord, file);
+                                logSession.Add($"File '{file.FileName}' (size:{file.FileSize}) stored into storage with path: '{file.FilePath}'");
                             }
                             catch (Exception ex)
                             {
@@ -251,7 +249,6 @@ namespace RoyaltyWorker
                             }
                             finally
                             {
-                                //importQueue.Files.Add(importFileRecord);
                                 if (importDirectory.DeleteFileAfterImport)
                                 try
                                 {

@@ -10,12 +10,13 @@ namespace RoyaltyWorker.Extensions
 {
     public static class RepositoryFileStorage
     {
-        public static RoyaltyRepository.Models.File FilePut(this RoyaltyRepository.Repository repository, IFileStorage storage, Stream streamToUpload, string fileName)
+        public static RoyaltyRepository.Models.File FilePut(this RoyaltyRepository.Repository repository, IFileStorage storage, Stream streamToUpload, string fileName, Encoding encoding = null)
         {
             var repFile = repository.FileNew(new { FileName = fileName, MimeType = MimeTypes.GetMimeTypeFromFileName(fileName) });
             var fileInfo = storage.FilePut(repFile.FileID, streamToUpload, fileName);
             repFile.FilePath = fileInfo.FullName;
             repFile.FileSize = fileInfo.Length;
+            repFile.Encoding = encoding;
             return repFile;
         }
 
@@ -31,8 +32,24 @@ namespace RoyaltyWorker.Extensions
             }
         }
 
+        public static RoyaltyRepository.Models.File FilePut(this RoyaltyRepository.Repository repository, IFileStorage storage, string localFilePath, Encoding encoding)
+        {
+            using (var fileStream = System.IO.File.OpenRead(localFilePath))
+            {
+                var fileName = System.IO.Path.GetFileName(localFilePath);
+                return repository.FilePut(storage, fileStream, fileName, encoding);
+            }
+        }
+
         public static IEnumerable<string> FileGetLines(this RoyaltyRepository.Repository repository, IFileStorage storage, RoyaltyRepository.Models.File repositoryFile)
         {
+            if (repository == null)
+                throw new ArgumentNullException(nameof(repository));
+            if (repositoryFile == null)
+                throw new ArgumentNullException(nameof(repositoryFile));
+            if (storage == null)
+                throw new ArgumentNullException(nameof(storage));
+
             var res = new List<string>();
             using (var fileStream = storage.FileGet(repositoryFile.FileID))
             using (var sr = new System.IO.StreamReader(fileStream, repositoryFile.Encoding))

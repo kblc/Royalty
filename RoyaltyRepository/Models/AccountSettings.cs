@@ -22,8 +22,8 @@ namespace RoyaltyRepository.Models
         {
             SheduleTimes = new List<AccountSettingsSheduleTime>();
             Columns = new HashSet<AccountSettingsColumn>();
-            ImportFolders = new HashSet<AccountSettingsImportDirectory>();
-            ExportFolders = new HashSet<AccountSettingsExportDirectory>();
+            ImportDirectories = new HashSet<AccountSettingsImportDirectory>();
+            ExportDirectories = new HashSet<AccountSettingsExportDirectory>();
         }
         #region Account
         /// <summary>
@@ -50,12 +50,12 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Директории импорта
         /// </summary>
-        public virtual ICollection<AccountSettingsImportDirectory> ImportFolders { get; set; }
+        public virtual ICollection<AccountSettingsImportDirectory> ImportDirectories { get; set; }
 
         /// <summary>
         /// Директории экспорта
         /// </summary>
-        public virtual ICollection<AccountSettingsExportDirectory> ExportFolders { get; set; }
+        public virtual ICollection<AccountSettingsExportDirectory> ExportDirectories { get; set; }
 
         /// <summary>
         /// Игнорирование времени экспорта (используйте IgnoreExportTime)

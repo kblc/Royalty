@@ -20,9 +20,9 @@ namespace RoyaltyRepository
         /// <param name="instance">ImportQueueRecordFile instance</param>
         /// <param name="saveAfterInsert">Save database after insertion</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void ImportQueueRecordFileAdd(ImportQueueRecordFile instance, bool saveAfterInsert = true, bool waitUntilSaving = true)
+        public void ImportQueueRecordFileInfoAdd(ImportQueueRecordFileInfo instance, bool saveAfterInsert = true, bool waitUntilSaving = true)
         {
-            ImportQueueRecordFileAdd(new ImportQueueRecordFile[] { instance }, instance.ImportQueueRecord, saveAfterInsert, waitUntilSaving);
+            ImportQueueRecordFileInfoAdd(new ImportQueueRecordFileInfo[] { instance }, instance.ImportQueueRecord, saveAfterInsert, waitUntilSaving);
         }
         /// <summary>
         /// Add ImportQueueRecordFile to database
@@ -31,9 +31,9 @@ namespace RoyaltyRepository
         /// <param name="importQueueRecord">ImportQueueRecord instance for instance</param>
         /// <param name="saveAfterInsert">Save database after insertion</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void ImportQueueRecordFileAdd(ImportQueueRecordFile instance, ImportQueueRecord importQueueRecord, bool saveAfterInsert = true, bool waitUntilSaving = true)
+        public void ImportQueueRecordFileInfoAdd(ImportQueueRecordFileInfo instance, ImportQueueRecord importQueueRecord, bool saveAfterInsert = true, bool waitUntilSaving = true)
         {
-            ImportQueueRecordFileAdd(new ImportQueueRecordFile[] { instance }, importQueueRecord, saveAfterInsert, waitUntilSaving);
+            ImportQueueRecordFileInfoAdd(new ImportQueueRecordFileInfo[] { instance }, importQueueRecord, saveAfterInsert, waitUntilSaving);
         }
         /// <summary>
         /// Add ImportQueueRecordFiles to database
@@ -42,7 +42,7 @@ namespace RoyaltyRepository
         /// <param name="importQueueRecord">ImportQueueRecord instance for instances</param>
         /// <param name="saveAfterInsert">Save database after insertion</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void ImportQueueRecordFileAdd(IEnumerable<ImportQueueRecordFile> instances, ImportQueueRecord importQueueRecord, bool saveAfterInsert = true, bool waitUntilSaving = true)
+        public void ImportQueueRecordFileInfoAdd(IEnumerable<ImportQueueRecordFileInfo> instances, ImportQueueRecord importQueueRecord, bool saveAfterInsert = true, bool waitUntilSaving = true)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace RoyaltyRepository
                     foreach (var i in instances)
                         i.ImportQueueRecord = importQueueRecord;
 
-                    this.Context.ImportQueueRecordFiles.AddRange(instances);
+                    this.Context.ImportQueueRecordFileInfoes.AddRange(instances);
                     if (saveAfterInsert)
                         this.SaveChanges(waitUntilSaving);
                 }
@@ -70,7 +70,7 @@ namespace RoyaltyRepository
             }
             catch (Exception ex)
             {
-                Helpers.Log.Add(ex, string.Format("Repository.ImportQueueRecordFileAdd(instances=[{0}],saveAfterInsert={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterInsert, waitUntilSaving));
+                Helpers.Log.Add(ex, string.Format("Repository.ImportQueueRecordFileInfoAdd(instances=[{0}],saveAfterInsert={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterInsert, waitUntilSaving));
                 throw;
             }
         }
@@ -80,9 +80,9 @@ namespace RoyaltyRepository
         /// <param name="instance">ImportQueueRecordFile instance</param>
         /// <param name="saveAfterRemove">Save database after removing</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void ImportQueueRecordFileRemove(ImportQueueRecordFile instance, bool saveAfterRemove = true, bool waitUntilSaving = true)
+        public void ImportQueueRecordFileInfoRemove(ImportQueueRecordFileInfo instance, bool saveAfterRemove = true, bool waitUntilSaving = true)
         {
-            ImportQueueRecordFileRemove(new ImportQueueRecordFile[] { instance }, saveAfterRemove, waitUntilSaving);
+            ImportQueueRecordFileInfoRemove(new ImportQueueRecordFileInfo[] { instance }, saveAfterRemove, waitUntilSaving);
         }
         /// <summary>
         /// Remove ImportQueueRecordFiles from database
@@ -90,20 +90,20 @@ namespace RoyaltyRepository
         /// <param name="instances">ImportQueueRecordFile instance array</param>
         /// <param name="saveAfterRemove">Save database after removing</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void ImportQueueRecordFileRemove(IEnumerable<ImportQueueRecordFile> instances, bool saveAfterRemove = true, bool waitUntilSaving = true)
+        public void ImportQueueRecordFileInfoRemove(IEnumerable<ImportQueueRecordFileInfo> instances, bool saveAfterRemove = true, bool waitUntilSaving = true)
         {
             try
             {
                 if (instances == null)
                     throw new ArgumentNullException("instances");
                 instances = instances.Where(i => i != null).ToArray();
-                var files = instances.SelectMany(i => new File[] { i.LogFile, i.ImportFile }).ToArray();
+                var files = instances.SelectMany(i => i.Files).ToArray();
                 try
                 {
                     var save = new Action(() =>
                     {
-                        this.Context.ImportQueueRecordFiles.RemoveRange(instances);
-                        this.FileRemove(files, saveAfterRemove: false);
+                        this.Context.ImportQueueRecordFileInfoes.RemoveRange(instances);
+                        this.ImportQueueRecordFileInfoFileRemove(files, saveAfterRemove);
                     });
 
                     if (saveAfterRemove)
@@ -125,7 +125,7 @@ namespace RoyaltyRepository
             }
             catch (Exception ex)
             {
-                Helpers.Log.Add(ex, string.Format("Repository.ImportQueueRecordFileRemove(instances=[{0}],saveAfterRemove={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterRemove, waitUntilSaving));
+                Helpers.Log.Add(ex, string.Format("Repository.ImportQueueRecordFileInfoRemove(instances=[{0}],saveAfterRemove={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterRemove, waitUntilSaving));
                 throw;
             }
         }
@@ -133,12 +133,12 @@ namespace RoyaltyRepository
         /// Create/Get new ImportQueueRecordFile instance without any link to database
         /// </summary>
         /// <returns>ImportQueueRecordFile instance</returns>
-        public ImportQueueRecordFile ImportQueueRecordFileNew(ImportQueueRecord importQueueRecord = null, object anonymousFiller = null)
+        public ImportQueueRecordFileInfo ImportQueueRecordFileInfoNew(ImportQueueRecord importQueueRecord = null, object anonymousFiller = null)
         {
             try
             {
                 var dt = DateTime.UtcNow;
-                var res = new ImportQueueRecordFile()
+                var res = new ImportQueueRecordFileInfo()
                 { 
                     ImportQueueRecordFileUID = Guid.NewGuid(),
                     ImportQueueRecordState = ImportQueueRecordStateGetDefault(),
@@ -147,14 +147,26 @@ namespace RoyaltyRepository
                     res.FillFromAnonymousType(anonymousFiller);
                 importQueueRecord = importQueueRecord ?? res.ImportQueueRecord;
                 if (importQueueRecord != null)
-                    importQueueRecord.Files.Add(res);
+                    importQueueRecord.FileInfoes.Add(res);
                 return res;
             }
             catch(Exception ex)
             {
-                Helpers.Log.Add(ex, string.Format("Repository.ImportQueueRecordFileNew()"));
+                Helpers.Log.Add(ex, string.Format("Repository.ImportQueueRecordFileInfoNew()"));
                 throw;
             }
+        }
+    }
+
+    public static partial class RepositoryExtensions
+    {
+        public static IEnumerable<File> GetFileByType(this ImportQueueRecordFileInfo info, ImportQueueRecordFileInfoFileType fileType)
+        {
+#pragma warning disable 618
+            return info.Files
+                .Where(f => string.Compare(f.TypeSystemName, RoyaltyRepository.Models.ImportQueueRecordFileInfoFileType.Import.ToString(), true) == 0)
+                .Select(f => f.File);
+#pragma warning restore 618
         }
     }
 }

@@ -104,7 +104,7 @@ namespace RoyaltyRepository
         /// Create/Get new ImportQueueRecordFileAccountDataRecord instance without any link to database
         /// </summary>
         /// <returns>ImportQueueRecordFileAccountDataRecord instance</returns>
-        public ImportQueueRecordFileAccountDataRecord ImportQueueRecordFileAccountDataRecordNew(ImportQueueRecordFile importQueueRecordFile = null, AccountDataRecord accountDataRecord = null)
+        public ImportQueueRecordFileAccountDataRecord ImportQueueRecordFileAccountDataRecordNew(ImportQueueRecordFileInfo importQueueRecordFile = null, AccountDataRecord accountDataRecord = null)
         {
             try
             {

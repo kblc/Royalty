@@ -67,7 +67,7 @@ namespace RoyaltyRepository.Models
         public Encoding Encoding
         {
 #pragma warning disable 618
-            get { return string.IsNullOrWhiteSpace(EncodingName) ? Encoding.Default : Encoding.GetEncoding(EncodingName); }
+            get { return Extensions.Extensions.GetEncodingByName(EncodingName); }
             set { EncodingName = value?.EncodingName; }
 #pragma warning restore 618
         }

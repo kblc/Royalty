@@ -132,9 +132,7 @@ namespace RoyaltyDataCalculator
                             ExistsInDataTable = columnNames.Contains(i.Column.ColumnName.ToUpper()),
                         }).ToArray();
 
-                    var badColumns = string.Empty;
-                    foreach (var badColumn in columnByTypes.Where(c => c.Column == null))
-                        badColumns += (string.IsNullOrWhiteSpace(badColumns) ? string.Empty : ", ") + ColumnType.GetNameFromType(badColumn.Type);
+                    var badColumns = columnByTypes.Where(c => c.Column == null).Concat(i => RoyaltyRepository.Extensions.Extensions.GetEnumNameFromType(i.Type), ", ");
                     if (!string.IsNullOrWhiteSpace(badColumns))
                         throw new Exception(string.Format(Resources.DataCalculator_Preview_ColumnInSettingsNotSetted, badColumns));
 
@@ -508,7 +506,7 @@ namespace RoyaltyDataCalculator
         /// <param name="progressAction">Действие для отображения прогресса</param>
         /// <param name="logAction">Действие для отображения лога</param>
         /// <returns>Возвращает обработанные данные, которые можно экспортировать</returns>
-        public IEnumerable<AccountDataRecord> Import(IEnumerable<DataPreviewRow> previewRows, ImportQueueRecordFile importFile, Action<decimal> progressAction = null, Action<string> logAction = null)
+        public IEnumerable<AccountDataRecord> Import(IEnumerable<DataPreviewRow> previewRows, ImportQueueRecordFileInfo importFile, Action<decimal> progressAction = null, Action<string> logAction = null)
         {
             progressAction = progressAction ?? new Action<decimal>((i) => { });
             logAction = logAction ?? new Action<string>((i) => { });
@@ -584,6 +582,20 @@ namespace RoyaltyDataCalculator
                     logSession.Enabled = true;
                     throw;
                 }
+        }
+
+        /// <summary>
+        /// Получить данные для формирования таблицы экспорта телефонов с меткой "Не доверенные"
+        /// </summary>
+        /// <param name="rowsToExport">Записи для экспорта</param>
+        public IEnumerable<Phone> GetExportNotTrustedPhones(IEnumerable<AccountDataRecord> rowsToExport)
+        {
+            var phoneIds = rowsToExport.Select(r => r.PhoneID);
+            var notTrustedMark = Repository.MarkGet(MarkTypes.NotTrusted);
+            return Account.PhoneMarks
+                .Where(pm => phoneIds.Contains(pm.PhoneID) && pm.MarkID == notTrustedMark.MarkID)
+                .Select(pm => pm.Phone)
+                .Distinct();
         }
 
         /// <summary>

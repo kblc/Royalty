@@ -58,14 +58,17 @@
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\DataImportAttributes.cs" />
     <Compile Include="Extensions\Helpers.cs" />
+    <Compile Include="Logic\AccountSettingsExportDirectory.cs" />
     <Compile Include="Logic\AccountSettingsImportDirectory.cs" />
     <Compile Include="Logic\History.cs" />
     <Compile Include="Logic\ColumnType.cs" />
     <Compile Include="Logic\AccountPhoneMark.cs" />
     <Compile Include="Logic\ImportQueueRecordFileAccountDataRecord.cs" />
+    <Compile Include="Logic\AccountSettings.cs" />
+    <Compile Include="Logic\ImportQueueRecordFileInfoFile.cs" />
     <Compile Include="Logic\Street.cs" />
     <Compile Include="Logic\File.cs" />
-    <Compile Include="Logic\ImportQueueRecordFile.cs" />
+    <Compile Include="Logic\ImportQueueRecordFileInfo.cs" />
     <Compile Include="Logic\AccountDataRecordAdditionalColumn.cs" />
     <Compile Include="Logic\AccountDataRecordAdditional.cs" />
     <Compile Include="Logic\AccountDataRecord.cs" />
@@ -232,6 +235,14 @@
     <Compile Include="Migrations\201510281013281_Migration_AddSourceFilePathToQueueFileRecord.Designer.cs">
       <DependentUpon>201510281013281_Migration_AddSourceFilePathToQueueFileRecord.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510300344552_Migration_ChangeAccountSettingsForFolders.cs" />
+    <Compile Include="Migrations\201510300344552_Migration_ChangeAccountSettingsForFolders.Designer.cs">
+      <DependentUpon>201510300344552_Migration_ChangeAccountSettingsForFolders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510300417041_Migration_ChangeImportFileToNotRequiredForImportFileRecord.cs" />
+    <Compile Include="Migrations\201510300417041_Migration_ChangeImportFileToNotRequiredForImportFileRecord.Designer.cs">
+      <DependentUpon>201510300417041_Migration_ChangeImportFileToNotRequiredForImportFileRecord.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountSettingsExportDirectory.cs" />
@@ -243,9 +254,10 @@
     <Compile Include="Models\IHistoryRecord.cs" />
     <Compile Include="Models\History.cs" />
     <Compile Include="Models\ImportQueueRecordFileAccountDataRecord.cs" />
+    <Compile Include="Models\ImportQueueRecordFileInfoFile.cs" />
     <Compile Include="Models\Street.cs" />
     <Compile Include="Models\File.cs" />
-    <Compile Include="Models\ImportQueueRecordFile.cs" />
+    <Compile Include="Models\ImportQueueRecordFileInfo.cs" />
     <Compile Include="Models\ImportQueueRecordState.cs" />
     <Compile Include="Models\ImportQueueRecord.cs" />
     <Compile Include="Models\AccountExportType.cs" />
@@ -401,6 +413,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510281013281_Migration_AddSourceFilePathToQueueFileRecord.resx">
       <DependentUpon>201510281013281_Migration_AddSourceFilePathToQueueFileRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510300344552_Migration_ChangeAccountSettingsForFolders.resx">
+      <DependentUpon>201510300344552_Migration_ChangeAccountSettingsForFolders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510300417041_Migration_ChangeImportFileToNotRequiredForImportFileRecord.resx">
+      <DependentUpon>201510300417041_Migration_ChangeImportFileToNotRequiredForImportFileRecord.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

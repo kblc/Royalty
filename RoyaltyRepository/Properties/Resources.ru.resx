@@ -282,4 +282,25 @@
   <data name="HISTORYSOURCETYPE_AccountSettings" xml:space="preserve">
     <value>Настройки аккаунта</value>
   </data>
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_Export" xml:space="preserve">
+    <value>Экспортируемый файл</value>
+  </data>
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_ExportPhones" xml:space="preserve">
+    <value>Экспортируемый файл телефонов</value>
+  </data>
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_Import" xml:space="preserve">
+    <value>Импортируемый файл</value>
+  </data>
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_Log" xml:space="preserve">
+    <value>Файл журнала</value>
+  </data>
+  <data name="COLUMNTYPE_CHANGED" xml:space="preserve">
+    <value>Дата изменения</value>
+  </data>
+  <data name="COLUMNTYPE_CREATED" xml:space="preserve">
+    <value>Дата создания</value>
+  </data>
+  <data name="COLUMNTYPE_EXPORTED" xml:space="preserve">
+    <value>Дата экспорта</value>
+  </data>
 </root>

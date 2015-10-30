@@ -120,4 +120,7 @@
   <data name="ROYALTYWATCHER_NoOneFilesInQueue" xml:space="preserve">
     <value>No one files added in queue record</value>
   </data>
+  <data name="ROYALTYWORKER_ImportFileNotFound" xml:space="preserve">
+    <value>Import file not found in database</value>
+  </data>
 </root>

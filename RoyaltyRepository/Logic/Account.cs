@@ -323,8 +323,8 @@ namespace RoyaltyRepository
                 to.Settings.IgnoreExportTime = from.Settings.IgnoreExportTime;
                 to.Settings.TimeForTrust = from.Settings.TimeForTrust;
 
-                foreach (var i in from.Settings.ImportFolders)
-                    to.Settings.ImportFolders.Add(new AccountSettingsImportDirectory()
+                foreach (var i in from.Settings.ImportDirectories)
+                    to.Settings.ImportDirectories.Add(new AccountSettingsImportDirectory()
                     {
                         DeleteFileAfterImport = i.DeleteFileAfterImport,
                         Encoding = i.Encoding,
@@ -334,8 +334,8 @@ namespace RoyaltyRepository
                         RecursiveFolderSearch = i.RecursiveFolderSearch,
                     });
 
-                foreach (var i in from.Settings.ExportFolders)
-                    to.Settings.ExportFolders.Add(new AccountSettingsExportDirectory()
+                foreach (var i in from.Settings.ExportDirectories)
+                    to.Settings.ExportDirectories.Add(new AccountSettingsExportDirectory()
                     {
                         Encoding = i.Encoding,
                         Path = i.Path,

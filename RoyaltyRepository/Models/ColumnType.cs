@@ -2,10 +2,12 @@
 using RoyaltyRepository.Extensions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,17 +21,47 @@ namespace RoyaltyRepository.Models
         public DbSet<ColumnType> ColumnTypes { get; set; }
     }
 
+    public class IsKeyAttribute : Attribute
+    {
+    }
+
+    ////[AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    //[AttributeUsage(AttributeTargets.All, Inherited = true)]
+    //public class LinkToAccountDataRecordAttribute : Attribute
+    //{
+
+    //    public Expression<Func<AccountDataRecord, string>> AccountExpression { get; private set; }
+    //    public LinkToAccountDataRecordAttribute(Expression<Func<AccountDataRecord, string>> accountExpression) { AccountExpression = accountExpression; }
+    //}
+
     /// <summary>
     /// Тип колонки
     /// </summary>
     public enum ColumnTypes
     {
+        //[LinkToAccountDataRecord(dr => dr.Street.Name + (!string.IsNullOrWhiteSpace(dr.HouseNumber) ? ", " + dr.HouseNumber : string.Empty))]
+        [Description("COLUMNTYPE_ADDRESS")]
+        [IsKey]
         Address = 0,
+        [Description("COLUMNTYPE_AREA")]
+        [IsKey]
         Area,
+        [Description("COLUMNTYPE_CITY")]
+        [IsKey]
         City,
+        [Description("COLUMNTYPE_HOST")]
         Host,
+        [Description("COLUMNTYPE_MARK")]
         Mark,
-        Phone
+        [Description("COLUMNTYPE_PHONE")]
+        [IsKey]
+        Phone,
+        [Description("COLUMNTYPE_CHANGED")]
+        Changed,
+        [Description("COLUMNTYPE_CREATED")]
+        Created,
+        [Description("COLUMNTYPE_EXPORTED")]
+        Exported,
     }
 
     /// <summary>
@@ -55,20 +87,7 @@ namespace RoyaltyRepository.Models
         /// Название метки (из файла ресурса)
         /// </summary>
         [NotMapped]
-        public string Name 
-        { 
-            get 
-            {
-                var obj = RoyaltyRepository.Properties.Resources.ResourceManager.GetObject(string.Format("COLUMNTYPE_{0}", SystemName.ToUpper()));
-                return obj == null ? SystemName : obj.ToString(); 
-            } 
-        }
-
-        public static string GetNameFromType(ColumnTypes type)
-        {
-            var obj = RoyaltyRepository.Properties.Resources.ResourceManager.GetObject(string.Format("COLUMNTYPE_{0}", type.ToString().ToUpper()));
-            return obj == null ? type.ToString() : obj.ToString(); 
-        }
+        public string Name { get { return Extensions.Extensions.GetEnumNameFromType(Type); } }
 
         /// <summary>
         /// Тип колонки из существующих
@@ -76,14 +95,8 @@ namespace RoyaltyRepository.Models
         [NotMapped]
         public ColumnTypes Type
         {
-            get
-            {
-                return typeof(ColumnTypes).GetEnumValues().Cast<ColumnTypes>().FirstOrDefault(ct => ct.ToString().ToUpper() == SystemName);
-            }
-            set
-            {
-                SystemName = value.ToString().ToUpper();
-            }
+            get { return Extensions.Helpers.GetEnumValueByName<ColumnTypes>(SystemName); }
+            set { SystemName = value.ToString().ToUpper(); }
         }
 
         /// <summary>
@@ -100,7 +113,7 @@ namespace RoyaltyRepository.Models
 
         void IDefaultRepositoryInitialization.InitializeDefault(RepositoryContext context)
         {
-            var defColumnTypes = new ColumnType[] 
+            var defColumnTypes = new ColumnType[]
             {
                 new ColumnType() { SystemName = ColumnTypes.Address.ToString().ToUpper(), ImportRowValidation = true, ImportTableValidation = true },
                 new ColumnType() { SystemName = ColumnTypes.Area.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = true },
@@ -108,6 +121,9 @@ namespace RoyaltyRepository.Models
                 new ColumnType() { SystemName = ColumnTypes.Host.ToString().ToUpper(), ImportRowValidation = true, ImportTableValidation = true },
                 new ColumnType() { SystemName = ColumnTypes.Mark.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = false },
                 new ColumnType() { SystemName = ColumnTypes.Phone.ToString().ToUpper(), ImportRowValidation = true, ImportTableValidation = true },
+                new ColumnType() { SystemName = ColumnTypes.Changed.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = false },
+                new ColumnType() { SystemName = ColumnTypes.Created.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = false },
+                new ColumnType() { SystemName = ColumnTypes.Exported.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = false },
             };
 
             context.ColumnTypes.AddRange(
@@ -121,6 +137,35 @@ namespace RoyaltyRepository.Models
         public override string ToString()
         {
             return this.GetColumnPropertiesForEntity();
+        }
+    }
+
+    public static partial class RepositoryExtensions
+    {
+        public static object GetAccountDataForColumnType(this ColumnTypes type, AccountDataRecord data)
+        {
+            switch(type)
+            {
+                case ColumnTypes.Address:
+                    return data.Street.Name + (string.IsNullOrWhiteSpace(data.HouseNumber) ? string.Empty : ", " + data.HouseNumber);
+                case ColumnTypes.Area:
+                    return data.Street.Area.Name;
+                case ColumnTypes.Changed:
+                    return data.Changed;
+                case ColumnTypes.City:
+                    return data.Street.Area.City.Name;
+                case ColumnTypes.Created:
+                    return data.Created;
+                case ColumnTypes.Exported:
+                    return data.Exported;
+                case ColumnTypes.Host:
+                    return data.Host.Name;
+                case ColumnTypes.Mark:
+                    return data.Account.PhoneMarks.FirstOrDefault(pm => pm.PhoneID == data.PhoneID)?.Mark?.Name;
+                case ColumnTypes.Phone:
+                    return data.Phone.PhoneNumber;
+            }
+            return null;
         }
     }
 }

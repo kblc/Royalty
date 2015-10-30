@@ -45,36 +45,47 @@ namespace RoyaltyWorker.Tests
         [TestMethod]
         public void RoyaltyWorker_Watcher()
         {
-            var storage = new FileStorage();
-            storage.Log += (s, e) => Console.WriteLine("[FILESTORAGE] {0}", e);
-
-            var storeFolder = "D:\\filestorage.import.main";
-
-            var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings" });
-            Rep.AccountSettingsImportDirectoryNew(a.Settings, new { Path = storeFolder, Filter = "*.csv" });
-
-            var dtStart = DateTime.UtcNow;
-            var dtCurrent = dtStart;
-            var addTimeSpan = new TimeSpan(0, 0, 1);
-            while ((dtCurrent - dtStart).TotalMinutes < 1)
+            SqlLogEnabled = false;
+            try
             {
-                dtCurrent += addTimeSpan;
-                Rep.AccountSettingsSheduleTimeNew(a.Settings, new TimeSpan(dtCurrent.Hour, dtCurrent.Minute, dtCurrent.Second));
+                var storage = new FileStorage();
+                storage.Log += (s, e) => Console.WriteLine("[FILESTORAGE] {0}", e);
+
+                var storeFolder = "D:\\filestorage.import.main";
+
+                var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings" });
+                Rep.AccountSettingsImportDirectoryNew(a.Settings, new { Path = storeFolder, Filter = "*.csv" });
+
+                var dtStart = DateTime.UtcNow;
+                var dtCurrent = dtStart;
+                var addTimeSpan = new TimeSpan(0, 0, 1);
+                while ((dtCurrent - dtStart).TotalMinutes < 1)
+                {
+                    dtCurrent += addTimeSpan;
+                    Rep.AccountSettingsSheduleTimeNew(a.Settings, new TimeSpan(dtCurrent.Hour, dtCurrent.Minute, dtCurrent.Second));
+                }
+                Rep.SaveChanges();
+
+                var itemsInQueueBeforeTest = a.ImportQueue.Count;
+
+                using (var w = new RoyaltyWatcher(() => GetNewRepository(), storage) { CheckTimerInterval = addTimeSpan.Add(addTimeSpan) })
+                {
+                    w.OnQueueRecordAdded += (s, e) => Console.WriteLine("[WORKER:RECORD_ADDED] {0}", e);
+                    w.Log += (s, e) => Console.WriteLine("[WORKER] {0}", e);
+                    var lines = new string[] { "Column0;Column1;Column2", "data0;data1;data2" };
+                    System.IO.File.WriteAllLines(System.IO.Path.Combine(storeFolder, "test.csv"), lines);
+                    System.Threading.Thread.Sleep(5000);
+                    while (w.IsBusy)
+                        System.Threading.Thread.Sleep(200);
+                }
+
+                var newRecordCount = Rep.ImportQueueRecordGet().Where(i => i.Account.AccountUID == a.AccountUID).Count();
+                Assert.AreNotEqual(itemsInQueueBeforeTest, newRecordCount, "Count must not equals");
             }
-            Rep.SaveChanges();
-
-            var itemsInQueueBeforeTest = a.ImportQueue.Count;
-
-            using (var w = new RoyaltyWatcher(() => GetNewRepository(), storage) { CheckTimerInterval = addTimeSpan.Add(addTimeSpan) })
+            finally
             {
-                w.Log += (s, e) => Console.WriteLine("[WORKER] {0}", e);
-                var lines = new string[] { "Column0;Column1;Column2", "data0;data1;data2" };
-                System.IO.File.WriteAllLines(System.IO.Path.Combine(storeFolder, "test.csv"), lines);
-                System.Threading.Thread.Sleep(5000);
+                SqlLogEnabled = true;
             }
-
-            var newRecordCount = Rep.ImportQueueRecordGet().Where(i => i.Account.AccountUID == a.AccountUID).Count();
-            Assert.AreNotEqual(itemsInQueueBeforeTest, newRecordCount, "Count must not equals");
         }
     }
 }

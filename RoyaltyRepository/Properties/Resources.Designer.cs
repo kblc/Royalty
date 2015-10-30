@@ -169,11 +169,38 @@ namespace RoyaltyRepository.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changed date.
+        /// </summary>
+        public static string COLUMNTYPE_CHANGED {
+            get {
+                return ResourceManager.GetString("COLUMNTYPE_CHANGED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to City.
         /// </summary>
         public static string COLUMNTYPE_CITY {
             get {
                 return ResourceManager.GetString("COLUMNTYPE_CITY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created date.
+        /// </summary>
+        public static string COLUMNTYPE_CREATED {
+            get {
+                return ResourceManager.GetString("COLUMNTYPE_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported date.
+        /// </summary>
+        public static string COLUMNTYPE_EXPORTED {
+            get {
+                return ResourceManager.GetString("COLUMNTYPE_EXPORTED", resourceCulture);
             }
         }
         
@@ -354,6 +381,42 @@ namespace RoyaltyRepository.Properties {
         public static string HouseNumberMaxLength {
             get {
                 return ResourceManager.GetString("HouseNumberMaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported file.
+        /// </summary>
+        public static string IMPORTQUEUERECORDFILEINFOFILETYPE_Export {
+            get {
+                return ResourceManager.GetString("IMPORTQUEUERECORDFILEINFOFILETYPE_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported phones file.
+        /// </summary>
+        public static string IMPORTQUEUERECORDFILEINFOFILETYPE_ExportPhones {
+            get {
+                return ResourceManager.GetString("IMPORTQUEUERECORDFILEINFOFILETYPE_ExportPhones", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imported file.
+        /// </summary>
+        public static string IMPORTQUEUERECORDFILEINFOFILETYPE_Import {
+            get {
+                return ResourceManager.GetString("IMPORTQUEUERECORDFILEINFOFILETYPE_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log file.
+        /// </summary>
+        public static string IMPORTQUEUERECORDFILEINFOFILETYPE_Log {
+            get {
+                return ResourceManager.GetString("IMPORTQUEUERECORDFILEINFOFILETYPE_Log", resourceCulture);
             }
         }
         

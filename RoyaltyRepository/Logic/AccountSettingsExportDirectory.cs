@@ -15,33 +15,33 @@ namespace RoyaltyRepository
     public partial class Repository
     {
         /// <summary>
-        /// Add AccountSettingsImportDirectory to database
+        /// Add AccountSettingsExportDirectory to database
         /// </summary>
-        /// <param name="instance">AccountSettingsImportDirectory instance</param>
+        /// <param name="instance">AccountSettingsExportDirectory instance</param>
         /// <param name="saveAfterInsert">Save database after insertion</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void AccountSettingsImportDirectoryAdd(AccountSettingsImportDirectory instance, bool saveAfterInsert = true, bool waitUntilSaving = true)
+        public void AccountSettingsExportDirectoryAdd(AccountSettingsExportDirectory instance, bool saveAfterInsert = true, bool waitUntilSaving = true)
         {
-            AccountSettingsImportDirectoryAdd(new AccountSettingsImportDirectory[] { instance }, instance.AccountSettings, saveAfterInsert, waitUntilSaving);
+            AccountSettingsExportDirectoryAdd(new AccountSettingsExportDirectory[] { instance }, instance.AccountSettings, saveAfterInsert, waitUntilSaving);
         }
         /// <summary>
-        /// Add AccountSettingsImportDirectory to database
+        /// Add AccountSettingsExportDirectory to database
         /// </summary>
-        /// <param name="instance">AccountSettingsImportDirectory instance</param>
+        /// <param name="instance">AccountSettingsExportDirectory instance</param>
         /// <param name="settings">AccountSettings instance for shedule time</param>
         /// <param name="saveAfterInsert">Save database after insertion</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void AccountSettingsImportDirectoryAdd(AccountSettingsImportDirectory instance, AccountSettings settings, bool saveAfterInsert = true, bool waitUntilSaving = true)
+        public void AccountSettingsExportDirectoryAdd(AccountSettingsExportDirectory instance, AccountSettings settings, bool saveAfterInsert = true, bool waitUntilSaving = true)
         {
-            AccountSettingsImportDirectoryAdd(new AccountSettingsImportDirectory[] { instance }, settings, saveAfterInsert, waitUntilSaving);
+            AccountSettingsExportDirectoryAdd(new AccountSettingsExportDirectory[] { instance }, settings, saveAfterInsert, waitUntilSaving);
         }
         /// <summary>
-        /// Add AccountSettingsImportDirectorys to database
+        /// Add AccountSettingsExportDirectorys to database
         /// </summary>
-        /// <param name="instances">AccountSettingsImportDirectory instance array</param>
+        /// <param name="instances">AccountSettingsExportDirectory instance array</param>
         /// <param name="saveAfterInsert">Save database after insertion</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void AccountSettingsImportDirectoryAdd(IEnumerable<AccountSettingsImportDirectory> instances, AccountSettings settings, bool saveAfterInsert = true, bool waitUntilSaving = true)
+        public void AccountSettingsExportDirectoryAdd(IEnumerable<AccountSettingsExportDirectory> instances, AccountSettings settings, bool saveAfterInsert = true, bool waitUntilSaving = true)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace RoyaltyRepository
                 instances = instances.Where(i => i != null).ToArray();
                 try
                 {
-                    this.Context.AccountSettingsImportDirectories.AddRange(instances);
+                    this.Context.AccountSettingsExportDirectories.AddRange(instances);
                     if (saveAfterInsert)
                         this.SaveChanges(waitUntilSaving);
                 }
@@ -66,27 +66,27 @@ namespace RoyaltyRepository
             }
             catch (Exception ex)
             {
-                Helpers.Log.Add(ex, string.Format("Repository.AccountSettingsImportDirectoryAdd(instances=[{0}],saveAfterInsert={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterInsert, waitUntilSaving));
+                Helpers.Log.Add(ex, string.Format("Repository.AccountSettingsExportDirectoryAdd(instances=[{0}],saveAfterInsert={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterInsert, waitUntilSaving));
                 throw;
             }
         }
         /// <summary>
-        /// Remove AccountSettingsImportDirectory from database
+        /// Remove AccountSettingsExportDirectory from database
         /// </summary>
-        /// <param name="instance">AccountSettingsImportDirectory instance</param>
+        /// <param name="instance">AccountSettingsExportDirectory instance</param>
         /// <param name="saveAfterRemove">Save database after removing</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void AccountSettingsImportDirectoryRemove(AccountSettingsImportDirectory instance, bool saveAfterRemove = true, bool waitUntilSaving = true)
+        public void AccountSettingsExportDirectoryRemove(AccountSettingsExportDirectory instance, bool saveAfterRemove = true, bool waitUntilSaving = true)
         {
-            AccountSettingsImportDirectoryRemove(new AccountSettingsImportDirectory[] { instance }, saveAfterRemove, waitUntilSaving);
+            AccountSettingsExportDirectoryRemove(new AccountSettingsExportDirectory[] { instance }, saveAfterRemove, waitUntilSaving);
         }
         /// <summary>
-        /// Remove AccountSettingsImportDirectorys from database
+        /// Remove AccountSettingsExportDirectorys from database
         /// </summary>
-        /// <param name="instances">AccountSettingsImportDirectory instance array</param>
+        /// <param name="instances">AccountSettingsExportDirectory instance array</param>
         /// <param name="saveAfterRemove">Save database after removing</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void AccountSettingsImportDirectoryRemove(IEnumerable<AccountSettingsImportDirectory> instances, bool saveAfterRemove = true, bool waitUntilSaving = true)
+        public void AccountSettingsExportDirectoryRemove(IEnumerable<AccountSettingsExportDirectory> instances, bool saveAfterRemove = true, bool waitUntilSaving = true)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace RoyaltyRepository
 
                 try
                 {
-                    this.Context.AccountSettingsImportDirectories.RemoveRange(instances);
+                    this.Context.AccountSettingsExportDirectories.RemoveRange(instances);
                     if (saveAfterRemove)
                         this.SaveChanges(waitUntilSaving);
                 }
@@ -110,19 +110,19 @@ namespace RoyaltyRepository
             }
             catch (Exception ex)
             {
-                Helpers.Log.Add(ex, string.Format("Repository.AccountSettingsImportDirectoryRemove(instances=[{0}],saveAfterRemove={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterRemove, waitUntilSaving));
+                Helpers.Log.Add(ex, string.Format("Repository.AccountSettingsExportDirectoryRemove(instances=[{0}],saveAfterRemove={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterRemove, waitUntilSaving));
                 throw;
             }
         }
         /// <summary>
-        /// Create/Get new AccountSettingsImportDirectory instance without any link to database
+        /// Create/Get new AccountSettingsExportDirectory instance without any link to database
         /// </summary>
-        /// <returns>AccountSettingsImportDirectory instance</returns>
-        public AccountSettingsImportDirectory AccountSettingsImportDirectoryNew(AccountSettings settings = null, object anonymousFiller = null)
+        /// <returns>AccountSettingsExportDirectory instance</returns>
+        public AccountSettingsExportDirectory AccountSettingsExportDirectoryNew(AccountSettings settings = null, object anonymousFiller = null)
         {
             try
             {
-                var res = new AccountSettingsImportDirectory()
+                var res = new AccountSettingsExportDirectory()
                 {
                     Encoding = Encoding.Default,
                 };
@@ -131,12 +131,12 @@ namespace RoyaltyRepository
                     res.FillFromAnonymousType(anonymousFiller);
 
                 if (settings != null)
-                    settings.ImportDirectories.Add(res);
+                    settings.ExportDirectories.Add(res);
                 return res;
             }
             catch(Exception ex)
             {
-                Helpers.Log.Add(ex, string.Format("Repository.AccountSettingsImportDirectoryNew()"));
+                Helpers.Log.Add(ex, string.Format("Repository.AccountSettingsExportDirectoryNew()"));
                 throw;
             }
         }
@@ -144,10 +144,10 @@ namespace RoyaltyRepository
         /// <summary>
         /// Get account settings shedule times
         /// </summary>
-        /// <returns>AccountSettingsImportDirectory queriable collection</returns>
-        public IQueryable<AccountSettingsImportDirectory> AccountSettingsImportDirectoryGet()
+        /// <returns>AccountSettingsExportDirectory queriable collection</returns>
+        public IQueryable<AccountSettingsExportDirectory> AccountSettingsExportDirectoryGet()
         {
-            return this.Context.AccountSettingsImportDirectories;
+            return this.Context.AccountSettingsExportDirectories;
         }
     }
 }

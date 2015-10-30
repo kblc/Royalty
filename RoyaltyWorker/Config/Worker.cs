@@ -29,8 +29,11 @@ namespace RoyaltyWorker.Config
         {
             get
             {
-                var encName = this["logFileEncoding"] as string;
-                return string.IsNullOrWhiteSpace(encName) ? Encoding.Default : Encoding.GetEncoding(encName);
+                try
+                {
+                    var encName = this["logFileEncoding"] as string;
+                    return Encoding.GetEncoding(encName);
+                } catch { return Encoding.Default; }
             }
         }
 

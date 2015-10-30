@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RoyaltyRepository.Extensions
 {
-    internal static class Extensions
+    public static class Extensions
     {
         public static string GetColumnPropertiesForEntity(this object obj)
         {
@@ -69,12 +69,29 @@ namespace RoyaltyRepository.Extensions
         /// <param name="enumVal">The enum value</param>
         /// <returns>The attribute of type T that exists on the enum value</returns>
         /// <example>string desc = myEnumVariable.GetAttributeOfType<DescriptionAttribute>().Description;</example>
-        public static T GetAttributeOfType<T>(this Enum enumVal) where T : System.Attribute
+        public static T GetAttributeOfType<T>(this object enumVal) where T : System.Attribute
         {
             var type = enumVal.GetType();
             var memInfo = type.GetMember(enumVal.ToString());
             var attributes = memInfo[0].GetCustomAttributes(typeof(T), false);
             return (attributes.Length > 0) ? (T)attributes[0] : null;
+        }
+
+        /// <summary>
+        /// Get encoding by encoding name
+        /// </summary>
+        /// <param name="encodingName">Encoding name</param>
+        /// <returns>Founded encoding or null if not found</returns>
+        internal static Encoding GetEncodingByName(string encodingName)
+        {
+            try
+            {
+                return Encoding.GetEncoding(encodingName);
+            }
+            catch
+            {
+                return Encoding.Default;
+            }
         }
     }
 }
