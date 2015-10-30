@@ -243,6 +243,10 @@
     <Compile Include="Migrations\201510300417041_Migration_ChangeImportFileToNotRequiredForImportFileRecord.Designer.cs">
       <DependentUpon>201510300417041_Migration_ChangeImportFileToNotRequiredForImportFileRecord.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510301106490_Migration_SmallChanges.cs" />
+    <Compile Include="Migrations\201510301106490_Migration_SmallChanges.Designer.cs">
+      <DependentUpon>201510301106490_Migration_SmallChanges.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountSettingsExportDirectory.cs" />
@@ -419,6 +423,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510300417041_Migration_ChangeImportFileToNotRequiredForImportFileRecord.resx">
       <DependentUpon>201510300417041_Migration_ChangeImportFileToNotRequiredForImportFileRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510301106490_Migration_SmallChanges.resx">
+      <DependentUpon>201510301106490_Migration_SmallChanges.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
