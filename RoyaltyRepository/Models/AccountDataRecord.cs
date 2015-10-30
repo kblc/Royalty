@@ -24,6 +24,7 @@ namespace RoyaltyRepository.Models
         public AccountDataRecord()
         {
             LoadedByQueueFiles = new List<ImportQueueRecordFileAccountDataRecord>();
+            ExportInfo = new HashSet<AccountDataRecordExport>();
         }
 
         /// <summary>
@@ -96,6 +97,11 @@ namespace RoyaltyRepository.Models
         /// Файлы очереди, в которых загружался данный файл
         /// </summary>
         public virtual ICollection<ImportQueueRecordFileAccountDataRecord> LoadedByQueueFiles { get; set; }
+
+        /// <summary>
+        /// Информация об экспорте данной записи
+        /// </summary>
+        public virtual ICollection<AccountDataRecordExport> ExportInfo { get; set; }
 
         #region Abstract implementation
 

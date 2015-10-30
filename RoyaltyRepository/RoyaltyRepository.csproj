@@ -58,6 +58,7 @@
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\DataImportAttributes.cs" />
     <Compile Include="Extensions\Helpers.cs" />
+    <Compile Include="Logic\AccountDataRecordExport.cs" />
     <Compile Include="Logic\AccountSettingsExportDirectory.cs" />
     <Compile Include="Logic\AccountSettingsImportDirectory.cs" />
     <Compile Include="Logic\History.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="Models\EntityBase.cs" />
     <Compile Include="Models\IHistoryRecord.cs" />
     <Compile Include="Models\History.cs" />
+    <Compile Include="Models\AccountDataRecordExport.cs" />
     <Compile Include="Models\ImportQueueRecordFileAccountDataRecord.cs" />
     <Compile Include="Models\ImportQueueRecordFileInfoFile.cs" />
     <Compile Include="Models\Street.cs" />

@@ -14,6 +14,7 @@ using Helpers.Linq;
 using RoyaltyDataCalculator;
 using RoyaltyWorker.Extensions;
 using System.Data;
+using System.Globalization;
 
 namespace RoyaltyWorker
 {
@@ -41,6 +42,26 @@ namespace RoyaltyWorker
         /// Is verbose log enabled
         /// </summary>
         public bool VerboseLog { get; set; } = false;
+
+        /// <summary>
+        /// Название по-умолчанию файла для экспорта
+        /// </summary>
+        public string DefaultExportFileName { get; set; } = Config.WorkerConfigSection.DefaultExportFileNameValue;
+
+        /// <summary>
+        /// Название по-умолчанию файла для экспорта
+        /// </summary>
+        public string DefaultImportLogFileName { get; set; } = Config.WorkerConfigSection.DefaultImportLogFileNamValue;
+
+        /// <summary>
+        /// Суффикс по-умолчанию для файлов с телефонами
+        /// </summary>
+        public string DefaultNotTrustedPhonesSuffix { get; set; } = Config.WorkerConfigSection.DefaultNotTrustedPhonesSuffixValue;
+
+        /// <summary>
+        /// Культура для работы потока экспорта
+        /// </summary>
+        public CultureInfo DefaultCultureForExportThread { get; set; } = new System.Globalization.CultureInfo(Config.WorkerConfigSection.DefaultCultureForExportThreadValue);
 
         /// <summary>
         /// Interval between calculations
@@ -105,11 +126,7 @@ namespace RoyaltyWorker
         private void Init(Func<Repository> getNewRepository, IFileStorage fileStorage)
         {
             if (Config.Config.IsWorkerConfigured)
-            {
-                CheckTimerInterval = Config.Config.WorkerConfig.CheckTimerInterval;
-                VerboseLog = Config.Config.WorkerConfig.VerboseLog;
-                LogFileEncodig = Config.Config.WorkerConfig.LogFileEncoding;
-            }
+                this.CopyObjectFrom(Config.Config.WorkerConfig);
 
             checkQueueTimer = new Timer(CheckQueueTimerCallback, null, TimeSpan.FromTicks(0), CheckTimerInterval);
         }
@@ -125,7 +142,17 @@ namespace RoyaltyWorker
                 if (checkQueueThread != null && checkQueueThread.IsAlive)
                     return;
                 checkQueueThread = new Thread(new ParameterizedThreadStart(ProcessRecordsThread));
-                checkQueueThread.Start(new { GetNewRepository = this.getNewRepository, FileStorage = this.fileStorage, VerboseLog, LogFileEncodig });
+                checkQueueThread.Start(new
+                {
+                    GetNewRepository = this.getNewRepository,
+                    FileStorage = this.fileStorage,
+                    VerboseLog,
+                    LogFileEncodig,
+                    DefaultCultureForExportThread,
+                    DefaultExportFileName,
+                    DefaultImportLogFileName,
+                    DefaultNotTrustedPhonesSuffix
+                });
             }
         }
 
@@ -139,6 +166,12 @@ namespace RoyaltyWorker
             var storage = ((dynamic)prm).FileStorage as IFileStorage;
             var verboseLog = (bool)((dynamic)prm).VerboseLog;
             var logFileEncoding = ((dynamic)prm).LogFileEncoding as Encoding;
+            var defaultCultureForExportThread = ((dynamic)prm).LogFileEncoding as System.Globalization.CultureInfo;
+            var defaultExportFileName = ((dynamic)prm).DefaultExportFileName as string;
+            var defaultImportLogFileName = ((dynamic)prm).DefaultImportLogFileName as string;
+            var defaultNotTrustedPhonesSuffix = ((dynamic)prm).DefaultNotTrustedPhonesSuffix as string;
+
+            Thread.CurrentThread.CurrentCulture = defaultCultureForExportThread;
 
             var progress = new Helpers.PercentageProgress();
             var processed = false;
@@ -176,7 +209,8 @@ namespace RoyaltyWorker
                                     try
                                     {
                                         //Process every file
-                                        filesElement.ForEach(f => ProcessRecordFile(f.File, rep, storage, p => f.Progress.Value = p, (s) => logSession.Add(s), logFileEncoding));
+                                        filesElement.ForEach(f => ProcessRecordFile(f.File, rep, storage, p => f.Progress.Value = p, (s) => logSession.Add(s)
+                                            , logFileEncoding, defaultExportFileName, defaultImportLogFileName, defaultNotTrustedPhonesSuffix));
 
                                         //Check for error
                                         if (queueItem.FileInfoes.Any(f => !string.IsNullOrWhiteSpace(f.Error)))
@@ -219,7 +253,7 @@ namespace RoyaltyWorker
         /// <param name="progressAction">Действие на изменение прогресса</param>
         /// <param name="logAction">Действие на событие логирования</param>
         private void ProcessRecordFile(RoyaltyRepository.Models.ImportQueueRecordFileInfo queueFile, Repository repository, IFileStorage storage,
-            Action<decimal> progressAction, Action<string> logAction, Encoding logFileEncoding)
+            Action<decimal> progressAction, Action<string> logAction, Encoding logFileEncoding, string defaultExportFileName, string defaultImportLogFileName, string defaultNotTrustedPhonesSuffix)
         {
             if (queueFile == null)
                 throw new ArgumentNullException(nameof(queueFile));
@@ -302,10 +336,10 @@ namespace RoyaltyWorker
                                 var prg42 = prg4.GetChild(weight: 0.8m);
 
                                 logSession.Add($"Export not trusted phones...");
-                                ExportNotTrustedPhones(queueFile, dc, storage, readyToExport, logSession, i => prg41.Value = i);
+                                ExportNotTrustedPhones(queueFile, dc, storage, readyToExport, logSession, i => prg41.Value = i, defaultNotTrustedPhonesSuffix);
 
                                 logSession.Add($"Export data...");
-                                ExportData(queueFile, repository, dc, storage, readyToExport, logSession, i => prg42.Value = i);
+                                ExportData(queueFile, repository, dc, storage, readyToExport, logSession, i => prg42.Value = i, defaultExportFileName);
 
                                 logSession.Add($"All export done.");
                             }
@@ -326,7 +360,7 @@ namespace RoyaltyWorker
                 }
                 finally
                 {
-                    var logFile = repository.FilePut(storage, fileLog, logFileEncoding, "fileimport.log");
+                    var logFile = repository.FilePut(storage, fileLog, logFileEncoding, defaultImportLogFileName);
                     repository.ImportQueueRecordFileInfoFileNew(RoyaltyRepository.Models.ImportQueueRecordFileInfoFileType.Log, queueFile, logFile);
                     queueFile.Finished = DateTime.UtcNow;
                     repository.SaveChanges();
@@ -344,7 +378,8 @@ namespace RoyaltyWorker
         /// <param name="settings">Настройки аккаунта (для определения названия колонки)</param>
         /// <param name="recordsToExport">Записи для экспорта</param>
         /// <returns>DataTable с данными</returns>
-        private DataTable GetDataTableFromRecords(RoyaltyRepository.Models.AccountSettings settings, IEnumerable<RoyaltyRepository.Models.AccountDataRecord> recordsToExport)
+        private DataTable GetDataTableFromRecords(RoyaltyRepository.Models.AccountSettings settings, 
+            IEnumerable<RoyaltyRepository.Models.AccountDataRecord> recordsToExport)
         {
             var mainColumns = settings.Columns.Select(c => new { Column = new DataColumn(c.ColumnType.Type.ToString(), typeof(string)), IsKey = RoyaltyRepository.Extensions.Extensions.GetAttributeOfType<RoyaltyRepository.Models.IsKeyAttribute>(c.ColumnType) != null });
             var additionalColumns = settings.Account.AdditionalColumns.Where(ad => ad.Export).Select(ad =>new { Column = new DataColumn(ad.ColumnName, typeof(string)), IsKey = false });
@@ -381,7 +416,9 @@ namespace RoyaltyWorker
         /// <param name="readyToExport">Данные для экспорта</param>
         /// <param name="upperLogSession">Журнал сессии верхнего уровня</param>
         /// <param name="progressAction">Действие для отслуживания прогресса выполнения</param>
-        private void ExportData(RoyaltyRepository.Models.ImportQueueRecordFileInfo queueFile, Repository rep, DataCalculator dc, IFileStorage storage, IEnumerable<RoyaltyRepository.Models.AccountDataRecord> readyToExport, Helpers.Log.SessionInfo upperLogSession, Action<decimal> progressAction)
+        private void ExportData(RoyaltyRepository.Models.ImportQueueRecordFileInfo queueFile, Repository rep, DataCalculator dc, IFileStorage storage, 
+            IEnumerable<RoyaltyRepository.Models.AccountDataRecord> readyToExport, Helpers.Log.SessionInfo upperLogSession, Action<decimal> progressAction,
+            string defaultExportFileName)
         {
             progressAction = progressAction ?? new Action<decimal>(i => { });
 
@@ -400,8 +437,13 @@ namespace RoyaltyWorker
                             validFileName = validFileName.Replace(c.ToString(), string.Empty);
 
                         var exportPhonesLines = Helpers.CSV.CSVFile.Save(dataTable, verboseLogAction: (s) => logSession.Add(s));
-                        var dataFile = dc.Repository.FilePut(storage, exportPhonesLines, Encoding.Default, "export.csv");
+                        var dataFile = dc.Repository.FilePut(storage, exportPhonesLines, Encoding.Default, defaultExportFileName);
                         dc.Repository.ImportQueueRecordFileInfoFileNew(RoyaltyRepository.Models.ImportQueueRecordFileInfoFileType.ExportPhones, queueFile, dataFile);
+
+                        logSession.Add($"Add export information for each record in data...");
+                        readyToExport.ToList().ForEach(adr => rep.AccountDataRecordExportNew(adr, dataFile, adr.Host));
+
+                        #region Name <-> SystemName
 
                         var namesDictionary = typeof(RoyaltyRepository.Models.ColumnTypes)
                             .GetEnumValues()
@@ -419,6 +461,8 @@ namespace RoyaltyWorker
                             var item = namesDictionary.FirstOrDefault(i => i.SystemName.ToUpper() == name.ToUpper());
                             return (item != null) ? item.Name : name;
                         });
+
+                        #endregion
 
                         var saveTable = new Action<string,Encoding,DataTable>((exportFilePath, enc, dt) =>
                         {
@@ -532,7 +576,9 @@ namespace RoyaltyWorker
         /// <param name="storage">Хранилище данных</param>
         /// <param name="readyToExport">Данные, подготовленные для экспорта</param>
         /// <param name="upperLogSession">Сессия журнала верхнего уровня</param>
-        private void ExportNotTrustedPhones(RoyaltyRepository.Models.ImportQueueRecordFileInfo queueFile, DataCalculator dc, IFileStorage storage, IEnumerable<RoyaltyRepository.Models.AccountDataRecord> readyToExport, Helpers.Log.SessionInfo upperLogSession, Action<decimal> progressAction)
+        private void ExportNotTrustedPhones(RoyaltyRepository.Models.ImportQueueRecordFileInfo queueFile, DataCalculator dc, IFileStorage storage, 
+            IEnumerable<RoyaltyRepository.Models.AccountDataRecord> readyToExport, Helpers.Log.SessionInfo upperLogSession, Action<decimal> progressAction,
+            string defaultNotTrustedPhonesSuffix)
         {
             progressAction = progressAction ?? new Action<decimal>(i => { });
 
@@ -552,7 +598,7 @@ namespace RoyaltyWorker
                             validFileName = validFileName.Replace(c.ToString(), string.Empty);
 
                         var exportPhonesLines = Helpers.CSV.CSVFile.Save(exportNotTrustedPhonesDataTable, verboseLogAction: (s) => logSession.Add(s));
-                        var phoneFile = dc.Repository.FilePut(storage, exportPhonesLines, Encoding.Default, "phones-notTrusted.csv");
+                        var phoneFile = dc.Repository.FilePut(storage, exportPhonesLines, Encoding.Default, $"data-{defaultNotTrustedPhonesSuffix}.csv");
                         dc.Repository.ImportQueueRecordFileInfoFileNew(RoyaltyRepository.Models.ImportQueueRecordFileInfoFileType.ExportPhones, queueFile, phoneFile);
 
                         var phonesExportDirectories = dc.Account.Settings.ExportDirectories
@@ -563,7 +609,7 @@ namespace RoyaltyWorker
                             {
                                 if (System.IO.Directory.Exists(phoneDirectory.Path))
                                 {
-                                    var exportFilePath = System.IO.Path.Combine(phoneDirectory.Path, $"{validFileName}-phones.csv");
+                                    var exportFilePath = System.IO.Path.Combine(phoneDirectory.Path, $"{validFileName}-{defaultNotTrustedPhonesSuffix}.csv");
                                     if (System.IO.File.Exists(exportFilePath))
                                     {
                                         logSession.Add($"Merging not trusted phones with '{exportFilePath}'");
