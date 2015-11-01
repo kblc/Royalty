@@ -26,7 +26,6 @@ namespace RoyaltyRepository.Models
             PhoneMarks = new List<AccountPhoneMark>();
             AdditionalColumns = new List<AccountDataRecordAdditionalColumn>();
             SeriesOfNumbers = new List<AccountSeriesOfNumbersRecord>();
-            ExportTypes = new List<AccountExportType>();
             ImportQueue = new List<ImportQueueRecord>();
         }
 
@@ -47,7 +46,6 @@ namespace RoyaltyRepository.Models
         public virtual ICollection<AccountDataRecord> Data { get; set; }
         public virtual ICollection<AccountDataRecordAdditionalColumn> AdditionalColumns { get; set; }
         public virtual ICollection<AccountSeriesOfNumbersRecord> SeriesOfNumbers { get; set; }
-        public virtual ICollection<AccountExportType> ExportTypes { get; set; }
         public virtual ICollection<ImportQueueRecord> ImportQueue { get; set; }
         public virtual ICollection<AccountPhoneMark> PhoneMarks { get; set; }
 

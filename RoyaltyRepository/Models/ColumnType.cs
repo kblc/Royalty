@@ -111,19 +111,25 @@ namespace RoyaltyRepository.Models
         [Column("import_row_validation"), Required]
         public bool ImportRowValidation { get; set; }
 
+        [Column("export_column_index"), Required]
+        public long ExportColumnIndex { get; set; }
+
+        [Column("export"), Required]
+        public bool Export { get; set; }
+
         void IDefaultRepositoryInitialization.InitializeDefault(RepositoryContext context)
         {
             var defColumnTypes = new ColumnType[]
             {
-                new ColumnType() { SystemName = ColumnTypes.Address.ToString().ToUpper(), ImportRowValidation = true, ImportTableValidation = true },
-                new ColumnType() { SystemName = ColumnTypes.Area.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = true },
-                new ColumnType() { SystemName = ColumnTypes.City.ToString().ToUpper(), ImportRowValidation = true, ImportTableValidation = true },
-                new ColumnType() { SystemName = ColumnTypes.Host.ToString().ToUpper(), ImportRowValidation = true, ImportTableValidation = true },
-                new ColumnType() { SystemName = ColumnTypes.Mark.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = false },
-                new ColumnType() { SystemName = ColumnTypes.Phone.ToString().ToUpper(), ImportRowValidation = true, ImportTableValidation = true },
-                new ColumnType() { SystemName = ColumnTypes.Changed.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = false },
-                new ColumnType() { SystemName = ColumnTypes.Created.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = false },
-                new ColumnType() { SystemName = ColumnTypes.Exported.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = false },
+                new ColumnType() { SystemName = ColumnTypes.Address.ToString().ToUpper(), ImportRowValidation = true, ImportTableValidation = true, ExportColumnIndex = 1, Export = true },
+                new ColumnType() { SystemName = ColumnTypes.Area.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = true, ExportColumnIndex = 2, Export = true },
+                new ColumnType() { SystemName = ColumnTypes.City.ToString().ToUpper(), ImportRowValidation = true, ImportTableValidation = true, ExportColumnIndex = 3, Export = true },
+                new ColumnType() { SystemName = ColumnTypes.Host.ToString().ToUpper(), ImportRowValidation = true, ImportTableValidation = true, ExportColumnIndex = 5, Export = true },
+                new ColumnType() { SystemName = ColumnTypes.Mark.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = false, ExportColumnIndex = 4, Export = true },
+                new ColumnType() { SystemName = ColumnTypes.Phone.ToString().ToUpper(), ImportRowValidation = true, ImportTableValidation = true, ExportColumnIndex = 0, Export = true },
+                new ColumnType() { SystemName = ColumnTypes.Changed.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = false, ExportColumnIndex = 6, Export = true },
+                new ColumnType() { SystemName = ColumnTypes.Created.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = false, ExportColumnIndex = 7, Export = true },
+                new ColumnType() { SystemName = ColumnTypes.Exported.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = false, ExportColumnIndex = 8, Export = true },
             };
 
             context.ColumnTypes.AddRange(

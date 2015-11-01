@@ -120,7 +120,16 @@
   <data name="ROYALTYWATCHER_NoOneFilesInQueue" xml:space="preserve">
     <value>В очереди нет ни одного файла</value>
   </data>
+  <data name="ROYALTYWATCHER_WatherIsBusyNow" xml:space="preserve">
+    <value>Компонент сейчас занят. Дождить окончания его работы.</value>
+  </data>
   <data name="ROYALTYWORKER_ImportFileNotFound" xml:space="preserve">
     <value>Файл импорта не найден в базе данных</value>
+  </data>
+  <data name="ROYALTYWORKER_WorkerIsBusyNow" xml:space="preserve">
+    <value>Компонент сейчас занят. Дождить окончания его работы.</value>
+  </data>
+  <data name="STARTSTOPBASE_StopBeforeRun" xml:space="preserve">
+    <value>Компонент сейчас занят. Остановите его перед запуском.</value>
   </data>
 </root>

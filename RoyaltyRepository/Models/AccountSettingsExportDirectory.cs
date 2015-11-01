@@ -40,24 +40,30 @@ namespace RoyaltyRepository.Models
         /// Путь до диреткории
         /// </summary>
         [Column("path"), Required]
-        public string Path { get; set; }
+        public string DirectoryPath { get; set; }
 
         /// <summary>
-        /// Экспортировать данные
+        /// Имя выгружаемого файла
         /// </summary>
-        [Column("export_data"), Required]
-        public bool ExportData { get; set; }
+        [Column("file_name")]
+        public string FileName { get; set; }
 
+        #region Mark
         /// <summary>
-        /// Экспортировать телефоны
+        /// Идентификатор типа записей для выгрузки
         /// </summary>
-        [Column("export_phones"), Required]
-        public bool ExportPhones { get; set; }
+        [Column("mark_id"), ForeignKey("Mark")]
+        public long? MarkID { get; set; }
+        /// <summary>
+        /// Тип записей для выгрузки
+        /// </summary>
+        public virtual Mark Mark { get; set; }
+        #endregion
 
         /// <summary>
         /// Название кодировки для файлов в этой директории
         /// </summary>
-        [Column("encoding")]
+        [Column("encoding"), MaxLength(100)]
         [Obsolete("User Encoding property instead")]
         public string EncodingName { get; set; }
 
@@ -68,8 +74,8 @@ namespace RoyaltyRepository.Models
         public Encoding Encoding
         {
 #pragma warning disable 618
-            get { return string.IsNullOrWhiteSpace(EncodingName) ? Encoding.Default : Encoding.GetEncoding(EncodingName); }
-            set { EncodingName = value?.EncodingName; }
+            get { return Extensions.Extensions.GetEncodingByName(EncodingName); }
+            set { EncodingName = value?.WebName; }
 #pragma warning restore 618
         }
 
@@ -80,10 +86,23 @@ namespace RoyaltyRepository.Models
         public string ExecuteAfterAnalizeCommand { get; set; }
 
         /// <summary>
-        /// Ожидать окончания выполнения запущенной команды
+        /// Время ожидания выполнения команды
         /// </summary>
-        [Column("wait_execution_after_analize")]
-        public bool? WaitExecutionAfterAnalize { get; set; }
+        [Obsolete("Property TimeoutForExecute should be used instead.")]
+        [Column("timeout_for_execute"), Required]
+        public decimal TimeoutForExecuteTicks { get; set; }
+
+        /// <summary>
+        /// Время ожидания выполнения команды
+        /// </summary>
+        [NotMapped]
+        public TimeSpan TimeoutForExecute
+        {
+#pragma warning disable 618
+            get { return TimeSpan.FromMilliseconds((double)TimeoutForExecuteTicks); }
+            set { TimeoutForExecuteTicks = (decimal)value.TotalMilliseconds; }
+#pragma warning restore 618
+        }
 
         #region Abstract implementation
 

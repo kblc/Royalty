@@ -75,7 +75,6 @@
     <Compile Include="Logic\AccountDataRecord.cs" />
     <Compile Include="Logic\AccountDictionaryRecordCondition.cs" />
     <Compile Include="Logic\AccountDictionaryRecord.cs" />
-    <Compile Include="Logic\AccountExportType.cs" />
     <Compile Include="Logic\AccountSeriesOfNumbersRecord.cs" />
     <Compile Include="Logic\AccountDictionaryExclude.cs" />
     <Compile Include="Logic\Area.cs" />
@@ -248,6 +247,26 @@
     <Compile Include="Migrations\201510301106490_Migration_SmallChanges.Designer.cs">
       <DependentUpon>201510301106490_Migration_SmallChanges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511010614031_Migration_AddExportForEveryDataRecord.cs" />
+    <Compile Include="Migrations\201511010614031_Migration_AddExportForEveryDataRecord.Designer.cs">
+      <DependentUpon>201511010614031_Migration_AddExportForEveryDataRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511011347182_Migration_SmallChange.cs" />
+    <Compile Include="Migrations\201511011347182_Migration_SmallChange.Designer.cs">
+      <DependentUpon>201511011347182_Migration_SmallChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511011745581_Migration_AddExportForColumnType.cs" />
+    <Compile Include="Migrations\201511011745581_Migration_AddExportForColumnType.Designer.cs">
+      <DependentUpon>201511011745581_Migration_AddExportForColumnType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511011755229_Migration_SmallFixForFK.cs" />
+    <Compile Include="Migrations\201511011755229_Migration_SmallFixForFK.Designer.cs">
+      <DependentUpon>201511011755229_Migration_SmallFixForFK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511011912436_Migration_AddTimeoutForExecuteForExportDirectory.cs" />
+    <Compile Include="Migrations\201511011912436_Migration_AddTimeoutForExecuteForExportDirectory.Designer.cs">
+      <DependentUpon>201511011912436_Migration_AddTimeoutForExecuteForExportDirectory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountSettingsExportDirectory.cs" />
@@ -266,7 +285,6 @@
     <Compile Include="Models\ImportQueueRecordFileInfo.cs" />
     <Compile Include="Models\ImportQueueRecordState.cs" />
     <Compile Include="Models\ImportQueueRecord.cs" />
-    <Compile Include="Models\AccountExportType.cs" />
     <Compile Include="Models\AccountSeriesOfNumbersRecord.cs" />
     <Compile Include="Models\AccountDataRecordAdditionalColumn.cs" />
     <Compile Include="Models\AccountDataRecordAdditional.cs" />
@@ -428,6 +446,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510301106490_Migration_SmallChanges.resx">
       <DependentUpon>201510301106490_Migration_SmallChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511010614031_Migration_AddExportForEveryDataRecord.resx">
+      <DependentUpon>201511010614031_Migration_AddExportForEveryDataRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511011347182_Migration_SmallChange.resx">
+      <DependentUpon>201511011347182_Migration_SmallChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511011745581_Migration_AddExportForColumnType.resx">
+      <DependentUpon>201511011745581_Migration_AddExportForColumnType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511011755229_Migration_SmallFixForFK.resx">
+      <DependentUpon>201511011755229_Migration_SmallFixForFK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511011912436_Migration_AddTimeoutForExecuteForExportDirectory.resx">
+      <DependentUpon>201511011912436_Migration_AddTimeoutForExecuteForExportDirectory.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

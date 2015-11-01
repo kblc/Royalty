@@ -61,7 +61,7 @@ namespace RoyaltyWorker.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No one files added in queue record.
+        ///   Looks up a localized string similar to No one files added in queue record..
         /// </summary>
         public static string ROYALTYWATCHER_NoOneFilesInQueue {
             get {
@@ -70,11 +70,38 @@ namespace RoyaltyWorker.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import file not found in database.
+        ///   Looks up a localized string similar to Watcher is busy now. Try to check account later..
+        /// </summary>
+        public static string ROYALTYWATCHER_WatherIsBusyNow {
+            get {
+                return ResourceManager.GetString("ROYALTYWATCHER_WatherIsBusyNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import file not found in database..
         /// </summary>
         public static string ROYALTYWORKER_ImportFileNotFound {
             get {
                 return ResourceManager.GetString("ROYALTYWORKER_ImportFileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Worker is busy now. Try to check account later..
+        /// </summary>
+        public static string ROYALTYWORKER_WorkerIsBusyNow {
+            get {
+                return ResourceManager.GetString("ROYALTYWORKER_WorkerIsBusyNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Component is busy. Stop it before run once..
+        /// </summary>
+        public static string STARTSTOPBASE_StopBeforeRun {
+            get {
+                return ResourceManager.GetString("STARTSTOPBASE_StopBeforeRun", resourceCulture);
             }
         }
     }

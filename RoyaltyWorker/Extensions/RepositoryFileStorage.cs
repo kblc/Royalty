@@ -23,9 +23,12 @@ namespace RoyaltyWorker.Extensions
         public static RoyaltyRepository.Models.File FilePut(this RoyaltyRepository.Repository repository, IFileStorage storage, IEnumerable<string> lines, Encoding encoding, string fileName)
         {
             using (var stream = new System.IO.MemoryStream())
-            {
-                using (var writer = new System.IO.StreamWriter(stream, encoding))
-                    lines.ToList().ForEach(s => writer.WriteLine(s));
+            using (var writer = new System.IO.StreamWriter(stream, encoding))
+            { 
+                lines.SelectMany(str => str.Split(new string[] { Environment.NewLine }, StringSplitOptions.None))
+                    .ToList()
+                    .ForEach(s => writer.WriteLine(s));
+                writer.Flush();
                 var file = FilePut(repository, storage, stream, fileName);
                 file.Encoding = encoding;
                 return file;

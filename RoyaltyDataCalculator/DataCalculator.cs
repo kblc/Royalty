@@ -125,6 +125,7 @@ namespace RoyaltyDataCalculator
                             Type = ct,
                             Column = Account.Settings.GetColumnFor(ct),
                         })
+                        .Where(c => c.Column != null)
                         .Select(i => new
                         {
                             i.Type,

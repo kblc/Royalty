@@ -68,7 +68,7 @@ namespace RoyaltyRepository.Models
         {
 #pragma warning disable 618
             get { return Extensions.Extensions.GetEncodingByName(EncodingName); }
-            set { EncodingName = value?.EncodingName; }
+            set { EncodingName = value?.WebName; }
 #pragma warning restore 618
         }
 

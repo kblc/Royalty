@@ -57,7 +57,7 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Название кодировки для файлов в этой директории
         /// </summary>
-        [Column("encoding")]
+        [Column("encoding"), MaxLength(100)]
         [Obsolete("User Encoding property instead")]
         public string EncodingName { get; set; }
 
@@ -69,7 +69,7 @@ namespace RoyaltyRepository.Models
         {
 #pragma warning disable 618
             get { return Extensions.Extensions.GetEncodingByName(EncodingName); }
-            set { EncodingName = value?.EncodingName; }
+            set { EncodingName = value?.WebName; }
 #pragma warning restore 618
         }
 

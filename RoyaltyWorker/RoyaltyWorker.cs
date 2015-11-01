@@ -15,33 +15,56 @@ using RoyaltyDataCalculator;
 using RoyaltyWorker.Extensions;
 using System.Data;
 using System.Globalization;
+using RoyaltyRepository.Models;
+using RoyaltyWorker.Base;
+using System.Configuration;
+using System.Diagnostics;
 
 namespace RoyaltyWorker
 {
+    public class WorkerThreadParameters
+    {
+        public readonly Func<Repository> GetNewRepository = null;
+        public readonly IFileStorage Storage = null;
+        public readonly bool VerboseLog = false;
+        public readonly bool SuspendTimerCheck = false;
+        public readonly Account AccountForCheck = null;
+        public readonly Action<IEnumerable<string>> Log;
+        public readonly Action<Exception> ExceptionLog;
+        public readonly Action<WorkerProcessElementEventArgs> WorkerStateChanged;
+        public readonly TimeSpan TimerInterval;
+        public readonly Encoding LogFileEncodig;
+        public readonly Encoding ExportFileEncodig;
+        public readonly CultureInfo DefaultCultureForExportThread;
+        public readonly string DefaultImportLogFileName;
+        public readonly string DefaultExportFileName;
+
+        public WorkerThreadParameters(Func<Repository> getNewRepository, IFileStorage storage, bool verboseLog, bool suspendTimerCheck,
+            Account accountForCheck, Action<IEnumerable<string>> log, Action<Exception> exceptionLog, Action<WorkerProcessElementEventArgs> workerStateChanged, TimeSpan timerInterval,
+            Encoding logFileEncodig, Encoding exportFileEncodig, CultureInfo defaultCultureForExportThread, string defaultImportLogFileName, string defaultExportFileName)
+        {
+            GetNewRepository = getNewRepository;
+            Storage = storage;
+            VerboseLog = verboseLog;
+            SuspendTimerCheck = suspendTimerCheck;
+            AccountForCheck = accountForCheck;
+            Log = log;
+            ExceptionLog = exceptionLog;
+            WorkerStateChanged = workerStateChanged;
+            TimerInterval = timerInterval;
+            LogFileEncodig = logFileEncodig;
+            ExportFileEncodig = exportFileEncodig;
+            DefaultCultureForExportThread = defaultCultureForExportThread;
+            DefaultImportLogFileName = defaultImportLogFileName;
+            DefaultExportFileName = defaultExportFileName;
+        }
+    }
+
     /// <summary>
     /// Задача Worker'a - выдергивать элементы из очереди и обрабатывать их
     /// </summary>
-    public class RoyaltyWorker : IDisposable
+    public class RoyaltyWorker : RoyaltyBase<WorkerThreadParameters, Account>
     {
-        /// <summary>
-        /// Royalty repository
-        /// </summary>
-        private readonly Func<Repository> getNewRepository = null;
-
-        /// <summary>
-        /// File storage
-        /// </summary>
-        private readonly IFileStorage fileStorage = null;
-
-        private TimeSpan checkTimerInterval = new TimeSpan(0, 0, 10);
-        private Timer checkQueueTimer = null;
-        private Thread checkQueueThread = null;
-        private object checkLockObject = new object();
-
-        /// <summary>
-        /// Is verbose log enabled
-        /// </summary>
-        public bool VerboseLog { get; set; } = false;
 
         /// <summary>
         /// Название по-умолчанию файла для экспорта
@@ -54,33 +77,9 @@ namespace RoyaltyWorker
         public string DefaultImportLogFileName { get; set; } = Config.WorkerConfigSection.DefaultImportLogFileNamValue;
 
         /// <summary>
-        /// Суффикс по-умолчанию для файлов с телефонами
-        /// </summary>
-        public string DefaultNotTrustedPhonesSuffix { get; set; } = Config.WorkerConfigSection.DefaultNotTrustedPhonesSuffixValue;
-
-        /// <summary>
         /// Культура для работы потока экспорта
         /// </summary>
         public CultureInfo DefaultCultureForExportThread { get; set; } = new System.Globalization.CultureInfo(Config.WorkerConfigSection.DefaultCultureForExportThreadValue);
-
-        /// <summary>
-        /// Interval between calculations
-        /// </summary>
-        public TimeSpan CheckTimerInterval
-        {
-            get { return checkTimerInterval; }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-
-                if (checkTimerInterval == value)
-                    return;
-
-                checkQueueTimer?.Change(TimeSpan.FromTicks(0), checkTimerInterval);
-                checkTimerInterval = value;
-            }
-        }
 
         /// <summary>
         /// Log file encoding
@@ -88,151 +87,119 @@ namespace RoyaltyWorker
         public Encoding LogFileEncodig { get; set; } = Encoding.GetEncoding(Config.WorkerConfigSection.DefaultEncoding);
 
         /// <summary>
+        /// Export file encoding
+        /// </summary>
+        public Encoding ExportFileEncodig { get; set; } = Encoding.GetEncoding(Config.WorkerConfigSection.DefaultEncoding);
+
+        #region Constructor
+
+        /// <summary>
         /// Инициализация нового экземпляра
         /// </summary>
         /// <param name="getNewRepository">Функия для получения нового экземпляра репозитория</param>
-        /// <param name="fileStorage">Хранилище файлов</param>
-        public RoyaltyWorker(Func<Repository> getNewRepository, IFileStorage fileStorage)
-        {
-            if (getNewRepository == null)
-                throw new ArgumentNullException(nameof(getNewRepository));
-            if (fileStorage == null)
-                throw new ArgumentNullException(nameof(fileStorage));
-
-            this.getNewRepository = getNewRepository;
-            this.fileStorage = fileStorage;
-
-            Init(getNewRepository, fileStorage);
-        }
+        /// <param name="storage">Хранилище файлов</param>
+        public RoyaltyWorker(Func<Repository> getNewRepository, IFileStorage storage)
+            : this(getNewRepository, storage, false) { }
 
         /// <summary>
-        /// Отменить выполнение текущих действий. Может привести к ошибке
-        /// </summary>
-        public void CancelCurrent()
-        {
-            lock(checkLockObject)
-            { 
-                if (checkQueueThread != null && checkQueueThread.IsAlive)
-                    checkQueueThread.Abort();
-                checkQueueThread = null;
-            }
-        }
-
-        /// <summary>
-        /// Инициализация обработчика
+        /// Инициализация нового экземпляра
         /// </summary>
         /// <param name="getNewRepository">Функия для получения нового экземпляра репозитория</param>
-        /// <param name="fileStorage">Хранилище файлов</param>
-        private void Init(Func<Repository> getNewRepository, IFileStorage fileStorage)
-        {
-            if (Config.Config.IsWorkerConfigured)
-                this.CopyObjectFrom(Config.Config.WorkerConfig);
+        /// <param name="storage">Хранилище файлов</param>
+        public RoyaltyWorker(Func<Repository> getNewRepository, IFileStorage storage, bool createStarted)
+            : base(getNewRepository, storage, createStarted, TimeSpan.FromSeconds(30)) { }
 
-            checkQueueTimer = new Timer(CheckQueueTimerCallback, null, TimeSpan.FromTicks(0), CheckTimerInterval);
-        }
-
-        /// <summary>
-        /// Событие по таймеру, означающее необходимость стартовать проверку
-        /// </summary>
-        /// <param name="state">Не используется</param>
-        private void CheckQueueTimerCallback(object state)
-        {
-            lock(checkLockObject)
-            {
-                if (checkQueueThread != null && checkQueueThread.IsAlive)
-                    return;
-                checkQueueThread = new Thread(new ParameterizedThreadStart(ProcessRecordsThread));
-                checkQueueThread.Start(new
-                {
-                    GetNewRepository = this.getNewRepository,
-                    FileStorage = this.fileStorage,
-                    VerboseLog,
-                    LogFileEncodig,
-                    DefaultCultureForExportThread,
-                    DefaultExportFileName,
-                    DefaultImportLogFileName,
-                    DefaultNotTrustedPhonesSuffix
-                });
-            }
-        }
+        #endregion
 
         /// <summary>
         /// Обрабатываем очередь, пока в ней не кончатся элементы, затем выходим
         /// </summary>
         /// <param name="prm">Входные параметры</param>
-        private void ProcessRecordsThread(object prm)
+        private static void ProcessThreadProc(WorkerThreadParameters prm)
         {
-            var getNewRep = ((dynamic)prm).GetNewRepository as Func<Repository>;
-            var storage = ((dynamic)prm).FileStorage as IFileStorage;
-            var verboseLog = (bool)((dynamic)prm).VerboseLog;
-            var logFileEncoding = ((dynamic)prm).LogFileEncoding as Encoding;
-            var defaultCultureForExportThread = ((dynamic)prm).LogFileEncoding as System.Globalization.CultureInfo;
-            var defaultExportFileName = ((dynamic)prm).DefaultExportFileName as string;
-            var defaultImportLogFileName = ((dynamic)prm).DefaultImportLogFileName as string;
-            var defaultNotTrustedPhonesSuffix = ((dynamic)prm).DefaultNotTrustedPhonesSuffix as string;
-
-            Thread.CurrentThread.CurrentCulture = defaultCultureForExportThread;
+            Thread.CurrentThread.CurrentCulture = prm.DefaultCultureForExportThread;
 
             var progress = new Helpers.PercentageProgress();
             var processed = false;
             do
             {
                 processed = false;
-                using (var logSession = Helpers.Log.Session($"{GetType().Name}.{nameof(ProcessRecordsThread)}()", verboseLog, RaiseLogEvent))
+                using (var logSession = Helpers.Log.Session($"{nameof(RoyaltyWorker)}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", prm.VerboseLog, prm.Log))
                     try
                     {
-                        using (var rep = getNewRep())
+                        using (var rep = prm.GetNewRepository())
                         {
-                            var queueItem = rep.ImportQueueRecordGet()
-                                .Where(r => r.ProcessedDate == null)
-                                .OrderBy(r => r.CreatedDate)
-                                .FirstOrDefault();
+                            var queueItem = (prm.AccountForCheck == null) 
+                                ? rep.ImportQueueRecordGet()
+                                    .Where(r => r.ProcessedDate == null)
+                                    .OrderBy(r => r.CreatedDate)
+                                    .FirstOrDefault()
+                                : rep.ImportQueueRecordGet()
+                                    .Where(r => r.ProcessedDate == null && r.AccountID == prm.AccountForCheck.AccountUID)
+                                    .OrderBy(r => r.CreatedDate)
+                                    .FirstOrDefault();
 
                             if (queueItem != null)
                             {
                                 processed = true;
                                 logSession.Add($"Queue record found: {queueItem}. Try to process.");
 
+                                var prgImport = progress.GetChild(weight: 0.9m);
+                                var prgExport = progress.GetChild(weight: 0.1m);
+
                                 //Get files with progress instances
                                 var filesElement = queueItem.FileInfoes
                                     .Where(f => f.Finished == null)
-                                    .Select(f => new { File = f, Progress = progress.GetChild() })
+                                    .Select(f => new { File = f, Progress = prgImport.GetChild() })
                                     .ToList();
                                 var buildEvent = new Func<WorkerProcessElement>(() => new WorkerProcessElement(queueItem.ImportQueueRecordUID, progress.Value, filesElement.Select(i => new WorkerProcessFileProgress(i.File.ImportQueueRecordFileUID, i.Progress.Value))));
 
                                 logSession.Add($"Queue record files count to process: {filesElement.Count}");
 
-                                RaiseStart(buildEvent());
-                                progress.Change += (s, e) => RaiseUpdate(buildEvent());
+                                prm.WorkerStateChanged(new WorkerProcessElementEventArgs(buildEvent(), WorkerProcessElementAction.Start));
+                                progress.Change += (s, e) => prm.WorkerStateChanged(new WorkerProcessElementEventArgs(buildEvent(), WorkerProcessElementAction.Update));
                                 try
                                 {
                                     try
                                     {
+                                        var dataToExport = new List<AccountDataRecord>();
+
                                         //Process every file
-                                        filesElement.ForEach(f => ProcessRecordFile(f.File, rep, storage, p => f.Progress.Value = p, (s) => logSession.Add(s)
-                                            , logFileEncoding, defaultExportFileName, defaultImportLogFileName, defaultNotTrustedPhonesSuffix));
+                                        filesElement.ForEach(f => 
+                                        {
+                                            var exportItems = ImportData(f.File, rep, prm.Storage, p => f.Progress.Value = p, logSession, prm.LogFileEncodig, prm.DefaultImportLogFileName);
+                                            dataToExport.AddRange(exportItems);
+                                        });
 
                                         //Check for error
                                         if (queueItem.FileInfoes.Any(f => !string.IsNullOrWhiteSpace(f.Error)))
                                             queueItem.HasError = true;
+
+                                        if (dataToExport.Count > 0)
+                                        {
+                                            logSession.Add($"Data imported. Start export {dataToExport.Count} records...");
+                                            ExportData(filesElement.Select(i => i.File), rep, queueItem.Account, prm.Storage, dataToExport.Distinct(), logSession, i => prgExport.Value = i, prm.ExportFileEncodig, prm.DefaultExportFileName);
+                                            logSession.Add($"All export done.");
+                                        }
+                                        else
+                                            prgExport.Value = 100;
                                     }
-                                    catch(Exception ex)
+                                    catch (Exception ex)
                                     {
                                         ex.Data.Add(nameof(queueItem), queueItem);
 
                                         logSession.Enabled = true;
                                         logSession.Add(ex);
                                         queueItem.Error = ex.GetExceptionText();
-                                        RaiseExceptionEvent(ex);
+                                        prm.ExceptionLog(ex);
                                     }
                                     finally
                                     {
                                         queueItem.ProcessedDate = DateTime.UtcNow;
                                         rep.SaveChanges();
                                     }
-
                                 }
-                                finally { RaiseEnd(buildEvent()); }
+                                finally { prm.WorkerStateChanged(new WorkerProcessElementEventArgs(buildEvent(), WorkerProcessElementAction.End)); }
                             }
                         }
                     }
@@ -252,9 +219,11 @@ namespace RoyaltyWorker
         /// <param name="storage">Хранилище файлов</param>
         /// <param name="progressAction">Действие на изменение прогресса</param>
         /// <param name="logAction">Действие на событие логирования</param>
-        private void ProcessRecordFile(RoyaltyRepository.Models.ImportQueueRecordFileInfo queueFile, Repository repository, IFileStorage storage,
-            Action<decimal> progressAction, Action<string> logAction, Encoding logFileEncoding, string defaultExportFileName, string defaultImportLogFileName, string defaultNotTrustedPhonesSuffix)
+        private static IEnumerable<AccountDataRecord> ImportData(RoyaltyRepository.Models.ImportQueueRecordFileInfo queueFile, Repository repository, IFileStorage storage,
+            Action<decimal> progressAction, Helpers.Log.SessionInfo upperLogSession, Encoding logFileEncoding, string defaultImportLogFileName) //Encoding exportFileEncoding, string defaultExportFileName, 
         {
+            var res = Enumerable.Empty<AccountDataRecord>();
+
             if (queueFile == null)
                 throw new ArgumentNullException(nameof(queueFile));
             if (repository == null)
@@ -263,19 +232,20 @@ namespace RoyaltyWorker
                 throw new ArgumentNullException(nameof(storage));
 
             var fileLog = new List<string>();
-            logAction = new Action<string>((s) => 
+            var logAction = new Action<string>((s) =>
             {
                 fileLog.Add(s);
-                logAction?.Invoke(s);
+                upperLogSession?.Add(s);
             });
             progressAction = progressAction ?? new Action<decimal>((i) => { });
 
             var progress = new Helpers.PercentageProgress();
+            progress.Change += (s, e) => progressAction(e.Value);
             var pBegin = progress.GetChild(weight: 0.05m);
             var pAction = progress.GetChild(weight: 0.90m);
             var pEnd = progress.GetChild(weight: 0.05m);
 
-            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, (s) => s.ToList().ForEach(str => logAction(str))))
+            using (var logSession = Helpers.Log.Session($"{nameof(RoyaltyWorker)}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", true, (s) => s.ToList().ForEach(str => logAction(str))))
                 try
                 {
                     logSession.Add($"Change state to '{RoyaltyRepository.Models.ImportQueueRecordStateType.TryToProcess}' for '{queueFile}'");
@@ -285,44 +255,43 @@ namespace RoyaltyWorker
 
                     pBegin.Value = 100;
 
-                    var importFiles = queueFile
+                    var importFile = queueFile
                         .GetFileByType(RoyaltyRepository.Models.ImportQueueRecordFileInfoFileType.Import)
                         .Where(f => f != null)
-                        .ToList();
+                        .FirstOrDefault();
 
-                    if (!importFiles.Any())
+                    if (importFile == null)
                         throw new Exception(Properties.Resources.ROYALTYWORKER_ImportFileNotFound);
 
-                    foreach (var importFile in importFiles)
+                    using (var dc = new DataCalculator(queueFile.ImportQueueRecord.Account, repository))
                     {
-                        using (var dc = new DataCalculator(queueFile.ImportQueueRecord.Account, repository))
-                        {
-                            var prg0 = pAction.GetChild(weight: 0.1m);
-                            var prg1 = pAction.GetChild(weight: 0.2m);
-                            var prg2 = pAction.GetChild(weight: 0.8m);
-                            var prg3 = pAction.GetChild(weight: 0.5m);
-                            var prg4 = pAction.GetChild(weight: 0.8m);
+                        var prgGetFileFromRepository = pAction.GetChild(weight: 0.1m);
+                        var prgPrepare = pAction.GetChild(weight: 0.2m);
+                        var prgPreview = pAction.GetChild(weight: 0.8m);
+                        var prgImport = pAction.GetChild(weight: 0.5m);
+                        //var prgExport = pAction.GetChild(weight: 0.4m);
 
-                            logSession.Add($"Read lines from import file '{importFile}'");
+                        logSession.Add($"Read lines from import file '{importFile}'");
 
-                            var csvLines = repository.FileGetLines(storage, importFile);
-                            prg0.Value = 100;
+                        var csvLines = repository.FileGetLines(storage, importFile);
+                        prgGetFileFromRepository.Value = 100;
 
-                            logSession.Add($"Start load lines as CSV...");
+                        logSession.Add($"Start load lines as CSV...");
 
-                            var l = Helpers.CSV.CSVFile.Load(csvLines.AsEnumerable(),
-                                verboseLogAction: (s) => logSession.Add(s),
-                                tableValidator: dc.TableValidator,
-                                rowFilter: dc.RowFilter);
+                        using (var l = Helpers.CSV.CSVFile.Load(csvLines.AsEnumerable(),
+                            verboseLogAction: (s) => logSession.Add(s),
+                            tableValidator: dc.TableValidator,
+                            rowFilter: dc.RowFilter))
+                        { 
 
                             logSession.Add($"Load lines as CSV done. Prepare table...");
-                            dc.Prepare(l.Table, i => prg1.Value = i, s => logSession.Add(s));
+                            dc.Prepare(l.Table, i => prgPrepare.Value = i, s => logSession.Add(s));
 
                             logSession.Add($"Table prepared. Start preview data...");
-                            var previewRes = dc.Preview(l.Table, i => prg2.Value = i, s => logSession.Add(s));
+                            var previewRes = dc.Preview(l.Table, i => prgPreview.Value = i, s => logSession.Add(s));
 
                             logSession.Add($"Preview done. Start import...");
-                            var readyToExport = dc.Import(previewRes.Values, null, i => prg3.Value = i, s => logSession.Add(s)).ToList();
+                            var readyToExport = dc.Import(previewRes.Values, null, i => prgImport.Value = i, s => logSession.Add(s)).ToList();
                             readyToExport.ForEach(adr => repository.ImportQueueRecordFileAccountDataRecordNew(queueFile, adr));
 
                             logSession.Add($"Try to save imported data...");
@@ -330,21 +299,14 @@ namespace RoyaltyWorker
 
                             if (queueFile.ForAnalize)
                             {
-                                logSession.Add($"Data imported. Start analize and export...");
+                                res = readyToExport;
 
-                                var prg41 = prg4.GetChild(weight: 0.2m);
-                                var prg42 = prg4.GetChild(weight: 0.8m);
-
-                                logSession.Add($"Export not trusted phones...");
-                                ExportNotTrustedPhones(queueFile, dc, storage, readyToExport, logSession, i => prg41.Value = i, defaultNotTrustedPhonesSuffix);
-
-                                logSession.Add($"Export data...");
-                                ExportData(queueFile, repository, dc, storage, readyToExport, logSession, i => prg42.Value = i, defaultExportFileName);
-
-                                logSession.Add($"All export done.");
+                                //logSession.Add($"Data imported. Start analize and export...");
+                                //ExportData(new ImportQueueRecordFileInfo[] { queueFile }, repository, dc.Account, storage, readyToExport, logSession, i => prgExport.Value = i, exportFileEncoding, defaultExportFileName);
+                                //logSession.Add($"All export done.");
                             }
-                            else
-                                prg4.Value = 100;
+                                //else
+                                //    prgExport.Value = 100;
                         }
                     }
                     logSession.Add($"Change state to '{RoyaltyRepository.Models.ImportQueueRecordStateType.Processed}' for '{queueFile}'");
@@ -360,14 +322,23 @@ namespace RoyaltyWorker
                 }
                 finally
                 {
-                    var logFile = repository.FilePut(storage, fileLog, logFileEncoding, defaultImportLogFileName);
-                    repository.ImportQueueRecordFileInfoFileNew(RoyaltyRepository.Models.ImportQueueRecordFileInfoFileType.Log, queueFile, logFile);
                     queueFile.Finished = DateTime.UtcNow;
                     repository.SaveChanges();
                     pEnd.Value = 100;
-
-                    logSession.Add($"All actions done for '{queueFile}'");
                 }
+
+            if (fileLog.Count > 0)
+                try
+                { 
+                    var logFile = repository.FilePut(storage, fileLog, logFileEncoding, defaultImportLogFileName);
+                    repository.ImportQueueRecordFileInfoFileNew(RoyaltyRepository.Models.ImportQueueRecordFileInfoFileType.Log, queueFile, logFile);
+                    repository.SaveChanges();
+                }
+                catch(Exception ex)
+                {
+                    upperLogSession.Add(ex.GetExceptionText());
+                }
+            return res;
         }
 
         #region Export data
@@ -378,30 +349,50 @@ namespace RoyaltyWorker
         /// <param name="settings">Настройки аккаунта (для определения названия колонки)</param>
         /// <param name="recordsToExport">Записи для экспорта</param>
         /// <returns>DataTable с данными</returns>
-        private DataTable GetDataTableFromRecords(RoyaltyRepository.Models.AccountSettings settings, 
-            IEnumerable<RoyaltyRepository.Models.AccountDataRecord> recordsToExport)
+        private static DataTable GetDataTableFromRecords(AccountSettings settings, IEnumerable<AccountDataRecord> recordsToExport, Action<decimal> progressAction = null)
         {
-            var mainColumns = settings.Columns.Select(c => new { Column = new DataColumn(c.ColumnType.Type.ToString(), typeof(string)), IsKey = RoyaltyRepository.Extensions.Extensions.GetAttributeOfType<RoyaltyRepository.Models.IsKeyAttribute>(c.ColumnType) != null });
-            var additionalColumns = settings.Account.AdditionalColumns.Where(ad => ad.Export).Select(ad =>new { Column = new DataColumn(ad.ColumnName, typeof(string)), IsKey = false });
+            progressAction = progressAction ?? new Action<decimal>(i => { });
+            var progress = new PercentageProgress();
+            progress.Change += (s, e) => progressAction(e.Value);
+
+            var mainColumns = settings.Columns
+                .OrderBy(c => c.ColumnType.ExportColumnIndex)
+                .Where(c => c.ColumnType.Export)
+                .Select(c => new
+                {
+                    ColumnName = c.ColumnType.Type.ToString(),
+                    IsKey = RoyaltyRepository.Extensions.Extensions.GetAttributeOfType<RoyaltyRepository.Models.IsKeyAttribute>(c.ColumnType.Type) != null
+                });
+
+            var additionalColumns = settings.Account.AdditionalColumns
+                .Where(ad => ad.Export)
+                .Select(ad => new
+                {
+                    ColumnName = ad.ColumnName,
+                    IsKey = false
+                });
 
             var allColumns = mainColumns.Union(additionalColumns);
+            var keysColumnNames = allColumns.Where(c => c.IsKey).Select(c => c.ColumnName);
 
             var res = new DataTable();
-            res.Columns.AddRange(allColumns.Select(i => i.Column).ToArray());
-            res.PrimaryKey = allColumns.Where(i => i.IsKey).Select(i => i.Column).ToArray();
+            res.Columns.AddRange(allColumns.Select(i => new DataColumn(i.ColumnName, typeof(string))).ToArray());
+            res.PrimaryKey = res.Columns.Cast<DataColumn>().Where(dc => keysColumnNames.Contains(dc.ColumnName)).ToArray();
+            //res.PrimaryKey = allColumns.Where(i => i.IsKey).Select(i => i.Column).ToArray();
 
-            foreach(var record in recordsToExport)
+            var cnt = recordsToExport.Count();
+            var current = 0;
+            foreach (var record in recordsToExport)
             {
                 var newRow = res.NewRow();
-
-                record.Exported = DateTime.UtcNow;
-                foreach(var column in settings.Columns)
+                foreach (var column in settings.Columns)
                     newRow[column.ColumnType.Type.ToString()] = RoyaltyRepository.Models.RepositoryExtensions.GetAccountDataForColumnType(column.ColumnType.Type, record);
 
                 foreach (var column in settings.Account.AdditionalColumns.Where(ad => ad.Export))
                     newRow[column.ColumnName] = record.DataAdditional.GetType().GetProperty(column.ColumnSystemName).GetValue(record.DataAdditional);
 
                 res.Rows.Add(newRow);
+                progress.Value = ((decimal)(++current) / (decimal)cnt) * 100m;
             }
 
             return res;
@@ -410,128 +401,144 @@ namespace RoyaltyWorker
         /// <summary>
         /// Экспортировать данные
         /// </summary>
-        /// <param name="queueFile">Элемент очереди</param>
-        /// <param name="dc">DataCalculator</param>
+        /// <param name="queueFiles">Элемент очереди</param>
+        /// <param name="account">Аккаунт для экспорта данных</param>
+        /// <param name="repository">Репозиторий</param>
         /// <param name="storage">Хранилище файлов</param>
         /// <param name="readyToExport">Данные для экспорта</param>
         /// <param name="upperLogSession">Журнал сессии верхнего уровня</param>
         /// <param name="progressAction">Действие для отслуживания прогресса выполнения</param>
-        private void ExportData(RoyaltyRepository.Models.ImportQueueRecordFileInfo queueFile, Repository rep, DataCalculator dc, IFileStorage storage, 
-            IEnumerable<RoyaltyRepository.Models.AccountDataRecord> readyToExport, Helpers.Log.SessionInfo upperLogSession, Action<decimal> progressAction,
-            string defaultExportFileName)
+        /// <param name="exportFileEncoding">Кодировка по умолчанию для файла экспорта</param>
+        /// <param name="defaultExportFileName">Имя файла экспорта (для хранения в БД)</param>
+        private static void ExportData(IEnumerable<ImportQueueRecordFileInfo> queueFiles, Repository repository, Account account, IFileStorage storage,
+            IEnumerable<AccountDataRecord> readyToExport, Log.SessionInfo upperLogSession, Action<decimal> progressAction,
+            Encoding exportFileEncoding, string defaultExportFileName)
         {
             progressAction = progressAction ?? new Action<decimal>(i => { });
 
-            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", upperLogSession.Enabled, (s) => s.ToList().ForEach(str => upperLogSession.Add(str))))
+            using (var logSession = Helpers.Log.Session($"{nameof(RoyaltyWorker)}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", upperLogSession.Enabled, (s) => s.ToList().ForEach(str => upperLogSession.Add(str))))
                 try
                 {
                     var progress = new Helpers.PercentageProgress();
-                    var saveProgress = progress.GetChild();
+                    var generateTableProgress = progress.GetChild(weight: 0.3m);
+                    var saveProgress = progress.GetChild(weight: 0.7m);
+                    var commandProgress = progress.GetChild(weight: 0.05m);
 
                     progress.Change += (s, e) => progressAction(e.Value);
 
-                    using (var dataTable = GetDataTableFromRecords(dc.Account.Settings, readyToExport))
-                    {
-                        var validFileName = System.IO.Path.GetFileNameWithoutExtension(queueFile.SourceFilePath);
-                        foreach (var c in System.IO.Path.GetInvalidFileNameChars())
-                            validFileName = validFileName.Replace(c.ToString(), string.Empty);
+                    #region Name <-> SystemName
 
-                        var exportPhonesLines = Helpers.CSV.CSVFile.Save(dataTable, verboseLogAction: (s) => logSession.Add(s));
-                        var dataFile = dc.Repository.FilePut(storage, exportPhonesLines, Encoding.Default, defaultExportFileName);
-                        dc.Repository.ImportQueueRecordFileInfoFileNew(RoyaltyRepository.Models.ImportQueueRecordFileInfoFileType.ExportPhones, queueFile, dataFile);
+                    var namesDictionary = typeof(RoyaltyRepository.Models.ColumnTypes)
+                        .GetEnumValues()
+                        .Cast<RoyaltyRepository.Models.ColumnTypes>()
+                        .Select(t => new { SystemName = t.ToString().ToUpper(), Name = RoyaltyRepository.Extensions.Extensions.GetEnumNameFromType(t) });
+
+                    var nameToSystemName = new Func<string, string>((name) =>
+                    {
+                        var item = namesDictionary.FirstOrDefault(i => i.Name.ToUpper() == name.ToUpper());
+                        return (item != null) ? item.SystemName : name;
+                    });
+
+                    var systemNameToName = new Func<string, string>((name) =>
+                    {
+                        var item = namesDictionary.FirstOrDefault(i => i.SystemName.ToUpper() == name.ToUpper());
+                        return (item != null) ? item.Name : name;
+                    });
+
+                    #endregion
+
+                    using (var dataTable = GetDataTableFromRecords(account.Settings, readyToExport, i => generateTableProgress.Value = i))
+                    {
+                        #region Store file in database
+
+                        logSession.Add($"Store file in databae...");
+                        var exportLines = Helpers.CSV.CSVFile.Save(dataTable, columnRenamer: systemNameToName, verboseLogAction: (s) => logSession.Add(s));
+                        var dataFile = repository.FilePut(storage, exportLines, exportFileEncoding, defaultExportFileName);
+                        foreach(var queueFile in queueFiles)
+                            repository.ImportQueueRecordFileInfoFileNew(RoyaltyRepository.Models.ImportQueueRecordFileInfoFileType.Export, queueFile, dataFile);
+
+                        #endregion
+                        #region Add export information for each record in data
 
                         logSession.Add($"Add export information for each record in data...");
-                        readyToExport.ToList().ForEach(adr => rep.AccountDataRecordExportNew(adr, dataFile, adr.Host));
-
-                        #region Name <-> SystemName
-
-                        var namesDictionary = typeof(RoyaltyRepository.Models.ColumnTypes)
-                            .GetEnumValues()
-                            .Cast<RoyaltyRepository.Models.ColumnTypes>()
-                            .Select(t => new { SystemName = t.ToString().ToUpper(), Name = RoyaltyRepository.Extensions.Extensions.GetEnumNameFromType(t) });
-
-                        var nameToSystemName = new Func<string, string>((name) => 
+                        readyToExport.ToList().ForEach(adr =>
                         {
-                            var item = namesDictionary.FirstOrDefault(i => i.Name.ToUpper() == name.ToUpper());
-                            return (item != null) ? item.SystemName : name;
-                        });
-
-                        var systemNameToName = new Func<string, string>((name) =>
-                        {
-                            var item = namesDictionary.FirstOrDefault(i => i.SystemName.ToUpper() == name.ToUpper());
-                            return (item != null) ? item.Name : name;
+                            repository.AccountDataRecordExportNew(adr, dataFile, adr.Host);
+                            adr.Exported = DateTime.UtcNow;
                         });
 
                         #endregion
 
-                        var saveTable = new Action<string,Encoding,DataTable>((exportFilePath, enc, dt) =>
-                        {
-                            logSession.Add($"Exporting data to '{exportFilePath}'");
-                            using (var res = Helpers.CSV.CSVFile.Save(dt, filePath: exportFilePath,
-                                encoding: enc,
-                                columnRenamer: systemNameToName,
-                                verboseLogAction: (s) => logSession.Add(s)))
-                            {
-                                logSession.Add($"Table saved to '{res.FilePath}', processed rows: {res.ProcessedRowCount}");
-                            }
-                        });
+                        var validAccountName = GetValidFileName(account.Name);
+                        var dataDirectories = account.Settings.ExportDirectories
+                            .Select(ed => new { ExportDirectory = ed, Progress = saveProgress.GetChild() })
+                            .ToArray();
 
-                        var dataExportDirectories = dc.Account.Settings.ExportDirectories
-                            .Where(ed => ed.ExportData);
-                        foreach (var dataDirectory in dataExportDirectories)
-                        {
-                            try
-                            {
-                                if (System.IO.Directory.Exists(dataDirectory.Path))
+                        if (dataDirectories.Length > 0)
+                            foreach (var dataDirectory in dataDirectories)
+                                try
                                 {
-                                    var exportFilePath = System.IO.Path.Combine(dataDirectory.Path, $"{validFileName}.csv");
-                                    if (System.IO.File.Exists(exportFilePath))
+                                    if (System.IO.Directory.Exists(dataDirectory.ExportDirectory.DirectoryPath))
                                     {
-                                        logSession.Add($"Merging data with '{exportFilePath}'");
-                                        using (var toMergeDataLines = Helpers.CSV.CSVFile.Load(exportFilePath, fileEncoding: dataDirectory.Encoding, columnRenamer: nameToSystemName))
+                                        var exportFilePath = System.IO.Path.Combine(dataDirectory.ExportDirectory.DirectoryPath, $"{(GetValidFileName(dataDirectory.ExportDirectory.FileName) ?? validAccountName)}.csv");
+                                        if (System.IO.File.Exists(exportFilePath))
                                         {
-                                            #region Update marks for stored data
-                                            var phoneMarks = from phoneMark in queueFile.ImportQueueRecord.Account.PhoneMarks
-                                                             join mark in rep.MarkGet() on phoneMark.MarkID equals mark.MarkID
-                                                             join phone in rep.PhoneGet() on phoneMark.PhoneID equals phone.PhoneID
-                                                             select new { MarkName = mark.Name, phone.PhoneNumber };
-
-                                            toMergeDataLines.Table.Rows.Cast<DataRow>()
-                                               .Join(phoneMarks, dr => dr[RoyaltyRepository.Models.ColumnTypes.Phone.ToString()], p => p.PhoneNumber, (dr, p) => new { DataRow = dr, Mark = p.MarkName })
-                                               .Where(i => i.DataRow[RoyaltyRepository.Models.ColumnTypes.Mark.ToString()]?.ToString() != i.Mark)
-                                               .ToList()
-                                               .ForEach(i => { i.DataRow[RoyaltyRepository.Models.ColumnTypes.Mark.ToString()] = i.Mark; });
-                                            #endregion
-
-                                            var mergeProgress = progress.GetChild();
-
-                                            using (var mergedTable = Helpers.CSV.CSVFile.MergeTables(new DataTable[] { dataTable, toMergeDataLines.Table }, dataTable.PrimaryKey.Select(c => c.ColumnName)))
+                                            logSession.Add($"Merging data with '{exportFilePath}'");
+                                            using (var toMergeDataLines = Helpers.CSV.CSVFile.Load(exportFilePath, fileEncoding: dataDirectory.ExportDirectory.Encoding, columnRenamer: nameToSystemName))
                                             {
-                                                mergeProgress.Value = 100;
-                                                logSession.Add($"Exporting merged data to '{exportFilePath}'");
-                                                saveTable(exportFilePath, dataDirectory.Encoding, mergedTable);
-                                                saveProgress.Value = 100;
+                                                #region Update marks for stored data
+                                                var phoneMarks = from phoneMark in account.PhoneMarks
+                                                                 join mark in repository.MarkGet() on phoneMark.MarkID equals mark.MarkID
+                                                                 join phone in repository.PhoneGet() on phoneMark.PhoneID equals phone.PhoneID
+                                                                 select new { MarkName = mark.Name, phone.PhoneNumber };
+
+                                                toMergeDataLines.Table.Rows.Cast<DataRow>()
+                                                   .Join(phoneMarks, dr => dr[RoyaltyRepository.Models.ColumnTypes.Phone.ToString()], p => p.PhoneNumber, (dr, p) => new { DataRow = dr, Mark = p.MarkName })
+                                                   .Where(i => i.DataRow[RoyaltyRepository.Models.ColumnTypes.Mark.ToString()]?.ToString() != i.Mark)
+                                                   .ToList()
+                                                   .ForEach(i => { i.DataRow[RoyaltyRepository.Models.ColumnTypes.Mark.ToString()] = i.Mark; });
+                                                #endregion
+
+                                                using (var mergedTable = Helpers.CSV.CSVFile.MergeTables(new DataTable[] { dataTable, toMergeDataLines.Table }, dataTable.PrimaryKey.Select(c => c.ColumnName)))
+                                                {
+                                                    dataDirectory.Progress.Value = 50;
+                                                    SaveTableToLocalFile(exportFilePath, dataDirectory.ExportDirectory.Encoding, dataDirectory.ExportDirectory.Mark, mergedTable, systemNameToName, s => logSession.Add(s));
+                                                    dataDirectory.Progress.Value = 100;
+                                                }
                                             }
                                         }
+                                        else
+                                        {
+                                            SaveTableToLocalFile(exportFilePath, dataDirectory.ExportDirectory.Encoding, dataDirectory.ExportDirectory.Mark, dataTable, systemNameToName, s => logSession.Add(s));
+                                            dataDirectory.Progress.Value = 100;
+                                        }
+
+                                        if (!string.IsNullOrWhiteSpace(dataDirectory.ExportDirectory.ExecuteAfterAnalizeCommand))
+                                        {
+                                            logSession.Add($"Start command after export: {dataDirectory.ExportDirectory.ExecuteAfterAnalizeCommand} with following argument: {exportFilePath}");
+                                            ProcessStartInfo startInfo = new ProcessStartInfo(dataDirectory.ExportDirectory.ExecuteAfterAnalizeCommand, $"\"{exportFilePath}\"");
+                                            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                                            using (var p = Process.Start(startInfo))
+                                            {
+                                                if (dataDirectory.ExportDirectory.TimeoutForExecute.TotalMilliseconds > 0 && !p.WaitForExit((int)dataDirectory.ExportDirectory.TimeoutForExecute.TotalMilliseconds))
+                                                    p.Kill();
+                                            }
+                                        }
+                                        commandProgress.Value = 100;
                                     }
                                     else
-                                    {
-                                        logSession.Add($"Exporting data to '{exportFilePath}'");
-                                        saveTable(exportFilePath, dataDirectory.Encoding, dataTable);
-                                        saveProgress.Value = 100;
-                                    }
+                                        logSession.Add($"Directory '{dataDirectory.ExportDirectory.DirectoryPath}' for export not found");
                                 }
-                                else
-                                    logSession.Add($"Directory '{dataDirectory.Path}' for export phones not found");
-                            }
-                            catch (Exception ex)
-                            {
-                                ex.Data.Add(nameof(dataDirectory), dataDirectory);
-                                ex.Data.Add(nameof(validFileName), validFileName);
-                                logSession.Add(ex);
-                                logSession.Enabled = true;
-                            }
-                        }
+                                catch (Exception ex)
+                                {
+                                    ex.Data.Add(nameof(dataDirectory), dataDirectory);
+                                    ex.Data.Add(nameof(validAccountName), validAccountName);
+                                    logSession.Add(ex);
+                                    logSession.Enabled = true;
+                                }
+                            
+                        else
+                            saveProgress.Value = 100;
                     }
                 }
                 catch (Exception ex)
@@ -543,152 +550,6 @@ namespace RoyaltyWorker
                 {
                     upperLogSession.Enabled = logSession.Enabled;
                 }
-        }
-
-        #endregion
-        #region Export not trusted phones
-
-        /// <summary>
-        /// Создает DataTable для списка телефонов
-        /// </summary>
-        /// <param name="settings">Настройки аккаунта (для определения названия колонки)</param>
-        /// <param name="phonesToExport">Телефоны для экспорта</param>
-        /// <returns>DataTable с телефонами</returns>
-        private DataTable GetDataTableFromPhones(RoyaltyRepository.Models.AccountSettings settings, IEnumerable<RoyaltyRepository.Models.Phone> phonesToExport)
-        {
-            var phoneColumnName = settings.GetColumnByType(RoyaltyRepository.Models.ColumnTypes.Phone)?.ColumnName 
-                ?? RoyaltyRepository.Models.ColumnTypes.Phone.ToString();
-
-            var res = new DataTable();
-            res.Columns.Add(phoneColumnName, typeof(string));
-            res.PrimaryKey = new DataColumn[] { res.Columns[0] };
-
-            foreach (var p in phonesToExport.Select(p => new object[] { p.PhoneNumber }))
-                res.Rows.Add(p);
-
-            return res;
-        }
-
-        /// <summary>
-        /// Экспорт недоверенных телефонов
-        /// </summary>
-        /// <param name="dc">DataCalculator</param>
-        /// <param name="storage">Хранилище данных</param>
-        /// <param name="readyToExport">Данные, подготовленные для экспорта</param>
-        /// <param name="upperLogSession">Сессия журнала верхнего уровня</param>
-        private void ExportNotTrustedPhones(RoyaltyRepository.Models.ImportQueueRecordFileInfo queueFile, DataCalculator dc, IFileStorage storage, 
-            IEnumerable<RoyaltyRepository.Models.AccountDataRecord> readyToExport, Helpers.Log.SessionInfo upperLogSession, Action<decimal> progressAction,
-            string defaultNotTrustedPhonesSuffix)
-        {
-            progressAction = progressAction ?? new Action<decimal>(i => { });
-
-            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", upperLogSession.Enabled, (s) => s.ToList().ForEach(str => upperLogSession.Add(str))))
-                try
-                {
-                    var progress = new Helpers.PercentageProgress();
-                    var saveProgress = progress.GetChild();
-
-                    progress.Change += (s, e) => progressAction(e.Value);
-
-                    var notTrustedPhones = dc.GetExportNotTrustedPhones(readyToExport);
-                    using (var exportNotTrustedPhonesDataTable = GetDataTableFromPhones(dc.Account.Settings, notTrustedPhones))
-                    {
-                        var validFileName = System.IO.Path.GetFileNameWithoutExtension(queueFile.SourceFilePath);
-                        foreach (var c in System.IO.Path.GetInvalidFileNameChars())
-                            validFileName = validFileName.Replace(c.ToString(), string.Empty);
-
-                        var exportPhonesLines = Helpers.CSV.CSVFile.Save(exportNotTrustedPhonesDataTable, verboseLogAction: (s) => logSession.Add(s));
-                        var phoneFile = dc.Repository.FilePut(storage, exportPhonesLines, Encoding.Default, $"data-{defaultNotTrustedPhonesSuffix}.csv");
-                        dc.Repository.ImportQueueRecordFileInfoFileNew(RoyaltyRepository.Models.ImportQueueRecordFileInfoFileType.ExportPhones, queueFile, phoneFile);
-
-                        var phonesExportDirectories = dc.Account.Settings.ExportDirectories
-                            .Where(ed => ed.ExportPhones);
-                        foreach (var phoneDirectory in phonesExportDirectories)
-                        {
-                            try
-                            {
-                                if (System.IO.Directory.Exists(phoneDirectory.Path))
-                                {
-                                    var exportFilePath = System.IO.Path.Combine(phoneDirectory.Path, $"{validFileName}-{defaultNotTrustedPhonesSuffix}.csv");
-                                    if (System.IO.File.Exists(exportFilePath))
-                                    {
-                                        logSession.Add($"Merging not trusted phones with '{exportFilePath}'");
-                                        using (var toMergePhoneLines = Helpers.CSV.CSVFile.Load(exportFilePath, hasColumns: false, fileEncoding: phoneDirectory.Encoding))
-                                        {
-                                            if (toMergePhoneLines.Table.Columns.Count == 0)
-                                                throw new Exception("Bad file format");
-
-                                            for (int i = 0; i < exportNotTrustedPhonesDataTable.Columns.Count; i++)
-                                                toMergePhoneLines.Table.Columns[i].ColumnName = exportNotTrustedPhonesDataTable.Columns[i].ColumnName;
-
-                                            var mergeProgress = progress.GetChild();
-
-                                            using (var mergedTable = Helpers.CSV.CSVFile.MergeTables(new DataTable[] { exportNotTrustedPhonesDataTable, toMergePhoneLines.Table }, exportNotTrustedPhonesDataTable.PrimaryKey.Select(c => c.ColumnName)))
-                                            {
-                                                mergeProgress.Value = 100;
-                                                logSession.Add($"Exporting not trusted phones to '{exportFilePath}'");
-                                                using (var res = Helpers.CSV.CSVFile.Save(mergedTable, filePath: exportFilePath,
-                                                    hasColumns: false,
-                                                    encoding: phoneDirectory.Encoding,
-                                                    verboseLogAction: (s) => logSession.Add(s)))
-                                                {
-                                                    logSession.Add($"Table merged to '{res.FilePath}', processed rows: {res.ProcessedRowCount}");
-                                                    saveProgress.Value = 100;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        logSession.Add($"Exporting not trusted phones to '{exportFilePath}'");
-                                        using (var res = Helpers.CSV.CSVFile.Save(exportNotTrustedPhonesDataTable, filePath: exportFilePath,
-                                            hasColumns: false,
-                                            encoding: phoneDirectory.Encoding,
-                                            verboseLogAction: (s) => logSession.Add(s)))
-                                        {
-                                            logSession.Add($"Table saved to '{res.FilePath}', processed rows: {res.ProcessedRowCount}");
-                                            saveProgress.Value = 100;
-                                        }
-                                    }
-                                }
-                                else
-                                    logSession.Add($"Directory '{phoneDirectory.Path}' for export phones not found");
-                            }
-                            catch (Exception ex)
-                            {
-                                ex.Data.Add(nameof(phoneDirectory), phoneDirectory);
-                                ex.Data.Add(nameof(validFileName), validFileName);
-                                logSession.Add(ex);
-                                logSession.Enabled = true;
-                            }
-                        }
-                    }
-                }
-                catch(Exception ex)
-                {
-                    logSession.Add(ex);
-                    logSession.Enabled = true;
-                }
-                finally
-                {
-                    upperLogSession.Enabled = logSession.Enabled;
-                }
-        }
-
-        #endregion
-        #region Work
-
-        private void RaiseStart(WorkerProcessElement element)
-        {
-            WorkerStateChanged?.Invoke(this, new WorkerProcessElementEventArgs(element, WorkerProcessElementAction.Start));
-        }
-        private void RaiseUpdate(WorkerProcessElement element)
-        {
-            WorkerStateChanged?.Invoke(this, new WorkerProcessElementEventArgs(element, WorkerProcessElementAction.Update));
-        }
-        private void RaiseEnd(WorkerProcessElement element)
-        {
-            WorkerStateChanged?.Invoke(this, new WorkerProcessElementEventArgs(element, WorkerProcessElementAction.End));
         }
 
         #endregion
@@ -706,37 +567,74 @@ namespace RoyaltyWorker
         {
             Log?.Invoke(this, logText);
         }
-        private void RaiseExceptionEvent(Exception ex)
+        private void RaiseExceptionLogEvent(Exception ex)
         {
             ExceptionLog?.Invoke(this, ex);
         }
+        private void RaiseStateChanged(WorkerProcessElementEventArgs element)
+        {
+            WorkerStateChanged?.Invoke(this, element);
+        }
 
         #endregion
-        #region IDisposable Support
-        private bool disposedValue = false;
+        #region Static
 
-        protected virtual void Dispose(bool disposing)
+        private static string GetValidFileName(string fileName)
         {
-            if (!disposedValue)
+            if (string.IsNullOrWhiteSpace(fileName))
+                return null;
+
+            var validFileName = fileName;
+            foreach (var c in System.IO.Path.GetInvalidFileNameChars())
+                validFileName = validFileName.Replace(c.ToString(), string.Empty);
+            return string.IsNullOrWhiteSpace(validFileName) ? null : validFileName;
+        }
+
+        private static DataTable FilterDataTable(DataTable dataTable, Mark mark)
+        {
+            var res = new DataTable();
+            res.Columns.AddRange(dataTable.Columns.Cast<DataColumn>().Select(c => new DataColumn(c.ColumnName, c.DataType)).ToArray());
+            foreach (var row in dataTable.Rows.Cast<DataRow>()
+                .Where(r => (mark == null) || (r[ColumnTypes.Mark.ToString()] as string == mark.Name)))
             {
-                if (disposing)
+                var newRow = res.NewRow();
+                foreach (var c in res.Columns.Cast<DataColumn>())
+                    newRow[c] = row[c.ColumnName];
+                res.Rows.Add(newRow);
+            }
+            return res;
+        }
+
+        private static void SaveTableToLocalFile(string exportFilePath, Encoding enc, Mark mark, DataTable dt, Func<string,string> systemNameToName, Action<string> logAction)
+        {
+            using (var dtExport = FilterDataTable(dt, mark))
+            {
+                logAction($"Exporting data to '{exportFilePath}'");
+                using (var res = Helpers.CSV.CSVFile.Save(dtExport, filePath: exportFilePath,
+                    encoding: enc,
+                    columnRenamer: systemNameToName,
+                    verboseLogAction: (s) => logAction(s)))
                 {
-                    checkQueueTimer?.Dispose();
-                    lock(checkLockObject)
-                    { 
-                        if (checkQueueThread != null && checkQueueThread.IsAlive)
-                            checkQueueThread.Abort();
-                        checkQueueThread = null;
-                    }
+                    logAction($"Table saved to '{res.FilePath}', processed rows: {res.ProcessedRowCount}");
                 }
-                disposedValue = true;
             }
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        #endregion
+        #region Abstract implementation
+
+        protected override ConfigurationSection GetConfigSection() => Config.Config.WorkerConfig;
+
+        protected override WorkerThreadParameters GetStartParameters() => new WorkerThreadParameters(
+            getNewRepository, storage, VerboseLog, false, null, RaiseLogEvent, RaiseExceptionLogEvent, 
+            RaiseStateChanged, TimerInterval, LogFileEncodig, ExportFileEncodig, DefaultCultureForExportThread, DefaultImportLogFileName, DefaultExportFileName);
+
+        protected override WorkerThreadParameters GetRunOnceParameters(Account acc) => new WorkerThreadParameters(
+            getNewRepository, storage, VerboseLog, true, acc, RaiseLogEvent, RaiseExceptionLogEvent, 
+            RaiseStateChanged, TimerInterval, LogFileEncodig, ExportFileEncodig, DefaultCultureForExportThread, DefaultImportLogFileName, DefaultExportFileName);
+
+        protected override void ThreadProc(WorkerThreadParameters prm) => ProcessThreadProc(prm);
+
         #endregion
     }
 }

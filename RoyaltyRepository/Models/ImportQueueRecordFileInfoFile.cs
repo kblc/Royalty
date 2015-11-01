@@ -36,11 +36,6 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Description("IMPORTQUEUERECORDFILEINFOFILETYPE_Export")]
         Export,
-        /// <summary>
-        /// Exported phones file
-        /// </summary>
-        [Description("IMPORTQUEUERECORDFILEINFOFILETYPE_ExportPhones")]
-        ExportPhones
     }
 
     [Table("import_queue_file_file")]

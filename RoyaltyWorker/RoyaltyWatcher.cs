@@ -10,115 +10,75 @@ using RoyaltyRepository.Models;
 using Helpers;
 using System.Threading;
 using RoyaltyWorker.Extensions;
+using RoyaltyWorker.Base;
+using System.Configuration;
 
 namespace RoyaltyWorker
 {
-    public class RoyaltyWatcher : IDisposable 
+    public class WatcherThreadParameters
     {
-        /// <summary>
-        /// Royalty repository
-        /// </summary>
-        private readonly Func<Repository> getNewRepository = null;
+        public readonly Func<Repository> GetNewRepository = null;
+        public readonly IFileStorage Storage = null;
+        public readonly bool VerboseLog = false;
+        public readonly bool ExceptionIfNoOneFileInQueue = false;
+        public readonly bool SuspendTimerCheck = false;
+        public readonly Account AccountForCheck = null;
+        public readonly Action<IEnumerable<string>> Log;
+        public readonly Action<Exception> ExceptionLog;
+        public readonly Action<ImportQueueRecord> OnQueueRecordAdded;
+        public readonly TimeSpan TimerInterval;
 
-        /// <summary>
-        /// File storage
-        /// </summary>
-        private readonly IFileStorage fileStorage = null;
+        public WatcherThreadParameters(Func<Repository> getNewRepository, IFileStorage storage, bool verboseLog, bool exceptionIfNoOneFileInQueue, bool suspendTimerCheck, 
+            Account accountForCheck, Action<IEnumerable<string>> log, Action<Exception> exceptionLog, Action<ImportQueueRecord> onQueueRecordAdded, TimeSpan timerInterval)
+        {
+            GetNewRepository = getNewRepository;
+            Storage = storage;
+            VerboseLog = verboseLog;
+            ExceptionIfNoOneFileInQueue = exceptionIfNoOneFileInQueue;
+            SuspendTimerCheck = suspendTimerCheck;
+            AccountForCheck = accountForCheck;
+            Log = log;
+            ExceptionLog = exceptionLog;
+            OnQueueRecordAdded = onQueueRecordAdded;
+            TimerInterval = timerInterval;
+        }
+    }
 
-        private Thread checkQueueThread = null;
-        private object checkLockObject = new object();
-
-        /// <summary>
-        /// Is verbose log enabled
-        /// </summary>
-        public bool VerboseLog { get; set; } = false;
-
+    public class RoyaltyWatcher : RoyaltyBase<WatcherThreadParameters, Account>
+    {
         /// <summary>
         /// Throws exception when no one file in queue
         /// </summary>
-        public bool ExceptionIfNoOneFileInQueue { get; set; } = true;
+        public bool ExceptionIfNoOneFileInQueue { get; set; } = Config.WatcherConfigSection.DefaultExceptionIfNoOneFileInQueue;
 
-        private TimeSpan checkTimerInterval = new TimeSpan(0, 0, 30);
-
-        /// <summary>
-        /// Interval for check events
-        /// </summary>
-        public TimeSpan CheckTimerInterval
-        {
-            get { return checkTimerInterval; }
-            set {
-                if (checkTimerInterval == value)
-                    return;
-                checkTimer?.Change(new TimeSpan(), value);
-                checkTimerInterval = value;
-            }
-        }
+        #region Constructor
 
         /// <summary>
-        /// Check timer
-        /// </summary>
-        private System.Threading.Timer checkTimer = null;
-
-        /// <summary>
-        /// Is watcher busy
-        /// </summary>
-        public bool IsBusy { get { return (checkQueueThread != null && checkQueueThread.IsAlive); } }
-
-        /// <summary>
-        /// Create new worker instance
+        /// Create new watcher instance
         /// </summary>
         /// <param name="repository">Royalty repository</param>
-        /// <param name="fileStorage">File storage</param>
-        public RoyaltyWatcher(Func<Repository> getNewRepository, IFileStorage fileStorage)
-        {
-            if (getNewRepository == null)
-                throw new ArgumentNullException(nameof(getNewRepository));
-            if (fileStorage == null)
-                throw new ArgumentNullException(nameof(fileStorage));
-
-            this.getNewRepository = getNewRepository;
-            this.fileStorage = fileStorage;
-
-            Init();
-        }
+        /// <param name="storage">File storage</param>
+        public RoyaltyWatcher(Func<Repository> getNewRepository, IFileStorage storage)
+            : this(getNewRepository, storage, false) { }
 
         /// <summary>
-        /// Initialization
+        /// Create new watcher instance
         /// </summary>
-        private void Init()
-        {
-            if (Config.Config.IsWatcherConfigured)
-            {
-                this.VerboseLog = Config.Config.WatcherConfig.VerboseLog;
-                this.CheckTimerInterval = Config.Config.WatcherConfig.CheckTimerInterval;
-                this.ExceptionIfNoOneFileInQueue = Config.Config.WatcherConfig.ExceptionIfNoOneFileInQueue;
-            }
-            checkTimer = new System.Threading.Timer(CheckTimerCallback, null, new TimeSpan(), checkTimerInterval);
-        }
-          
+        /// <param name="repository">Royalty repository</param>
+        /// <param name="storage">File storage</param>
+        /// <param name="createStarted">Create started</param>
+        public RoyaltyWatcher(Func<Repository> getNewRepository, IFileStorage storage, bool createStarted)
+            : base(getNewRepository, storage, createStarted, TimeSpan.FromSeconds(30)) { }
+
+        #endregion
+
         /// <summary>
-        /// Check timer callback
+        /// Main thread proc
         /// </summary>
-        /// <param name="state"></param>
-        private void CheckTimerCallback(object state)
+        /// <param name="prm">Parameters for thread</param>
+        private static void ProcessThreadProc(WatcherThreadParameters prm)
         {
-            lock (checkLockObject)
-            {
-                if (checkQueueThread != null && checkQueueThread.IsAlive)
-                    return;
-                checkQueueThread = new Thread(new ParameterizedThreadStart(ProcessAccountsThread));
-                checkQueueThread.Start(new { GetNewRepository = this.getNewRepository, FileStorage = this.fileStorage, VerboseLog, ExceptionIfNoOneFileInQueue });
-            }
-        }
-
-        private void ProcessAccountsThread(object prm)
-        {
-            var getNewRep = ((dynamic)prm).GetNewRepository as Func<Repository>;
-            var storage = ((dynamic)prm).FileStorage as IFileStorage;
-            var verboseLog = (bool)((dynamic)prm).VerboseLog;
-            var exceptionIfNoOneFileInQueue = (bool)((dynamic)prm).ExceptionIfNoOneFileInQueue;
-
-            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{nameof(ProcessAccountsThread)}()", verboseLog, RaiseLogEvent))
+            using (var logSession = Helpers.Log.Session($"{nameof(RoyaltyWatcher)}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", prm.VerboseLog, prm.Log))
                 try
                 {
                     var currentTime = DateTime.UtcNow;
@@ -126,15 +86,26 @@ namespace RoyaltyWorker
 
                     logSession.Add($"Ckeck started at '{currentTime}'");
 
-                    using (var rep = getNewRep())
+                    using (var rep = prm.GetNewRepository())
                     {
+                        List<Account> accountsToProcess = null;
+
+                        if (prm.SuspendTimerCheck)
+                        {
+                            if (prm.AccountForCheck == null)
+                                accountsToProcess = rep.AccountGet().ToList(); 
+                            else
+                                accountsToProcess = new Account[] { rep.AccountGet(prm.AccountForCheck.AccountUID) }.ToList();
+                        } else
+                        { 
 #pragma warning disable 618
-                        var accountsToProcess = rep
-                            .AccountSettingsSheduleTimeGet()
-                            .Where(i => (long)utcTs.TotalMilliseconds - i.TimeTicks < (long)checkTimerInterval.TotalMilliseconds)
-                            .Join(rep.AccountGet(), st => st.AccountUID, a => a.AccountUID, (st, a) => a)
-                            .Distinct()
-                            .ToList();
+                            accountsToProcess = rep
+                                .AccountSettingsSheduleTimeGet()
+                                .Where(i => (long)utcTs.TotalMilliseconds - i.TimeTicks < (long)prm.TimerInterval.TotalMilliseconds)
+                                .Join(rep.AccountGet(), st => st.AccountUID, a => a.AccountUID, (st, a) => a)
+                                .Distinct()
+                                .ToList();
+                        }
 #pragma warning restore 618
                         if (accountsToProcess.Count > 0)
                         {
@@ -145,8 +116,8 @@ namespace RoyaltyWorker
                                 {
                                     logSession.Add($"Proceed account '{account.Name}'");
                                     var queueRecord = rep.ImportQueueRecordNew(account);
-                                    ProcessAccount(queueRecord, rep, storage, logSession);
-                                    RaiseOnQueueRecordAdded(queueRecord);
+                                    ProcessAccount(queueRecord, rep, prm.Storage, prm.ExceptionIfNoOneFileInQueue, logSession);
+                                    prm.OnQueueRecordAdded(queueRecord);
                                 }
                                 catch (Exception ex)
                                 {
@@ -163,8 +134,7 @@ namespace RoyaltyWorker
                 {
                     logSession.Enabled = true;
                     logSession.Add(ex);
-                    RaiseExceptionEvent(ex);
-                    //throw ex;
+                    prm.ExceptionLog(ex);
                 }
         }
 
@@ -174,9 +144,9 @@ namespace RoyaltyWorker
         /// <param name="importQueue">Запись в очереди</param>
         /// <param name="repository">Репозиторий</param>
         /// <param name="upperLogSession">Лог сессия верхнего уровня</param>
-        private void ProcessAccount(ImportQueueRecord importQueue, Repository repository, IFileStorage storage, Helpers.Log.SessionInfo upperLogSession)
+        private static void ProcessAccount(ImportQueueRecord importQueue, Repository repository, IFileStorage storage, bool exceptionIfNoOneFileInQueue, Helpers.Log.SessionInfo upperLogSession)
         {
-            using(var logSession = Helpers.Log.Session($"{GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", upperLogSession.Enabled, s => s.ToList().ForEach(str => upperLogSession.Add(str))))
+            using(var logSession = Helpers.Log.Session($"{nameof(RoyaltyWatcher)}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", upperLogSession.Enabled, s => s.ToList().ForEach(str => upperLogSession.Add(str))))
                 try
                 {
                     if (importQueue == null)
@@ -187,7 +157,7 @@ namespace RoyaltyWorker
                     importQueue.Account.Settings.ImportDirectories.ToList()
                         .ForEach(f => ProcessAccount(importQueue, repository, storage, f, logSession));
 
-                    if (importQueue.FileInfoes.Count == 0 && ExceptionIfNoOneFileInQueue)
+                    if (importQueue.FileInfoes.Count == 0 && exceptionIfNoOneFileInQueue)
                         throw new System.Exception(Properties.Resources.ROYALTYWATCHER_NoOneFilesInQueue);
 
                     if (importQueue.FileInfoes.All(f => f.Finished != null))
@@ -215,9 +185,9 @@ namespace RoyaltyWorker
         /// <param name="folderPath">Путь до диреткории с файлами</param>
         /// <param name="forAnalize">Данные используются для анализа</param>
         /// <param name="upperLogSession">Лог сессия верхнего уровня</param>
-        private void ProcessAccount(ImportQueueRecord importQueue, Repository rep, IFileStorage storage, AccountSettingsImportDirectory importDirectory, Helpers.Log.SessionInfo upperLogSession)
+        private static void ProcessAccount(ImportQueueRecord importQueue, Repository rep, IFileStorage storage, AccountSettingsImportDirectory importDirectory, Helpers.Log.SessionInfo upperLogSession)
         {
-            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, s => s.ToList().ForEach(str => upperLogSession.Add(str))))
+            using (var logSession = Helpers.Log.Session($"{nameof(RoyaltyWatcher)}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", upperLogSession.Enabled, s => s.ToList().ForEach(str => upperLogSession.Add(str))))
                 try
                 {
                     if (!System.IO.Directory.Exists(importDirectory.Path))
@@ -245,7 +215,6 @@ namespace RoyaltyWorker
                                 importQueue.HasError = true;
                                 logSession.Add(ex);
                                 logSession.Enabled = true;
-                                RaiseExceptionEvent(ex);
                             }
                             finally
                             {
@@ -266,7 +235,6 @@ namespace RoyaltyWorker
                             ex.Data.Add(nameof(filePath), filePath);
                             logSession.Add(ex);
                             logSession.Enabled = true;
-                            RaiseExceptionEvent(ex);
                         }
                 }
                 catch(Exception ex)
@@ -291,44 +259,34 @@ namespace RoyaltyWorker
         {
             OnQueueRecordAdded?.Invoke(this, record);
         }
-        private void RaiseLogEvent(IEnumerable<string> logTexts)
-        {
-            logTexts?.ToList().ForEach(s => RaiseLogEvent(s));
-        }
         private void RaiseLogEvent(string logText)
         {
             Log?.Invoke(this, logText);
         }
-        private void RaiseExceptionEvent(Exception ex)
+        private void RaiseLogEvent(IEnumerable<string> logTexts)
+        {
+            logTexts?.ToList().ForEach(s => RaiseLogEvent(s));
+        }
+        private void RaiseExceptionLogEvent(Exception ex)
         {
             ExceptionLog?.Invoke(this, ex);
         }
 
         #endregion
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
+        #region Abstract implementation
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    if (checkTimer != null)
-                        checkTimer.Dispose();
+        protected override ConfigurationSection GetConfigSection() => Config.Config.WatcherConfig;
 
-                    if (checkQueueThread != null && checkQueueThread.IsAlive)
-                        checkQueueThread.Abort();
-                    checkQueueThread = null;
-                }
-                disposedValue = true;
-            }
-        }
+        protected override WatcherThreadParameters GetStartParameters() => new WatcherThreadParameters(
+            getNewRepository, storage, VerboseLog, ExceptionIfNoOneFileInQueue, false, null, 
+            RaiseLogEvent, RaiseExceptionLogEvent, RaiseOnQueueRecordAdded, TimerInterval);
 
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        protected override WatcherThreadParameters GetRunOnceParameters(Account acc) => new WatcherThreadParameters(
+            getNewRepository, storage, VerboseLog, ExceptionIfNoOneFileInQueue, true, acc,
+            RaiseLogEvent, RaiseExceptionLogEvent, RaiseOnQueueRecordAdded, TimerInterval);
+
+        protected override void ThreadProc(WatcherThreadParameters prm) => ProcessThreadProc(prm);
+
         #endregion
     }
 }

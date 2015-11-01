@@ -12,33 +12,58 @@ namespace RoyaltyWorker.Config
     {
         public const string SectionName = "workerConfig";
 
-        internal const string DefaultEncoding = "cp1251";
+        internal const string DefaultEncoding = "utf-8";
         internal const string DefaultExportFileNameValue = "export.csv";
         internal const string DefaultImportLogFileNamValue = "fileimport.log";
-        internal const string DefaultNotTrustedPhonesSuffixValue = "phones";
         internal const string DefaultCultureForExportThreadValue = "ru-RU";
+        internal const string DefaultTimerInterval = "00:00:30.000";
+        internal const bool DefaultVerboseLog = false;
 
-        [ConfigurationProperty("checkTimerInterval", IsRequired = false)]
-        public TimeSpan CheckTimerInterval
+        [ConfigurationProperty("timerInterval", IsRequired = false, DefaultValue = DefaultTimerInterval)]
+        public TimeSpan TimerInterval
         {
             get
             {
-                var res = new TimeSpan(0, 0, 10);
-                TimeSpan.TryParse(this["checkTimerInterval"] as string, out res);
-                return res;
+                try
+                {
+                    return (TimeSpan)this["timerInterval"];
+                }
+                catch { return TimeSpan.Parse(DefaultTimerInterval); }
             }
         }
 
-        [ConfigurationProperty("logFileEncoding", IsRequired = false, DefaultValue = DefaultEncoding)]
+        [ConfigurationProperty("logFileEncodingName", IsRequired = false, DefaultValue = DefaultEncoding)]
+        public string LogFileEncodingName
+        {
+            get { return this["logFileEncodingName"] as string; }
+        }
+
         public Encoding LogFileEncoding
         {
             get
             {
                 try
                 {
-                    var encName = this["logFileEncoding"] as string;
-                    return Encoding.GetEncoding(encName);
-                } catch { return Encoding.Default; }
+                    return Encoding.GetEncoding(LogFileEncodingName);
+                } catch { return Encoding.GetEncoding(DefaultEncoding); }
+            }
+        }
+
+        [ConfigurationProperty("exportFileEncodingName", IsRequired = false, DefaultValue = DefaultEncoding)]
+        public string ExportFileEncodingName
+        {
+            get { return this["exportFileEncodingName"] as string; }
+        }
+
+        public Encoding ExportFileEncoding
+        {
+            get
+            {
+                try
+                {
+                    return Encoding.GetEncoding(ExportFileEncodingName);
+                }
+                catch { return Encoding.GetEncoding(DefaultEncoding); }
             }
         }
 
@@ -54,12 +79,6 @@ namespace RoyaltyWorker.Config
             get { return this["defaultImportLogFileName"] as string; }
         }
 
-        [ConfigurationProperty("defaultNotTrustedPhonesSuffix", IsRequired = false, DefaultValue = DefaultNotTrustedPhonesSuffixValue)]
-        public string DefaultNotTrustedPhonesSuffix
-        {
-            get { return this["defaultNotTrustedPhonesSuffix"] as string; }
-        }
-
         [ConfigurationProperty("defaultCultureForExportThread", IsRequired = false, DefaultValue = DefaultCultureForExportThreadValue)]
         public CultureInfo DefaultCultureForExportThread
         {
@@ -67,12 +86,11 @@ namespace RoyaltyWorker.Config
             {
                 try
                 {
-                    var cultureName = this["defaultCultureForExportThread"] as string;
-                    return new System.Globalization.CultureInfo(cultureName);
+                    return this["defaultCultureForExportThread"] as CultureInfo;
                 }
                 catch
                 {
-                    return System.Threading.Thread.CurrentThread.CurrentCulture;
+                    return new CultureInfo(DefaultCultureForExportThreadValue);
                 }
             }
         }
@@ -82,12 +100,12 @@ namespace RoyaltyWorker.Config
         {
             get
             {
-                var res = false;
-                bool.TryParse(this["verboseLog"] as string, out res);
-                return res;
+                bool res;
+                if (bool.TryParse(this["verboseLog"] as string, out res))
+                    return res;
+                else
+                    return DefaultVerboseLog;
             }
         }
-
-
     }
 }

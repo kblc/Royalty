@@ -11,36 +11,46 @@ namespace RoyaltyWorker.Config
     {
         public const string SectionName = "watcherConfig";
 
-        [ConfigurationProperty("checkTimerInterval", IsRequired = false)]
-        public TimeSpan CheckTimerInterval
+        internal const string DefaultTimerInterval = "00:00:30.000";
+        internal const bool DefaultExceptionIfNoOneFileInQueue = true;
+        internal const bool DefaultVerboseLog = false;
+
+        [ConfigurationProperty("timerInterval", IsRequired = false, DefaultValue = DefaultTimerInterval)]
+        public TimeSpan TimerInterval
         {
             get
             {
-                var res = new TimeSpan(0,0,30);
-                TimeSpan.TryParse(this["checkTimerInterval"] as string, out res);
-                return res;
+                try
+                {
+                    return (TimeSpan)this["timerInterval"];
+                }
+                catch { return TimeSpan.Parse(DefaultTimerInterval); }
             }
         }
 
-        [ConfigurationProperty("exceptionIfNoOneFileInQueue", IsRequired = false, DefaultValue = true)]
+        [ConfigurationProperty("exceptionIfNoOneFileInQueue", IsRequired = false, DefaultValue = DefaultExceptionIfNoOneFileInQueue)]
         public bool ExceptionIfNoOneFileInQueue
         {
             get
             {
-                var res = true;
-                bool.TryParse(this["exceptionIfNoOneFileInQueue"] as string, out res);
-                return res;
+                bool res;
+                if (bool.TryParse(this["exceptionIfNoOneFileInQueue"] as string, out res))
+                    return res;
+                else
+                    return DefaultExceptionIfNoOneFileInQueue;
             }
         }
 
-        [ConfigurationProperty("verboseLog", IsRequired = false, DefaultValue = false)]
+        [ConfigurationProperty("verboseLog", IsRequired = false, DefaultValue = DefaultVerboseLog)]
         public bool VerboseLog
         {
             get
             {
-                var res = false;
-                bool.TryParse(this["verboseLog"] as string, out res);
-                return res;
+                bool res;
+                if (bool.TryParse(this["verboseLog"] as string, out res))
+                    return res;
+                else
+                    return DefaultVerboseLog;
             }
         }
     }

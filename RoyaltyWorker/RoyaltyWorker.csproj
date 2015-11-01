@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\RoyaltyBase.cs" />
+    <Compile Include="Base\StartStopBase.cs" />
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\Worker.cs" />
     <Compile Include="Config\Watcher.cs" />

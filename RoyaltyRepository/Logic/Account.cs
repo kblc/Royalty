@@ -134,13 +134,13 @@ namespace RoyaltyRepository
                         "Dictionary.Records.Conditions",
                         "Dictionary.Records.Street",
                         "Dictionary.Records.ChangeStreetTo",
-                        "ExportTypes",
-                        "ExportTypes.Mark",
                         "SeriesOfNumbers",
                         "State",
                         "Settings",
                         "Settings.SheduleTimes",
-                        "Settings.Columns"
+                        "Settings.Columns",
+                        "Settings.ImportDirectories",
+                        "Settings.ExportDirectories",
                     });
                     if (defaultAccount != null)
                         AccountCopy(defaultAccount, res);
@@ -167,7 +167,6 @@ namespace RoyaltyRepository
         /// <param name="to">Account for copy to</param>
         public void AccountCopy(Account from, Account to,
             bool copySeriesOfNumbers = true,
-            bool copyExportType = true,
             bool copyData = true,
             bool copyDataAdditionalColumns = true,
             bool copyDictionary = true, 
@@ -192,18 +191,6 @@ namespace RoyaltyRepository
                     {
                         Delay = son.Delay,
                         DigitCount = son.DigitCount
-                    });
-            }
-            #endregion
-            #region ExportType
-            if (copyExportType)
-            {
-                to.ExportTypes.Clear();
-                foreach (var et in from.ExportTypes)
-                    to.ExportTypes.Add(new AccountExportType()
-                    {
-                        FileName = et.FileName,
-                        Mark = et.Mark
                     });
             }
             #endregion
@@ -338,11 +325,11 @@ namespace RoyaltyRepository
                     to.Settings.ExportDirectories.Add(new AccountSettingsExportDirectory()
                     {
                         Encoding = i.Encoding,
-                        Path = i.Path,
+                        DirectoryPath = i.DirectoryPath,
                         ExecuteAfterAnalizeCommand = i.ExecuteAfterAnalizeCommand,
-                        ExportData = i.ExportData,
-                        ExportPhones = i.ExportPhones,
-                        WaitExecutionAfterAnalize = i.WaitExecutionAfterAnalize
+                        TimeoutForExecute = i.TimeoutForExecute,
+                        FileName = i.FileName,
+                        Mark = i.Mark,
                     });
 
                 foreach (var c in from.Settings.Columns)
@@ -399,8 +386,8 @@ namespace RoyaltyRepository
         /// <returns>Account with identifier</returns>
         public IQueryable<Account> AccountGet(IEnumerable<string> accountNames, bool showHidden = false, IEnumerable<string> eagerLoad = null)
         {
-            return AccountGet(showHidden, eagerLoad)
-                .Join(accountNames.Select(n => n.ToUpper()), a => a.Name.ToUpper(), i => i, (a, i) => a);
+            var names = accountNames.Select(n => n.ToUpper());
+            return AccountGet(showHidden, eagerLoad).Where(a => names.Contains(a.Name.ToUpper()));
         }
         /// <summary>
         /// Get accounts by UIDs

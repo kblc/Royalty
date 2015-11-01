@@ -101,22 +101,6 @@ namespace RoyaltyRepositoryTests
         }
 
         [TestMethod]
-        public void AccountExportTypes_Insert_Remove()
-        {
-            var acc = Rep.AccountGet(defAccountName);
-            var hPhn = acc.ExportTypes.Count;
-            var mark = Rep.MarkGet().First();
-
-            var p = Rep.AccountExportTypeNew(acc, "test.csv", mark);
-            Rep.SaveChanges();
-
-            Assert.AreEqual(hPhn + 1, acc.ExportTypes.Count, "AccountExportType count must be increase by 1");
-            Rep.AccountExportTypeRemove(p);
-
-            Assert.AreEqual(hPhn, acc.ExportTypes.Count, "AccountExportType count must be decrease by 1");
-        }
-
-        [TestMethod]
         public void AccountDataRecord_Insert_Remove()
         {
             var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Data" });

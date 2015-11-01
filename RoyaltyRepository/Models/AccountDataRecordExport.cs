@@ -34,20 +34,13 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Идентификатор записи, которой принадлежат расширенные данные
         /// </summary>
-        [Key, Column("data_uid"), ForeignKey("AccountDataRecord")]
+        [Column("data_uid"), ForeignKey("AccountDataRecord"), Required]
         public Guid AccountDataRecordID { get; set; }
         /// <summary>
         /// Запись, которой принадлежат расширенные данные
         /// </summary>
         public virtual AccountDataRecord AccountDataRecord { get; set; }
         #endregion
-
-        /// <summary>
-        /// Дата экспорта
-        /// </summary>
-        [Column("export_date"), Required]
-        public DateTime ExportDate { get; set; }
-
         #region Host
         /// <summary>
         /// Идентификатор хоста была загружена запись
@@ -63,13 +56,19 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Идентификатор файла, в котором была загружена запись
         /// </summary>
-        [Column("file_uid"), ForeignKey("File")]
+        [Column("file_uid"), ForeignKey("File"), Required]
         public Guid FileUID { get; set; }
         /// <summary>
         /// Запись, которой принадлежат расширенные данные
         /// </summary>
         public virtual File File { get; set; }
         #endregion
+
+        /// <summary>
+        /// Дата экспорта
+        /// </summary>
+        [Column("export_date"), Required]
+        public DateTime ExportDate { get; set; }
 
         #region Abstract implementation
 

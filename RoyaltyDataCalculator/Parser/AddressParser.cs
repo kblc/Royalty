@@ -95,7 +95,7 @@ namespace RoyaltyDataCalculator.Parser
                     Progress = pp.GetChild()
                 })
                 .ToArray()
-                .AsParallel()
+                //.AsParallel()
                 .Select(g => new
                 {
                     g.City,
