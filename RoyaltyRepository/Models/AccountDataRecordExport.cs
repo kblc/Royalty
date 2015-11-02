@@ -72,7 +72,7 @@ namespace RoyaltyRepository.Models
 
         #region Abstract implementation
 
-        protected override object GetSourceId() => AccountDataRecordID;
+        protected override object GetSourceId() => ((IHistoryRecordSource)AccountDataRecord).SourceId;
         protected override HistorySourceType GetSourceType() => HistorySourceType.AccountData;
 
         #endregion

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Configuration;
 using RoyaltyRepository.Migrations;
 using System.Data.Common;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 
 namespace RoyaltyRepository.Models
 {
@@ -133,6 +135,50 @@ namespace RoyaltyRepository.Models
             //modelBuilder.Entity<Account>()
             //    .HasOptional(s => s.Settings)
             //    .WithRequired(ad => ad.Account);
+        }
+
+        private void HistoryAdd()
+        {
+            var changeStateFunc = new Func<EntityState, HistoryActionType>((es) =>
+            {
+                switch (es)
+                {
+                    case EntityState.Added:
+                        return HistoryActionType.Add;
+                    case EntityState.Deleted:
+                        return HistoryActionType.Remove;
+                    default:
+                        return HistoryActionType.Change;
+                }
+            });
+
+            var historyEntities = ChangeTracker.Entries()
+                    .Where(p => p.State == EntityState.Added || p.State == EntityState.Modified) // p.State == EntityState.Deleted ||
+                    .Select(p => new { HistoryRecord = p.Entity as IHistoryRecordSource, p.State })
+                    .Where(p => p.HistoryRecord != null)
+                    .Select(p => new { p.HistoryRecord.SourceId, p.HistoryRecord.SourceType, State = changeStateFunc(p.State) })
+                    .Distinct()
+                    .Select(ent => new Models.History() { ActionType = ent.State, SourceID = ent.SourceId.ToString(), SourceType = ent.SourceType })
+                    .ToArray();
+
+            if (historyEntities.Length > 0)
+                History.AddRange(historyEntities);
+        }
+
+        public override int SaveChanges()
+        {
+            HistoryAdd();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync()
+        {
+            var res = Task.Factory.StartNew<int>(() =>
+            {
+                HistoryAdd();
+                return base.SaveChangesAsync().Result;
+            });
+            return res;
         }
 
         public Action<string> Log

@@ -137,7 +137,7 @@ namespace RoyaltyRepository.Models
         {
 #pragma warning disable 618
             get { return RoyaltyRepository.Extensions.Helpers.GetEnumValueByName<HistorySourceType>(SourceTypeSystemName); }
-            set { ActionTypeSystemName = value.ToString().ToUpper(); }
+            set { SourceTypeSystemName = value.ToString().ToUpper(); }
 #pragma warning restore 618
         }
 
