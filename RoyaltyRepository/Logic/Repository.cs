@@ -17,14 +17,17 @@ namespace RoyaltyRepository
         public Repository()
         {
             Context = new RepositoryContext();
+            InitLog();
         }
         public Repository(string connectionStringName)
         {
             Context = new RepositoryContext(connectionStringName);
+            InitLog();
         }
         public Repository(string connectionString, string connectionProviderName)
         {
             Context = new RepositoryContext(connectionString, connectionProviderName);
+            InitLog();
         }
 
         public IDisposable BeginTransaction(bool commitOnDispose = false)
@@ -64,12 +67,18 @@ namespace RoyaltyRepository
             Dispose(false);
         }
 
-        public Action<string> Log
+        private void InitLog()
         {
-            get { return Context.Log; }
-            set { Context.Log = value; }
+            Context.Log = (s) => SqlLog?.Invoke(this, s);
         }
 
+        protected void RaiseLogEvent(string logMessage)
+        {
+            Log?.Invoke(this, logMessage);
+        }
+
+        public event EventHandler<string> SqlLog;
+        public event EventHandler<string> Log;
 
         protected void BulkInsert<T>(IEnumerable<T> instances)
             where T: class

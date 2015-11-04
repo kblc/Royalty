@@ -63,12 +63,5 @@ namespace RoyaltyRepository.Models
 
         public virtual ICollection<AccountDictionaryExclude> Excludes { get; set; }
         public virtual ICollection<AccountDictionaryRecord> Records { get; set; }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ((IHistoryRecordSource)Account).SourceId;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountDictionary;
-
-        #endregion
     }
 }

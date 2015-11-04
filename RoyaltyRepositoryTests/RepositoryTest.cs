@@ -11,22 +11,23 @@ namespace RoyaltyRepositoryTests
     {
         private const string defAccountName = "default0";
         public Repository Rep { get; set; }
+        public bool SqlLogEnabled { get; set; } = true;
 
         [TestInitialize]
         public void Initialization()
         {
             Rep = new Repository("connectionString");
-            Rep.AccountRemove(Rep.AccountGet(defAccountName, true));
-            Rep.AccountAdd(Rep.AccountNew(byDefault: true, accountName: defAccountName));
+            Rep.Remove(Rep.GetAccount(defAccountName, true));
+            Rep.Add(Rep.NewAccount(byDefault: true, accountName: defAccountName));
             Console.WriteLine("############################## Initialization done");
-            Rep.Log = (s) => { Console.WriteLine(string.Format("[~] SQL: {0}", s)); };
+            Rep.SqlLog += (s, e) => { if (SqlLogEnabled) Console.WriteLine(string.Format("{0}", e)); };
+            Rep.Log += (s, e) => Console.WriteLine(string.Format("{0}", e));
         }
 
         [TestCleanup]
         public void Finalization()
         {
-            Rep.Log = null;
-            Rep.AccountRemove(Rep.AccountGet(defAccountName));
+            Rep.Remove(Rep.GetAccount(defAccountName));
             Rep.Dispose();
             Rep = null;
             Console.WriteLine("############################## Finalization done");
@@ -103,7 +104,7 @@ namespace RoyaltyRepositoryTests
         [TestMethod]
         public void AccountDataRecord_Insert_Remove()
         {
-            var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Data" });
+            var acc = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "Data" });
             var hPhn = acc.Data.Count;
 
             var ph = Rep.PhoneGet("00-000-000-0000") ?? Rep.PhoneNew("00-000-000-0000");
@@ -183,7 +184,7 @@ namespace RoyaltyRepositoryTests
         [TestMethod]
         public void Account_State()
         {
-            var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "State" });
+            var acc = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "State" });
             acc.State.IsActive = true;
             acc.State.LastBatch = DateTime.Now;
             Rep.SaveChanges();
@@ -192,7 +193,7 @@ namespace RoyaltyRepositoryTests
         [TestMethod]
         public void Account_Settings()
         {
-            var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings" });
+            var acc = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "Settings" });
             acc.Settings.TimeForTrust = TimeSpan.FromDays(30);
             Rep.SaveChanges();
         }
@@ -200,7 +201,7 @@ namespace RoyaltyRepositoryTests
         [TestMethod]
         public void Account_Settings_Shedule()
         {
-            var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings", "Settings.SheduleTimes" });
+            var acc = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "Settings", "Settings.SheduleTimes" });
             var cShd = acc.Settings.SheduleTimes.Count;
             Rep.AccountSettingsSheduleTimeNew(acc.Settings, new TimeSpan(09, 00, 00));
             Rep.AccountSettingsSheduleTimeNew(acc.Settings, new TimeSpan(12, 00, 00));

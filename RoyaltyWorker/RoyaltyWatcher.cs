@@ -93,16 +93,16 @@ namespace RoyaltyWorker
                         if (prm.SuspendTimerCheck)
                         {
                             if (prm.AccountForCheck == null)
-                                accountsToProcess = rep.AccountGet().ToList(); 
+                                accountsToProcess = rep.GetAccount().ToList(); 
                             else
-                                accountsToProcess = new Account[] { rep.AccountGet(prm.AccountForCheck.AccountUID) }.ToList();
+                                accountsToProcess = rep.AccountGet(new Guid[] { prm.AccountForCheck.AccountUID }).ToList();
                         } else
                         { 
 #pragma warning disable 618
                             accountsToProcess = rep
                                 .AccountSettingsSheduleTimeGet()
                                 .Where(i => (long)utcTs.TotalMilliseconds - i.TimeTicks < (long)prm.TimerInterval.TotalMilliseconds)
-                                .Join(rep.AccountGet(), st => st.AccountUID, a => a.AccountUID, (st, a) => a)
+                                .Join(rep.GetAccount(), st => st.AccountUID, a => a.AccountUID, (st, a) => a)
                                 .Distinct()
                                 .ToList();
                         }

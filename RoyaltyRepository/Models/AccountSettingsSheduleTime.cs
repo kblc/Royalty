@@ -51,12 +51,5 @@ namespace RoyaltyRepository.Models
             set { TimeTicks = (long)value.TotalMilliseconds; }
             #pragma warning restore 618
         }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ((IHistoryRecordSource)AccountSettings).SourceId;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountSettings;
-
-        #endregion
     }
 }

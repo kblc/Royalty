@@ -152,13 +152,20 @@ namespace RoyaltyRepository.Models
                 }
             });
 
-            var historyEntities = ChangeTracker.Entries()
-                    .Where(p => p.State == EntityState.Added || p.State == EntityState.Modified) // p.State == EntityState.Deleted ||
-                    .Select(p => new { HistoryRecord = p.Entity as IHistoryRecordSource, p.State })
-                    .Where(p => p.HistoryRecord != null)
-                    .Select(p => new { p.HistoryRecord.SourceId, p.HistoryRecord.SourceType, State = changeStateFunc(p.State) })
+            var changedItems = ChangeTracker.Entries()
+                    .Where(p => p.State == EntityState.Added || p.State == EntityState.Modified || p.State == EntityState.Deleted)
+                    .ToArray();
+
+            var historySource = changedItems
+                    .Where(p => p.Entity as IHistoryRecordSource != null)
+                    .Select(p => new { Entry = p.Entity as IHistoryRecordSource, State = changeStateFunc(p.State) })
+                    .ToArray();
+
+            var historyEntities = historySource
+                    .Where(p => p.Entry.SourceId != null)
+                    .Select(p => new { SourceId = p.Entry.GetSourceIdString(), p.Entry.SourceName, p.State })
                     .Distinct()
-                    .Select(ent => new Models.History() { ActionType = ent.State, SourceID = ent.SourceId.ToString(), SourceType = ent.SourceType })
+                    .Select(ent => new Models.History() { ActionType = ent.State, SourceID = ent.SourceId, SourceName = ent.SourceName })
                     .ToArray();
 
             if (historyEntities.Length > 0)

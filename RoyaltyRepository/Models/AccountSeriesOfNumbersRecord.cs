@@ -62,12 +62,5 @@ namespace RoyaltyRepository.Models
             set { DelayTicks = value.Ticks; }
 #pragma warning restore 618
         }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ((IHistoryRecordSource)Account).SourceId;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountSettings;
-
-        #endregion
     }
 }

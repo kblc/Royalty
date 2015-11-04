@@ -58,10 +58,10 @@
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\DataImportAttributes.cs" />
     <Compile Include="Extensions\Helpers.cs" />
+    <Compile Include="Logic\Templated.cs" />
     <Compile Include="Logic\AccountDataRecordExport.cs" />
     <Compile Include="Logic\AccountSettingsExportDirectory.cs" />
     <Compile Include="Logic\AccountSettingsImportDirectory.cs" />
-    <Compile Include="Logic\History.cs" />
     <Compile Include="Logic\ColumnType.cs" />
     <Compile Include="Logic\AccountPhoneMark.cs" />
     <Compile Include="Logic\ImportQueueRecordFileAccountDataRecord.cs" />

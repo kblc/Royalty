@@ -48,7 +48,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("import_queue_record_state")]
-    public partial class ImportQueueRecordState : IDefaultRepositoryInitialization
+    public partial class ImportQueueRecordState : EntityBase, IDefaultRepositoryInitialization
     {
         /// <summary>
         /// Идентификатор записи
@@ -83,6 +83,10 @@ namespace RoyaltyRepository.Models
 #pragma warning restore 618
         }
 
+        /// <summary>
+        /// Default initialization
+        /// </summary>
+        /// <param name="context"></param>
         void IDefaultRepositoryInitialization.InitializeDefault(RepositoryContext context)
         {
 #pragma warning disable 618
@@ -95,11 +99,6 @@ namespace RoyaltyRepository.Models
                 .Select(i => i.Default);
             context.ImportQueueRecordStates.AddRange(defValues);
 #pragma warning restore 618
-        }
-
-        public override string ToString()
-        {
-            return this.GetColumnPropertiesForEntity();
         }
     }
 }

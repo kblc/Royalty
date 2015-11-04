@@ -45,12 +45,5 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("column_name"), Required]
         public string ColumnName { get; set; }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ((IHistoryRecordSource)AccountSettings).SourceId;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountSettings;
-
-        #endregion
     }
 }

@@ -15,102 +15,11 @@ namespace RoyaltyRepository
     public partial class Repository
     {
         /// <summary>
-        /// Add account to database
-        /// </summary>
-        /// <param name="instance">Account instance</param>
-        /// <param name="saveAfterInsert">Save database after insertion</param>
-        /// <param name="waitUntilSaving">Wait until saving</param>
-        public void AccountAdd(Account instance, bool saveAfterInsert = true, bool waitUntilSaving = true)
-        {
-            AccountAdd(new Account[] { instance }, saveAfterInsert, waitUntilSaving);
-        }
-        /// <summary>
-        /// Add accounts to database
-        /// </summary>
-        /// <param name="instances">Account instance array</param>
-        /// <param name="saveAfterInsert">Save database after insertion</param>
-        /// <param name="waitUntilSaving">Wait until saving</param>
-        public void AccountAdd(IEnumerable<Account> instances, bool saveAfterInsert = true, bool waitUntilSaving = true)
-        {
-            try
-            {
-                if (instances == null)
-                    throw new ArgumentNullException("instances");
-                instances = instances.Where(i => i != null).ToArray();
-
-                try
-                {
-                    this.Context.Accounts.AddRange(instances);
-                    if (saveAfterInsert)
-                        this.SaveChanges(waitUntilSaving);
-                }
-                catch (Exception ex)
-                {
-                    var e = new Exception(ex.Message, ex);
-                    for (int i = 0; i < instances.Count(); i++)
-                        e.Data.Add(string.Format("instance_{0}", i), instances.ElementAt(i).ToString());
-                    throw e;
-                }
-            }
-            catch (Exception ex)
-            {
-                Helpers.Log.Add(ex, string.Format("Repository.AccountAdd(instances=[{0}],saveAfterInsert={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterInsert, waitUntilSaving));
-                throw;
-            }
-        }
-        /// <summary>
-        /// Remove account from database
-        /// </summary>
-        /// <param name="instance">Account instance</param>
-        /// <param name="saveAfterRemove">Save database after removing</param>
-        /// <param name="waitUntilSaving">Wait until saving</param>
-        public void AccountRemove(Account instance, bool saveAfterRemove = true, bool waitUntilSaving = true)
-        {
-            AccountRemove(new Account[] { instance }, saveAfterRemove, waitUntilSaving);
-        }
-        /// <summary>
-        /// Remove accounts from database
-        /// </summary>
-        /// <param name="instances">Account instance array</param>
-        /// <param name="saveAfterRemove">Save database after removing</param>
-        /// <param name="waitUntilSaving">Wait until saving</param>
-        public void AccountRemove(IEnumerable<Account> instances, bool saveAfterRemove = true, bool waitUntilSaving = true)
-        {
-            try
-            {
-                if (instances == null)
-                    throw new ArgumentNullException("instances");
-                instances = instances
-                    .Where(i => i != null)
-                    //.Where(i => Context.Entry(i).State != EntityState.Deleted)
-                    .ToArray();
-
-                try
-                {
-                    this.Context.Accounts.RemoveRange(instances);
-                    if (saveAfterRemove)
-                        this.SaveChanges(waitUntilSaving);
-                }
-                catch(Exception ex)
-                {
-                    var e = new Exception(ex.Message, ex);
-                    for (int i = 0; i < instances.Count(); i++)
-                        e.Data.Add(string.Format("instance_{0}", i), instances.ElementAt(i).ToString());
-                    throw e;
-                }
-            }
-            catch (Exception ex)
-            {
-                Helpers.Log.Add(ex, string.Format("Repository.AccountRemove(instances=[{0}],saveAfterRemove={1},waitUntilSaving={2})", instances == null ? "NULL" : instances.Count().ToString(), saveAfterRemove, waitUntilSaving));
-                throw;
-            }
-        }
-        /// <summary>
         /// Create/Get new account without any link to database
         /// </summary>
         /// <param name="byDefault">Copy all settings and other from defaults</param>
         /// <returns>Account instance</returns>
-        public Account AccountNew(bool byDefault = false, string accountName = null)
+        public Account NewAccount(bool byDefault = false, string accountName = null)
         {
             try
             { 
@@ -124,7 +33,7 @@ namespace RoyaltyRepository
 
                 if (byDefault)
                 {
-                    var defaultAccount = AccountGet(Account.defaultAccountName, true, new string[]
+                    var defaultAccount = GetAccount(Account.defaultAccountName, true, new string[]
                     {
                         "AdditionalColumns",
                         "Data",
@@ -341,54 +250,41 @@ namespace RoyaltyRepository
             }
             #endregion
         }
+
         /// <summary>
         /// Get accounts
         /// </summary>
         /// <param name="showHidden">Show hidden accounts</param>
         /// <returns>Accounts</returns>
-        public IQueryable<Account> AccountGet(bool showHidden = false, IEnumerable<string> eagerLoad = null)
+        public IQueryable<Account> GetAccount(bool showHidden = false, IEnumerable<string> eagerLoad = null)
         {
-            System.Data.Entity.Infrastructure.DbQuery<Account> res = Context.Accounts;
-            if (eagerLoad != null)
-            {
-                foreach (var el in eagerLoad)
-                    res = res.Include(el);
-                res.Include((a) => a.Dictionary);
-            }
-            return res.Where(a => showHidden || !a.IsHidden);
+            return Get<Account>(a => showHidden || !a.IsHidden, eagerLoad);
         }
-        /// <summary>
-        /// Get one account by UID
-        /// </summary>
-        /// <param name="accountId">Account identifier</param>
-        /// <param name="showHidden">Show hidden accounts</param>
-        /// <returns>Account with identifier</returns>
-        public Account AccountGet(Guid accountId, bool showHidden = false, IEnumerable<string> eagerLoad = null)
-        {
-            return AccountGet(new Guid[] { accountId }, showHidden, eagerLoad).FirstOrDefault();
-        }
+        
         /// <summary>
         /// Get one account by name
         /// </summary>
         /// <param name="accountName">Account name</param>
         /// <param name="showHidden">Show hidden accounts</param>
         /// <returns>Account with identifier</returns>
-        public Account AccountGet(string accountName, bool showHidden = false, IEnumerable<string> eagerLoad = null)
+        public Account GetAccount(string accountName, bool showHidden = false, IEnumerable<string> eagerLoad = null)
         {
-            return AccountGet(new string[] { accountName }, showHidden, eagerLoad)
+            return GetAccount(new string[] { accountName }, showHidden, eagerLoad)
                 .SingleOrDefault();
         }
+        
         /// <summary>
         /// Get accounts by names
         /// </summary>
         /// <param name="accountNames">Account name array</param>
         /// <param name="showHidden">Show hidden accounts</param>
         /// <returns>Account with identifier</returns>
-        public IQueryable<Account> AccountGet(IEnumerable<string> accountNames, bool showHidden = false, IEnumerable<string> eagerLoad = null)
+        public IQueryable<Account> GetAccount(IEnumerable<string> accountNames, bool showHidden = false, IEnumerable<string> eagerLoad = null)
         {
             var names = accountNames.Select(n => n.ToUpper());
-            return AccountGet(showHidden, eagerLoad).Where(a => names.Contains(a.Name.ToUpper()));
+            return GetAccount(showHidden, eagerLoad).Where(a => names.Contains(a.Name.ToUpper()));
         }
+        
         /// <summary>
         /// Get accounts by UIDs
         /// </summary>
@@ -397,8 +293,7 @@ namespace RoyaltyRepository
         /// <returns>Account with identifier</returns>
         public IQueryable<Account> AccountGet(IEnumerable<Guid> instanceIds, bool showHidden = false, IEnumerable<string> eagerLoad = null)
         {
-            return AccountGet(showHidden, eagerLoad)
-                .Join(instanceIds, s => s.AccountUID, i => i, (s, i) => s);
+            return GetAccount(showHidden, eagerLoad).Where(a => instanceIds.Contains(a.AccountUID));
         }
     }
 }

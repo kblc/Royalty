@@ -93,12 +93,5 @@ namespace RoyaltyRepository.Models
         /// Файлы для этой записи
         /// </summary>
         public virtual ICollection<ImportQueueRecordFileInfoFile> Files { get; set; }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ImportQueueRecordUID;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.Queue;
-
-        #endregion
     }
 }

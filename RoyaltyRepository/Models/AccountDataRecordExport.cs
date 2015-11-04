@@ -35,7 +35,7 @@ namespace RoyaltyRepository.Models
         /// Идентификатор записи, которой принадлежат расширенные данные
         /// </summary>
         [Column("data_uid"), ForeignKey("AccountDataRecord"), Required]
-        public Guid AccountDataRecordID { get; set; }
+        public Guid AccountDataRecordUID { get; set; }
         /// <summary>
         /// Запись, которой принадлежат расширенные данные
         /// </summary>
@@ -69,12 +69,5 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("export_date"), Required]
         public DateTime ExportDate { get; set; }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ((IHistoryRecordSource)AccountDataRecord).SourceId;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountData;
-
-        #endregion
     }
 }

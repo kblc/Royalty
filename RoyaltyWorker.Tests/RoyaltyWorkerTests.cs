@@ -24,27 +24,23 @@ namespace RoyaltyWorker.Tests
         {
             SqlLogEnabled = true;
             Rep = GetNewRepository();
-            Rep.AccountRemove(Rep.AccountGet(defAccountName, true));
-            Rep.AccountAdd(Rep.AccountNew(byDefault: true, accountName: defAccountName));
+            Rep.Remove(Rep.GetAccount(defAccountName, true));
+            Rep.Add(Rep.NewAccount(byDefault: true, accountName: defAccountName));
             Console.WriteLine("############################## Initialization done");
         }
 
         private Repository GetNewRepository()
         {
             var res = new Repository("connectionStringHome");
-            res.Log = (s) => { if (SqlLogEnabled)
-                {
-                    //Debug.WriteLine(string.Format("{0}", s));
-                    Console.WriteLine(string.Format("{0}", s));
-                } };
+            res.SqlLog += (s, e) => { if (SqlLogEnabled) Console.WriteLine(string.Format("{0}", e)); };
+            res.Log += (s, e) => Console.WriteLine(string.Format("{0}", e));
             return res;
         }
 
         [TestCleanup]
         public void Finalization()
         {
-            Rep.Log = null;
-            Rep.AccountRemove(Rep.AccountGet(defAccountName));
+            Rep.Remove(Rep.GetAccount(defAccountName));
             Rep.Dispose();
             Rep = null;
             Console.WriteLine("############################## Finalization done");
@@ -61,7 +57,7 @@ namespace RoyaltyWorker.Tests
 
                 var storeFolder = "D:\\filestorage.import.main";
 
-                var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings" });
+                var a = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "Settings" });
                 var f = Rep.AccountSettingsImportDirectoryNew(a.Settings, new { Path = storeFolder, Filter = "*.csv", ForAnalize = true, DeleteFileAfterImport = true });
                 Rep.SaveChanges();
 
@@ -96,7 +92,7 @@ namespace RoyaltyWorker.Tests
                 var storage = new FileStorage();
                 storage.Log += (s, e) => Console.WriteLine("[FILESTORAGE] {0}", e);
 
-                var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings" });
+                var a = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "Settings" });
                 a.Settings.IgnoreExportTime = TimeSpan.FromTicks(0);
                 var f = Rep.AccountSettingsImportDirectoryNew(a.Settings, new { Path = storeFolder, Filter = "*.csv", ForAnalize = true, DeleteFileAfterImport = true, Encoding = Encoding.UTF8 });
                 var ef = Rep.AccountSettingsExportDirectoryNew(a.Settings, new { DirectoryPath = exportFolder, Encoding = Encoding.UTF8 });
@@ -144,7 +140,7 @@ namespace RoyaltyWorker.Tests
             var streetNames = Enumerable.Range(0, 100).Select(i => Enumerable.Range(0, 6).Select(n => alph[rnd.Next(alph.Length)].ToString()).Concat(c => c)).ToArray();
             var hostNames = new string[] { "testhost0.ru", "testhost1.ru" };
 
-            var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings.Columns.ColumnType" });
+            var acc = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "Settings.Columns.ColumnType" });
 
             var addrCol = acc.Settings.GetColumnFor(RoyaltyRepository.Models.ColumnTypes.Address);
             var areaCol = acc.Settings.GetColumnFor(RoyaltyRepository.Models.ColumnTypes.Area);

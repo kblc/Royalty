@@ -57,12 +57,5 @@ namespace RoyaltyRepository.Models
         /// </summary>
         public virtual Mark Mark { get; set; }
         #endregion
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ((IHistoryRecordSource)Account).SourceId;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountSettings;
-
-        #endregion
     }
 }

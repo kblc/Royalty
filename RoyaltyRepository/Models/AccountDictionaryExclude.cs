@@ -38,12 +38,5 @@ namespace RoyaltyRepository.Models
         [Column("exclude"), Required(ErrorMessageResourceName = "AccountDictionaryExcludeRequired")]
         [MinLength(1, ErrorMessageResourceName = "AccountDictionaryExcludeMinLength"), MaxLength(250, ErrorMessageResourceName = "AccountDictionaryExcludeMaxLength")]
         public string Exclude { get; set; }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ((IHistoryRecordSource)Dictionary).SourceId;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountDictionary;
-
-        #endregion
     }
 }

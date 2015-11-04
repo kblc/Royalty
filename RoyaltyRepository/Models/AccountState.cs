@@ -45,12 +45,5 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("is_active"), Required]
         public bool IsActive { get; set; }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ((IHistoryRecordSource)Account).SourceId;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.Account;
-
-        #endregion
     }
 }

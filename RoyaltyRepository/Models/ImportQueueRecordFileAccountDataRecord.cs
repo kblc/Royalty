@@ -19,7 +19,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("import_queue_file_data_records")]
-    public partial class ImportQueueRecordFileAccountDataRecord
+    public partial class ImportQueueRecordFileAccountDataRecord : HistoryEntityBase
     {
         #region ImportQueueRecordFile
         /// <summary>
@@ -49,14 +49,5 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("load_date"), Required]
         public DateTime LoadDate { get; set; }
-
-        #region ToString()
-
-        public override string ToString()
-        {
-            return this.GetColumnPropertiesForEntity();
-        }
-
-        #endregion
     }
 }

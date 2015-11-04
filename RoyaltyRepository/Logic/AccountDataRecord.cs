@@ -131,7 +131,7 @@ namespace RoyaltyRepository
                 var dt = DateTime.UtcNow;
                 var res = new AccountDataRecord()
                 {
-                    AccountDataRecordID = Guid.NewGuid(),
+                    AccountDataRecordUID = Guid.NewGuid(),
                     Created = dt,
                     Changed = dt,
                 };

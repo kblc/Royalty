@@ -73,13 +73,9 @@ namespace RoyaltyRepository.Models
         [Column("record_error")]
         public string Error { get; set; }
 
+        /// <summary>
+        /// Файлы
+        /// </summary>
         public virtual ICollection<ImportQueueRecordFileInfo> FileInfoes { get; set; }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ImportQueueRecordUID;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.Queue;
-
-        #endregion
     }
 }

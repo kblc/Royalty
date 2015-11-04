@@ -94,12 +94,5 @@ namespace RoyaltyRepository.Models
             set { TimeForTrustTicks = value == null ? (long?)null : (long)value.Value.TotalMilliseconds; }
             #pragma warning restore 618
         }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ((IHistoryRecordSource)Account).SourceId;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountSettings;
-
-        #endregion
     }
 }

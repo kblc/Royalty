@@ -51,12 +51,5 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("even")]
         public bool? Even { get; set; }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ((IHistoryRecordSource)DictionaryRecord).SourceId;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountDictionary;
-
-        #endregion
     }
 }

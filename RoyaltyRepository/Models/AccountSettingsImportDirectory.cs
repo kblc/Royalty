@@ -85,12 +85,5 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("delete_file_after_import"), Required]
         public bool DeleteFileAfterImport { get; set; }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ((IHistoryRecordSource)AccountSettings).SourceId;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountSettings;
-
-        #endregion
     }
 }

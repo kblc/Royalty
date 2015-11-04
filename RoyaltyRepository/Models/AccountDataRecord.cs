@@ -31,14 +31,14 @@ namespace RoyaltyRepository.Models
         /// Идентификатор записи
         /// </summary>
         [Key, Column("data_uid")]
-        public Guid AccountDataRecordID { get; set; }
+        public Guid AccountDataRecordUID { get; set; }
         
         #region Account
         /// <summary>
         /// Идентификатор аккаунта, которому принадлежат данные
         /// </summary>
         [ForeignKey("Account"), Column("account_uid"), Index("IX_DATA_ACCOUNT_UID", IsUnique = false), Required]
-        public Guid AccountID { get; set; }
+        public Guid AccountUID { get; set; }
         /// <summary>
         /// Аккаунт, которому принадлежат данные
         /// </summary>
@@ -102,12 +102,5 @@ namespace RoyaltyRepository.Models
         /// Информация об экспорте данной записи
         /// </summary>
         public virtual ICollection<AccountDataRecordExport> ExportInfo { get; set; }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ((IHistoryRecordSource)Account).SourceId;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountData;
-
-        #endregion
     }
 }

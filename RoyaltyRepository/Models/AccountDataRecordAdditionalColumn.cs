@@ -26,6 +26,7 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Key, Column("data_additional_column_id"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long AccountDataRecordAdditionalColumnID { get; set; }
+        
         #region Account
         /// <summary>
         /// Идентификатор аккаунта, которому принадлежат данные настройки
@@ -37,22 +38,25 @@ namespace RoyaltyRepository.Models
         /// </summary>
         public virtual Account Account { get; set; }
         #endregion
+        
+        /// <summary>
+        /// Системное название колонки, например: Column0, Column1 и т.д.
+        /// </summary>
         [Column("system_name"), Index("UIX_DATA_ADDITIONAL_COLUMN_ACCOUNT_SYSTEMNAME", 2, IsUnique = true)]
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "DataAdditionalColumnSystemNameRequired"), MaxLength(250, ErrorMessageResourceName = "DataAdditionalColumnSystemNameMaxLength")]
         public string ColumnSystemName { get; set; }
 
+        /// <summary>
+        /// Название колонки для пользователя
+        /// </summary>
         [Column("name")]
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "DataAdditionalColumnNameRequired"), MaxLength(250, ErrorMessageResourceName = "DataAdditionalColumnNameMaxLength")]
         public string ColumnName { get; set; }
 
+        /// <summary>
+        /// Экспортировать данную колонку
+        /// </summary>
         [Column("export"), Required]
         public bool Export { get; set; }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ((IHistoryRecordSource)Account).SourceId;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountData;
-
-        #endregion
     }
 }

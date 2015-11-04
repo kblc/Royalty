@@ -555,10 +555,10 @@ namespace RoyaltyDataCalculator
                         }
                         else
                         {
-                            i.Insert.DataRecord.CopyObject(i.Existed, new string[] { nameof(i.Insert.DataRecord.DataAdditional), nameof(i.Insert.DataRecord.LoadedByQueueFiles), nameof(i.Insert.DataRecord.AccountDataRecordID), nameof(i.Insert.DataRecord.Created), nameof(i.Insert.DataRecord.Exported) });
-                            i.Existed.CopyObject(i.Insert.DataRecord, new string[] { nameof(i.Insert.DataRecord.DataAdditional), nameof(i.Insert.DataRecord.LoadedByQueueFiles), nameof(i.Insert.DataRecord.AccountDataRecordID) });
+                            i.Insert.DataRecord.CopyObject(i.Existed, new string[] { nameof(i.Insert.DataRecord.DataAdditional), nameof(i.Insert.DataRecord.LoadedByQueueFiles), nameof(i.Insert.DataRecord.AccountDataRecordUID), nameof(i.Insert.DataRecord.Created), nameof(i.Insert.DataRecord.Exported) });
+                            i.Existed.CopyObject(i.Insert.DataRecord, new string[] { nameof(i.Insert.DataRecord.DataAdditional), nameof(i.Insert.DataRecord.LoadedByQueueFiles), nameof(i.Insert.DataRecord.AccountDataRecordUID) });
 
-                            i.Insert.DataRecordAdditional.CopyObject(i.Existed.DataAdditional, new string[] { nameof(i.Insert.DataRecordAdditional.AccountDataRecordID) });
+                            i.Insert.DataRecordAdditional.CopyObject(i.Existed.DataAdditional, new string[] { nameof(i.Insert.DataRecordAdditional.AccountDataRecordUID) });
                         }
                     });
 

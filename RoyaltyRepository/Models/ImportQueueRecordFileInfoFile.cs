@@ -39,7 +39,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("import_queue_file_file")]
-    public class ImportQueueRecordFileInfoFile
+    public class ImportQueueRecordFileInfoFile : HistoryEntityBase
     {
         [Key, Column("import_queue_file_file_id"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long ImportQueueRecordFileInfoFileID { get; set; }

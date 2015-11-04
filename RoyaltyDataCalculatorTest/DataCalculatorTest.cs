@@ -26,17 +26,17 @@ namespace RoyaltyDataCalculatorTest
         {
             SqlLogEnabled = true;
             Rep = new Repository("connectionStringHome");
-            Rep.AccountRemove(Rep.AccountGet(defAccountName, true));
-            Rep.AccountAdd(Rep.AccountNew(byDefault: true, accountName: defAccountName));
-            Rep.Log = (s) => { if (SqlLogEnabled) Console.WriteLine(string.Format("{0}", s)); };
+            Rep.Remove(Rep.GetAccount(defAccountName, true));
+            Rep.Add(Rep.NewAccount(byDefault: true, accountName: defAccountName));
+            Rep.SqlLog += (s,e) => { if (SqlLogEnabled) Console.WriteLine(string.Format("{0}", e)); };
+            Rep.Log += (s,e) => Console.WriteLine(string.Format("{0}", e));
             Console.WriteLine("############################## Initialization done");
         }
 
         [TestCleanup]
         public void Finalization()
         {
-            Rep.Log = null;
-            Rep.AccountRemove(Rep.AccountGet(defAccountName));
+            Rep.Remove(Rep.GetAccount(defAccountName));
             Rep.Dispose();
             Rep = null;
             Console.WriteLine("############################## Finalization done");
@@ -46,7 +46,7 @@ namespace RoyaltyDataCalculatorTest
         [ExpectedException(typeof(Exception))]
         public void DataCalculator_Preview_ExceptOnTableValidation()
         {
-            var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings.Columns" });
+            var a = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "Settings.Columns" });
             if (a != null)
                 using (var dc = new DataCalculator(a, Rep))
                 {
@@ -84,7 +84,7 @@ namespace RoyaltyDataCalculatorTest
         [TestMethod]
         public void DataCalculator_Preview_RowFilterAll()
         {
-            var a = Rep.AccountGet(defAccountName);
+            var a = Rep.GetAccount(defAccountName);
             if (a != null)
                 using (var dc = new DataCalculator(a, Rep))
                 {
@@ -162,7 +162,7 @@ namespace RoyaltyDataCalculatorTest
                     });
                 Rep.SaveChanges();
 
-                var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings.Columns.ColumnType" });
+                var acc = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "Settings.Columns.ColumnType" });
 
                 cityNames.ToList().ForEach((s) =>
                 {
@@ -294,7 +294,7 @@ namespace RoyaltyDataCalculatorTest
             SqlLogEnabled = false;
             try
             {
-                var acc = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Settings.Columns.ColumnType" });
+                var acc = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "Settings.Columns.ColumnType" });
                 var csvLines = new List<string>();
 
                 var colValues = acc.Settings.Columns

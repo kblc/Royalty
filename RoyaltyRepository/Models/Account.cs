@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -130,12 +131,6 @@ namespace RoyaltyRepository.Models
 
             return acc;
         }
-
-        #endregion
-        #region Abstract implementation
-
-        protected override object GetSourceId() => this.AccountUID;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.Account;
 
         #endregion
     }

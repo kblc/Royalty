@@ -67,12 +67,5 @@ namespace RoyaltyRepository.Models
         /// Условия
         /// </summary>
         public virtual ICollection<AccountDictionaryRecordCondition> Conditions { get; set; }
-
-        #region Abstract implementation
-
-        protected override object GetSourceId() => ((IHistoryRecordSource)Dictionary).SourceId;
-        protected override HistorySourceType GetSourceType() => HistorySourceType.AccountDictionary;
-
-        #endregion
     }
 }

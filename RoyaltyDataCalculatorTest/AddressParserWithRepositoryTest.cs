@@ -19,17 +19,17 @@ namespace RoyaltyDataCalculatorTest
         {
             SqlLogEnabled = true;
             Rep = new Repository("connectionStringHome");
-            Rep.AccountRemove(Rep.AccountGet(defAccountName, true));
-            Rep.AccountAdd(Rep.AccountNew(byDefault: true, accountName: defAccountName));
-            Rep.Log = (s) => { if (SqlLogEnabled) Console.WriteLine(string.Format("{0}", s)); };
+            Rep.Remove(Rep.GetAccount(defAccountName, true));
+            Rep.Add(Rep.NewAccount(byDefault: true, accountName: defAccountName));
+            Rep.SqlLog += (s,e) => { if (SqlLogEnabled) Console.WriteLine(string.Format("{0}", e)); };
+            Rep.Log += (s,e) => Console.WriteLine(string.Format("{0}", e));
             Console.WriteLine("############################## Initialization done");
         }
 
         [TestCleanup]
         public void Finalization()
         {
-            Rep.Log = null;
-            Rep.AccountRemove(Rep.AccountGet(defAccountName));
+            Rep.Remove(Rep.GetAccount(defAccountName));
             Rep.Dispose();
             Rep = null;
             Console.WriteLine("############################## Finalization done");
@@ -62,7 +62,7 @@ namespace RoyaltyDataCalculatorTest
                 Rep.StreetAdd(s10, saveAfterInsert: false);
                 Rep.StreetAdd(s11, saveAfterInsert: false);
 
-                var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Dictionary", "Dictionary.Records" });
+                var a = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "Dictionary", "Dictionary.Records" });
 
                 Rep.AccountDictionaryRecordNew(a.Dictionary, s00);
                 Rep.AccountDictionaryRecordNew(a.Dictionary, s01, s00);
@@ -136,7 +136,7 @@ namespace RoyaltyDataCalculatorTest
             try
             {
                 Rep.CityRemove(Rep.CityGet("testCity"));
-                var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Dictionary", "Dictionary.Records" });
+                var a = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "Dictionary", "Dictionary.Records" });
 
                 var c = Rep.CityNew("testCity");
                 Rep.CityAdd(c, saveAfterInsert: false);
@@ -207,7 +207,7 @@ namespace RoyaltyDataCalculatorTest
             try
             {
                 Rep.CityRemove(Rep.CityGet("testCity"));
-                var a = Rep.AccountGet(defAccountName, eagerLoad: new string[] { "Dictionary.Records.Street.Area.City" });
+                var a = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "Dictionary.Records.Street.Area.City" });
 
                 var c = Rep.CityNew("testCity");
                 Rep.CityAdd(c, saveAfterInsert: false);
