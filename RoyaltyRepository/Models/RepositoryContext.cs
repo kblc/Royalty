@@ -137,7 +137,7 @@ namespace RoyaltyRepository.Models
             //    .WithRequired(ad => ad.Account);
         }
 
-        private void HistoryAdd()
+        private int SaveWithHistory()
         {
             var changeStateFunc = new Func<EntityState, HistoryActionType>((es) =>
             {
@@ -152,40 +152,38 @@ namespace RoyaltyRepository.Models
                 }
             });
 
-            var changedItems = ChangeTracker.Entries()
+            var historySource = ChangeTracker.Entries()
                     .Where(p => p.State == EntityState.Added || p.State == EntityState.Modified || p.State == EntityState.Deleted)
-                    .ToArray();
-
-            var historySource = changedItems
                     .Where(p => p.Entity as IHistoryRecordSource != null)
                     .Select(p => new { Entry = p.Entity as IHistoryRecordSource, State = changeStateFunc(p.State) })
                     .ToArray();
 
+            var subRes = base.SaveChanges();
+
             var historyEntities = historySource
                     .Where(p => p.Entry.SourceId != null)
                     .Select(p => new { SourceId = p.Entry.GetSourceIdString(), p.Entry.SourceName, p.State })
-                    .Distinct()
+                    .GroupBy(p => new { p.SourceId, p.SourceName, p.State })
+                    .Select(p => p.Key)
                     .Select(ent => new Models.History() { ActionType = ent.State, SourceID = ent.SourceId, SourceName = ent.SourceName })
                     .ToArray();
 
             if (historyEntities.Length > 0)
+            { 
                 History.AddRange(historyEntities);
+                return subRes + base.SaveChanges();
+            }
+            return subRes;
         }
 
         public override int SaveChanges()
         {
-            HistoryAdd();
-            return base.SaveChanges();
+            return SaveWithHistory();
         }
 
         public override Task<int> SaveChangesAsync()
         {
-            var res = Task.Factory.StartNew<int>(() =>
-            {
-                HistoryAdd();
-                return base.SaveChangesAsync().Result;
-            });
-            return res;
+            return Task.Factory.StartNew<int>(SaveWithHistory);
         }
 
         public Action<string> Log
