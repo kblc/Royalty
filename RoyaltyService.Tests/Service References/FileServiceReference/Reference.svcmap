@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="6365a157-e890-49ce-ae2a-7fc2e55e2366" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8733/royalty/storage/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="d5404f4b-85c9-46d6-92d6-cef2cdafa0e9" SourceId="1" SourceUrl="http://localhost:8733/royalty/storage/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="a7be105c-d519-4ff4-ac62-9c5dec67435e" SourceId="1" SourceUrl="http://localhost:8733/royalty/storage/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="7702acd3-2b80-4f00-9776-624716804485" SourceId="1" SourceUrl="http://localhost:8733/royalty/storage/mex" />
+    <MetadataFile FileName="RoyaltyService.Services.File.xsd" MetadataType="Schema" ID="6813b9b4-20d4-4fc7-9247-87bd31c88e05" SourceId="1" SourceUrl="http://localhost:8733/royalty/storage/mex" />
+    <MetadataFile FileName="RoyaltyService.Model.xsd" MetadataType="Schema" ID="bb81fcd2-579c-406c-aab2-b188a2fb4e43" SourceId="1" SourceUrl="http://localhost:8733/royalty/storage/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="3768036f-86e8-4459-a782-e9bb33650851" SourceId="1" SourceUrl="http://localhost:8733/royalty/storage/mex" />
+    <MetadataFile FileName="Message.xsd" MetadataType="Schema" ID="41001ad6-64d7-4e94-a471-7993fec18dc3" SourceId="1" SourceUrl="http://localhost:8733/royalty/storage/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

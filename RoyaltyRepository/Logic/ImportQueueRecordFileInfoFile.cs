@@ -87,7 +87,7 @@ namespace RoyaltyRepository
                     var save = new Action(() =>
                     {
                         this.Context.ImportQueueRecordFileInfoFiles.RemoveRange(instances);
-                        this.FileRemove(files, saveAfterRemove);
+                        this.RemoveRange(files, saveAfterRemove);
                     });
 
                     if (saveAfterRemove)

@@ -22,7 +22,7 @@ namespace RoyaltyRepository.Models
     /// Файл
     /// </summary>
     [Table("file")]
-    public partial class File
+    public partial class File : EntityBase
     {
         /// <summary>
         /// Идентификатор записи
@@ -70,11 +70,6 @@ namespace RoyaltyRepository.Models
             get { return Extensions.Extensions.GetEncodingByName(EncodingName); }
             set { EncodingName = value?.WebName; }
 #pragma warning restore 618
-        }
-
-        public override string ToString()
-        {
-            return this.GetColumnPropertiesForEntity();
         }
     }
 }

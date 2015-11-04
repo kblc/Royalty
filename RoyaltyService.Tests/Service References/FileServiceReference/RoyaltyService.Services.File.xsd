@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.File" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.File" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+  <xs:complexType name="FileInfoResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q1:ResultWithValue">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="FileInfoResult" nillable="true" type="tns:FileInfoResult" />
+  <xs:complexType name="FileInfoResults">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q2:ResultWithValues">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="FileInfoResults" nillable="true" type="tns:FileInfoResults" />
+</xs:schema>

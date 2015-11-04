@@ -6,6 +6,17 @@ using System.Threading.Tasks;
 
 namespace RoyaltyFileStorage
 {
+    public class MimePreviewInfo
+    {
+        public readonly string Small;
+        public readonly string Big;
+        public MimePreviewInfo(string small, string big)
+        {
+            Small = small;
+            Big = big;
+        }
+    }
+
     public static class MimeTypes
     {
         /// <summary>
@@ -17,6 +28,19 @@ namespace RoyaltyFileStorage
         {
             var mimeInfo = Config.Config.MimeTypes.FirstOrDefault(i => string.Compare(i.Name, mimeType, true) == 0);
             return mimeInfo?.Extension ?? UnknownExtension;
+        }
+
+        /// <summary>
+        /// Get preview images for mime type
+        /// </summary>
+        /// <param name="mimeType">Mime type</param>
+        /// <returns>File extension for mime type or unknown if not found</returns>
+        public static MimePreviewInfo GetPreviewImagesForMimeType(string mimeType)
+        {
+            var mimeInfo = Config.Config.MimeTypes.FirstOrDefault(i => string.Compare(i.Name, mimeType, true) == 0);
+            if (mimeInfo == null)
+                return null;
+            return new MimePreviewInfo(mimeInfo.Small, mimeInfo.Resource);
         }
 
         /// <summary>

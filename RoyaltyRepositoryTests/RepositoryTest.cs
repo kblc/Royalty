@@ -169,16 +169,16 @@ namespace RoyaltyRepositoryTests
         [TestMethod]
         public void File_Insert_Remove()
         {
-            var hCnt = Rep.FileGet().Count();
-            var h = Rep.FileNew();
+            var hCnt = Rep.Get<RoyaltyRepository.Models.File>().Count();
+            var h = Rep.NewFile();
             h.FileName = "test";
             //h.FilePath = @"c:\test";
             h.FileSize = 0;
             h.MimeType = @"csv/plain";
-            Rep.FileAdd(h);
-            Assert.AreEqual(hCnt + 1, Rep.FileGet().Count(), "File count must be increase by 1");
-            Rep.FileRemove(h);
-            Assert.AreEqual(hCnt, Rep.FileGet().Count(), "File count must be decrease by 1");
+            Rep.Add(h);
+            Assert.AreEqual(hCnt + 1, Rep.Get<RoyaltyRepository.Models.File>().Count(), "File count must be increase by 1");
+            Rep.Remove(h);
+            Assert.AreEqual(hCnt, Rep.Get<RoyaltyRepository.Models.File>().Count(), "File count must be decrease by 1");
         }
 
         [TestMethod]

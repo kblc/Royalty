@@ -20,6 +20,13 @@ namespace RoyaltyFileStorage
         Stream FileGet(Guid fileId);
 
         /// <summary>
+        /// Get file stream from file storage
+        /// </summary>
+        /// <param name="fileName">File path</param>
+        /// <returns>File stream</returns>
+        Stream FileGet(string filePath);
+
+        /// <summary>
         /// Put file to file storage
         /// </summary>
         /// <param name="fileId">File identifier</param>
@@ -32,5 +39,20 @@ namespace RoyaltyFileStorage
         /// </summary>
         /// <param name="fileId">File identifier</param>
         void FileDelete(Guid fileId);
+
+        /// <summary>
+        /// Log event
+        /// </summary>
+        event EventHandler<string> Log;
+
+        /// <summary>
+        /// Exception event
+        /// </summary>
+        event EventHandler<Exception> Exception;
+
+        /// <summary>
+        /// Verbose log
+        /// </summary>
+        bool VerboseLog { get; set; }
     }
 }

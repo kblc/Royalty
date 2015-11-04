@@ -12,7 +12,11 @@ namespace RoyaltyWorker.Extensions
     {
         public static RoyaltyRepository.Models.File FilePut(this RoyaltyRepository.Repository repository, IFileStorage storage, Stream streamToUpload, string fileName, Encoding encoding = null)
         {
-            var repFile = repository.FileNew(new { FileName = fileName, MimeType = MimeTypes.GetMimeTypeFromFileName(fileName) });
+            var repFile = repository.NewFile((f) =>
+                {
+                    f.FileName = fileName;
+                    f.MimeType = MimeTypes.GetMimeTypeFromFileName(fileName);
+                });
             var fileInfo = storage.FilePut(repFile.FileID, streamToUpload, fileName);
             repFile.FilePath = fileInfo.FullName;
             repFile.FileSize = fileInfo.Length;

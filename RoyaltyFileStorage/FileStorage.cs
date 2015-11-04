@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Helpers;
 
 namespace RoyaltyFileStorage
 {
@@ -12,16 +13,16 @@ namespace RoyaltyFileStorage
     /// </summary>
     public class FileStorage : IFileStorage
     {
+
         /// <summary>
         /// Create new instance
         /// </summary>
         public FileStorage()
         {
-            if (Config.Config.IsStorageConfigured)
             try
             {
-                Location = Config.Config.StorageConfig.Location;
-                VerboseLog = Config.Config.StorageConfig.VerboseLog;
+                if (Config.Config.IsStorageConfigured)
+                    this.CopyObjectFrom(Config.Config.StorageConfig);
             }
             catch { }
         }
@@ -101,6 +102,44 @@ namespace RoyaltyFileStorage
                 catch (Exception ex)
                 {
                     ex.Data.Add(nameof(fileId), fileId);
+                    logSession.Add(ex);
+                    logSession.Enabled = true;
+                    RaiseExceptionEvent(ex);
+                    throw ex;
+                }
+        }
+
+        /// <summary>
+        /// Get file stream from file storage
+        /// </summary>
+        /// <param name="filePath">File path</param>
+        /// <returns>File stream</returns>
+        public Stream FileGet(string filePath)
+        {
+            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{nameof(FileGet)}()", VerboseLog, RaiseLogEvent))
+                try
+                {
+                    filePath = filePath.Replace(@"/", @"\");
+                    if (filePath.StartsWith(@"\"))
+                        filePath = filePath.Remove(0);
+                    var fullFilePath = System.IO.Path.Combine(Location, filePath.Replace(@"/", @"\"));
+                    logSession.Add($"Try get file '{filePath}' in next location: '{fullFilePath}'");
+
+                    if (filePath.StartsWith(Location))
+                    {
+                        if (System.IO.File.Exists(fullFilePath))
+                        {
+                            return System.IO.File.OpenRead(fullFilePath);
+                        }
+                        else
+                            throw new System.Exception("File not found");
+                    }
+                    else
+                        throw new System.Security.SecurityException($"Wrong file path");
+                }
+                catch (Exception ex)
+                {
+                    ex.Data.Add(nameof(filePath), filePath);
                     logSession.Add(ex);
                     logSession.Enabled = true;
                     RaiseExceptionEvent(ex);
