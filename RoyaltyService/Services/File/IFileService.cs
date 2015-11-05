@@ -54,22 +54,12 @@ namespace RoyaltyService.Services.File
         /// <summary>
         /// Get file source stream
         /// </summary>
-        /// <param name="fileId">File identifier</param>
+        /// <param name="fileIdOrName">File identifier</param>
         /// <returns>Source stream</returns>
         [OperationContract]
-        [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "GET", ResponseFormat = WebMessageFormat.Json, 
-            UriTemplate = "/file/{fileId}")]
-        System.IO.Stream GetSource(string fileId);
-
-        /// <summary>
-        /// Get file source stream by name
-        /// </summary>
-        /// <param name="fileName">FIle name</param>
-        /// <returns>Source stream</returns>
-        [OperationContract]
-        [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "GET", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, 
-            UriTemplate = "/file/?name={fileName}")]
-        System.IO.Stream GetSourceByName(string fileName);
+        [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "GET", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "/file?get={fileIdOrName}")]
+        System.IO.Stream GetSource(string fileIdOrName);
 
         /// <summary>
         /// Put file with source and parameters

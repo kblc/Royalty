@@ -13,7 +13,6 @@ namespace RoyaltyFileStorage
     /// </summary>
     public class FileStorage : IFileStorage
     {
-
         /// <summary>
         /// Create new instance
         /// </summary>
@@ -43,7 +42,7 @@ namespace RoyaltyFileStorage
         /// <param name="fileId">File identifier</param>
         public void FileDelete(Guid fileId)
         {
-            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{nameof(FileDelete)}()", VerboseLog, RaiseLogEvent))
+            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLogEvent))
                 try
                 {
                     var searchPattern = fileId.ToString("N") + "*";
@@ -82,7 +81,7 @@ namespace RoyaltyFileStorage
         /// <returns>File stream</returns>
         public Stream FileGet(Guid fileId)
         {
-            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{nameof(FileGet)}()", VerboseLog, RaiseLogEvent))
+            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLogEvent))
                 try
                 {
                     var searchPattern = fileId.ToString("N") + "*";
@@ -116,7 +115,7 @@ namespace RoyaltyFileStorage
         /// <returns>File stream</returns>
         public Stream FileGet(string filePath)
         {
-            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{nameof(FileGet)}()", VerboseLog, RaiseLogEvent))
+            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLogEvent))
                 try
                 {
                     filePath = filePath.Replace(@"/", @"\");
@@ -125,7 +124,7 @@ namespace RoyaltyFileStorage
                     var fullFilePath = System.IO.Path.Combine(Location, filePath.Replace(@"/", @"\"));
                     logSession.Add($"Try get file '{filePath}' in next location: '{fullFilePath}'");
 
-                    if (filePath.StartsWith(Location))
+                    if (fullFilePath.StartsWith(Location))
                     {
                         if (System.IO.File.Exists(fullFilePath))
                         {
@@ -167,7 +166,7 @@ namespace RoyaltyFileStorage
         /// <returns>Save file info</returns>
         private FileInfo FilePutWithExtension(Guid fileId, Stream stream, string originalFileName)
         {
-            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{nameof(FilePutWithExtension)}()", VerboseLog, RaiseLogEvent))
+            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLogEvent))
                 try
                 {
                     var origFileName = Path.GetFileName(originalFileName);
@@ -199,6 +198,59 @@ namespace RoyaltyFileStorage
                 catch (Exception ex)
                 {
                     ex.Data.Add(nameof(fileId), fileId);
+                    logSession.Add(ex);
+                    logSession.Enabled = true;
+                    RaiseExceptionEvent(ex);
+                    throw ex;
+                }
+        }
+
+        /// <summary>
+        /// Rename file from storage with file identifier and newFileName
+        /// </summary>
+        /// <param name="fileId">File identifier</param>
+        /// <param name="newFileName">New file name</param>
+        /// <returns>Rename file info</returns>
+        public FileInfo FileRename(Guid fileId, string newFileName)
+        {
+            using (var logSession = Helpers.Log.Session($"{GetType().Name}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLogEvent))
+                try
+                {
+                    var nwFileName = Path.GetFileName(newFileName);
+                    foreach (var c in Path.GetInvalidFileNameChars())
+                        nwFileName = nwFileName.Replace(c.ToString(), "");
+
+                    var newFullName = fileId.ToString("N") + (Path.GetExtension(nwFileName) != nwFileName ? "_" : string.Empty) + nwFileName;
+                    var newFilePath = System.IO.Path.Combine(Location, newFullName);
+
+
+                    var searchPattern = fileId.ToString("N") + "*";
+                    logSession.Add($"Try get file with '{searchPattern}' names in next location: '{Location}'");
+                    var filesExisted = System.IO.Directory.GetFiles(Location, searchPattern, SearchOption.TopDirectoryOnly);
+                    logSession.Add($"Files founded: {filesExisted.Length}");
+                    if (filesExisted.Length == 1)
+                    {
+                        var originalFilePath = filesExisted.First();
+
+                        logSession.Add($"Try put file to '{newFilePath}' from '{originalFilePath}'");
+                        try
+                        {
+                            System.IO.File.Move(originalFilePath, newFilePath);
+                            return new FileInfo(newFilePath);
+                        }
+                        catch (Exception ex)
+                        {
+                            ex.Data.Add(nameof(newFilePath), newFilePath);
+                            throw ex;
+                        }
+                    }
+                    else
+                        throw new Exception($"File count must be 1 instead of {filesExisted.Length}");
+                }
+                catch (Exception ex)
+                {
+                    ex.Data.Add(nameof(fileId), fileId);
+                    ex.Data.Add(nameof(newFileName), newFileName);
                     logSession.Add(ex);
                     logSession.Enabled = true;
                     RaiseExceptionEvent(ex);

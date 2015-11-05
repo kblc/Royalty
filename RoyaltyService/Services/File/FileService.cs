@@ -20,6 +20,10 @@ namespace RoyaltyService.Services.File
         static FileService()
         {
             Model.FileInfo.InitializeMap();
+            //if (Config.Config.IsServicesConfigured && !string.IsNullOrWhiteSpace(Config.Config.ServicesConfig.FileServiceLogFileName))
+            //{
+
+            //}
         }
 
         private static Dictionary<InstanceContext, CultureInfo> langDictionary = new Dictionary<InstanceContext, CultureInfo>();
@@ -37,7 +41,7 @@ namespace RoyaltyService.Services.File
             OperationContext.Current.InstanceContext.Closed += (s, e) => removeAction((InstanceContext)s);
         }
 
-        private bool verboseLog = false;
+        private bool verboseLog = Config.Config.ServicesConfig?.VerboseLog ?? false;
         public bool VerboseLog
         {
             get { return verboseLog; }
@@ -95,14 +99,21 @@ namespace RoyaltyService.Services.File
 
         private Guid GetGuidByString(string guidText)
         {
+            var res = TryGetGuidByString(guidText);
+            if (res == null)
+            {
+                var ex = new Exception(Properties.Resources.SERVICES_FILE_BadIdentifierFormat);
+                ex.Data.Add(nameof(guidText), guidText);
+                throw ex;
+            }
+            return res.Value;
+        }
+        private Guid? TryGetGuidByString(string guidText)
+        {
             Guid res;
             if (!Guid.TryParse(guidText, out res))
                 if (!Guid.TryParseExact(guidText, "N", out res))
-                { 
-                    var ex = new Exception(Properties.Resources.SERVICES_FILE_BadIdentifierFormat);
-                    ex.Data.Add(nameof(guidText), guidText);
-                    throw ex;
-                }
+                    return null;
             return res;
         }
 
@@ -212,51 +223,26 @@ namespace RoyaltyService.Services.File
                 }
         }
 
-        public Stream GetSource(string fileId)
+        public Stream GetSource(string fileIdOrName)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
                 try
                 {
-                    using (var rep = new RoyaltyRepository.Repository())
-                    {
-                        rep.SqlLog += (s, e) => RaiseSqlLog(e);
-                        rep.Log += (s, e) => logSession.Add(e, "[REPOSITORY]");
-
-                        logSession.Add($"Try to get file with id = '{fileId}' from database...");
-
-                        var file = rep.GetFile(GetGuidByString(fileId));
-                        if (file != null)
-                        {
-                            logSession.Add($"File found: '{file}'.");
-                            logSession.Add($"Try to get file with id = '{fileId}' from file storage.");
-                            return FileStorage.FileGet(file.FileID);
-                        }
-                        else
-                            throw new Exception(Properties.Resources.SERVICES_FILE_FileNotFound);
-                    }
+                    //try
+                    //{ 
+                    //    System.ServiceModel.Web.WebOperationContext.Current.OutgoingResponse.Headers.Add(System.Net.HttpRequestHeader.ContentEncoding, );
+                    //}
+                    //catch { }
+                    logSession.Add($"Try to get file with id or name = '{fileIdOrName}' from database...");
+                    var fileId = TryGetGuidByString(fileIdOrName);
+                    return fileId.HasValue
+                        ? FileStorage.FileGet(fileId.Value)
+                        : FileStorage.FileGet(fileIdOrName);
                 }
                 catch (Exception ex)
                 {
-                    ex.Data.Add(nameof(fileId), fileId);
-                    logSession.Enabled = true;
-                    logSession.Add(ex);
-                    throw;
-                }
-        }
-
-        public Stream GetSourceByName(string fileName)
-        {
-            UpdateSessionCulture();
-            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}({nameof(fileName)}={fileName})", VerboseLog, RaiseLog))
-                try
-                {
-                    logSession.Add($"Try to get file with name = '{fileName}' from file storage...");
-                    return FileStorage.FileGet(fileName);
-                }
-                catch (Exception ex)
-                {
-                    ex.Data.Add(nameof(fileName), fileName);
+                    ex.Data.Add(nameof(fileIdOrName), fileIdOrName);
                     logSession.Enabled = true;
                     logSession.Add(ex);
                     throw;
@@ -269,11 +255,8 @@ namespace RoyaltyService.Services.File
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
                 try
                 {
-                    using (var rep = new RoyaltyRepository.Repository())
+                    using (var rep = GetNewRepository(logSession))
                     {
-                        rep.SqlLog += (s, e) => RaiseSqlLog(e);
-                        rep.Log += (s, e) => logSession.Add(e, "[REPOSITORY]");
-
                         var dbFile = rep.New<RoyaltyRepository.Models.File>((f) =>
                         {
                             f.FileName = "unknown";
@@ -301,30 +284,38 @@ namespace RoyaltyService.Services.File
                 }
         }
 
-        public FileInfoExecutionResult Update(string fileId, string fileName, string encoding, string mime)
+        public FileInfoExecutionResult Update(string fileIdstring, string fileName, string encoding, string mime)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
                 try
                 {
-                    using (var rep = new RoyaltyRepository.Repository())
+                    using (var rep = GetNewRepository(logSession))
                     {
-                        rep.SqlLog += (s, e) => RaiseSqlLog(e);
-                        rep.Log += (s, e) => logSession.Add(e, "[REPOSITORY]");
+                        logSession.Add($"Try to get file with id = '{fileIdstring}' from database...");
 
-                        logSession.Add($"Try to get file with id = '{fileId}' from database...");
-                        var dbFile = rep.GetFile(GetGuidByString(fileId));
+                        var id = GetGuidByString(fileIdstring);
+
+                        var dbFile = rep.GetFile(id);
                         if (dbFile == null)
                             throw new Exception(Properties.Resources.SERVICES_FILE_FileNotFound);
 
                         if (!string.IsNullOrEmpty(fileName))
+                        { 
                             dbFile.FileName = System.IO.Path.GetFileName(fileName);
+                            var fi = FileStorage.FileRename(id, fileName);
+                            dbFile.FilePath = fi.FullName;
+                        }
 
                         if (!string.IsNullOrEmpty(encoding))
                             dbFile.Encoding = Encoding.GetEncoding(encoding);
 
+                        logSession.Add($"Try to rename file in file storage...");
+
                         if (!string.IsNullOrEmpty(mime))
                             dbFile.MimeType = mime;
+                        else
+                            dbFile.MimeType = RoyaltyFileStorage.MimeTypes.GetMimeTypeFromFileName(dbFile.FilePath);
 
                         logSession.Add($"Try to update file in database...");
                         rep.SaveChanges();
@@ -334,7 +325,7 @@ namespace RoyaltyService.Services.File
                 }
                 catch (Exception ex)
                 {
-                    ex.Data.Add(nameof(fileId), fileId);
+                    ex.Data.Add(nameof(fileIdstring), fileIdstring);
                     ex.Data.Add(nameof(fileName), fileName);
                     ex.Data.Add(nameof(encoding), encoding);
                     ex.Data.Add(nameof(mime), mime);

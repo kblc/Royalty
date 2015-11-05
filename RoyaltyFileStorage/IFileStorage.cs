@@ -27,6 +27,14 @@ namespace RoyaltyFileStorage
         Stream FileGet(string filePath);
 
         /// <summary>
+        /// Rename file with specified identifier
+        /// </summary>
+        /// <param name="fileId">File identifier</param>
+        /// <param name="newFileName">New file name</param>
+        /// <returns>File info</returns>
+        FileInfo FileRename(Guid fileId, string newFileName);
+
+        /// <summary>
         /// Put file to file storage
         /// </summary>
         /// <param name="fileId">File identifier</param>
