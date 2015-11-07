@@ -183,7 +183,7 @@ namespace RoyaltyService.Services.File
         /// </summary>
         /// <param name="identifiers">File info identifiers</param>
         /// <returns>Files info</returns>
-        public FileInfoExecutionResults GetRange(IEnumerable<Guid> identifiers)
+        public FileInfoExecutionResults GetRange(Guid[] identifiers)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
@@ -211,13 +211,13 @@ namespace RoyaltyService.Services.File
         /// </summary>
         /// <param name="identifiers">File info identifiers</param>
         /// <returns>Files info</returns>
-        public FileInfoExecutionResults RESTGetRange(IEnumerable<string> identifiers)
+        public FileInfoExecutionResults RESTGetRange(string[] identifiers)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
                 try
                 {
-                    var valiIdentifiers = identifiers.Select(i => GetGuidByString(i));
+                    var valiIdentifiers = identifiers.Select(i => GetGuidByString(i)).ToArray();
                     return GetRange(valiIdentifiers);
                 }
                 catch (Exception ex)

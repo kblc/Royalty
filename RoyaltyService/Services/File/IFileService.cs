@@ -25,9 +25,8 @@ namespace RoyaltyService.Services.File
         /// <returns>File info</returns>
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "GET", ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "/info/{identifier}")]
+            UriTemplate = "/file/{identifier}")]
         FileInfoExecutionResult RESTGet(string identifier);
-        
 
         /// <summary>
         /// Delete file by identifier
@@ -51,7 +50,7 @@ namespace RoyaltyService.Services.File
         /// <param name="identifiers">File info identifiers</param>
         /// <returns>Files info</returns>
         [OperationContract]
-        FileInfoExecutionResults GetRange(IEnumerable<Guid> identifiers);
+        FileInfoExecutionResults GetRange(Guid[] identifiers);
         /// <summary>
         /// Get file infos by identifiers
         /// </summary>
@@ -59,8 +58,8 @@ namespace RoyaltyService.Services.File
         /// <returns>Files info</returns>
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "/file/info")]
-        FileInfoExecutionResults RESTGetRange(IEnumerable<string> identifiers);
+            UriTemplate = "/file/range")]
+        FileInfoExecutionResults RESTGetRange(string[] identifiers);
 
 
         /// <summary>
@@ -84,7 +83,7 @@ namespace RoyaltyService.Services.File
         /// <returns>Source stream</returns>
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "GET", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "/file?get={fileIdOrName}")]
+            UriTemplate = "/file?source={fileIdOrName}")]
         System.IO.Stream RESTGetSource(string fileIdOrName);
 
 
@@ -104,6 +103,8 @@ namespace RoyaltyService.Services.File
         /// <param name="file">File to update</param>
         /// <returns>File info</returns>
         [OperationContract]
+        [WebInvoke(BodyStyle = WebMessageBodyStyle.Wrapped, Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "/file")]
         FileInfoExecutionResult Update(Model.FileInfo item);
 
         /// <summary>
@@ -115,7 +116,7 @@ namespace RoyaltyService.Services.File
         /// <param name="mime">New mime type</param>
         /// <returns>File info</returns>
         [OperationContract]
-        [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+        [WebInvoke(BodyStyle = WebMessageBodyStyle.Wrapped, Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "file/{identifier}?name={fileName}&encoding={encoding}&mime={mime}")]
         FileInfoExecutionResult RESTUpdate(string identifier, string fileName, string encoding, string mime);
     }
