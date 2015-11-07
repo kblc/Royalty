@@ -63,9 +63,9 @@ namespace RoyaltyService.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Identifier had bad format..
         /// </summary>
-        public static string SERVICES_FILE_BadIdentifierFormat {
+        public static string BASESERVICES_BadIdentifierFormat {
             get {
-                return ResourceManager.GetString("SERVICES_FILE_BadIdentifierFormat", resourceCulture);
+                return ResourceManager.GetString("BASESERVICES_BadIdentifierFormat", resourceCulture);
             }
         }
         

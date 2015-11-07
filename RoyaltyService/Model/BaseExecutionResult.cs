@@ -13,13 +13,15 @@ namespace RoyaltyService.Model
     {
         public BaseExecutionResult() { }
 
-        public BaseExecutionResult(Exception ex)
-        {
-            Error = ex.GetExceptionText(includeStackTrace: false, clearText: true);
-        }
+        public BaseExecutionResult(Exception ex) { Exception = ex; }
 
         [DataMember(IsRequired = false)]
         public string Error { get; set; }
+
+        [IgnoreDataMember]
+        private Exception exception = null;
+        [IgnoreDataMember]
+        public Exception Exception { get { return exception; } set { exception = value; Error = value?.GetExceptionText(includeStackTrace: false, clearText: true); } }
     }
 
     [DataContract(Name = "ResultWithValue")]
@@ -37,10 +39,10 @@ namespace RoyaltyService.Model
     public abstract class BaseExecutionResults<T> : BaseExecutionResult
     {
         public BaseExecutionResults() { }
-        public BaseExecutionResults(IEnumerable<T> values) { Values = values; }
+        public BaseExecutionResults(T[] values) { Values = values; }
         public BaseExecutionResults(Exception ex) : base(ex) { }
 
         [DataMember(IsRequired = false)]
-        public IEnumerable<T> Values { get; set; }
+        public T[] Values { get; set; }
     }
 }

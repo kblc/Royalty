@@ -38,6 +38,16 @@ namespace RoyaltyRepository
         {
             return GetFile(new Guid[] { instanceId }).SingleOrDefault();
         }
+
+        /// <summary>
+        /// Get one File by name
+        /// </summary>
+        /// <param name="instanceId">File identifier</param>
+        /// <returns>File</returns>
+        public File GetFile(string fileName)
+        {
+            return Get<File>(f => f.OriginalFileName == fileName).SingleOrDefault();
+        }
         /// <summary>
         /// Get Files by identifiers
         /// </summary>

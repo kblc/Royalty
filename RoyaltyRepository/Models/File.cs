@@ -38,7 +38,7 @@ namespace RoyaltyRepository.Models
         /// Путь к файлу
         /// </summary>
         [Column("file_path"), Required]
-        public string FilePath { get; set; }
+        public string OriginalFileName { get; set; }
         /// <summary>
         /// Размер файла
         /// </summary>

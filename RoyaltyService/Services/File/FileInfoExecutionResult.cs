@@ -19,7 +19,7 @@ namespace RoyaltyService.Services.File
     public class FileInfoExecutionResults : Model.BaseExecutionResults<Model.FileInfo>
     {
         public FileInfoExecutionResults() { }
-        public FileInfoExecutionResults(IEnumerable<Model.FileInfo> values) : base(values) { }
+        public FileInfoExecutionResults(Model.FileInfo[] values) : base(values) { }
         public FileInfoExecutionResults(Exception ex) : base(ex) { }
     }
 }

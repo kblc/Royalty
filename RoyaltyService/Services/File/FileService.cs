@@ -15,8 +15,12 @@ using System.Threading;
 namespace RoyaltyService.Services.File
 {
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, InstanceContextMode = InstanceContextMode.PerSession)]
-    public class FileService : IFileService
+    public class FileService : Base.BaseService, IFileService
     {
+        #region Initialize
+
+        private const string DefaultFileName = "unknown.bin";
+
         static FileService()
         {
             Model.FileInfo.InitializeMap();
@@ -26,53 +30,8 @@ namespace RoyaltyService.Services.File
             //}
         }
 
-        private static Dictionary<InstanceContext, CultureInfo> langDictionary = new Dictionary<InstanceContext, CultureInfo>();
-
-        public FileService()
-        {
-            var removeAction = new Action<InstanceContext>((s) =>
-            {
-                lock (langDictionary)
-                    if (langDictionary.ContainsKey(s))
-                        langDictionary.Remove(s);
-            });
-
-            OperationContext.Current.InstanceContext.Faulted += (s, e) => removeAction((InstanceContext)s);
-            OperationContext.Current.InstanceContext.Closed += (s, e) => removeAction((InstanceContext)s);
-        }
-
-        private bool verboseLog = Config.Config.ServicesConfig?.VerboseLog ?? false;
-        public bool VerboseLog
-        {
-            get { return verboseLog; }
-            set { verboseLog = value; FileStorage.VerboseLog = verboseLog; }
-        }
-
-        public CultureInfo CurrentCulture
-        {
-            get
-            {
-                lock(langDictionary)
-                    return (langDictionary.ContainsKey(OperationContext.Current.InstanceContext))
-                            ? langDictionary[OperationContext.Current.InstanceContext] ?? Thread.CurrentThread.CurrentCulture
-                            : Thread.CurrentThread.CurrentCulture;
-            }
-            set
-            {
-                lock (langDictionary)
-                    if (langDictionary.ContainsKey(OperationContext.Current.InstanceContext))
-                        langDictionary[OperationContext.Current.InstanceContext] = value;
-                    else
-                        langDictionary.Add(OperationContext.Current.InstanceContext, value);
-            }
-        }
-
-        private void UpdateSessionCulture()
-        {
-            var cultureForSession = CurrentCulture;
-            Thread.CurrentThread.CurrentCulture = cultureForSession;
-            Thread.CurrentThread.CurrentUICulture = cultureForSession;
-        }
+        #endregion
+        #region File storage
 
         private RoyaltyFileStorage.IFileStorage fileStorage = null;
         protected RoyaltyFileStorage.IFileStorage FileStorage
@@ -83,96 +42,57 @@ namespace RoyaltyService.Services.File
                 {
                     fileStorage = new RoyaltyFileStorage.FileStorage();
                     fileStorage.Log += (s, e) => RaiseLog($"[FILESTORAGE] {e}");
-                    fileStorage.VerboseLog = verboseLog;
+                    fileStorage.VerboseLog = VerboseLog;
                 }
                 return fileStorage;
             }
         }
 
-        protected RoyaltyRepository.Repository GetNewRepository(Helpers.Log.SessionInfo logSession)
+        #endregion
+
+        private void SetOutputResponseHeaders(string mime, Encoding encoding)
         {
-            var rep = new RoyaltyRepository.Repository();
-            rep.SqlLog += (s, e) => RaiseSqlLog(e);
-            rep.Log += (s, e) => logSession.Add(e, "[REPOSITORY]");
-            return rep;
+            //try
+            //{ 
+            //    System.ServiceModel.Web.WebOperationContext.Current.OutgoingResponse.Headers.Add(System.Net.HttpRequestHeader.ContentEncoding, );
+            //}
+            //catch { }
         }
 
-        private Guid GetGuidByString(string guidText)
+        private void GetInputRequestHeaders(out string mime, out Encoding encoding)
         {
-            var res = TryGetGuidByString(guidText);
-            if (res == null)
-            {
-                var ex = new Exception(Properties.Resources.SERVICES_FILE_BadIdentifierFormat);
-                ex.Data.Add(nameof(guidText), guidText);
-                throw ex;
-            }
-            return res.Value;
-        }
-        private Guid? TryGetGuidByString(string guidText)
-        {
-            Guid res;
-            if (!Guid.TryParse(guidText, out res))
-                if (!Guid.TryParseExact(guidText, "N", out res))
-                    return null;
-            return res;
-        }
-
-        public IEnumerable<Model.FileInfo> GetRangeFromFileIdentifiers(IEnumerable<string> fileIds)
-        {
-            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}(fileIds={fileIds.Concat(i => i.ToString(), ",")})", VerboseLog, RaiseLog))
-                try
-                {
-                    using (var rep = GetNewRepository(logSession))
-                    {
-                        var res = new List<Model.FileInfo>();
-                        foreach (var fileId in fileIds.Select(fi => GetGuidByString(fi)).ToArray())
-                        {
-                            logSession.Add($"Try to get file with id = '{fileId}' from database...");
-                            var file = rep.GetFile(fileId);
-                            if (file != null)
-                            {
-                                logSession.Add($"File found: '{file}'.");
-                                var fileInfo = Mapper.Map<Model.FileInfo>(file);
-                                res.Add(fileInfo);
-                            }
-                            else
-                                throw new Exception(Properties.Resources.SERVICES_FILE_FileNotFound);
-                        }
-                        return res;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ex.Data.Add(nameof(fileIds), fileIds.Concat(i => i.ToString(), ","));
-                    logSession.Enabled = true;
-                    logSession.Add(ex);
-                    throw;
-                }
+            mime = null;
+            encoding = null;
+            //try
+            //{ 
+            //    System.ServiceModel.Web.WebOperationContext.Current.OutgoingResponse.Headers.Add(System.Net.HttpRequestHeader.ContentEncoding, );
+            //}
+            //catch { }
         }
 
         #region Service contract implementation
 
-        public void Delete(string fileId)
+        /// <summary>
+        /// Delete file by identifier
+        /// </summary>
+        /// <param name="identifier">File identifier</param>
+        public void Remove(Guid identifier)
         {
             UpdateSessionCulture();
-            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}(fileId={fileId})", VerboseLog, RaiseLog))
+            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}(fileId={identifier})", VerboseLog, RaiseLog))
                 try
                 {
-                    using (var rep = new RoyaltyRepository.Repository())
+                    using (var rep = GetNewRepository(logSession))
                     {
-                        rep.SqlLog += (s, e) => RaiseSqlLog(e);
-                        rep.Log += (s, e) => logSession.Add(e, "[REPOSITORY]");
-
-                        logSession.Add($"Try to get file with id = '{fileId}' from database...");
-
-                        var file = rep.GetFile(GetGuidByString(fileId));
+                        logSession.Add($"Try to get file with id = '{identifier}' from database...");
+                        var file = rep.GetFile(identifier);
                         if (file != null)
                         {
                             logSession.Add($"File found: '{file}'.");
                             rep.Remove(file);
-                            logSession.Add($"File with id = '{fileId}' deleted from database.");
+                            logSession.Add($"File with id = '{identifier}' deleted from database.");
                             FileStorage.FileDelete(file.FileID);
-                            logSession.Add($"File with id = '{fileId}' deleted from file storage.");
+                            logSession.Add($"File with id = '{identifier}' deleted from file storage.");
                         }
                         else
                             throw new Exception(Properties.Resources.SERVICES_FILE_FileNotFound);
@@ -180,65 +100,207 @@ namespace RoyaltyService.Services.File
                 }
                 catch(Exception ex)
                 {
-                    ex.Data.Add(nameof(fileId), fileId);
+                    ex.Data.Add(nameof(identifier), identifier);
                     logSession.Enabled = true;
                     logSession.Add(ex);
                     throw;
                 }
         }
-
-        public FileInfoExecutionResult Get(string fileId)
+        /// <summary>
+        /// Delete file by identifier
+        /// </summary>
+        /// <param name="identifier">File identifier</param>
+        public void RESTRemove(string identifier)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
                 try
                 {
-                    var item = GetRangeFromFileIdentifiers(new string[] { fileId }).SingleOrDefault();
-                    return new FileInfoExecutionResult(item);
+                    var id = GetGuidByString(identifier);
+                    Remove(id);
                 }
                 catch (Exception ex)
                 {
-                    ex.Data.Add(nameof(fileId), fileId);
+                    ex.Data.Add(nameof(identifier), identifier);
+                    logSession.Enabled = true;
+                    logSession.Add(ex);
+                }
+        }
+
+        /// <summary>
+        /// Get file info by file identifier
+        /// </summary>
+        /// <param name="identifier">File identifier</param>
+        /// <returns>File info</returns>
+        public FileInfoExecutionResult Get(Guid identifier)
+        {
+            UpdateSessionCulture();
+            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
+                try
+                {
+                    var res = GetRange(new Guid[] { identifier });
+                    if (res.Exception != null)
+                        throw res.Exception;
+
+                    if (res.Values.Length != 1)
+                        throw new Exception(Properties.Resources.SERVICES_FILE_FileNotFound);
+
+                    return new FileInfoExecutionResult(res.Values.FirstOrDefault());
+                }
+                catch (Exception ex)
+                {
+                    ex.Data.Add(nameof(identifier), identifier);
+                    logSession.Enabled = true;
+                    logSession.Add(ex);
+                    return new FileInfoExecutionResult(ex);
+                }
+        }
+        /// <summary>
+        /// Get file info by file identifier
+        /// </summary>
+        /// <param name="identifier">File identifier</param>
+        /// <returns>File info</returns>
+        public FileInfoExecutionResult RESTGet(string identifier)
+        {
+            UpdateSessionCulture();
+            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
+                try
+                {
+                    var id = GetGuidByString(identifier);
+                    return Get(id);
+                }
+                catch (Exception ex)
+                {
+                    ex.Data.Add(nameof(identifier), identifier);
                     logSession.Enabled = true;
                     logSession.Add(ex);
                     return new FileInfoExecutionResult(ex);
                 }
         }
 
-        public FileInfoExecutionResults GetRange(IEnumerable<string> fileIds)
+        /// <summary>
+        /// Get file infos by identifiers
+        /// </summary>
+        /// <param name="identifiers">File info identifiers</param>
+        /// <returns>Files info</returns>
+        public FileInfoExecutionResults GetRange(IEnumerable<Guid> identifiers)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
                 try
                 {
-                    var item = GetRangeFromFileIdentifiers(fileIds);
-                    return new FileInfoExecutionResults(item);
+                    using (var rep = GetNewRepository(logSession))
+                    {
+                        var res = rep.Get<RoyaltyRepository.Models.File>(f => identifiers.Contains(f.FileID))
+                            .ToArray()
+                            .Select(f => Mapper.Map<Model.FileInfo>(f))
+                            .ToArray();
+                        return new FileInfoExecutionResults(res);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    ex.Data.Add(nameof(fileIds), fileIds.Concat(i => i?.ToString() ?? "NULL", ","));
+                    ex.Data.Add(nameof(identifiers), identifiers.Concat(i => i.ToString("N"), ","));
+                    logSession.Enabled = true;
+                    logSession.Add(ex);
+                    return new FileInfoExecutionResults(ex);
+                }
+        }
+        /// <summary>
+        /// Get file infos by identifiers
+        /// </summary>
+        /// <param name="identifiers">File info identifiers</param>
+        /// <returns>Files info</returns>
+        public FileInfoExecutionResults RESTGetRange(IEnumerable<string> identifiers)
+        {
+            UpdateSessionCulture();
+            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
+                try
+                {
+                    var valiIdentifiers = identifiers.Select(i => GetGuidByString(i));
+                    return GetRange(valiIdentifiers);
+                }
+                catch (Exception ex)
+                {
+                    ex.Data.Add(nameof(identifiers), identifiers.Concat(i => i ?? "NULL", ","));
                     logSession.Enabled = true;
                     logSession.Add(ex);
                     return new FileInfoExecutionResults(ex);
                 }
         }
 
-        public Stream GetSource(string fileIdOrName)
+        /// <summary>
+        /// Get file source stream
+        /// </summary>
+        /// <param name="identifier">File identifier</param>
+        /// <returns>Source stream</returns>
+        public Stream GetSource(Guid identifier)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
                 try
                 {
-                    //try
-                    //{ 
-                    //    System.ServiceModel.Web.WebOperationContext.Current.OutgoingResponse.Headers.Add(System.Net.HttpRequestHeader.ContentEncoding, );
-                    //}
-                    //catch { }
+                    using (var rep = GetNewRepository(logSession))
+                    {
+                        var file = rep.GetFile(identifier);
+                        if (file != null)
+                            SetOutputResponseHeaders(file.MimeType, file.Encoding);
+                    }
+                    logSession.Add($"Try to get file with id = '{identifier}' from data storage...");
+                    return FileStorage.FileGet(identifier);
+                }
+                catch (Exception ex)
+                {
+                    ex.Data.Add(nameof(identifier), identifier);
+                    logSession.Enabled = true;
+                    logSession.Add(ex);
+                    throw;
+                }
+        }
+        /// <summary>
+        /// Get file source stream
+        /// </summary>
+        /// <param name="fileName">File name</param>
+        /// <returns>Source stream</returns>
+        public Stream GetSourceByName(string fileName)
+        {
+            UpdateSessionCulture();
+            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
+                try
+                {
+                    using (var rep = GetNewRepository(logSession))
+                    {
+                        var file = rep.GetFile(fileName);
+                        if (file != null)
+                            SetOutputResponseHeaders(file.MimeType, file.Encoding);
+                    }
+                    logSession.Add($"Try to get file with name = '{fileName}' from data storage...");
+                    return FileStorage.FileGet(fileName);
+                }
+                catch (Exception ex)
+                {
+                    ex.Data.Add(nameof(fileName), fileName);
+                    logSession.Enabled = true;
+                    logSession.Add(ex);
+                    throw;
+                }
+        }
+        /// <summary>
+        /// Get file source stream
+        /// </summary>
+        /// <param name="fileIdOrName">File identifier or name</param>
+        /// <returns>Source stream</returns>
+        public Stream RESTGetSource(string fileIdOrName)
+        {
+            UpdateSessionCulture();
+            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
+                try
+                {
                     logSession.Add($"Try to get file with id or name = '{fileIdOrName}' from database...");
                     var fileId = TryGetGuidByString(fileIdOrName);
-                    return fileId.HasValue
-                        ? FileStorage.FileGet(fileId.Value)
-                        : FileStorage.FileGet(fileIdOrName);
+                    if (fileId.HasValue)
+                        return GetSource(fileId.Value);
+                    return GetSourceByName(fileIdOrName);
                 }
                 catch (Exception ex)
                 {
@@ -249,6 +311,12 @@ namespace RoyaltyService.Services.File
                 }
         }
 
+        /// <summary>
+        /// Put file with source and parameters
+        /// </summary>
+        /// <param name="content">Source stream</param>
+        /// <param name="file">New file information</param>
+        /// <returns>File identifier</returns>
         public FileInfoExecutionResult Put(System.IO.Stream content)
         {
             UpdateSessionCulture();
@@ -257,21 +325,26 @@ namespace RoyaltyService.Services.File
                 {
                     using (var rep = GetNewRepository(logSession))
                     {
+                        string mimeType;
+                        Encoding encoding;
+
+                        GetInputRequestHeaders(out mimeType, out encoding);
+
                         var dbFile = rep.New<RoyaltyRepository.Models.File>((f) =>
                         {
-                            f.FileName = "unknown";
-                            f.MimeType = RoyaltyFileStorage.MimeTypes.GetMimeTypeFromFileName(f.FileName);
+                            f.FileName = DefaultFileName;
+                            f.Encoding = encoding;
+                            f.MimeType = string.IsNullOrWhiteSpace(mimeType) ? RoyaltyFileStorage.MimeTypes.GetMimeTypeFromFileName(f.FileName) : mimeType;
                         });
 
                         logSession.Add($"Try to save file to file storage...");
                         var fi = FileStorage.FilePut(dbFile.FileID, content, dbFile.FileName);
 
                         dbFile.FileSize = fi.Length;
-                        dbFile.FilePath = fi.FullName;
+                        dbFile.OriginalFileName = fi.Name;
 
                         logSession.Add($"Try to save file to database...");
                         rep.Add(dbFile);
-                        rep.SaveChanges();
 
                         return new FileInfoExecutionResult(Mapper.Map<Model.FileInfo>(dbFile));
                     }
@@ -284,7 +357,12 @@ namespace RoyaltyService.Services.File
                 }
         }
 
-        public FileInfoExecutionResult Update(string fileIdstring, string fileName, string encoding, string mime)
+        /// <summary>
+        /// Update file in database
+        /// </summary>
+        /// <param name="file">File to update</param>
+        /// <returns>File info</returns>
+        public FileInfoExecutionResult Update(Model.FileInfo item)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
@@ -292,30 +370,26 @@ namespace RoyaltyService.Services.File
                 {
                     using (var rep = GetNewRepository(logSession))
                     {
-                        logSession.Add($"Try to get file with id = '{fileIdstring}' from database...");
-
-                        var id = GetGuidByString(fileIdstring);
+                        logSession.Add($"Try to get file with id = '{item.FileID}' from database...");
+                        var id = GetGuidByString(item.FileID);
 
                         var dbFile = rep.GetFile(id);
                         if (dbFile == null)
                             throw new Exception(Properties.Resources.SERVICES_FILE_FileNotFound);
 
-                        if (!string.IsNullOrEmpty(fileName))
-                        { 
-                            dbFile.FileName = System.IO.Path.GetFileName(fileName);
-                            var fi = FileStorage.FileRename(id, fileName);
-                            dbFile.FilePath = fi.FullName;
+                        if (!string.IsNullOrEmpty(item.EncodingName))
+                            dbFile.Encoding = Encoding.GetEncoding(item.EncodingName);
+
+                        dbFile.MimeType = (!string.IsNullOrEmpty(item.MimeType)) ? item.MimeType : RoyaltyFileStorage.MimeTypes.GetMimeTypeFromFileName(dbFile.OriginalFileName);
+
+                        if (!string.IsNullOrEmpty(item.FileName))
+                        {
+                            dbFile.FileName = System.IO.Path.GetFileName(item.FileName);
+
+                            logSession.Add($"Try to rename file in file storage...");
+                            var fi = FileStorage.FileRename(id, dbFile.FileName);
+                            dbFile.OriginalFileName = fi.Name;
                         }
-
-                        if (!string.IsNullOrEmpty(encoding))
-                            dbFile.Encoding = Encoding.GetEncoding(encoding);
-
-                        logSession.Add($"Try to rename file in file storage...");
-
-                        if (!string.IsNullOrEmpty(mime))
-                            dbFile.MimeType = mime;
-                        else
-                            dbFile.MimeType = RoyaltyFileStorage.MimeTypes.GetMimeTypeFromFileName(dbFile.FilePath);
 
                         logSession.Add($"Try to update file in database...");
                         rep.SaveChanges();
@@ -325,56 +399,25 @@ namespace RoyaltyService.Services.File
                 }
                 catch (Exception ex)
                 {
-                    ex.Data.Add(nameof(fileIdstring), fileIdstring);
-                    ex.Data.Add(nameof(fileName), fileName);
-                    ex.Data.Add(nameof(encoding), encoding);
-                    ex.Data.Add(nameof(mime), mime);
+                    ex.Data.Add(nameof(item), item);
                     logSession.Enabled = true;
                     logSession.Add(ex);
                     return new FileInfoExecutionResult(ex);
                 }
         }
 
-        public void ChangeLanguage(string codename)
+        /// <summary>
+        /// Update file in database
+        /// </summary>
+        /// <param name="identifier">File identifier</param>
+        /// <param name="fileName">New file name</param>
+        /// <param name="encoding">New file encoding</param>
+        /// <param name="mime">New mime type</param>
+        /// <returns>File info</returns>
+        public FileInfoExecutionResult RESTUpdate(string identifier, string fileName, string encoding, string mime)
         {
-            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
-                try
-                {
-                    CurrentCulture = new CultureInfo(codename);
-                    UpdateSessionCulture();
-                }
-                catch (Exception ex)
-                {
-                    ex.Data.Add(nameof(codename), codename);
-                    logSession.Enabled = true;
-                    logSession.Add(ex);
-                }
+            return Update(new Model.FileInfo() { FileID = identifier, FileName = fileName, EncodingName = encoding, MimeType = mime });
         }
-
-        #endregion
-        #region Log events
-
-        public event EventHandler<string> SqlLog;
-        public event EventHandler<string> Log;
-
-        private void RaiseSqlLog(string logMessage)
-        {
-            SqlLog?.Invoke(this, logMessage);
-            StaticSqlLog?.Invoke(this, logMessage);
-        }
-        private void RaiseLog(string logMessage)
-        {
-            Log?.Invoke(this, logMessage);
-            StaticLog?.Invoke(this, logMessage);
-        }
-        private void RaiseLog(IEnumerable<string> logMessages)
-        {
-            foreach (var s in logMessages)
-                RaiseLog(s);
-        }
-
-        public static event EventHandler<string> StaticSqlLog;
-        public event EventHandler<string> StaticLog;
 
         #endregion
     }

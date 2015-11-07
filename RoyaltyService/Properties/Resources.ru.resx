@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SERVICES_FILE_BadIdentifierFormat" xml:space="preserve">
+  <data name="BASESERVICES_BadIdentifierFormat" xml:space="preserve">
     <value>Идентификатор имеет неверный формат.</value>
   </data>
   <data name="SERVICES_FILE_FileNotFound" xml:space="preserve">

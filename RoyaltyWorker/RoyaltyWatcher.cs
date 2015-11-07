@@ -205,7 +205,7 @@ namespace RoyaltyWorker
                                 logSession.Add($"Try put file '{filePath}' into storage");
                                 var file = rep.FilePut(storage, filePath, importDirectory.Encoding);
                                 rep.ImportQueueRecordFileInfoFileNew(ImportQueueRecordFileInfoFileType.Import, importFileRecord, file);
-                                logSession.Add($"File '{file.FileName}' (size:{file.FileSize}) stored into storage with path: '{file.FilePath}'");
+                                logSession.Add($"File '{file.FileName}' (size:{file.FileSize}) stored into storage with original name: '{file.OriginalFileName}'");
                             }
                             catch (Exception ex)
                             {

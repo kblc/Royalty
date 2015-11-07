@@ -47,18 +47,27 @@ namespace RoyaltyService.Model
     [DataContract]
     public class FileInfo
     {
-        [DataMember(IsRequired = true)]
-        public string FileID { get; set; }
-        [DataMember(IsRequired = true)]
-        public string FileName { get; set; }
-        [DataMember(IsRequired = true)]
-        public long FileSize { get; set; }
-        [DataMember(IsRequired = true)]
-        public string MimeType { get; set; }
-        [DataMember(IsRequired = true)]
-        public DateTime Date { get; set; }
         [DataMember(IsRequired = false)]
-        public string Encoding { get; set; }
+        public string FileID { get; set; }
+        [DataMember(IsRequired = false)]
+        public string FileName { get; set; }
+        [DataMember(IsRequired = false)]
+        public long FileSize { get; set; }
+        [DataMember(IsRequired = false)]
+        public string MimeType { get; set; }
+        [DataMember(IsRequired = false)]
+        public DateTime Date { get; set; }
+        [DataMember(Name = "Encoding", IsRequired = false)]
+        public string EncodingName { get; set; }
+        [IgnoreDataMember]
+        public Encoding Encoding
+        {
+            get {
+                try { return Encoding.GetEncoding(EncodingName); }
+                catch { return Encoding.Default; }
+                }
+            set { EncodingName = value?.WebName; }
+        }
         [DataMember(IsRequired = false)]
         public string StoredFileName { get; set; }
         [DataMember(IsRequired = false)]
@@ -71,8 +80,8 @@ namespace RoyaltyService.Model
 #pragma warning disable 618
             AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.File, FileInfo>()
                 .ForMember(dst => dst.FileID, a => a.ResolveUsing<GuidToStringConverter>().FromMember(src => src.FileID))
-                .ForMember(dst => dst.StoredFileName, a => a.ResolveUsing<AddUrlPrefixConverter>().FromMember(src => src.FilePath))
-                .ForMember(dst => dst.Encoding, a => a.MapFrom(src => src.EncodingName))
+                .ForMember(dst => dst.StoredFileName, a => a.ResolveUsing<AddUrlPrefixConverter>().FromMember(src => src.OriginalFileName))
+                .ForMember(dst => dst.EncodingName, a => a.MapFrom(src => src.EncodingName))
                 .AfterMap((src, dst) =>
                 {
                     var mimeInfo = RoyaltyFileStorage.MimeTypes.GetPreviewImagesForMimeType(dst.MimeType);
@@ -86,7 +95,7 @@ namespace RoyaltyService.Model
 
             AutoMapper.Mapper.CreateMap<FileInfo, RoyaltyRepository.Models.File>()
                 .ForMember(dst => dst.FileID, a => a.ResolveUsing<StringToGuidConverter>().FromMember(src => src.FileID))
-                .ForMember(dst => dst.EncodingName, a => a.MapFrom(src => src.Encoding));
+                .ForMember(dst => dst.EncodingName, a => a.MapFrom(src => src.EncodingName));
 #pragma warning restore 618
         }
     }

@@ -9,82 +9,114 @@ using System.Text;
 namespace RoyaltyService.Services.File
 {
     [ServiceContract(SessionMode = SessionMode.Allowed)]
-    public interface IFileService
+    public interface IFileService : Base.IBaseService
     {
         /// <summary>
         /// Get file info by file identifier
         /// </summary>
-        /// <param name="fileId">File identifier</param>
+        /// <param name="identifier">File identifier</param>
+        /// <returns>File info</returns>
+        [OperationContract]
+        FileInfoExecutionResult Get(Guid identifier);
+        /// <summary>
+        /// Get file info by file identifier
+        /// </summary>
+        /// <param name="identifier">File identifier</param>
         /// <returns>File info</returns>
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "GET", ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "/info/{fileId}")]
-        FileInfoExecutionResult Get(string fileId);
+            UriTemplate = "/info/{identifier}")]
+        FileInfoExecutionResult RESTGet(string identifier);
+        
 
         /// <summary>
         /// Delete file by identifier
         /// </summary>
-        /// <param name="fileId">File identifier</param>
-        /// <returns></returns>
+        /// <param name="identifier">File identifier</param>
+        [OperationContract(IsOneWay = true)]
+        void Remove(Guid identifier);
+        /// <summary>
+        /// Delete file by identifier
+        /// </summary>
+        /// <param name="identifier">File identifier</param>
         [OperationContract(IsOneWay = true)]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "DELETE", ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "/file/{fileId}")]
-        void Delete(string fileId);
+            UriTemplate = "/file/{identifier}")]
+        void RESTRemove(string identifier);
 
-        /// <summary>
-        /// Set session lang
-        /// </summary>
-        /// <param name="fileId">File identifier</param>
-        /// <returns></returns>
-        [OperationContract(IsOneWay = true)]
-        [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "GET", ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "/ln/{codename}")]
-        void ChangeLanguage(string codename);
 
         /// <summary>
         /// Get file infos by identifiers
         /// </summary>
-        /// <param name="fileIds">File info identifiers</param>
-        /// <returns></returns>
+        /// <param name="identifiers">File info identifiers</param>
+        /// <returns>Files info</returns>
+        [OperationContract]
+        FileInfoExecutionResults GetRange(IEnumerable<Guid> identifiers);
+        /// <summary>
+        /// Get file infos by identifiers
+        /// </summary>
+        /// <param name="identifiers">File info identifiers</param>
+        /// <returns>Files info</returns>
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "/file/info")]
-        FileInfoExecutionResults GetRange(IEnumerable<string> fileIds);
+        FileInfoExecutionResults RESTGetRange(IEnumerable<string> identifiers);
+
 
         /// <summary>
         /// Get file source stream
         /// </summary>
-        /// <param name="fileIdOrName">File identifier</param>
+        /// <param name="fileName">File name</param>
+        /// <returns>Source stream</returns>
+        [OperationContract]
+        System.IO.Stream GetSourceByName(string fileName);
+        /// <summary>
+        /// Get file source stream
+        /// </summary>
+        /// <param name="identifier">File identifier</param>
+        /// <returns>Source stream</returns>
+        [OperationContract]
+        System.IO.Stream GetSource(Guid identifier);
+        /// <summary>
+        /// Get file source stream
+        /// </summary>
+        /// <param name="fileIdOrName">File identifier or name</param>
         /// <returns>Source stream</returns>
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "GET", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "/file?get={fileIdOrName}")]
-        System.IO.Stream GetSource(string fileIdOrName);
+        System.IO.Stream RESTGetSource(string fileIdOrName);
+
 
         /// <summary>
         /// Put file with source and parameters
         /// </summary>
         /// <param name="content">Source stream</param>
-        /// <param name="fileName">File name</param>
-        /// <param name="encoding">File encoding</param>
-        /// <param name="mime">File mime type</param>
         /// <returns>File identifier</returns>
         [OperationContract]
-        [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "PUT", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+        [WebInvoke(BodyStyle = WebMessageBodyStyle.Wrapped, Method = "PUT", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "/file")]
         FileInfoExecutionResult Put(System.IO.Stream content);
 
         /// <summary>
         /// Update file in database
         /// </summary>
-        /// <param name="fileId">File identifier</param>
+        /// <param name="file">File to update</param>
+        /// <returns>File info</returns>
+        [OperationContract]
+        FileInfoExecutionResult Update(Model.FileInfo item);
+
+        /// <summary>
+        /// Update file in database
+        /// </summary>
+        /// <param name="identifier">File identifier</param>
         /// <param name="fileName">New file name</param>
         /// <param name="encoding">New file encoding</param>
         /// <param name="mime">New mime type</param>
         /// <returns>File info</returns>
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "info/{fileId}?name={fileName}&encoding={encoding}&mime={mime}")]
-        FileInfoExecutionResult Update(string fileId, string fileName, string encoding, string mime);
+            UriTemplate = "file/{identifier}?name={fileName}&encoding={encoding}&mime={mime}")]
+        FileInfoExecutionResult RESTUpdate(string identifier, string fileName, string encoding, string mime);
     }
 }

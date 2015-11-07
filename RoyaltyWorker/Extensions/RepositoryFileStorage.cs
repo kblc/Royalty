@@ -18,7 +18,7 @@ namespace RoyaltyWorker.Extensions
                     f.MimeType = MimeTypes.GetMimeTypeFromFileName(fileName);
                 });
             var fileInfo = storage.FilePut(repFile.FileID, streamToUpload, fileName);
-            repFile.FilePath = fileInfo.FullName;
+            repFile.OriginalFileName = fileInfo.Name;
             repFile.FileSize = fileInfo.Length;
             repFile.Encoding = encoding;
             return repFile;

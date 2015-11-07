@@ -71,6 +71,8 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Services\Base\BaseService.cs" />
+    <Compile Include="Services\Base\IBaseService.cs" />
     <Compile Include="Services\File\FileInfoExecutionResult.cs" />
     <Compile Include="Model\File.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
