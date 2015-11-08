@@ -7,6 +7,7 @@ using RoyaltyRepository.Models;
 using EntityFramework.Utilities;
 using System.Data.Entity;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace RoyaltyRepository
 {
@@ -79,6 +80,22 @@ namespace RoyaltyRepository
 
         public event EventHandler<string> SqlLog;
         public event EventHandler<string> Log;
+
+        public object GetHistoryElements(Type sourceType, Type returnType, RoyaltyRepository.Models.IHistoryRecordSourceIdentifier[][] ids)
+        {
+            var methods = sourceType
+                .GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                .Where(mi => mi.ReturnType == returnType && mi.GetCustomAttribute(typeof(HistoryResolverAttribute)) != null);
+
+            foreach(var method in methods)
+                try
+                {
+                    return method.Invoke(null, new object[] { this, ids });
+                }
+                catch { }
+            
+            return null;
+        }
 
         protected void BulkInsert<T>(IEnumerable<T> instances)
             where T: class

@@ -271,6 +271,10 @@
     <Compile Include="Migrations\201511081205424_Migration_RemoveAccountState.Designer.cs">
       <DependentUpon>201511081205424_Migration_RemoveAccountState.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511081249494_Migration_AddDateToHistory.cs" />
+    <Compile Include="Migrations\201511081249494_Migration_AddDateToHistory.Designer.cs">
+      <DependentUpon>201511081249494_Migration_AddDateToHistory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountSettingsExportDirectory.cs" />
@@ -467,6 +471,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511081205424_Migration_RemoveAccountState.resx">
       <DependentUpon>201511081205424_Migration_RemoveAccountState.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511081249494_Migration_AddDateToHistory.resx">
+      <DependentUpon>201511081249494_Migration_AddDateToHistory.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

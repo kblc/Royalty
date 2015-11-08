@@ -94,5 +94,17 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("source_id"), Required]
         public string SourceID { get; set; }
+
+        /// <summary>
+        /// Дата изменения
+        /// </summary>
+        [Column("date"), Required]
+        public DateTime Date { get; set; }
+
+
+        public IEnumerable<IHistoryRecordSourceIdentifier> GetIdentifiers()
+        {
+            return RoyaltyRepository.Models.HistoryEntityBase.DeserializeIdentifiers(SourceID);
+        }
     }
 }

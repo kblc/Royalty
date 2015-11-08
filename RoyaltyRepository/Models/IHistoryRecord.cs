@@ -18,4 +18,10 @@ namespace RoyaltyRepository.Models
         string GetSourceIdString();
         string SourceName { get; }
     }
+
+    [AttributeUsage(AttributeTargets.Method, Inherited = true)]
+    public class HistoryResolverAttribute : Attribute
+    {
+
+    }
 }

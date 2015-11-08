@@ -29,6 +29,15 @@ namespace RoyaltyService.Config
             }
         }
 
+        [ConfigurationProperty("maxHistoryCount", IsRequired = false, DefaultValue = "100")]
+        public long MaxHistoryCount
+        {
+            get
+            {
+                return (long)this["maxHistoryCount"];
+            }
+        }
+
         [ConfigurationProperty("verboseLog", IsRequired = false, DefaultValue = false)]
         public bool VerboseLog
         {

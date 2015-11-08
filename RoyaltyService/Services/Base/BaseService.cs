@@ -59,6 +59,25 @@ namespace RoyaltyService.Services.Base
             return rep;
         }
 
+        protected long GetLongByString(string longText)
+        {
+            var res = TryGetLongByString(longText);
+            if (res == null)
+            {
+                var ex = new Exception(Properties.Resources.BASESERVICES_BadIdentifierFormat);
+                ex.Data.Add(nameof(longText), longText);
+                throw ex;
+            }
+            return res.Value;
+        }
+        protected long? TryGetLongByString(string longText)
+        {
+            long res;
+            if (!long.TryParse(longText, out res))
+                return null;
+            return res;
+        }
+
         protected Guid GetGuidByString(string guidText)
         {
             var res = TryGetGuidByString(guidText);
