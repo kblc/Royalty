@@ -172,30 +172,15 @@ namespace RoyaltyRepository
         /// </summary>
         /// <param name="eagerLoad">Eager load some property names</param>
         /// <returns>Item array</returns>
-        public IQueryable<T> Get<T>(IEnumerable<string> eagerLoad = null)
+        public IQueryable<T> Get<T>(IEnumerable<string> eagerLoad = null, bool asNoTracking = false)
             where T : class
         {
             IQueryable<T> res = GetDbSet<T>();
             if (eagerLoad != null)
                 foreach (var el in eagerLoad)
                     res = res.Include(el);
-            return res;
-        }
-
-        /// <summary>
-        /// Get items
-        /// </summary>
-        /// <param name="eagerLoad">Eager load some property names</param>
-        /// <param name="eagerLoadFuncs">Eager load some properties</param>
-        /// <returns>Item array</returns>
-        public IQueryable<T> Get<T, TProperty>(IEnumerable<string> eagerLoad = null, 
-            IEnumerable<System.Linq.Expressions.Expression<Func<T, TProperty>>> eagerLoadFuncs = null)
-            where T : class
-        {
-            IQueryable<T> res = Get<T>(eagerLoad);
-            if (eagerLoadFuncs != null)
-                foreach (var elf in eagerLoadFuncs)
-                    res = res.Include(elf);
+            if (asNoTracking)
+                res = res.AsNoTracking();
             return res;
         }
 
@@ -208,26 +193,11 @@ namespace RoyaltyRepository
         /// <returns>Item array</returns>
         public IQueryable<T> Get<T>(
             System.Linq.Expressions.Expression<Func<T, bool>> whereClause,
-            IEnumerable<string> eagerLoad = null)
-            where T : class
-        {
-            return Get<T>(eagerLoad).Where(whereClause);
-        }
-
-        /// <summary>
-        /// Get items
-        /// </summary>
-        /// <param name="eagerLoad">Eager load some property names</param>
-        /// <param name="eagerLoadFuncs">Eager load some properties</param>
-        /// <param name="whereClause">Where clause</param>
-        /// <returns>Item array</returns>
-        public IQueryable<T> Get<T, TProperty>(
-            System.Linq.Expressions.Expression<Func<T, bool>> whereClause,
             IEnumerable<string> eagerLoad = null,
-            IEnumerable<System.Linq.Expressions.Expression<Func<T, TProperty>>> eagerLoadFuncs = null)
+            bool asNoTracking = false)
             where T : class
         {
-            return Get<T, TProperty>(eagerLoad, eagerLoadFuncs).Where(whereClause);
+            return Get<T>(eagerLoad, asNoTracking).Where(whereClause);
         }
     }
 }

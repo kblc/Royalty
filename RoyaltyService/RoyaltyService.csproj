@@ -65,15 +65,19 @@
   <ItemGroup>
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\ServicesConfigSection.cs" />
+    <Compile Include="Model\Account.cs" />
     <Compile Include="Model\BaseExecutionResult.cs" />
     <Compile Include="Properties\Resources.ru.Designer.cs">
       <DependentUpon>Resources.ru.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Services\Account\AccountExecutionResult.cs" />
+    <Compile Include="Services\Account\AccountService.cs" />
+    <Compile Include="Services\Account\IAccountService.cs" />
     <Compile Include="Services\Base\BaseService.cs" />
     <Compile Include="Services\Base\IBaseService.cs" />
-    <Compile Include="Services\File\FileInfoExecutionResult.cs" />
+    <Compile Include="Services\File\FileExecutionResult.cs" />
     <Compile Include="Model\File.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

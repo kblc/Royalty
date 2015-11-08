@@ -30,18 +30,38 @@ namespace RoyaltyRepository.Models
             ImportQueue = new List<ImportQueueRecord>();
         }
 
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
         [Key, Column("account_uid")]
         public Guid AccountUID { get; set; }
 
+        /// <summary>
+        /// Название аккаунта
+        /// </summary>
         [Column("name"), Index("UIX_ACCOUNT_NAME", IsUnique = true)]
         [Required(AllowEmptyStrings = false, ErrorMessageResourceName = "AccountNameRequred"), MaxLength(250, ErrorMessageResourceName = "AccountNameMaxLength")]
         public string Name { get; set; }
 
+        /// <summary>
+        /// Это скрытый аккаунт
+        /// </summary>
         [Column("is_hidden"), Required]
         public bool IsHidden { get; set; }
 
+        ///// <summary>
+        ///// Дата последнего запуска. Нужна ли?
+        ///// </summary>
+        //[Column("last_batch")]
+        //public DateTime? LastBatch { get; set; }
+        
+        /// <summary>
+        /// Данный аккаунт активен
+        /// </summary>
+        [Column("is_active"), Required]
+        public bool IsActive { get; set; }
+
         public virtual AccountSettings Settings { get; set; }
-        public virtual AccountState State { get; set; }
         public virtual AccountDictionary Dictionary { get; set; }
 
         public virtual ICollection<AccountDataRecord> Data { get; set; }
@@ -85,10 +105,6 @@ namespace RoyaltyRepository.Models
                         new AccountSettingsColumn() { ColumnName = "URL", ColumnType = cts.FirstOrDefault(c => c.SystemName == ColumnTypes.Host.ToString().ToUpper()) },
                         new AccountSettingsColumn() { ColumnName = "Контакты для связи", ColumnType = cts.FirstOrDefault(c => c.SystemName == ColumnTypes.Phone.ToString().ToUpper()) },
                     }
-                },
-                State = new AccountState()
-                {
-                    IsActive = false
                 },
                 Dictionary = new AccountDictionary()
                 {

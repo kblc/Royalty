@@ -120,6 +120,9 @@
   <data name="BASESERVICES_BadIdentifierFormat" xml:space="preserve">
     <value>Identifier had bad format.</value>
   </data>
+  <data name="SERVICES_FILE_AccountNotFound" xml:space="preserve">
+    <value>Account not found.</value>
+  </data>
   <data name="SERVICES_FILE_FileNotFound" xml:space="preserve">
     <value>File not found. See data for details.</value>
   </data>

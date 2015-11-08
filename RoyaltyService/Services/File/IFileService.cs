@@ -17,7 +17,7 @@ namespace RoyaltyService.Services.File
         /// <param name="identifier">File identifier</param>
         /// <returns>File info</returns>
         [OperationContract]
-        FileInfoExecutionResult Get(Guid identifier);
+        FileExecutionResult Get(Guid identifier);
         /// <summary>
         /// Get file info by file identifier
         /// </summary>
@@ -26,7 +26,7 @@ namespace RoyaltyService.Services.File
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "GET", ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "/file/{identifier}")]
-        FileInfoExecutionResult RESTGet(string identifier);
+        FileExecutionResult RESTGet(string identifier);
 
         /// <summary>
         /// Delete file by identifier
@@ -50,7 +50,7 @@ namespace RoyaltyService.Services.File
         /// <param name="identifiers">File info identifiers</param>
         /// <returns>Files info</returns>
         [OperationContract]
-        FileInfoExecutionResults GetRange(Guid[] identifiers);
+        FileExecutionResults GetRange(Guid[] identifiers);
         /// <summary>
         /// Get file infos by identifiers
         /// </summary>
@@ -59,7 +59,7 @@ namespace RoyaltyService.Services.File
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Bare, Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "/file/range")]
-        FileInfoExecutionResults RESTGetRange(string[] identifiers);
+        FileExecutionResults RESTGetRange(string[] identifiers);
 
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace RoyaltyService.Services.File
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Wrapped, Method = "PUT", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "/file")]
-        FileInfoExecutionResult Put(System.IO.Stream content);
+        FileExecutionResult Put(System.IO.Stream content);
 
         /// <summary>
         /// Update file in database
@@ -105,7 +105,7 @@ namespace RoyaltyService.Services.File
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Wrapped, Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "/file")]
-        FileInfoExecutionResult Update(Model.FileInfo item);
+        FileExecutionResult Update(Model.File item);
 
         /// <summary>
         /// Update file in database
@@ -118,6 +118,6 @@ namespace RoyaltyService.Services.File
         [OperationContract]
         [WebInvoke(BodyStyle = WebMessageBodyStyle.Wrapped, Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "file/{identifier}?name={fileName}&encoding={encoding}&mime={mime}")]
-        FileInfoExecutionResult RESTUpdate(string identifier, string fileName, string encoding, string mime);
+        FileExecutionResult RESTUpdate(string identifier, string fileName, string encoding, string mime);
     }
 }

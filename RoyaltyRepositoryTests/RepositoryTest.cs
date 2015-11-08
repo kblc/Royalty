@@ -182,15 +182,6 @@ namespace RoyaltyRepositoryTests
         }
 
         [TestMethod]
-        public void Account_State()
-        {
-            var acc = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "State" });
-            acc.State.IsActive = true;
-            acc.State.LastBatch = DateTime.Now;
-            Rep.SaveChanges();
-        }
-
-        [TestMethod]
         public void Account_Settings()
         {
             var acc = Rep.GetAccount(defAccountName, eagerLoad: new string[] { "Settings" });

@@ -23,7 +23,7 @@ namespace RoyaltyService.Services.File
 
         static FileService()
         {
-            Model.FileInfo.InitializeMap();
+            Model.File.InitializeMap();
             //if (Config.Config.IsServicesConfigured && !string.IsNullOrWhiteSpace(Config.Config.ServicesConfig.FileServiceLogFileName))
             //{
 
@@ -184,7 +184,7 @@ namespace RoyaltyService.Services.File
         /// </summary>
         /// <param name="identifier">File identifier</param>
         /// <returns>File info</returns>
-        public FileInfoExecutionResult Get(Guid identifier)
+        public FileExecutionResult Get(Guid identifier)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
@@ -197,14 +197,14 @@ namespace RoyaltyService.Services.File
                     if (res.Values.Length != 1)
                         throw new Exception(Properties.Resources.SERVICES_FILE_FileNotFound);
 
-                    return new FileInfoExecutionResult(res.Values.First());
+                    return new FileExecutionResult(res.Values.First());
                 }
                 catch (Exception ex)
                 {
                     ex.Data.Add(nameof(identifier), identifier);
                     logSession.Enabled = true;
                     logSession.Add(ex);
-                    return new FileInfoExecutionResult(ex);
+                    return new FileExecutionResult(ex);
                 }
         }
         /// <summary>
@@ -212,7 +212,7 @@ namespace RoyaltyService.Services.File
         /// </summary>
         /// <param name="identifier">File identifier</param>
         /// <returns>File info</returns>
-        public FileInfoExecutionResult RESTGet(string identifier)
+        public FileExecutionResult RESTGet(string identifier)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
@@ -226,7 +226,7 @@ namespace RoyaltyService.Services.File
                     ex.Data.Add(nameof(identifier), identifier);
                     logSession.Enabled = true;
                     logSession.Add(ex);
-                    return new FileInfoExecutionResult(ex);
+                    return new FileExecutionResult(ex);
                 }
         }
 
@@ -235,7 +235,7 @@ namespace RoyaltyService.Services.File
         /// </summary>
         /// <param name="identifiers">File info identifiers</param>
         /// <returns>Files info</returns>
-        public FileInfoExecutionResults GetRange(Guid[] identifiers)
+        public FileExecutionResults GetRange(Guid[] identifiers)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
@@ -245,9 +245,9 @@ namespace RoyaltyService.Services.File
                     {
                         var res = rep.Get<RoyaltyRepository.Models.File>(f => identifiers.Contains(f.FileID))
                             .ToArray()
-                            .Select(f => Mapper.Map<Model.FileInfo>(f))
+                            .Select(f => Mapper.Map<Model.File>(f))
                             .ToArray();
-                        return new FileInfoExecutionResults(res);
+                        return new FileExecutionResults(res);
                     }
                 }
                 catch (Exception ex)
@@ -255,7 +255,7 @@ namespace RoyaltyService.Services.File
                     ex.Data.Add(nameof(identifiers), identifiers.Concat(i => i.ToString("N"), ","));
                     logSession.Enabled = true;
                     logSession.Add(ex);
-                    return new FileInfoExecutionResults(ex);
+                    return new FileExecutionResults(ex);
                 }
         }
         /// <summary>
@@ -263,7 +263,7 @@ namespace RoyaltyService.Services.File
         /// </summary>
         /// <param name="identifiers">File info identifiers</param>
         /// <returns>Files info</returns>
-        public FileInfoExecutionResults RESTGetRange(string[] identifiers)
+        public FileExecutionResults RESTGetRange(string[] identifiers)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
@@ -277,7 +277,7 @@ namespace RoyaltyService.Services.File
                     ex.Data.Add(nameof(identifiers), identifiers.Concat(i => i ?? "NULL", ","));
                     logSession.Enabled = true;
                     logSession.Add(ex);
-                    return new FileInfoExecutionResults(ex);
+                    return new FileExecutionResults(ex);
                 }
         }
 
@@ -369,7 +369,7 @@ namespace RoyaltyService.Services.File
         /// <param name="content">Source stream</param>
         /// <param name="file">New file information</param>
         /// <returns>File identifier</returns>
-        public FileInfoExecutionResult Put(System.IO.Stream content)
+        public FileExecutionResult Put(System.IO.Stream content)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
@@ -399,14 +399,14 @@ namespace RoyaltyService.Services.File
                         logSession.Add($"Try to save file to database...");
                         rep.Add(dbFile);
 
-                        return new FileInfoExecutionResult(Mapper.Map<Model.FileInfo>(dbFile));
+                        return new FileExecutionResult(Mapper.Map<Model.File>(dbFile));
                     }
                 }
                 catch (Exception ex)
                 {
                     logSession.Enabled = true;
                     logSession.Add(ex);
-                    return new FileInfoExecutionResult(ex);
+                    return new FileExecutionResult(ex);
                 }
         }
 
@@ -415,7 +415,7 @@ namespace RoyaltyService.Services.File
         /// </summary>
         /// <param name="file">File to update</param>
         /// <returns>File info</returns>
-        public FileInfoExecutionResult Update(Model.FileInfo item)
+        public FileExecutionResult Update(Model.File item)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
@@ -449,7 +449,7 @@ namespace RoyaltyService.Services.File
                         logSession.Add($"Try to update file in database...");
                         rep.SaveChanges();
 
-                        return new FileInfoExecutionResult(Mapper.Map<Model.FileInfo>(dbFile));
+                        return new FileExecutionResult(Mapper.Map<Model.File>(dbFile));
                     }
                 }
                 catch (Exception ex)
@@ -457,7 +457,7 @@ namespace RoyaltyService.Services.File
                     ex.Data.Add(nameof(item), item);
                     logSession.Enabled = true;
                     logSession.Add(ex);
-                    return new FileInfoExecutionResult(ex);
+                    return new FileExecutionResult(ex);
                 }
         }
 
@@ -469,9 +469,9 @@ namespace RoyaltyService.Services.File
         /// <param name="encoding">New file encoding</param>
         /// <param name="mime">New mime type</param>
         /// <returns>File info</returns>
-        public FileInfoExecutionResult RESTUpdate(string identifier, string fileName, string encoding, string mime)
+        public FileExecutionResult RESTUpdate(string identifier, string fileName, string encoding, string mime)
         {
-            return Update(new Model.FileInfo() { FileID = identifier, FileName = fileName, EncodingName = encoding, MimeType = mime });
+            return Update(new Model.File() { FileID = identifier, FileName = fileName, EncodingName = encoding, MimeType = mime });
         }
 
         #endregion

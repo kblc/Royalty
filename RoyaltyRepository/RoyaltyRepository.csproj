@@ -267,6 +267,10 @@
     <Compile Include="Migrations\201511011912436_Migration_AddTimeoutForExecuteForExportDirectory.Designer.cs">
       <DependentUpon>201511011912436_Migration_AddTimeoutForExecuteForExportDirectory.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511081205424_Migration_RemoveAccountState.cs" />
+    <Compile Include="Migrations\201511081205424_Migration_RemoveAccountState.Designer.cs">
+      <DependentUpon>201511081205424_Migration_RemoveAccountState.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountSettingsExportDirectory.cs" />
@@ -302,7 +306,6 @@
     </Compile>
     <Compile Include="Models\AccountSettings.cs" />
     <Compile Include="Models\AccountSettingsSheduleTime.cs" />
-    <Compile Include="Models\AccountState.cs" />
     <Compile Include="Models\AccountDataRecord.cs" />
     <Compile Include="Models\Area.cs" />
     <Compile Include="Models\Host.cs" />
@@ -461,6 +464,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511011912436_Migration_AddTimeoutForExecuteForExportDirectory.resx">
       <DependentUpon>201511011912436_Migration_AddTimeoutForExecuteForExportDirectory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511081205424_Migration_RemoveAccountState.resx">
+      <DependentUpon>201511081205424_Migration_RemoveAccountState.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

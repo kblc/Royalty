@@ -45,9 +45,9 @@ namespace RoyaltyService.Model
     }
 
     [DataContract]
-    public class FileInfo
+    public class File
     {
-        [DataMember(IsRequired = false)]
+        [DataMember(IsRequired = false, Name = "Id")]
         public string FileID { get; set; }
         [DataMember(IsRequired = false)]
         public string FileName { get; set; }
@@ -78,7 +78,7 @@ namespace RoyaltyService.Model
         public static void InitializeMap()
         {
 #pragma warning disable 618
-            AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.File, FileInfo>()
+            AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.File, File>()
                 .ForMember(dst => dst.FileID, a => a.ResolveUsing<GuidToStringConverter>().FromMember(src => src.FileID))
                 .ForMember(dst => dst.StoredFileName, a => a.ResolveUsing<AddUrlPrefixConverter>().FromMember(src => src.OriginalFileName))
                 .ForMember(dst => dst.EncodingName, a => a.MapFrom(src => src.EncodingName))
@@ -93,7 +93,7 @@ namespace RoyaltyService.Model
                 })
                 ;
 
-            AutoMapper.Mapper.CreateMap<FileInfo, RoyaltyRepository.Models.File>()
+            AutoMapper.Mapper.CreateMap<File, RoyaltyRepository.Models.File>()
                 .ForMember(dst => dst.FileID, a => a.ResolveUsing<StringToGuidConverter>().FromMember(src => src.FileID))
                 .ForMember(dst => dst.EncodingName, a => a.MapFrom(src => src.EncodingName));
 #pragma warning restore 618

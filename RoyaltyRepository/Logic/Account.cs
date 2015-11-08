@@ -28,7 +28,6 @@ namespace RoyaltyRepository
                     AccountUID = Guid.NewGuid(),
                     Dictionary = new AccountDictionary(),
                     Settings = new AccountSettings(),
-                    State = new AccountState()
                 };
 
                 if (byDefault)
@@ -83,7 +82,6 @@ namespace RoyaltyRepository
             bool copyDictionaryExclude = true,
             bool copySettings = true,
             bool copySettingsShedule = true,
-            bool copyState = true,
             bool copyPhoneMarks = true)
         {
             if (from == null)
@@ -205,12 +203,6 @@ namespace RoyaltyRepository
                         to.Dictionary.Records.Add(record);
                     }
                 }
-            }
-            #endregion
-            #region State
-            if (copyState)
-            { 
-                to.State.IsActive = from.State.IsActive;
             }
             #endregion
             #region Settings

@@ -70,6 +70,15 @@ namespace RoyaltyService.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account not found..
+        /// </summary>
+        public static string SERVICES_FILE_AccountNotFound {
+            get {
+                return ResourceManager.GetString("SERVICES_FILE_AccountNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File not found. See data for details..
         /// </summary>
         public static string SERVICES_FILE_FileNotFound {

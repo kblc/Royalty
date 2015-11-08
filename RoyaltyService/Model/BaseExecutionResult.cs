@@ -24,7 +24,7 @@ namespace RoyaltyService.Model
         public Exception Exception { get { return exception; } set { exception = value; Error = value?.GetExceptionText(includeStackTrace: false, clearText: true); } }
     }
 
-    [DataContract(Name = "ResultWithValue")]
+    [DataContract]
     public abstract class BaseExecutionResult<T> : BaseExecutionResult
     {
         public BaseExecutionResult() { }
@@ -35,7 +35,7 @@ namespace RoyaltyService.Model
         public T Value { get; set; }
     }
 
-    [DataContract(Name = "ResultWithValues")]
+    [DataContract]
     public abstract class BaseExecutionResults<T> : BaseExecutionResult
     {
         public BaseExecutionResults() { }
@@ -44,5 +44,21 @@ namespace RoyaltyService.Model
 
         [DataMember(IsRequired = false)]
         public T[] Values { get; set; }
+    }
+
+    [DataContract]
+    public class GuidExecutionResult : BaseExecutionResult<Guid>
+    {
+        public GuidExecutionResult() { }
+        public GuidExecutionResult(Guid value) { Value = value; }
+        public GuidExecutionResult(Exception ex) : base(ex) { }
+    }
+
+    [DataContract]
+    public class GuidExecutionResults : BaseExecutionResults<Guid>
+    {
+        public GuidExecutionResults() { }
+        public GuidExecutionResults(Guid[] values) { Values = values; }
+        public GuidExecutionResults(Exception ex) : base(ex) { }
     }
 }
