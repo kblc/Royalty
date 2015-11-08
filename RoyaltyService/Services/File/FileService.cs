@@ -50,24 +50,76 @@ namespace RoyaltyService.Services.File
 
         #endregion
 
-        private void SetOutputResponseHeaders(string mime, Encoding encoding)
+        /// <summary>
+        /// Set some header for output response stream
+        /// </summary>
+        /// <param name="mime">File mime type</param>
+        /// <param name="encoding">File encoding</param>
+        /// <param name="fileName">File name</param>
+        private void SetOutputResponseHeaders(string mime, Encoding encoding, string fileName, Helpers.Log.SessionInfo upperLogSession)
         {
-            //try
-            //{ 
-            //    System.ServiceModel.Web.WebOperationContext.Current.OutgoingResponse.Headers.Add(System.Net.HttpRequestHeader.ContentEncoding, );
-            //}
-            //catch { }
+            if (upperLogSession != null)
+                throw new ArgumentNullException(nameof(upperLogSession));
+
+            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, ss => ss.ToList().ForEach(s => upperLogSession.Add(s))))
+                try
+                {
+                    var webContext = System.ServiceModel.Web.WebOperationContext.Current;
+                    if (webContext != null)
+                    { 
+                        webContext.OutgoingResponse.ContentType = new string[] { mime, encoding?.WebName }.Where(s => !string.IsNullOrWhiteSpace(s)).Concat(s => s,"; ");
+                        if (!string.IsNullOrWhiteSpace(fileName))
+                            webContext.OutgoingResponse.Headers.Add("Content-Disposition", $"attachment; filename={fileName}");
+                    }
+                }
+                catch(Exception ex)
+                {
+                    logSession.Add(ex);
+                    logSession.Enabled = true;
+                    upperLogSession.Enabled = true;
+                }
         }
 
-        private void GetInputRequestHeaders(out string mime, out Encoding encoding)
+        /// <summary>
+        /// Get parameters from input request stream
+        /// </summary>
+        /// <param name="mime">File mime type</param>
+        /// <param name="encoding">File encoding</param>
+        /// <param name="fileName">File name</param>
+        private void GetInputRequestHeaders(out string mime, out Encoding encoding, out string fileName, Log.SessionInfo upperLogSession)
         {
+            if (upperLogSession != null)
+                throw new ArgumentNullException(nameof(upperLogSession));
+
             mime = null;
             encoding = null;
-            //try
-            //{ 
-            //    System.ServiceModel.Web.WebOperationContext.Current.OutgoingResponse.Headers.Add(System.Net.HttpRequestHeader.ContentEncoding, );
-            //}
-            //catch { }
+            fileName = null;
+            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, ss => ss.ToList().ForEach(s => upperLogSession.Add(s))))
+                try
+                {
+                    var webContext = System.ServiceModel.Web.WebOperationContext.Current;
+                    if (webContext != null)
+                    {
+                        var ct = webContext.IncomingRequest.ContentType.Split(new char[] { ';' }, StringSplitOptions.None).Select(i => i.Trim());
+                        mime = ct.FirstOrDefault();
+                        var encName = ct.Skip(1).FirstOrDefault();
+                        if (!string.IsNullOrWhiteSpace(encName))
+                            try { encoding = Encoding.GetEncoding(encName); } catch { }
+
+                        var cd = webContext.IncomingRequest.Headers.Get("Content-Disposition");
+                        if (!string.IsNullOrWhiteSpace(cd))
+                        {
+                            var fName = cd.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).FirstOrDefault(i => i.ToLower().StartsWith("filename="));
+                            fileName = fName.Substring(fName.IndexOf("=") + 1);
+                        }
+                    }
+                }
+                catch(Exception ex)
+                {
+                    logSession.Add(ex);
+                    logSession.Enabled = true;
+                    upperLogSession.Enabled = true;
+                }
         }
 
         #region Service contract implementation
@@ -145,7 +197,7 @@ namespace RoyaltyService.Services.File
                     if (res.Values.Length != 1)
                         throw new Exception(Properties.Resources.SERVICES_FILE_FileNotFound);
 
-                    return new FileInfoExecutionResult(res.Values.FirstOrDefault());
+                    return new FileInfoExecutionResult(res.Values.First());
                 }
                 catch (Exception ex)
                 {
@@ -244,7 +296,7 @@ namespace RoyaltyService.Services.File
                     {
                         var file = rep.GetFile(identifier);
                         if (file != null)
-                            SetOutputResponseHeaders(file.MimeType, file.Encoding);
+                            SetOutputResponseHeaders(file.MimeType, file.Encoding, file.FileName, logSession);
                     }
                     logSession.Add($"Try to get file with id = '{identifier}' from data storage...");
                     return FileStorage.FileGet(identifier);
@@ -272,7 +324,7 @@ namespace RoyaltyService.Services.File
                     {
                         var file = rep.GetFile(fileName);
                         if (file != null)
-                            SetOutputResponseHeaders(file.MimeType, file.Encoding);
+                            SetOutputResponseHeaders(file.MimeType, file.Encoding, file.FileName, logSession);
                     }
                     logSession.Add($"Try to get file with name = '{fileName}' from data storage...");
                     return FileStorage.FileGet(fileName);
@@ -327,12 +379,13 @@ namespace RoyaltyService.Services.File
                     {
                         string mimeType;
                         Encoding encoding;
+                        string fileName;
 
-                        GetInputRequestHeaders(out mimeType, out encoding);
+                        GetInputRequestHeaders(out mimeType, out encoding, out fileName, logSession);
 
                         var dbFile = rep.New<RoyaltyRepository.Models.File>((f) =>
                         {
-                            f.FileName = DefaultFileName;
+                            f.FileName = string.IsNullOrWhiteSpace(fileName) ? DefaultFileName : fileName;
                             f.Encoding = encoding;
                             f.MimeType = string.IsNullOrWhiteSpace(mimeType) ? RoyaltyFileStorage.MimeTypes.GetMimeTypeFromFileName(f.FileName) : mimeType;
                         });
@@ -377,10 +430,12 @@ namespace RoyaltyService.Services.File
                         if (dbFile == null)
                             throw new Exception(Properties.Resources.SERVICES_FILE_FileNotFound);
 
-                        if (!string.IsNullOrEmpty(item.EncodingName))
-                            dbFile.Encoding = Encoding.GetEncoding(item.EncodingName);
+                        if (item.Encoding != null)
+                            dbFile.Encoding = item.Encoding;
 
-                        dbFile.MimeType = (!string.IsNullOrEmpty(item.MimeType)) ? item.MimeType : RoyaltyFileStorage.MimeTypes.GetMimeTypeFromFileName(dbFile.OriginalFileName);
+                        dbFile.MimeType = (string.IsNullOrEmpty(item.MimeType)) 
+                            ? RoyaltyFileStorage.MimeTypes.GetMimeTypeFromFileName(dbFile.OriginalFileName) 
+                            : item.MimeType;
 
                         if (!string.IsNullOrEmpty(item.FileName))
                         {

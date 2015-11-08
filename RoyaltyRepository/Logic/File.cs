@@ -46,7 +46,7 @@ namespace RoyaltyRepository
         /// <returns>File</returns>
         public File GetFile(string fileName)
         {
-            return Get<File>(f => f.OriginalFileName == fileName).SingleOrDefault();
+            return Get<File>(f => f.OriginalFileName.EndsWith(fileName)).SingleOrDefault();
         }
         /// <summary>
         /// Get Files by identifiers

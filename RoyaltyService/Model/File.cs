@@ -64,7 +64,7 @@ namespace RoyaltyService.Model
         {
             get {
                 try { return Encoding.GetEncoding(EncodingName); }
-                catch { return Encoding.Default; }
+                catch { return null; }
                 }
             set { EncodingName = value?.WebName; }
         }
