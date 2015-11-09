@@ -162,8 +162,7 @@ namespace RoyaltyRepository.Models
 
             var historyEntities = historySource
                     .Where(p => p.Entry.SourceId != null)
-                    .Select(p => new { SourceId = p.Entry.GetSourceIdString(), p.Entry.SourceName, p.State })
-                    .GroupBy(p => new { p.SourceId, p.SourceName, p.State })
+                    .GroupBy(p => new { SourceId = p.Entry.SourceId, p.Entry.SourceName, p.State })
                     .Select(p => p.Key)
                     .Select(ent => new Models.History() { ActionType = ent.State, SourceID = ent.SourceId, SourceName = ent.SourceName, Date = DateTime.UtcNow })
                     .ToArray();

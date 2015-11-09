@@ -11,18 +11,28 @@ namespace RoyaltyService.Services.History
     {
         public long MaxHistoryCount { get; set; } = Config.Config.ServicesConfig.MaxHistoryCount;
 
-        private object GetModelItemsFromRepository(RoyaltyRepository.Repository rep, Type entityType, Type returnType, RoyaltyRepository.Models.IHistoryRecordSourceIdentifier[][] ids, bool idsOnly)
+        private Array GetModelItemsFromRepository(RoyaltyRepository.Repository rep, Type entitySourceType, Type entitySourceTypeResult, Type propertyType, string[] ids, bool idsOnly)
         {
-            var items = rep.GetHistoryElements(entityType, returnType, ids);
+            var items = rep.GetHistoryElements(entitySourceType, entitySourceTypeResult, ids);
             if (items != null)
             {
                 if (idsOnly)
                     return items;
 
-                var typeMap = AutoMapper.Mapper.GetAllTypeMaps().FirstOrDefault(t => t.SourceType == entityType);
+                var propertyElementType = propertyType.IsArray
+                    ? propertyType.GetElementType()
+                    : propertyType;
+
+                var typeMap = AutoMapper.Mapper.GetAllTypeMaps().FirstOrDefault(t => t.SourceType == entitySourceType && t.DestinationType == propertyElementType);
                 if (typeMap != null)
                 {
-                    return ((Array)items).Cast<object>().Select(i => AutoMapper.Mapper.Map(i, entityType, typeMap.DestinationType)).ToArray();
+                    var resArray = Array.CreateInstance(propertyElementType, items.Length);
+                    var mappedArray = items
+                        .Cast<object>()
+                        .Select(i => AutoMapper.Mapper.Map(i, entitySourceType, propertyElementType))
+                        .ToArray();
+                    Array.Copy(mappedArray, resArray, items.Length);
+                    return resArray;
                 }
                 else
                     return items;
@@ -57,7 +67,6 @@ namespace RoyaltyService.Services.History
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
                 try
                 {
-                    Model.History res = null;
                     while (true)
                     { 
                         using (var rep = GetNewRepository(logSession))
@@ -66,78 +75,63 @@ namespace RoyaltyService.Services.History
                                 .Take((int)MaxHistoryCount)
                                 .OrderBy(h => h.HistoryID)
                                 .ToArray();
-                            if (historyData.Length > 0)
+
+#pragma warning disable 618
+                            var groupedItems = historyData.Distinct().ToArray()
+                                .GroupBy(h => new { h.SourceID, h.SourceName, h.ActionType })
+                                .Select(h => h.Key)
+                                .ToArray();
+#pragma warning restore 618
+
+                            var getData = new Func<RoyaltyRepository.Models.HistoryActionType, object>((type) => 
                             {
-                                var groupedItems = historyData
-                                    .GroupBy(h => new { h.SourceID, h.SourceName })
-                                    .ToArray()
-                                    .Select(g => new { Items = g, Empty = g.Any(n => n.ActionType == RoyaltyRepository.Models.HistoryActionType.Add) && g.Any(n => n.ActionType == RoyaltyRepository.Models.HistoryActionType.Remove) })
-                                    .Where(i => !i.Empty)
-                                    .SelectMany(i => i.Items)
-                                    .GroupBy(h => h.ActionType)
-                                    .Select(g => new
-                                    {
-                                        Action = g.Key,
-                                        Items = g.OrderBy(h => h.Date)
-                                    })
-                                    .Select(i => new
-                                    {
-                                        i.Action,
-                                        Items = i.Items.Select(hi => new
-                                        {
-                                            hi.SourceName,
-                                            Ids = hi.GetIdentifiers()
-                                        })
-                                    })
-                                    .ToArray();
+                                var idOnly = type == RoyaltyRepository.Models.HistoryActionType.Remove;
 
-                                var getData = new Func<RoyaltyRepository.Models.HistoryActionType, object>((type) => 
-                                {
-                                    var idOnly = type == RoyaltyRepository.Models.HistoryActionType.Remove;
+                                var wasChanged = false;
+                                var resD = idOnly
+                                    ? new Model.HistoryRemovePart() as object
+                                    : new Model.HistoryUpdatePart() as object;
 
-                                    var wasChanged = false;
-                                    var resD = idOnly
-                                        ? new Model.HistoryIdOnlytPart() as object
-                                        : new Model.HistoryPart() as object;
-                                    resD.GetType()
-                                        .GetProperties()
-                                        .Where(p => p.CanWrite)
-                                        .Select(p => new { Property = p, Attr = p.GetCustomAttributes(typeof(Model.RepositoryHistoryLinkAttribute), true) })
-                                        .Select(p => new { p.Property, Attr = p.Attr != null && p.Attr.Length == 1 ? p.Attr[0] as Model.RepositoryHistoryLinkAttribute : null })
-                                        .Where(p => p.Attr != null)
-                                        .ToList()
-                                        .ForEach(p =>
-                                        {
-                                            var ids = groupedItems.Where(i => i.Action == type)
-                                                .SelectMany(i => i.Items)
-                                                .Where(i => string.Compare(i.SourceName, p.Attr.RepositoryEntityType.Name, true) == 0)
-                                                .Select(i => i.Ids.ToArray())
-                                                .ToArray();
-                                            if (ids.Length > 0)
-                                            { 
-                                                var items = GetModelItemsFromRepository(rep, p.Attr.RepositoryEntityType, p.Property.PropertyType, ids, idOnly);
-                                                if (items != null)
-                                                {
-                                                    p.Property.SetValue(resD, items);
-                                                    wasChanged = true;
-                                                }
+                                resD.GetType()
+                                    .GetProperties()
+                                    .Where(p => p.CanWrite)
+                                    .Select(p => new { Property = p, Attr = p.GetCustomAttributes(typeof(Model.RepositoryHistoryLinkAttribute), true) })
+                                    .Select(p => new { p.Property, Attr = p.Attr != null && p.Attr.Length == 1 ? p.Attr[0] as Model.RepositoryHistoryLinkAttribute : null })
+                                    .Where(p => p.Attr != null)
+                                    .ToList()
+                                    .ForEach(p =>
+                                    {
+                                        var ids = groupedItems
+                                            .Where(i => i.ActionType == type && string.Compare(i.SourceName, p.Attr.RepositoryEntityType.Name, true) == 0)
+                                            .Select(i => i.SourceID)
+                                            .ToArray();
+
+                                        if (ids.Length > 0)
+                                        { 
+                                            var items = GetModelItemsFromRepository(rep, p.Attr.RepositoryEntityType, p.Attr.RepositoryArrayElementEntitySourceType, p.Property.PropertyType,  ids, idOnly);
+                                            if (items != null)
+                                            {
+                                                p.Property.SetValue(resD, items);
+                                                wasChanged = true;
                                             }
-                                        });
-                                    return (wasChanged) ? resD : null;
-                                });
+                                        }
+                                    });
+                                return (wasChanged) ? resD : null;
+                            });
 
-                                var addItems = getData(RoyaltyRepository.Models.HistoryActionType.Add) as Model.HistoryPart;
-                                var chgItems = getData(RoyaltyRepository.Models.HistoryActionType.Change) as Model.HistoryPart;
-                                var delItems = getData(RoyaltyRepository.Models.HistoryActionType.Remove) as Model.HistoryIdOnlytPart;
+                            var addItems = getData(RoyaltyRepository.Models.HistoryActionType.Add) as Model.HistoryUpdatePart;
+                            var chgItems = getData(RoyaltyRepository.Models.HistoryActionType.Change) as Model.HistoryUpdatePart;
+                            var delItems = getData(RoyaltyRepository.Models.HistoryActionType.Remove) as Model.HistoryRemovePart;
 
-                                res = new Model.History()
+                            if (addItems != null || chgItems != null || delItems != null)
+                            { 
+                                var res = new Model.History()
                                 {
                                     EventId = historyData.Last().HistoryID,
                                     Add = addItems,
                                     Change = chgItems,
                                     Remove = delItems
                                 };
-
                                 return new HistoryExecutionResult(res);
                             }
                         }

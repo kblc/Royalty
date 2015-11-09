@@ -75,8 +75,13 @@ namespace RoyaltyService.Model
         [DataMember(IsRequired = false)]
         public string Preview { get; set; }
 
+        private static bool isInitialized = false;
+        [MapperInitialize]
         public static void InitializeMap()
         {
+            if (isInitialized)
+                return;
+
 #pragma warning disable 618
             AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.File, File>()
                 .ForMember(dst => dst.FileID, a => a.ResolveUsing<GuidToStringConverter>().FromMember(src => src.FileID))
@@ -97,6 +102,7 @@ namespace RoyaltyService.Model
                 .ForMember(dst => dst.FileID, a => a.ResolveUsing<StringToGuidConverter>().FromMember(src => src.FileID))
                 .ForMember(dst => dst.EncodingName, a => a.MapFrom(src => src.EncodingName));
 #pragma warning restore 618
+            isInitialized = true;
         }
     }
 }

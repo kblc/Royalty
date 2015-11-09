@@ -8,6 +8,9 @@ using Helpers;
 
 namespace RoyaltyService.Model
 {
+    [AttributeUsage(AttributeTargets.Method)]
+    public class MapperInitializeAttribute : Attribute { }
+
     [DataContract(Name = "Result")]
     public class BaseExecutionResult
     {

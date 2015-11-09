@@ -19,7 +19,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("data")]
-    public partial class AccountDataRecord: HistoryEntityBase
+    public partial class AccountDataRecord: HistoryEntityBase<Guid, AccountDataRecord>
     {
         public AccountDataRecord()
         {

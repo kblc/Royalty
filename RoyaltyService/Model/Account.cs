@@ -11,23 +11,29 @@ namespace RoyaltyService.Model
     public class Account
     {
         [DataMember(IsRequired = false, Name = "Id")]
-        public Guid? AccountUID { get; set; }
+        public Guid AccountUID { get; set; }
 
         [DataMember(IsRequired = false)]
         public string Name { get; set; }
 
         [DataMember(IsRequired = false)]
-        public string IsHidden { get; set; }
+        public bool IsHidden { get; set; }
 
         [DataMember(IsRequired = false)]
-        public string IsActive { get; set; }
+        public bool IsActive { get; set; }
 
+
+        private static bool isInitialize = false;
+        [MapperInitialize]
         public static void InitializeMap()
         {
+            if (isInitialize)
+                return;
 #pragma warning disable 618
             AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.Account, Account>();
             AutoMapper.Mapper.CreateMap<Account, RoyaltyRepository.Models.Account>();
 #pragma warning restore 618
+            isInitialize = true;
         }
     }
 }

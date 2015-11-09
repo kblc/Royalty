@@ -11,30 +11,24 @@ namespace RoyaltyService.Model
     public class RepositoryHistoryLinkAttribute : Attribute
     {
         public Type RepositoryEntityType { get; set; }
+        public Type RepositoryArrayElementEntitySourceType { get; set; }
 
         public RepositoryHistoryLinkAttribute() { }
-
-        public RepositoryHistoryLinkAttribute(Type repositoryEntityType) { RepositoryEntityType = repositoryEntityType; }
+        public RepositoryHistoryLinkAttribute(Type repositoryEntityType) { RepositoryEntityType = repositoryEntityType; RepositoryArrayElementEntitySourceType = repositoryEntityType; }
+        public RepositoryHistoryLinkAttribute(Type repositoryEntityType, Type repositoryArrayElementEntitySourceType) { RepositoryEntityType = repositoryEntityType; RepositoryArrayElementEntitySourceType = repositoryArrayElementEntitySourceType; }
     }
 
 
     [DataContract]
-    public class HistoryIdOnlytPart
+    public class HistoryRemovePart
     {
         [DataMember]
-        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.Account))]
-        public Guid[] AccountId { get; set; }
-
-        //[IgnoreDataMember]
-        //public object[] AccountObjectId
-        //{
-        //    get { return AccountId.Cast<object>().ToArray(); }
-        //    set { AccountId = value.Cast<Guid>().ToArray(); }
-        //}
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.Account), typeof(Guid))]
+        public Guid[] Account { get; set; }
     }
 
     [DataContract]
-    public class HistoryPart
+    public class HistoryUpdatePart
     {
         [DataMember]
         [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.Account))]
@@ -48,12 +42,12 @@ namespace RoyaltyService.Model
         public long EventId { get; set; }
 
         [DataMember(IsRequired = false)]
-        public HistoryPart Add { get; set; }
+        public HistoryUpdatePart Add { get; set; }
 
         [DataMember(IsRequired = false)]
-        public HistoryPart Change { get; set; }
+        public HistoryUpdatePart Change { get; set; }
 
         [DataMember(IsRequired = false)]
-        public HistoryIdOnlytPart Remove { get; set; }
+        public HistoryRemovePart Remove { get; set; }
     }
 }

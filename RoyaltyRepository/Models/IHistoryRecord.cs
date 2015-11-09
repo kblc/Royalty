@@ -6,16 +6,9 @@ using System.Threading.Tasks;
 
 namespace RoyaltyRepository.Models
 {
-    public interface IHistoryRecordSourceIdentifier
-    {
-        string Value { get; }
-        string Name { get; }
-    }
-
     public interface IHistoryRecordSource
     {
-        IEnumerable<IHistoryRecordSourceIdentifier> SourceId { get; }
-        string GetSourceIdString();
+        string SourceId { get; }
         string SourceName { get; }
     }
 

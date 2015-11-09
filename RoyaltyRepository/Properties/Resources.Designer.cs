@@ -313,47 +313,11 @@ namespace RoyaltyRepository.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account.
+        ///   Looks up a localized string similar to Rule &apos;One entry -&gt;one key&apos; broken. Change entity &apos;{0}&apos; for only one key column..
         /// </summary>
-        public static string HISTORYSOURCETYPE_Account {
+        public static string HISTORYRECORD_EntityBreakOneToOneRule {
             get {
-                return ResourceManager.GetString("HISTORYSOURCETYPE_Account", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Account data records.
-        /// </summary>
-        public static string HISTORYSOURCETYPE_AccountData {
-            get {
-                return ResourceManager.GetString("HISTORYSOURCETYPE_AccountData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Account dictionary.
-        /// </summary>
-        public static string HISTORYSOURCETYPE_AccountDictionary {
-            get {
-                return ResourceManager.GetString("HISTORYSOURCETYPE_AccountDictionary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Account settings.
-        /// </summary>
-        public static string HISTORYSOURCETYPE_AccountSettings {
-            get {
-                return ResourceManager.GetString("HISTORYSOURCETYPE_AccountSettings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Qeueu.
-        /// </summary>
-        public static string HISTORYSOURCETYPE_Queue {
-            get {
-                return ResourceManager.GetString("HISTORYSOURCETYPE_Queue", resourceCulture);
+                return ResourceManager.GetString("HISTORYRECORD_EntityBreakOneToOneRule", resourceCulture);
             }
         }
         

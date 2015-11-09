@@ -258,12 +258,6 @@
   <data name="Logic_Street_StreetRemove_StreetContainsDataRecords_TerminateDeletion" xml:space="preserve">
     <value>Отмена удаления</value>
   </data>
-  <data name="HISTORYSOURCETYPE_Account" xml:space="preserve">
-    <value>Аккаунт</value>
-  </data>
-  <data name="HISTORYSOURCETYPE_Queue" xml:space="preserve">
-    <value>Очередь</value>
-  </data>
   <data name="HISTORYACTIONTYPE_Add" xml:space="preserve">
     <value>Запись добавлена</value>
   </data>
@@ -272,15 +266,6 @@
   </data>
   <data name="HISTORYACTIONTYPE_Remove" xml:space="preserve">
     <value>Запись удалена</value>
-  </data>
-  <data name="HISTORYSOURCETYPE_AccountData" xml:space="preserve">
-    <value>Данные аккаунта</value>
-  </data>
-  <data name="HISTORYSOURCETYPE_AccountDictionary" xml:space="preserve">
-    <value>Словарь аккаунта</value>
-  </data>
-  <data name="HISTORYSOURCETYPE_AccountSettings" xml:space="preserve">
-    <value>Настройки аккаунта</value>
   </data>
   <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_Export" xml:space="preserve">
     <value>Экспортируемый файл</value>
@@ -302,5 +287,8 @@
   </data>
   <data name="COLUMNTYPE_EXPORTED" xml:space="preserve">
     <value>Дата экспорта</value>
+  </data>
+  <data name="HISTORYRECORD_EntityBreakOneToOneRule" xml:space="preserve">
+    <value>Нарушено правило "1 сущность - 1 ключ". Исправьте объект '{0}' (Только 1 колонка с полем Key)</value>
   </data>
 </root>

@@ -100,11 +100,5 @@ namespace RoyaltyRepository.Models
         /// </summary>
         [Column("date"), Required]
         public DateTime Date { get; set; }
-
-
-        public IEnumerable<IHistoryRecordSourceIdentifier> GetIdentifiers()
-        {
-            return RoyaltyRepository.Models.HistoryEntityBase.DeserializeIdentifiers(SourceID);
-        }
     }
 }

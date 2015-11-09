@@ -1,7 +1,9 @@
-﻿using System;
+﻿using RoyaltyService.Model;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.ServiceModel;
 using System.Text;
 using System.Threading;
@@ -12,6 +14,18 @@ namespace RoyaltyService.Services.Base
     public abstract class BaseService
     {
         private static Dictionary<InstanceContext, CultureInfo> langDictionary = new Dictionary<InstanceContext, CultureInfo>();
+
+        static BaseService()
+        {
+            var mapperInitializeMethods = Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .SelectMany(t => t.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy))
+                .Where(mi => mi.GetCustomAttribute(typeof(MapperInitializeAttribute)) != null)
+                .ToArray();
+
+            foreach (var mi in mapperInitializeMethods)
+                mi.Invoke(null, null);
+        }
 
         public BaseService()
         {

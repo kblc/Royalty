@@ -258,12 +258,6 @@
   <data name="Logic_Street_StreetRemove_StreetContainsDataRecords_TerminateDeletion" xml:space="preserve">
     <value>Terminate deletion.</value>
   </data>
-  <data name="HISTORYSOURCETYPE_Account" xml:space="preserve">
-    <value>Account</value>
-  </data>
-  <data name="HISTORYSOURCETYPE_Queue" xml:space="preserve">
-    <value>Qeueu</value>
-  </data>
   <data name="HISTORYACTIONTYPE_Add" xml:space="preserve">
     <value>Record added</value>
   </data>
@@ -272,15 +266,6 @@
   </data>
   <data name="HISTORYACTIONTYPE_Remove" xml:space="preserve">
     <value>Record removed</value>
-  </data>
-  <data name="HISTORYSOURCETYPE_AccountData" xml:space="preserve">
-    <value>Account data records</value>
-  </data>
-  <data name="HISTORYSOURCETYPE_AccountDictionary" xml:space="preserve">
-    <value>Account dictionary</value>
-  </data>
-  <data name="HISTORYSOURCETYPE_AccountSettings" xml:space="preserve">
-    <value>Account settings</value>
   </data>
   <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_Export" xml:space="preserve">
     <value>Exported file</value>
@@ -302,5 +287,8 @@
   </data>
   <data name="COLUMNTYPE_EXPORTED" xml:space="preserve">
     <value>Exported date</value>
+  </data>
+  <data name="HISTORYRECORD_EntityBreakOneToOneRule" xml:space="preserve">
+    <value>Rule 'One entry -&gt;one key' broken. Change entity '{0}' for only one key column.</value>
   </data>
 </root>

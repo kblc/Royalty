@@ -19,7 +19,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("data_additional")]
-    public partial class AccountDataRecordAdditional : HistoryEntityBase
+    public partial class AccountDataRecordAdditional : HistoryEntityBase<Guid, AccountDataRecordAdditional>
     {
         public const uint ColumnCount = 20;
 

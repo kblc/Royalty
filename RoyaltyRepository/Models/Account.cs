@@ -17,7 +17,7 @@ namespace RoyaltyRepository.Models
     }
 
     [Table("account")]
-    public partial class Account : HistoryEntityBase, IDefaultRepositoryInitialization
+    public partial class Account : HistoryEntityBase<Guid, Account>, IDefaultRepositoryInitialization
     {
         internal const string defaultAccountName = ".default";
 
@@ -149,18 +149,5 @@ namespace RoyaltyRepository.Models
         }
 
         #endregion
-
-        [HistoryResolver]
-        public static Account[] GetAccountForHistory(Repository rep, IHistoryRecordSourceIdentifier[][] ids)
-        {
-            var id = GetAccountIdForHistory(rep, ids);
-            return rep.Get<Account>(a => id.Contains(a.AccountUID)).ToArray();
-        }
-
-        [HistoryResolver]
-        public static Guid[] GetAccountIdForHistory(Repository rep, IHistoryRecordSourceIdentifier[][] ids)
-        {
-            return ids.SelectMany(i => i.Where(i2 => i2.Name == nameof(AccountUID)).Select(i2 => Guid.Parse(i2.Value))).ToArray();
-        }
     }
 }

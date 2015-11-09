@@ -8,6 +8,8 @@ using EntityFramework.Utilities;
 using System.Data.Entity;
 using System.Linq.Expressions;
 using System.Reflection;
+using Helpers;
+using Helpers.Linq;
 
 namespace RoyaltyRepository
 {
@@ -81,19 +83,43 @@ namespace RoyaltyRepository
         public event EventHandler<string> SqlLog;
         public event EventHandler<string> Log;
 
-        public object GetHistoryElements(Type sourceType, Type returnType, RoyaltyRepository.Models.IHistoryRecordSourceIdentifier[][] ids)
+        public Array GetHistoryElements(Type sourceType, Type returnArrayElementType, string[] ids)
         {
-            var methods = sourceType
-                .GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
-                .Where(mi => mi.ReturnType == returnType && mi.GetCustomAttribute(typeof(HistoryResolverAttribute)) != null);
-
-            foreach(var method in methods)
+            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", false, str => str.ToList().ForEach(s => RaiseLogEvent(s))))
                 try
                 {
-                    return method.Invoke(null, new object[] { this, ids });
+                    var returnArrayType = returnArrayElementType.MakeArrayType();
+
+                    var methods = sourceType
+                        .GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                        .Where(mi => mi.ReturnType == returnArrayType && mi.GetCustomAttribute(typeof(HistoryResolverAttribute)) != null) //validTypes.Contains(mi.ReturnType)
+                        .ToArray();
+
+                    foreach (var method in methods)
+                        try
+                        {
+                            var invokeArray = (Array)method.Invoke(null, new object[] { this, ids });
+                            var resArray = Array.CreateInstance(returnArrayElementType, invokeArray.Length);
+                            Array.Copy(invokeArray, resArray, invokeArray.Length);
+                            return resArray;
+                        }
+                        catch (Exception ex)
+                        {
+                            ex.Data.Add(nameof(sourceType), sourceType);
+                            ex.Data.Add(nameof(returnArrayElementType), returnArrayElementType);
+                            ex.Data.Add(nameof(ids), ids.Concat(i => i, ","));
+                            logSession.Enabled = true;
+                            logSession.Add(ex);
+                        }
                 }
-                catch { }
-            
+                catch (Exception ex)
+                {
+                    ex.Data.Add(nameof(sourceType), sourceType);
+                    ex.Data.Add(nameof(returnArrayElementType), returnArrayElementType);
+                    ex.Data.Add(nameof(ids), ids.Concat(i => i, ","));
+                    logSession.Enabled = true;
+                    logSession.Add(ex);
+                }
             return null;
         }
 
