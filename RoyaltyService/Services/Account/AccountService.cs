@@ -11,7 +11,7 @@ using Helpers;
 namespace RoyaltyService.Services.Account
 {
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, InstanceContextMode = InstanceContextMode.PerSession)]
-    public class AccountService : Base.BaseService, IAccountService
+    public partial class AccountService : Base.BaseService, IAccountService
     {
         #region Static initializer
 
@@ -145,78 +145,6 @@ namespace RoyaltyService.Services.Account
                 catch (Exception ex)
                 {
                     ex.Data.Add(nameof(identifiers), identifiers.Concat(i => i.ToString(),","));
-                    logSession.Enabled = true;
-                    logSession.Add(ex);
-                    return new GuidExecutionResults(ex);
-                }
-        }
-
-        public AccountExecutionResult RESTGet(string identifier)
-        {
-            UpdateSessionCulture();
-            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
-                try
-                {
-                    var id = GetGuidByString(identifier);
-                    return Get(id);
-                }
-                catch (Exception ex)
-                {
-                    ex.Data.Add(nameof(identifier), identifier);
-                    logSession.Enabled = true;
-                    logSession.Add(ex);
-                    return new AccountExecutionResult(ex);
-                }
-        }
-
-        public AccountExecutionResults RESTGetRange(string[] identifiers)
-        {
-            UpdateSessionCulture();
-            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
-                try
-                {
-                    var ids = identifiers.Select(i => GetGuidByString(i)).ToArray();
-                    return GetRange(ids);
-                }
-                catch (Exception ex)
-                {
-                    ex.Data.Add(nameof(identifiers), identifiers.Concat(i => i, ","));
-                    logSession.Enabled = true;
-                    logSession.Add(ex);
-                    return new AccountExecutionResults(ex);
-                }
-        }
-
-        public GuidExecutionResult RESTRemove(string identifier)
-        {
-            UpdateSessionCulture();
-            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
-                try
-                {
-                    var id = GetGuidByString(identifier);
-                    return Remove(id);
-                }
-                catch (Exception ex)
-                {
-                    ex.Data.Add(nameof(identifier), identifier);
-                    logSession.Enabled = true;
-                    logSession.Add(ex);
-                    return new GuidExecutionResult(ex);
-                }
-        }
-
-        public GuidExecutionResults RESTRemoveRange(string[] identifiers)
-        {
-            UpdateSessionCulture();
-            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
-                try
-                {
-                    var ids = identifiers.Select(i => GetGuidByString(i)).ToArray();
-                    return RemoveRange(ids);
-                }
-                catch (Exception ex)
-                {
-                    ex.Data.Add(nameof(identifiers), identifiers.Concat(i => i,","));
                     logSession.Enabled = true;
                     logSession.Add(ex);
                     return new GuidExecutionResults(ex);

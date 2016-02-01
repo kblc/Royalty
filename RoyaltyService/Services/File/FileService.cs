@@ -15,19 +15,15 @@ using System.Threading;
 namespace RoyaltyService.Services.File
 {
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, InstanceContextMode = InstanceContextMode.PerSession)]
-    public class FileService : Base.BaseService, IFileService
+    public partial class FileService : Base.BaseService, IFileService
     {
         #region Initialize
 
-        private const string DefaultFileName = "unknown.bin";
+        private const string DefaultFileName = Config.ServicesConfigSection.DefaultDefaultFileName;
 
         static FileService()
         {
             Model.File.InitializeMap();
-            //if (Config.Config.IsServicesConfigured && !string.IsNullOrWhiteSpace(Config.Config.ServicesConfig.FileServiceLogFileName))
-            //{
-
-            //}
         }
 
         #endregion
@@ -58,7 +54,7 @@ namespace RoyaltyService.Services.File
         /// <param name="fileName">File name</param>
         private void SetOutputResponseHeaders(string mime, Encoding encoding, string fileName, Helpers.Log.SessionInfo upperLogSession)
         {
-            if (upperLogSession != null)
+            if (upperLogSession == null)
                 throw new ArgumentNullException(nameof(upperLogSession));
 
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, ss => ss.ToList().ForEach(s => upperLogSession.Add(s))))
@@ -66,13 +62,13 @@ namespace RoyaltyService.Services.File
                 {
                     var webContext = System.ServiceModel.Web.WebOperationContext.Current;
                     if (webContext != null)
-                    { 
-                        webContext.OutgoingResponse.ContentType = new string[] { mime, encoding?.WebName }.Where(s => !string.IsNullOrWhiteSpace(s)).Concat(s => s,"; ");
+                    {
+                        webContext.OutgoingResponse.ContentType = new string[] { mime, encoding?.WebName }.Where(s => !string.IsNullOrWhiteSpace(s)).Concat(s => s, "; ");
                         if (!string.IsNullOrWhiteSpace(fileName))
                             webContext.OutgoingResponse.Headers.Add("Content-Disposition", $"attachment; filename={fileName}");
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     logSession.Add(ex);
                     logSession.Enabled = true;
@@ -86,9 +82,9 @@ namespace RoyaltyService.Services.File
         /// <param name="mime">File mime type</param>
         /// <param name="encoding">File encoding</param>
         /// <param name="fileName">File name</param>
-        private void GetInputRequestHeaders(out string mime, out Encoding encoding, out string fileName, Log.SessionInfo upperLogSession)
+        private void GetInputRequestHeaders(out string mime, out Encoding encoding, out string fileName, Helpers.Log.SessionInfo upperLogSession)
         {
-            if (upperLogSession != null)
+            if (upperLogSession == null)
                 throw new ArgumentNullException(nameof(upperLogSession));
 
             mime = null;
@@ -114,7 +110,7 @@ namespace RoyaltyService.Services.File
                         }
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     logSession.Add(ex);
                     logSession.Enabled = true;
@@ -158,26 +154,6 @@ namespace RoyaltyService.Services.File
                     throw;
                 }
         }
-        /// <summary>
-        /// Delete file by identifier
-        /// </summary>
-        /// <param name="identifier">File identifier</param>
-        public void RESTRemove(string identifier)
-        {
-            UpdateSessionCulture();
-            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
-                try
-                {
-                    var id = GetGuidByString(identifier);
-                    Remove(id);
-                }
-                catch (Exception ex)
-                {
-                    ex.Data.Add(nameof(identifier), identifier);
-                    logSession.Enabled = true;
-                    logSession.Add(ex);
-                }
-        }
 
         /// <summary>
         /// Get file info by file identifier
@@ -198,28 +174,6 @@ namespace RoyaltyService.Services.File
                         throw new Exception(Properties.Resources.SERVICES_FILE_FileNotFound);
 
                     return new FileExecutionResult(res.Values.First());
-                }
-                catch (Exception ex)
-                {
-                    ex.Data.Add(nameof(identifier), identifier);
-                    logSession.Enabled = true;
-                    logSession.Add(ex);
-                    return new FileExecutionResult(ex);
-                }
-        }
-        /// <summary>
-        /// Get file info by file identifier
-        /// </summary>
-        /// <param name="identifier">File identifier</param>
-        /// <returns>File info</returns>
-        public FileExecutionResult RESTGet(string identifier)
-        {
-            UpdateSessionCulture();
-            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
-                try
-                {
-                    var id = GetGuidByString(identifier);
-                    return Get(id);
                 }
                 catch (Exception ex)
                 {
@@ -258,28 +212,6 @@ namespace RoyaltyService.Services.File
                     return new FileExecutionResults(ex);
                 }
         }
-        /// <summary>
-        /// Get file infos by identifiers
-        /// </summary>
-        /// <param name="identifiers">File info identifiers</param>
-        /// <returns>Files info</returns>
-        public FileExecutionResults RESTGetRange(string[] identifiers)
-        {
-            UpdateSessionCulture();
-            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
-                try
-                {
-                    var valiIdentifiers = identifiers.Select(i => GetGuidByString(i)).ToArray();
-                    return GetRange(valiIdentifiers);
-                }
-                catch (Exception ex)
-                {
-                    ex.Data.Add(nameof(identifiers), identifiers.Concat(i => i ?? "NULL", ","));
-                    logSession.Enabled = true;
-                    logSession.Add(ex);
-                    return new FileExecutionResults(ex);
-                }
-        }
 
         /// <summary>
         /// Get file source stream
@@ -309,6 +241,7 @@ namespace RoyaltyService.Services.File
                     throw;
                 }
         }
+
         /// <summary>
         /// Get file source stream
         /// </summary>
@@ -332,31 +265,6 @@ namespace RoyaltyService.Services.File
                 catch (Exception ex)
                 {
                     ex.Data.Add(nameof(fileName), fileName);
-                    logSession.Enabled = true;
-                    logSession.Add(ex);
-                    throw;
-                }
-        }
-        /// <summary>
-        /// Get file source stream
-        /// </summary>
-        /// <param name="fileIdOrName">File identifier or name</param>
-        /// <returns>Source stream</returns>
-        public Stream RESTGetSource(string fileIdOrName)
-        {
-            UpdateSessionCulture();
-            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
-                try
-                {
-                    logSession.Add($"Try to get file with id or name = '{fileIdOrName}' from database...");
-                    var fileId = TryGetGuidByString(fileIdOrName);
-                    if (fileId.HasValue)
-                        return GetSource(fileId.Value);
-                    return GetSourceByName(fileIdOrName);
-                }
-                catch (Exception ex)
-                {
-                    ex.Data.Add(nameof(fileIdOrName), fileIdOrName);
                     logSession.Enabled = true;
                     logSession.Add(ex);
                     throw;
@@ -459,19 +367,6 @@ namespace RoyaltyService.Services.File
                     logSession.Add(ex);
                     return new FileExecutionResult(ex);
                 }
-        }
-
-        /// <summary>
-        /// Update file in database
-        /// </summary>
-        /// <param name="identifier">File identifier</param>
-        /// <param name="fileName">New file name</param>
-        /// <param name="encoding">New file encoding</param>
-        /// <param name="mime">New mime type</param>
-        /// <returns>File info</returns>
-        public FileExecutionResult RESTUpdate(string identifier, string fileName, string encoding, string mime)
-        {
-            return Update(new Model.File() { FileID = identifier, FileName = fileName, EncodingName = encoding, MimeType = mime });
         }
 
         #endregion

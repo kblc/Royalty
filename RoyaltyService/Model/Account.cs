@@ -22,7 +22,6 @@ namespace RoyaltyService.Model
         [DataMember(IsRequired = false)]
         public bool IsActive { get; set; }
 
-
         private static bool isInitialize = false;
         [MapperInitialize]
         public static void InitializeMap()

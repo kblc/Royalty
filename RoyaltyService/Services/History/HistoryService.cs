@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RoyaltyService.Services.History
 {
-    public class HistoryService : Base.BaseService, IHistoryService
+    public partial class HistoryService : Base.BaseService, IHistoryService
     {
         public long MaxHistoryCount { get; set; } = Config.Config.ServicesConfig.MaxHistoryCount;
 
@@ -40,6 +40,51 @@ namespace RoyaltyService.Services.History
             return null;
         }
 
+        private object GetData(RoyaltyRepository.Models.HistoryActionType type, RoyaltyRepository.Models.History[] historyData, RoyaltyRepository.Repository rep)
+        {
+            var idOnly = type == RoyaltyRepository.Models.HistoryActionType.Remove;
+
+            var wasChanged = false;
+            var resD = idOnly
+                ? new Model.HistoryRemovePart() as object
+                : new Model.HistoryUpdatePart() as object;
+
+#pragma warning disable 618
+            var groupedItems = historyData.Distinct().ToArray()
+                .GroupBy(h => new { h.SourceID, h.SourceName, h.ActionType })
+                .Select(h => h.Key)
+                .ToArray();
+#pragma warning restore 618
+
+            resD.GetType()
+                .GetProperties()
+                .Where(p => p.CanWrite)
+                .Select(p => new { Property = p, Attr = p.GetCustomAttributes(typeof(Model.RepositoryHistoryLinkAttribute), true) })
+                .Select(p => new { p.Property, Attr = p.Attr != null && p.Attr.Length == 1 ? p.Attr[0] as Model.RepositoryHistoryLinkAttribute : null })
+                .Where(p => p.Attr != null)
+                .ToList()
+                .ForEach(p =>
+                {
+                    var ids = groupedItems
+                        .Where(i => i.ActionType == type && string.Compare(i.SourceName, p.Attr.RepositoryEntityType.Name, true) == 0)
+                        .Select(i => i.SourceID)
+                        .ToArray();
+
+                    if (ids.Length > 0)
+                    {
+                        var items = GetModelItemsFromRepository(rep, p.Attr.RepositoryEntityType, p.Attr.RepositoryArrayElementEntitySourceType, p.Property.PropertyType, ids, idOnly);
+                        if (items != null)
+                        {
+                            p.Property.SetValue(resD, items);
+                            wasChanged = true;
+                        }
+                    }
+                });
+            return (wasChanged) ? resD : null;
+        }
+
+        #region IHistoryService
+
         public HistoryExecutionResult Get()
         {
             UpdateSessionCulture();
@@ -48,7 +93,10 @@ namespace RoyaltyService.Services.History
                 {
                     using (var rep = GetNewRepository(logSession))
                     {
-                        var historyData = rep.Get<RoyaltyRepository.Models.History>().OrderByDescending(i => i.HistoryID).Take(1).FirstOrDefault();
+                        var historyData = rep.Get<RoyaltyRepository.Models.History>()
+                            .OrderByDescending(i => i.HistoryID)
+                            .Take(1)
+                            .FirstOrDefault();
                         Model.History res = new Model.History() { EventId = historyData?.HistoryID ?? 0 };
                         return new HistoryExecutionResult(res);
                     }
@@ -76,52 +124,9 @@ namespace RoyaltyService.Services.History
                                 .OrderBy(h => h.HistoryID)
                                 .ToArray();
 
-#pragma warning disable 618
-                            var groupedItems = historyData.Distinct().ToArray()
-                                .GroupBy(h => new { h.SourceID, h.SourceName, h.ActionType })
-                                .Select(h => h.Key)
-                                .ToArray();
-#pragma warning restore 618
-
-                            var getData = new Func<RoyaltyRepository.Models.HistoryActionType, object>((type) => 
-                            {
-                                var idOnly = type == RoyaltyRepository.Models.HistoryActionType.Remove;
-
-                                var wasChanged = false;
-                                var resD = idOnly
-                                    ? new Model.HistoryRemovePart() as object
-                                    : new Model.HistoryUpdatePart() as object;
-
-                                resD.GetType()
-                                    .GetProperties()
-                                    .Where(p => p.CanWrite)
-                                    .Select(p => new { Property = p, Attr = p.GetCustomAttributes(typeof(Model.RepositoryHistoryLinkAttribute), true) })
-                                    .Select(p => new { p.Property, Attr = p.Attr != null && p.Attr.Length == 1 ? p.Attr[0] as Model.RepositoryHistoryLinkAttribute : null })
-                                    .Where(p => p.Attr != null)
-                                    .ToList()
-                                    .ForEach(p =>
-                                    {
-                                        var ids = groupedItems
-                                            .Where(i => i.ActionType == type && string.Compare(i.SourceName, p.Attr.RepositoryEntityType.Name, true) == 0)
-                                            .Select(i => i.SourceID)
-                                            .ToArray();
-
-                                        if (ids.Length > 0)
-                                        { 
-                                            var items = GetModelItemsFromRepository(rep, p.Attr.RepositoryEntityType, p.Attr.RepositoryArrayElementEntitySourceType, p.Property.PropertyType,  ids, idOnly);
-                                            if (items != null)
-                                            {
-                                                p.Property.SetValue(resD, items);
-                                                wasChanged = true;
-                                            }
-                                        }
-                                    });
-                                return (wasChanged) ? resD : null;
-                            });
-
-                            var addItems = getData(RoyaltyRepository.Models.HistoryActionType.Add) as Model.HistoryUpdatePart;
-                            var chgItems = getData(RoyaltyRepository.Models.HistoryActionType.Change) as Model.HistoryUpdatePart;
-                            var delItems = getData(RoyaltyRepository.Models.HistoryActionType.Remove) as Model.HistoryRemovePart;
+                            var addItems = GetData(RoyaltyRepository.Models.HistoryActionType.Add, historyData, rep) as Model.HistoryUpdatePart;
+                            var chgItems = GetData(RoyaltyRepository.Models.HistoryActionType.Change, historyData, rep) as Model.HistoryUpdatePart;
+                            var delItems = GetData(RoyaltyRepository.Models.HistoryActionType.Remove, historyData, rep) as Model.HistoryRemovePart;
 
                             if (addItems != null || chgItems != null || delItems != null)
                             { 
@@ -147,22 +152,6 @@ namespace RoyaltyService.Services.History
                 }
         }
 
-        public HistoryExecutionResult RESTGetFrom(string identifier)
-        {
-            UpdateSessionCulture();
-            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
-                try
-                {
-                    var id = GetLongByString(identifier);
-                    return GetFrom(id);
-                }
-                catch (Exception ex)
-                {
-                    ex.Data.Add(nameof(identifier), identifier);
-                    logSession.Enabled = true;
-                    logSession.Add(ex);
-                    return new HistoryExecutionResult(ex);
-                }
-        }
+        #endregion
     }
 }

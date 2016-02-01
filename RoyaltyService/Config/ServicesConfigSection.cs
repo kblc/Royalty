@@ -10,6 +10,7 @@ namespace RoyaltyService.Config
     public class ServicesConfigSection : ConfigurationSection
     {
         public const string SectionName = "servicesConfig";
+        public const string DefaultDefaultFileName = "unknown.bin";
 
         [ConfigurationProperty("fileServiceUrlPrefix", IsRequired = true, DefaultValue = "")]
         public Uri FileServiceUrlPrefix
