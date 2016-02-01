@@ -65,6 +65,9 @@
   <ItemGroup>
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\ServicesConfigSection.cs" />
+    <Compile Include="Model\AccountSettingsColumn.cs" />
+    <Compile Include="Model\ColumnType.cs" />
+    <Compile Include="Model\AccountSettings.cs" />
     <Compile Include="Model\Account.cs" />
     <Compile Include="Model\BaseExecutionResult.cs" />
     <Compile Include="Model\History.cs" />
@@ -73,9 +76,19 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Services\Account\AccountExecutionResult.cs" />
+    <Compile Include="Services\Account\AccountService.Settings.ColumnsREST.cs" />
+    <Compile Include="Services\Account\AccountService.Settings.Columns.cs" />
+    <Compile Include="Services\Account\AccountService.Settings.ColumnTypeREST.cs" />
+    <Compile Include="Services\Account\AccountService.Settings.ColumnType.cs" />
+    <Compile Include="Services\Account\IAccountService.Settings.ColumnsREST.cs" />
+    <Compile Include="Services\Account\IAccountService.Settings.Columns.cs" />
+    <Compile Include="Services\Account\IAccountService.Settings.ColumnTypeREST.cs" />
+    <Compile Include="Services\Account\Result\Account.Settings.ColumnType.ExecutionResult.cs" />
+    <Compile Include="Services\Account\Result\Account.Settings.Columns.ExecutionResult.cs" />
+    <Compile Include="Services\Account\Result\Account.ExecutionResult.cs" />
     <Compile Include="Services\Account\AccountServiceREST.cs" />
     <Compile Include="Services\Account\AccountService.cs" />
+    <Compile Include="Services\Account\IAccountService.Settings.ColumnType.cs" />
     <Compile Include="Services\Account\IAccountServiceREST.cs" />
     <Compile Include="Services\Account\IAccountService.cs" />
     <Compile Include="Services\Base\BaseService.cs" />

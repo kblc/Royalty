@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoyaltyService.Services.Account.Result;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace RoyaltyService.Services.Account
 {
     [ServiceContract(SessionMode = SessionMode.Allowed)]
-    public interface IAccountServiceREST : Base.IBaseService
+    public partial interface IAccountServiceREST : Base.IBaseService
     {
         /// <summary>
         /// Get all account info

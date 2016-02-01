@@ -7,6 +7,7 @@ using RoyaltyService.Model;
 using System.ServiceModel;
 using Helpers.Linq;
 using Helpers;
+using RoyaltyService.Services.Account.Result;
 
 namespace RoyaltyService.Services.Account
 {

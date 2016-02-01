@@ -7,6 +7,7 @@ using RoyaltyService.Model;
 using System.ServiceModel;
 using Helpers.Linq;
 using Helpers;
+using RoyaltyService.Services.Account.Result;
 
 namespace RoyaltyService.Services.Account
 {
@@ -18,6 +19,8 @@ namespace RoyaltyService.Services.Account
         static AccountService()
         {
             Model.Account.InitializeMap();
+            Model.ColumnType.InitializeMap();
+            Model.AccountSettingsColumn.InitializeMap();
         }
 
         #endregion
@@ -66,7 +69,7 @@ namespace RoyaltyService.Services.Account
                             : rep.Get<RoyaltyRepository.Models.Account>(a => identifiers.Contains(a.AccountUID), asNoTracking: true).ToArray();
                         logSession.Add($"Accounts found: {items.Length}");
 
-                        var res = items.Select(i => AutoMapper.Mapper.Map<Model.Account>(i)).ToArray(); 
+                        var res = items.Select(i => AutoMapper.Mapper.Map<Model.Account>(i)).ToArray();
                         return new AccountExecutionResults(res);
                     }
                 }
@@ -92,6 +95,7 @@ namespace RoyaltyService.Services.Account
                         {
                             a.CopyObjectFrom(mappedDbItem, new string[] { nameof(a.AccountUID) });
                         });
+                        rep.Add(dbItem);
                         var res = AutoMapper.Mapper.Map<Model.Account>(dbItem);
                         return new AccountExecutionResult(res);
                     }
@@ -166,6 +170,7 @@ namespace RoyaltyService.Services.Account
                             throw new Exception(Properties.Resources.SERVICES_FILE_AccountNotFound);
 
                         dbItem.CopyObjectFrom(mappedDbItem, new string[] { nameof(dbItem) });
+                        rep.SaveChanges();
 
                         var res = AutoMapper.Mapper.Map<Model.Account>(dbItem);
                         return new AccountExecutionResult(res);
@@ -178,6 +183,19 @@ namespace RoyaltyService.Services.Account
                     logSession.Add(ex);
                     return new AccountExecutionResult(ex);
                 }
+        }
+
+        private TModel Put<TModel,TRepository>(TModel item, Action<TRepository, TRepository, RoyaltyRepository.Repository> initAction, Helpers.Log.SessionInfo logSession)
+            where TRepository: class
+        {
+            using (var rep = GetNewRepository(logSession))
+            {
+                var mappedDbItem = AutoMapper.Mapper.Map<TRepository>(item);
+                var dbItem = rep.New<TRepository>((a) => initAction?.Invoke(a, mappedDbItem, rep));
+                rep.Add(dbItem);
+                var res = AutoMapper.Mapper.Map<TModel>(dbItem);
+                return res;
+            }
         }
     }
 }

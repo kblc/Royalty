@@ -25,6 +25,14 @@ namespace RoyaltyService.Model
         [DataMember]
         [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.Account), typeof(Guid))]
         public Guid[] Account { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettings), typeof(Guid))]
+        public Guid[] AccountSettings { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettingsColumn), typeof(long))]
+        public long[] AccountSettingsColumn { get; set; }
     }
 
     [DataContract]
@@ -33,6 +41,14 @@ namespace RoyaltyService.Model
         [DataMember]
         [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.Account))]
         public Account[] Account { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettings))]
+        public AccountSettings[] AccountSettings { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettingsColumn), typeof(long))]
+        public AccountSettingsColumn[] AccountSettingsColumn { get; set; }
     }
 
     [DataContract]

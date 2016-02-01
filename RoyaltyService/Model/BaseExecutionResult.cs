@@ -64,4 +64,20 @@ namespace RoyaltyService.Model
         public GuidExecutionResults(Guid[] values) { Values = values; }
         public GuidExecutionResults(Exception ex) : base(ex) { }
     }
+
+    [DataContract]
+    public class LongExecutionResult : BaseExecutionResult<long>
+    {
+        public LongExecutionResult() { }
+        public LongExecutionResult(long value) { Value = value; }
+        public LongExecutionResult(Exception ex) : base(ex) { }
+    }
+
+    [DataContract]
+    public class LongExecutionResults : BaseExecutionResults<long>
+    {
+        public LongExecutionResults() { }
+        public LongExecutionResults(long[] values) { Values = values; }
+        public LongExecutionResults(Exception ex) : base(ex) { }
+    }
 }

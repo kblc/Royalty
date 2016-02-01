@@ -8,22 +8,19 @@ using System.Threading.Tasks;
 namespace RoyaltyService.Model
 {
     [DataContract]
-    public class Account
+    public class AccountSettings
     {
         [DataMember(IsRequired = false, Name = "Id")]
         public Guid AccountUID { get; set; }
 
         [DataMember(IsRequired = false)]
-        public string Name { get; set; }
+        public TimeSpan? IgnoreExportTime { get; set; }
 
         [DataMember(IsRequired = false)]
-        public bool IsHidden { get; set; }
+        public TimeSpan? TimeForTrust { get; set; }
 
         [DataMember(IsRequired = false)]
-        public bool IsActive { get; set; }
-
-        [DataMember(IsRequired = false)]
-        public AccountSettings Settings { get; set; }
+        public List<AccountSettingsColumn> Columns { get; set; }
 
         private static bool isInitialize = false;
         [MapperInitialize]
@@ -32,8 +29,8 @@ namespace RoyaltyService.Model
             if (isInitialize)
                 return;
 #pragma warning disable 618
-            AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.Account, Account>();
-            AutoMapper.Mapper.CreateMap<Account, RoyaltyRepository.Models.Account>();
+            AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.AccountSettings, AccountSettings>();
+            AutoMapper.Mapper.CreateMap<AccountSettings, RoyaltyRepository.Models.AccountSettings>();
 #pragma warning restore 618
             isInitialize = true;
         }

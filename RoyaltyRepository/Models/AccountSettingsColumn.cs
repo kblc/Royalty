@@ -18,11 +18,17 @@ namespace RoyaltyRepository.Models
     [Table("account_settings_column")]
     public partial class AccountSettingsColumn : HistoryEntityBase
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        [Column("account_settings_column_id", Order = 1), Key, Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long AccountSettingsColumnID { get; set; }
+
         #region AccountSettings
         /// <summary>
         /// Идентификатор аккаунта, которому принадлежат данные настройки
         /// </summary>
-        [Column("account_uid", Order = 0), ForeignKey("AccountSettings"), Key, Required]
+        [Column("account_uid"), ForeignKey("AccountSettings"), Required, Index("UIX_ACCOUNT_SETTINGS_COLUMN", IsUnique = true, Order = 2)]
         public Guid AccountUID { get; set; }
         /// <summary>
         /// Аккаунт, которому принадлежат данные настройки
@@ -33,13 +39,14 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Идентификатор типа колонки
         /// </summary>
-        [Column("column_type_id", Order = 1), ForeignKey("ColumnType"), Key, Required]
+        [Column("column_type_id"), ForeignKey("ColumnType"), Required, Index("UIX_ACCOUNT_SETTINGS_COLUMN", IsUnique = true, Order = 3)]
         public long ColumnTypeID { get; set; }
         /// <summary>
         /// Тип колонки
         /// </summary>
         public virtual ColumnType ColumnType { get; set; }
         #endregion
+
         /// <summary>
         /// Название колонки в импортируемом файле
         /// </summary>

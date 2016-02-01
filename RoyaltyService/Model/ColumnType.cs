@@ -8,22 +8,28 @@ using System.Threading.Tasks;
 namespace RoyaltyService.Model
 {
     [DataContract]
-    public class Account
+    public class ColumnType
     {
         [DataMember(IsRequired = false, Name = "Id")]
-        public Guid AccountUID { get; set; }
+        public long ColumnTypeID { get; set; }
 
         [DataMember(IsRequired = false)]
         public string Name { get; set; }
 
         [DataMember(IsRequired = false)]
-        public bool IsHidden { get; set; }
+        public string SystemName { get; set; }
 
         [DataMember(IsRequired = false)]
-        public bool IsActive { get; set; }
+        public bool ImportTableValidation { get; set; }
 
         [DataMember(IsRequired = false)]
-        public AccountSettings Settings { get; set; }
+        public bool ImportRowValidation { get; set; }
+
+        [DataMember(IsRequired = false)]
+        public long ExportColumnIndex { get; set; }
+
+        [DataMember(IsRequired = false)]
+        public bool Export { get; set; }
 
         private static bool isInitialize = false;
         [MapperInitialize]
@@ -32,8 +38,8 @@ namespace RoyaltyService.Model
             if (isInitialize)
                 return;
 #pragma warning disable 618
-            AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.Account, Account>();
-            AutoMapper.Mapper.CreateMap<Account, RoyaltyRepository.Models.Account>();
+            AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.ColumnType, ColumnType>();
+            AutoMapper.Mapper.CreateMap<ColumnType, RoyaltyRepository.Models.ColumnType>();
 #pragma warning restore 618
             isInitialize = true;
         }
