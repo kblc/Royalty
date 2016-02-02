@@ -8,28 +8,31 @@ using System.Threading.Tasks;
 namespace RoyaltyService.Model
 {
     [DataContract]
-    public class AccountSettings
+    public class AccountSettingsImportDirectory
     {
         [DataMember(IsRequired = false, Name = "Id")]
+        public long AccountSettingsImportDirectoryID { get; set; }
+
+        [DataMember(IsRequired = false)]
         public Guid AccountUID { get; set; }
 
         [DataMember(IsRequired = false)]
-        public TimeSpan? IgnoreExportTime { get; set; }
+        public string Path { get; set; }
 
         [DataMember(IsRequired = false)]
-        public TimeSpan? TimeForTrust { get; set; }
+        public bool ForAnalize { get; set; }
 
         [DataMember(IsRequired = false)]
-        public List<AccountSettingsColumn> Columns { get; set; }
+        public bool RecursiveFolderSearch { get; set; }
 
         [DataMember(IsRequired = false)]
-        public List<AccountSettingsImportDirectory> ImportDirectories { get; set; }
+        public string EncodingName { get; set; }
 
         [DataMember(IsRequired = false)]
-        public List<AccountSettingsExportDirectory> ExportDirectories { get; set; }
+        public string Filter { get; set; }
 
         [DataMember(IsRequired = false)]
-        public List<AccountSettingsSheduleTime> SheduleTimes { get; set; }
+        public bool DeleteFileAfterImport { get; set; }
 
         private static bool isInitialize = false;
         [MapperInitialize]
@@ -38,8 +41,8 @@ namespace RoyaltyService.Model
             if (isInitialize)
                 return;
 #pragma warning disable 618
-            AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.AccountSettings, AccountSettings>();
-            AutoMapper.Mapper.CreateMap<AccountSettings, RoyaltyRepository.Models.AccountSettings>();
+            AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.AccountSettingsImportDirectory, AccountSettingsImportDirectory>();
+            AutoMapper.Mapper.CreateMap<AccountSettingsImportDirectory, RoyaltyRepository.Models.AccountSettingsImportDirectory>();
 #pragma warning restore 618
             isInitialize = true;
         }

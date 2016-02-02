@@ -18,9 +18,14 @@ namespace RoyaltyService.Services.Account
 
         static AccountService()
         {
-            Model.Account.InitializeMap();
             Model.ColumnType.InitializeMap();
+            Model.Mark.InitializeMap();
+
+            Model.Account.InitializeMap();
             Model.AccountSettingsColumn.InitializeMap();
+            Model.AccountSettingsImportDirectory.InitializeMap();
+            Model.AccountSettingsExportDirectory.InitializeMap();
+            Model.AccountSettingsSheduleTime.InitializeMap();
         }
 
         #endregion

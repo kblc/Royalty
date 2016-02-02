@@ -8,28 +8,31 @@ using System.Threading.Tasks;
 namespace RoyaltyService.Model
 {
     [DataContract]
-    public class AccountSettings
+    public class AccountSettingsExportDirectory
     {
         [DataMember(IsRequired = false, Name = "Id")]
+        public long AccountSettingsExportDirectoryID { get; set; }
+
+        [DataMember(IsRequired = false)]
         public Guid AccountUID { get; set; }
 
         [DataMember(IsRequired = false)]
-        public TimeSpan? IgnoreExportTime { get; set; }
+        public string DirectoryPath { get; set; }
 
         [DataMember(IsRequired = false)]
-        public TimeSpan? TimeForTrust { get; set; }
+        public string FileName { get; set; }
 
         [DataMember(IsRequired = false)]
-        public List<AccountSettingsColumn> Columns { get; set; }
+        public long? MarkID { get; set; }
 
         [DataMember(IsRequired = false)]
-        public List<AccountSettingsImportDirectory> ImportDirectories { get; set; }
+        public string EncodingName { get; set; }
 
         [DataMember(IsRequired = false)]
-        public List<AccountSettingsExportDirectory> ExportDirectories { get; set; }
+        public string ExecuteAfterAnalizeCommand { get; set; }
 
         [DataMember(IsRequired = false)]
-        public List<AccountSettingsSheduleTime> SheduleTimes { get; set; }
+        public TimeSpan TimeoutForExecute { get; set; }
 
         private static bool isInitialize = false;
         [MapperInitialize]
@@ -38,8 +41,8 @@ namespace RoyaltyService.Model
             if (isInitialize)
                 return;
 #pragma warning disable 618
-            AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.AccountSettings, AccountSettings>();
-            AutoMapper.Mapper.CreateMap<AccountSettings, RoyaltyRepository.Models.AccountSettings>();
+            AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.AccountSettingsExportDirectory, AccountSettingsExportDirectory>();
+            AutoMapper.Mapper.CreateMap<AccountSettingsExportDirectory, RoyaltyRepository.Models.AccountSettingsExportDirectory>();
 #pragma warning restore 618
             isInitialize = true;
         }

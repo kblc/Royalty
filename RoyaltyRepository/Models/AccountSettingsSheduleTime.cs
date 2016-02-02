@@ -22,7 +22,7 @@ namespace RoyaltyRepository.Models
         /// Идентификатор таймера
         /// </summary>
         [Key, Column("shedule_time_id"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long ID { get; set; }
+        public long AccountSettingsSheduleTimeID { get; set; }
         /// <summary>
         /// Идентификатор аккаунта, которому принадлежат данные настройки
         /// </summary>

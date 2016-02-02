@@ -13,16 +13,16 @@ namespace RoyaltyService.Services.Account
 {
     public partial class AccountService : Base.BaseService, IAccountServiceREST
     {
-        public AccountSettingsColumnsExecutionResult RESTSettingsColumnPut(Model.AccountSettingsColumn item) => SettingsColumnPut(item);
+        public AccountSettingsExportDirectoryExecutionResult RESTSettingsExportDirectoryPut(Model.AccountSettingsExportDirectory item) => SettingsExportDirectoryPut(item);
 
-        public LongExecutionResult RESTSettingsColumnRemove(string identifier)
+        public Model.LongExecutionResult RESTSettingsExportDirectoryRemove(string identifier)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
                 try
                 {
                     var id = GetLongByString(identifier);
-                    return SettingsColumnRemove(id);
+                    return SettingsExportDirectoryRemove(id);
                 }
                 catch (Exception ex)
                 {
@@ -33,14 +33,14 @@ namespace RoyaltyService.Services.Account
                 }
         }
 
-        public LongExecutionResults RESTSettingsColumnRemoveRange(string[] identifiers)
+        public Model.LongExecutionResults RESTSettingsExportDirectoryRemoveRange(string[] identifiers)
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
                 try
                 {
                     var ids = identifiers.Select(i => GetLongByString(i)).ToArray();
-                    return SettingsColumnRemoveRange(ids);
+                    return SettingsExportDirectoryRemoveRange(ids);
                 }
                 catch (Exception ex)
                 {
@@ -51,6 +51,6 @@ namespace RoyaltyService.Services.Account
                 }
         }
 
-        public AccountSettingsColumnsExecutionResult RESTSettingsColumnUpdate(Model.AccountSettingsColumn item) => SettingsColumnUpdate(item);
+        public AccountSettingsExportDirectoryExecutionResult RESTSettingsExportDirectoryUpdate(Model.AccountSettingsExportDirectory item) => SettingsExportDirectoryUpdate(item);
     }
 }
