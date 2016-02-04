@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="af34c1f8-2cb9-4cc1-96fc-38edb8118cd2" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8733/royalty/history/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="d26c72cf-1fdc-421e-8ffb-7268d11e85c9" SourceId="1" SourceUrl="http://localhost:8733/royalty/history/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="6e3a798b-8cf2-40d7-a63a-4afb827fb289" SourceId="1" SourceUrl="http://localhost:8733/royalty/history/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="67103af8-dcaa-4e15-bb58-c789b3042f49" SourceId="1" SourceUrl="http://localhost:8733/royalty/history/mex" />
+    <MetadataFile FileName="RoyaltyService.Services.History.xsd" MetadataType="Schema" ID="766ead8e-92ce-4f37-99c4-4216c28d9806" SourceId="1" SourceUrl="http://localhost:8733/royalty/history/mex" />
+    <MetadataFile FileName="RoyaltyService.Model.xsd" MetadataType="Schema" ID="3b9b91c8-290f-4b80-9e3a-ae4ec374a611" SourceId="1" SourceUrl="http://localhost:8733/royalty/history/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="d5d09b84-f4ca-4da1-8b31-2fd5b0a6e3a0" SourceId="1" SourceUrl="http://localhost:8733/royalty/history/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

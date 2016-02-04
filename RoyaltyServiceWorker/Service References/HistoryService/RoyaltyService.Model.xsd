@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="BaseExecutionResultOfHistoryh3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="History" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" nillable="true" type="tns:History" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultOfHistoryh3e0gNRf" nillable="true" type="tns:BaseExecutionResultOfHistoryh3e0gNRf" />
+  <xs:complexType name="Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Result" nillable="true" type="tns:Result" />
+  <xs:complexType name="History">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Add" nillable="true" type="tns:HistoryUpdatePart" />
+      <xs:element minOccurs="0" name="Change" nillable="true" type="tns:HistoryUpdatePart" />
+      <xs:element name="EventId" type="xs:long" />
+      <xs:element minOccurs="0" name="Remove" nillable="true" type="tns:HistoryRemovePart" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="History" nillable="true" type="tns:History" />
+  <xs:complexType name="HistoryUpdatePart">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Account" nillable="true" type="tns:ArrayOfAccount" />
+      <xs:element minOccurs="0" name="AccountSettings" nillable="true" type="tns:ArrayOfAccountSettings" />
+      <xs:element minOccurs="0" name="AccountSettingsColumn" nillable="true" type="tns:ArrayOfAccountSettingsColumn" />
+      <xs:element minOccurs="0" name="AccountSettingsExportDirectory" nillable="true" type="tns:ArrayOfAccountSettingsExportDirectory" />
+      <xs:element minOccurs="0" name="AccountSettingsImportDirectory" nillable="true" type="tns:ArrayOfAccountSettingsImportDirectory" />
+      <xs:element minOccurs="0" name="AccountSettingsSheduleTime" nillable="true" type="tns:ArrayOfAccountSettingsSheduleTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="HistoryUpdatePart" nillable="true" type="tns:HistoryUpdatePart" />
+  <xs:complexType name="ArrayOfAccount">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Account" nillable="true" type="tns:Account" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAccount" nillable="true" type="tns:ArrayOfAccount" />
+  <xs:complexType name="Account">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="ser:guid" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsHidden" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Settings" nillable="true" type="tns:AccountSettings" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Account" nillable="true" type="tns:Account" />
+  <xs:complexType name="AccountSettings">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Columns" nillable="true" type="tns:ArrayOfAccountSettingsColumn" />
+      <xs:element minOccurs="0" name="ExportDirectories" nillable="true" type="tns:ArrayOfAccountSettingsExportDirectory" />
+      <xs:element minOccurs="0" name="Id" type="ser:guid" />
+      <xs:element minOccurs="0" name="IgnoreExportTime" nillable="true" type="ser:duration" />
+      <xs:element minOccurs="0" name="ImportDirectories" nillable="true" type="tns:ArrayOfAccountSettingsImportDirectory" />
+      <xs:element minOccurs="0" name="SheduleTimes" nillable="true" type="tns:ArrayOfAccountSettingsSheduleTime" />
+      <xs:element minOccurs="0" name="TimeForTrust" nillable="true" type="ser:duration" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccountSettings" nillable="true" type="tns:AccountSettings" />
+  <xs:complexType name="ArrayOfAccountSettingsColumn">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountSettingsColumn" nillable="true" type="tns:AccountSettingsColumn" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAccountSettingsColumn" nillable="true" type="tns:ArrayOfAccountSettingsColumn" />
+  <xs:complexType name="AccountSettingsColumn">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="ColumnName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ColumnTypeID" type="xs:long" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccountSettingsColumn" nillable="true" type="tns:AccountSettingsColumn" />
+  <xs:complexType name="ArrayOfAccountSettingsExportDirectory">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountSettingsExportDirectory" nillable="true" type="tns:AccountSettingsExportDirectory" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAccountSettingsExportDirectory" nillable="true" type="tns:ArrayOfAccountSettingsExportDirectory" />
+  <xs:complexType name="AccountSettingsExportDirectory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="DirectoryPath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EncodingName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExecuteAfterAnalizeCommand" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="MarkID" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="TimeoutForExecute" type="ser:duration" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccountSettingsExportDirectory" nillable="true" type="tns:AccountSettingsExportDirectory" />
+  <xs:complexType name="ArrayOfAccountSettingsImportDirectory">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountSettingsImportDirectory" nillable="true" type="tns:AccountSettingsImportDirectory" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAccountSettingsImportDirectory" nillable="true" type="tns:ArrayOfAccountSettingsImportDirectory" />
+  <xs:complexType name="AccountSettingsImportDirectory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="DeleteFileAfterImport" type="xs:boolean" />
+      <xs:element minOccurs="0" name="EncodingName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Filter" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ForAnalize" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="Path" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RecursiveFolderSearch" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccountSettingsImportDirectory" nillable="true" type="tns:AccountSettingsImportDirectory" />
+  <xs:complexType name="ArrayOfAccountSettingsSheduleTime">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountSettingsSheduleTime" nillable="true" type="tns:AccountSettingsSheduleTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAccountSettingsSheduleTime" nillable="true" type="tns:ArrayOfAccountSettingsSheduleTime" />
+  <xs:complexType name="AccountSettingsSheduleTime">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="Time" type="ser:duration" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccountSettingsSheduleTime" nillable="true" type="tns:AccountSettingsSheduleTime" />
+  <xs:complexType name="ArrayOfAccountSettings">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountSettings" nillable="true" type="tns:AccountSettings" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAccountSettings" nillable="true" type="tns:ArrayOfAccountSettings" />
+  <xs:complexType name="HistoryRemovePart">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Account" nillable="true" type="q1:ArrayOfguid" />
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettings" nillable="true" type="q2:ArrayOfguid" />
+      <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsColumn" nillable="true" type="q3:ArrayOflong" />
+      <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsExportDirectory" nillable="true" type="q4:ArrayOflong" />
+      <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsImportDirectory" nillable="true" type="q5:ArrayOflong" />
+      <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsSheduleTime" nillable="true" type="q6:ArrayOflong" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="HistoryRemovePart" nillable="true" type="tns:HistoryRemovePart" />
+</xs:schema>

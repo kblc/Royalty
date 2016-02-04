@@ -33,6 +33,18 @@ namespace RoyaltyService.Model
         [DataMember]
         [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettingsColumn), typeof(long))]
         public long[] AccountSettingsColumn { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettingsExportDirectory), typeof(long))]
+        public long[] AccountSettingsExportDirectory { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettingsImportDirectory), typeof(long))]
+        public long[] AccountSettingsImportDirectory { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettingsSheduleTime), typeof(long))]
+        public long[] AccountSettingsSheduleTime { get; set; }
     }
 
     [DataContract]
@@ -47,8 +59,20 @@ namespace RoyaltyService.Model
         public AccountSettings[] AccountSettings { get; set; }
 
         [DataMember]
-        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettingsColumn), typeof(long))]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettingsColumn))]
         public AccountSettingsColumn[] AccountSettingsColumn { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettingsExportDirectory))]
+        public AccountSettingsExportDirectory[] AccountSettingsExportDirectory { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettingsImportDirectory))]
+        public AccountSettingsImportDirectory[] AccountSettingsImportDirectory { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettingsSheduleTime))]
+        public AccountSettingsSheduleTime[] AccountSettingsSheduleTime { get; set; }
     }
 
     [DataContract]

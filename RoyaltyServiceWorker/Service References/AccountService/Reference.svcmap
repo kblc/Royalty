@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="a1b13710-8106-4e8a-878a-e5190a02a048" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8733/royalty/account/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="740aec23-f897-4087-93b3-288c96b30dc6" SourceId="1" SourceUrl="http://localhost:8733/royalty/account/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="50ce1edf-0b26-4ee7-987f-495691eef6f7" SourceId="1" SourceUrl="http://localhost:8733/royalty/account/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="7d1dc82e-8926-4381-a9e1-866ad57b272d" SourceId="1" SourceUrl="http://localhost:8733/royalty/account/mex" />
+    <MetadataFile FileName="RoyaltyService.Model.xsd" MetadataType="Schema" ID="6511c64e-5f8e-4f11-9a77-695255bdef9e" SourceId="1" SourceUrl="http://localhost:8733/royalty/account/mex" />
+    <MetadataFile FileName="RoyaltyService.Services.Account.Result.xsd" MetadataType="Schema" ID="ffe36d1f-d384-4f56-a3b0-cb60b0eec43b" SourceId="1" SourceUrl="http://localhost:8733/royalty/account/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="42f64c2b-e5e2-41d4-8dde-011a7cef5675" SourceId="1" SourceUrl="http://localhost:8733/royalty/account/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

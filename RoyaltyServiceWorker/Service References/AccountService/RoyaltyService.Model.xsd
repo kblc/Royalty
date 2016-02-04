@@ -1,0 +1,374 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="AccountSettingsSheduleTime">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="Time" type="ser:duration" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccountSettingsSheduleTime" nillable="true" type="tns:AccountSettingsSheduleTime" />
+  <xs:complexType name="BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="AccountSettingsSheduleTime" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" nillable="true" type="tns:AccountSettingsSheduleTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf" nillable="true" type="tns:BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf" />
+  <xs:complexType name="Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Result" nillable="true" type="tns:Result" />
+  <xs:complexType name="LongExecutionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:BaseExecutionResultOflong">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LongExecutionResult" nillable="true" type="tns:LongExecutionResult" />
+  <xs:complexType name="BaseExecutionResultOflong">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="long" Namespace="http://www.w3.org/2001/XMLSchema" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" type="xs:long" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultOflong" nillable="true" type="tns:BaseExecutionResultOflong" />
+  <xs:complexType name="LongExecutionResults">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:BaseExecutionResultsOflong">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LongExecutionResults" nillable="true" type="tns:LongExecutionResults" />
+  <xs:complexType name="BaseExecutionResultsOflong">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultsOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="long" Namespace="http://www.w3.org/2001/XMLSchema" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Values" nillable="true" type="q1:ArrayOflong" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultsOflong" nillable="true" type="tns:BaseExecutionResultsOflong" />
+  <xs:complexType name="AccountSettingsExportDirectory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="DirectoryPath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EncodingName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExecuteAfterAnalizeCommand" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="MarkID" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="TimeoutForExecute" type="ser:duration" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccountSettingsExportDirectory" nillable="true" type="tns:AccountSettingsExportDirectory" />
+  <xs:complexType name="BaseExecutionResultOfAccountSettingsExportDirectoryh3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="AccountSettingsExportDirectory" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" nillable="true" type="tns:AccountSettingsExportDirectory" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultOfAccountSettingsExportDirectoryh3e0gNRf" nillable="true" type="tns:BaseExecutionResultOfAccountSettingsExportDirectoryh3e0gNRf" />
+  <xs:complexType name="AccountSettingsImportDirectory">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="DeleteFileAfterImport" type="xs:boolean" />
+      <xs:element minOccurs="0" name="EncodingName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Filter" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ForAnalize" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="Path" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RecursiveFolderSearch" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccountSettingsImportDirectory" nillable="true" type="tns:AccountSettingsImportDirectory" />
+  <xs:complexType name="BaseExecutionResultOfAccountSettingsImportDirectoryh3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="AccountSettingsImportDirectory" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" nillable="true" type="tns:AccountSettingsImportDirectory" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultOfAccountSettingsImportDirectoryh3e0gNRf" nillable="true" type="tns:BaseExecutionResultOfAccountSettingsImportDirectoryh3e0gNRf" />
+  <xs:complexType name="AccountSettingsColumn">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="ColumnName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ColumnTypeID" type="xs:long" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccountSettingsColumn" nillable="true" type="tns:AccountSettingsColumn" />
+  <xs:complexType name="BaseExecutionResultOfAccountSettingsColumnh3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="AccountSettingsColumn" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" nillable="true" type="tns:AccountSettingsColumn" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultOfAccountSettingsColumnh3e0gNRf" nillable="true" type="tns:BaseExecutionResultOfAccountSettingsColumnh3e0gNRf" />
+  <xs:complexType name="BaseExecutionResultsOfMarkh3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultsOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="Mark" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Values" nillable="true" type="tns:ArrayOfMark" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultsOfMarkh3e0gNRf" nillable="true" type="tns:BaseExecutionResultsOfMarkh3e0gNRf" />
+  <xs:complexType name="ArrayOfMark">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Mark" nillable="true" type="tns:Mark" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMark" nillable="true" type="tns:ArrayOfMark" />
+  <xs:complexType name="Mark">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SystemName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Mark" nillable="true" type="tns:Mark" />
+  <xs:complexType name="BaseExecutionResultsOfColumnTypeh3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultsOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="ColumnType" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Values" nillable="true" type="tns:ArrayOfColumnType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultsOfColumnTypeh3e0gNRf" nillable="true" type="tns:BaseExecutionResultsOfColumnTypeh3e0gNRf" />
+  <xs:complexType name="ArrayOfColumnType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ColumnType" nillable="true" type="tns:ColumnType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfColumnType" nillable="true" type="tns:ArrayOfColumnType" />
+  <xs:complexType name="ColumnType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Export" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ExportColumnIndex" type="xs:long" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="ImportRowValidation" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ImportTableValidation" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SystemName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ColumnType" nillable="true" type="tns:ColumnType" />
+  <xs:complexType name="BaseExecutionResultsOfAccounth3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultsOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="Account" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Values" nillable="true" type="tns:ArrayOfAccount" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultsOfAccounth3e0gNRf" nillable="true" type="tns:BaseExecutionResultsOfAccounth3e0gNRf" />
+  <xs:complexType name="ArrayOfAccount">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Account" nillable="true" type="tns:Account" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAccount" nillable="true" type="tns:ArrayOfAccount" />
+  <xs:complexType name="Account">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="ser:guid" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsHidden" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Settings" nillable="true" type="tns:AccountSettings" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Account" nillable="true" type="tns:Account" />
+  <xs:complexType name="AccountSettings">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Columns" nillable="true" type="tns:ArrayOfAccountSettingsColumn" />
+      <xs:element minOccurs="0" name="ExportDirectories" nillable="true" type="tns:ArrayOfAccountSettingsExportDirectory" />
+      <xs:element minOccurs="0" name="Id" type="ser:guid" />
+      <xs:element minOccurs="0" name="IgnoreExportTime" nillable="true" type="ser:duration" />
+      <xs:element minOccurs="0" name="ImportDirectories" nillable="true" type="tns:ArrayOfAccountSettingsImportDirectory" />
+      <xs:element minOccurs="0" name="SheduleTimes" nillable="true" type="tns:ArrayOfAccountSettingsSheduleTime" />
+      <xs:element minOccurs="0" name="TimeForTrust" nillable="true" type="ser:duration" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccountSettings" nillable="true" type="tns:AccountSettings" />
+  <xs:complexType name="ArrayOfAccountSettingsColumn">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountSettingsColumn" nillable="true" type="tns:AccountSettingsColumn" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAccountSettingsColumn" nillable="true" type="tns:ArrayOfAccountSettingsColumn" />
+  <xs:complexType name="ArrayOfAccountSettingsExportDirectory">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountSettingsExportDirectory" nillable="true" type="tns:AccountSettingsExportDirectory" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAccountSettingsExportDirectory" nillable="true" type="tns:ArrayOfAccountSettingsExportDirectory" />
+  <xs:complexType name="ArrayOfAccountSettingsImportDirectory">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountSettingsImportDirectory" nillable="true" type="tns:AccountSettingsImportDirectory" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAccountSettingsImportDirectory" nillable="true" type="tns:ArrayOfAccountSettingsImportDirectory" />
+  <xs:complexType name="ArrayOfAccountSettingsSheduleTime">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountSettingsSheduleTime" nillable="true" type="tns:AccountSettingsSheduleTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAccountSettingsSheduleTime" nillable="true" type="tns:ArrayOfAccountSettingsSheduleTime" />
+  <xs:complexType name="BaseExecutionResultOfAccounth3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="Account" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" nillable="true" type="tns:Account" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultOfAccounth3e0gNRf" nillable="true" type="tns:BaseExecutionResultOfAccounth3e0gNRf" />
+  <xs:complexType name="GuidExecutionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:BaseExecutionResultOfguid">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GuidExecutionResult" nillable="true" type="tns:GuidExecutionResult" />
+  <xs:complexType name="BaseExecutionResultOfguid">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="guid" Namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" type="ser:guid" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultOfguid" nillable="true" type="tns:BaseExecutionResultOfguid" />
+  <xs:complexType name="GuidExecutionResults">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:BaseExecutionResultsOfguid">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GuidExecutionResults" nillable="true" type="tns:GuidExecutionResults" />
+  <xs:complexType name="BaseExecutionResultsOfguid">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultsOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="guid" Namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Values" nillable="true" type="q2:ArrayOfguid" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultsOfguid" nillable="true" type="tns:BaseExecutionResultsOfguid" />
+</xs:schema>

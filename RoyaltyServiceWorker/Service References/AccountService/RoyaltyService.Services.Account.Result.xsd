@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+  <xs:complexType name="AccountSettingsSheduleTimeResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q1:BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AccountSettingsSheduleTimeResult" nillable="true" type="tns:AccountSettingsSheduleTimeResult" />
+  <xs:complexType name="AccountSettingsExportDirectoryResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q2:BaseExecutionResultOfAccountSettingsExportDirectoryh3e0gNRf">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AccountSettingsExportDirectoryResult" nillable="true" type="tns:AccountSettingsExportDirectoryResult" />
+  <xs:complexType name="AccountSettingsImportDirectoryResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q3:BaseExecutionResultOfAccountSettingsImportDirectoryh3e0gNRf">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AccountSettingsImportDirectoryResult" nillable="true" type="tns:AccountSettingsImportDirectoryResult" />
+  <xs:complexType name="AccountSettingsColumnsResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q4="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q4:BaseExecutionResultOfAccountSettingsColumnh3e0gNRf">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AccountSettingsColumnsResult" nillable="true" type="tns:AccountSettingsColumnsResult" />
+  <xs:complexType name="AccountSettingsMarkResults">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q5:BaseExecutionResultsOfMarkh3e0gNRf">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AccountSettingsMarkResults" nillable="true" type="tns:AccountSettingsMarkResults" />
+  <xs:complexType name="AccountSettingsColumnTypeResults">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q6="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q6:BaseExecutionResultsOfColumnTypeh3e0gNRf">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AccountSettingsColumnTypeResults" nillable="true" type="tns:AccountSettingsColumnTypeResults" />
+  <xs:complexType name="AccountResults">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q7="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q7:BaseExecutionResultsOfAccounth3e0gNRf">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AccountResults" nillable="true" type="tns:AccountResults" />
+  <xs:complexType name="AccountResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q8="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q8:BaseExecutionResultOfAccounth3e0gNRf">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AccountResult" nillable="true" type="tns:AccountResult" />
+</xs:schema>
