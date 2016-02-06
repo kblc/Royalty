@@ -70,6 +70,15 @@ namespace RoyaltyService.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Series of numbers not found..
+        /// </summary>
+        public static string SERVICES_ACCOUNT_AccountSeriesOfNumbersRecordNotFound {
+            get {
+                return ResourceManager.GetString("SERVICES_ACCOUNT_AccountSeriesOfNumbersRecordNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account not found..
         /// </summary>
         public static string SERVICES_FILE_AccountNotFound {

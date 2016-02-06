@@ -12,10 +12,21 @@ namespace RoyaltyServiceWorker
 {
     public class AccountWorker : AbstractBaseWorker
     {
+        static AccountWorker()
+        {
+            AutoMapper.Mapper.CreateMap<HistoryService.Account, AccountService.Account>();
+            AutoMapper.Mapper.CreateMap<HistoryService.AccountSettings, AccountService.AccountSettings>();
+            AutoMapper.Mapper.CreateMap<HistoryService.AccountSettingsColumn, AccountService.AccountSettingsColumn>();
+            AutoMapper.Mapper.CreateMap<HistoryService.AccountSettingsExportDirectory, AccountService.AccountSettingsExportDirectory>();
+            AutoMapper.Mapper.CreateMap<HistoryService.AccountSettingsImportDirectory, AccountService.AccountSettingsImportDirectory>();
+            AutoMapper.Mapper.CreateMap<HistoryService.AccountSettingsSheduleTime, AccountService.AccountSettingsSheduleTime>();
+        }
+
         private Thread initThread = null;
         private CancellationTokenSource stopCancellationTokenSource = null;
 
         private readonly List<AccountService.Account> Accounts = new List<AccountService.Account>();
+        private readonly List<AccountService.Mark> Marks = new List<AccountService.Mark>();
 
         protected override bool DoStart()
         {
@@ -65,39 +76,43 @@ namespace RoyaltyServiceWorker
 
             #region Infinity try to connect then init and exit
 
-            var checkAggregateExceptions = new Func<Type, AggregateException, bool>((t, ex) =>
-            {
-                var res = true;
-                if (ex != null)
-                    foreach (var e in ex.InnerExceptions)
-                    {
-                        SetError(e);
-                        res = false;
-                    }
-                return res;
-            });
-
             do
             {
                 try
                 {
                     using (var sClient = new AccountService.AccountServiceClient())
                     {
-                        var getAccountTask = sClient.GetAllAsync();
-                        var applyGetAccountResultTask = getAccountTask.ContinueWith((res) => 
+                        var getAccountsTask = sClient.GetAllAsync();
+                        var getAccountsResTask = getAccountsTask.ContinueWith(res => 
                         {
+                            stopCancellationTokenSource.Token.ThrowIfCancellationRequested();
                             if (res.Result.Error != null)
                                 throw new Exception(res.Result.Error);
-
-                            modelLevelThContext.DoCallBack(() => RaiseAccountInitialize(res.Result.Values.ToArray()));
+                            return res.Result.Values;
                         }, stopCancellationTokenSource.Token, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
 
-                        getAccountTask.Wait(stopCancellationTokenSource.Token);
-                        applyGetAccountResultTask.Wait(stopCancellationTokenSource.Token);
+                        var getMarksTask = sClient.GetColumnMarksAsync();
+                        var getMarksResTask = getMarksTask.ContinueWith(res =>
+                        {
+                            stopCancellationTokenSource.Token.ThrowIfCancellationRequested();
+                            if (res.Result.Error != null)
+                                throw new Exception(res.Result.Error);
+                            return res.Result.Values;
+                        }, stopCancellationTokenSource.Token, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
+
+                        Task.WaitAll(new Task[] { getAccountsTask, getMarksTask }, stopCancellationTokenSource.Token);
+                        Task.WaitAll(new Task[] { getAccountsResTask, getMarksResTask }, stopCancellationTokenSource.Token);
+
+                        modelLevelThContext.DoCallBack(() => RaiseAccountInitialize(getAccountsResTask.Result.ToArray()));
+                        modelLevelThContext.DoCallBack(() => RaiseMarkInitialize(getMarksResTask.Result.ToArray()));
 
                         inited = true;
                         SetError((string)null);
                     }
+                }
+                catch(ThreadAbortException ex)
+                {
+                    throw ex;
                 }
                 catch (Exception ex)
                 {
@@ -113,11 +128,43 @@ namespace RoyaltyServiceWorker
 
         private void RaiseAccountInitialize(AccountService.Account[] accounts)
         {
+            AccountService.Account[] oldAccounts = new AccountService.Account[] { };
+            lock (Accounts)
+            {
+                oldAccounts = Accounts.ToArray();
+                Accounts.Clear();
+            }
+
+            if (oldAccounts.Length > 0)
+                OnAccountsChanged(this, new ListItemsEventArgs<AccountService.Account>(oldAccounts, ChangeAction.Remove));
+
             lock(Accounts)
             {
-                Accounts.Clear();
                 Accounts.AddRange(accounts);
             }
+
+            if (accounts.Length > 0)
+                OnAccountsChanged(this, new ListItemsEventArgs<AccountService.Account>(accounts, ChangeAction.Add));
+        }
+        private void RaiseMarkInitialize(AccountService.Mark[] marks)
+        {
+            var oldMarks = new AccountService.Mark[] { };
+            lock (Marks)
+            {
+                oldMarks = Marks.ToArray();
+                Marks.Clear();
+            }
+
+            if (oldMarks.Length > 0)
+                OnMarksChanged(this, ListItemsEventArgs.Create(oldMarks, ChangeAction.Remove));
+
+            lock (Accounts)
+            {
+                Marks.AddRange(marks);
+            }
+
+            if (marks.Length > 0)
+                OnMarksChanged(this, ListItemsEventArgs.Create(marks, ChangeAction.Add));
         }
 
         public void ApplyHistoryChanges(HistoryService.History e)
@@ -138,7 +185,11 @@ namespace RoyaltyServiceWorker
                 return;
 
             ApplyHistoryUpdateAccount(change.Account);
+            ApplyHistoryUpdateAccountSettings(change.AccountSettings);
             ApplyHistoryUpdateAccountSettingsColumn(change.AccountSettingsColumn);
+            ApplyHistoryUpdateAccountSettingsExportDirectory(change.AccountSettingsExportDirectory);
+            ApplyHistoryUpdateAccountSettingsImportDirectory(change.AccountSettingsImportDirectory);
+            ApplyHistoryUpdateAccountSettingsSheduleTime(change.AccountSettingsSheduleTime);
         }
 
         private void ApplyHistoryUpdateAccount(IEnumerable<HistoryService.Account> items)
@@ -176,6 +227,33 @@ namespace RoyaltyServiceWorker
                 OnAccountsChanged(this, new ListItemsEventArgs<AccountService.Account>(itemsToInsert.ToArray(), ChangeAction.Add));
         }
 
+        private void ApplyHistoryUpdateAccountSettings(IEnumerable<HistoryService.AccountSettings> items)
+        {
+            if (items == null || !items.Any()) return;
+
+            var innerItems = items.Select(i => AutoMapper.Mapper.Map<AccountService.AccountSettings>(i));
+            var itemsToUpdate = new List<AccountService.Account>();
+
+            lock (Accounts)
+            {
+                var upd = Accounts
+                    .Join(innerItems, a => a.Id, a => a.Id, (ExistedAccount, UpdateSettings) => new { ExistedAccount, UpdateSettings })
+                    .ToArray();
+
+                foreach (var i in upd)
+                {
+                    if (i.ExistedAccount.Settings == null)
+                        i.ExistedAccount.Settings = i.UpdateSettings;
+                    else
+                        i.ExistedAccount.Settings.CopyObjectFrom(i.UpdateSettings);
+                    itemsToUpdate.Add(i.ExistedAccount);
+                }
+            }
+
+            if (itemsToUpdate.Count > 0)
+                OnAccountsChanged(this, new ListItemsEventArgs<AccountService.Account>(itemsToUpdate.ToArray(), ChangeAction.Change));
+        }
+
         private void ApplyHistoryUpdateAccountSettingsColumn(IEnumerable<HistoryService.AccountSettingsColumn> items)
         {
             if (items == null || !items.Any()) return;
@@ -206,6 +284,129 @@ namespace RoyaltyServiceWorker
                     {
                         if (c.Existed == null)
                             a.Account.Settings.Columns.Add(c.Update);
+                        else
+                            c.Existed.CopyObjectFrom(c.Update);
+                    }
+                    itemsToUpdate.Add(a.Account);
+                }
+            }
+
+            if (itemsToUpdate.Count > 0)
+                OnAccountsChanged(this, new ListItemsEventArgs<AccountService.Account>(itemsToUpdate.ToArray(), ChangeAction.Change));
+        }
+
+        private void ApplyHistoryUpdateAccountSettingsExportDirectory(IEnumerable<HistoryService.AccountSettingsExportDirectory> items)
+        {
+            if (items == null || !items.Any()) return;
+
+            var updItems = items.Select(i => AutoMapper.Mapper.Map<AccountService.AccountSettingsExportDirectory>(i));
+            var itemsToUpdate = new List<AccountService.Account>();
+
+            lock (Accounts)
+            {
+                var upd = updItems
+                    .Join(Accounts, a => a.AccountUID, a => a.Id, (Update, Account) => new { Update, Account })
+                    .Select(i => new
+                    {
+                        i.Update,
+                        i.Account,
+                        Existed = i.Account
+                            .Settings
+                            .ExportDirectories
+                            .FirstOrDefault(c => c.Id == i.Update.Id)
+                    })
+                    .GroupBy(i => i.Account)
+                    .Select(g => new { Account = g.Key, Directories = g.Select(i => new { i.Existed, i.Update }).ToArray() })
+                    .ToArray();
+
+                foreach (var a in upd)
+                {
+                    foreach (var c in a.Directories)
+                    {
+                        if (c.Existed == null)
+                            a.Account.Settings.ExportDirectories.Add(c.Update);
+                        else
+                            c.Existed.CopyObjectFrom(c.Update);
+                    }
+                    itemsToUpdate.Add(a.Account);
+                }
+            }
+
+            if (itemsToUpdate.Count > 0)
+                OnAccountsChanged(this, new ListItemsEventArgs<AccountService.Account>(itemsToUpdate.ToArray(), ChangeAction.Change));
+        }
+
+        private void ApplyHistoryUpdateAccountSettingsImportDirectory(IEnumerable<HistoryService.AccountSettingsImportDirectory> items)
+        {
+            if (items == null || !items.Any()) return;
+
+            var updItems = items.Select(i => AutoMapper.Mapper.Map<AccountService.AccountSettingsImportDirectory>(i));
+            var itemsToUpdate = new List<AccountService.Account>();
+
+            lock (Accounts)
+            {
+                var upd = updItems
+                    .Join(Accounts, a => a.AccountUID, a => a.Id, (Update, Account) => new { Update, Account })
+                    .Select(i => new
+                    {
+                        i.Update,
+                        i.Account,
+                        Existed = i.Account
+                            .Settings
+                            .ImportDirectories
+                            .FirstOrDefault(c => c.Id == i.Update.Id)
+                    })
+                    .GroupBy(i => i.Account)
+                    .Select(g => new { Account = g.Key, Directories = g.Select(i => new { i.Existed, i.Update }).ToArray() })
+                    .ToArray();
+
+                foreach (var a in upd)
+                {
+                    foreach (var c in a.Directories)
+                    {
+                        if (c.Existed == null)
+                            a.Account.Settings.ImportDirectories.Add(c.Update);
+                        else
+                            c.Existed.CopyObjectFrom(c.Update);
+                    }
+                    itemsToUpdate.Add(a.Account);
+                }
+            }
+
+            if (itemsToUpdate.Count > 0)
+                OnAccountsChanged(this, new ListItemsEventArgs<AccountService.Account>(itemsToUpdate.ToArray(), ChangeAction.Change));
+        }
+
+        private void ApplyHistoryUpdateAccountSettingsSheduleTime(IEnumerable<HistoryService.AccountSettingsSheduleTime> items)
+        {
+            if (items == null || !items.Any()) return;
+
+            var updItems = items.Select(i => AutoMapper.Mapper.Map<AccountService.AccountSettingsSheduleTime>(i));
+            var itemsToUpdate = new List<AccountService.Account>();
+
+            lock (Accounts)
+            {
+                var upd = updItems
+                    .Join(Accounts, a => a.AccountUID, a => a.Id, (Update, Account) => new { Update, Account })
+                    .Select(i => new
+                    {
+                        i.Update,
+                        i.Account,
+                        Existed = i.Account
+                            .Settings
+                            .SheduleTimes
+                            .FirstOrDefault(c => c.Id == i.Update.Id)
+                    })
+                    .GroupBy(i => i.Account)
+                    .Select(g => new { Account = g.Key, Directories = g.Select(i => new { i.Existed, i.Update }).ToArray() })
+                    .ToArray();
+
+                foreach (var a in upd)
+                {
+                    foreach (var c in a.Directories)
+                    {
+                        if (c.Existed == null)
+                            a.Account.Settings.SheduleTimes.Add(c.Update);
                         else
                             c.Existed.CopyObjectFrom(c.Update);
                     }
@@ -344,6 +545,22 @@ namespace RoyaltyServiceWorker
 
         #endregion
 
+        public AccountService.Account[] GetAccounts()
+        {
+            lock(Accounts)
+            {
+                return Accounts.ToArray();
+            }
+        }
+        public AccountService.Mark[] GetMarks()
+        {
+            lock (Marks)
+            {
+                return Marks.ToArray();
+            }
+        }
+
         public event EventHandler<ListItemsEventArgs<AccountService.Account>> OnAccountsChanged;
+        public event EventHandler<ListItemsEventArgs<AccountService.Mark>> OnMarksChanged;
     }
 }

@@ -115,6 +115,272 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_GetSeriesOfNumbers_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_GetSeriesOfNumbers_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_PutSeriesOfNumbers_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_PutSeriesOfNumbers_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_UpdateSeriesOfNumbers_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_UpdateSeriesOfNumbers_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_RemoveSeriesOfNumbers_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_RemoveSeriesOfNumbers_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_RemoveSeriesOfNumbersRange_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_RemoveSeriesOfNumbersRange_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_RESTSettingsUpdate_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_RESTSettingsUpdate_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_SettingsUpdate_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_SettingsUpdate_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_SettingsSheduleTimePut_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -1069,13 +1335,43 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IAccountServiceREST_ChangeLanguage_InputMessage">
     <wsdl:part name="parameters" element="tns:ChangeLanguage" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTGetSeriesOfNumbers_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTGetSeriesOfNumbers" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTGetSeriesOfNumbers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTGetSeriesOfNumbersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTPutSeriesOfNumbers_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTPutSeriesOfNumbers" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTPutSeriesOfNumbers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTPutSeriesOfNumbersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTUpdateSeriesOfNumbers_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTUpdateSeriesOfNumbers" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTUpdateSeriesOfNumbers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTUpdateSeriesOfNumbersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTRemoveSeriesOfNumbers_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTRemoveSeriesOfNumbers" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTRemoveSeriesOfNumbers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTRemoveSeriesOfNumbersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTRemoveSeriesOfNumbersRange_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTRemoveSeriesOfNumbersRange" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTRemoveSeriesOfNumbersRange_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTRemoveSeriesOfNumbersRangeResponse" />
   </wsdl:message>
   <wsdl:message name="IAccountServiceREST_RESTSettingsSheduleTimePut_InputMessage">
     <wsdl:part name="parameters" element="tns:RESTSettingsSheduleTimePut" />
@@ -1226,6 +1522,48 @@
   </wsdl:message>
   <wsdl:message name="IAccountServiceREST_RESTRemoveRange_OutputMessage">
     <wsdl:part name="parameters" element="tns:RESTRemoveRangeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_GetSeriesOfNumbers_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSeriesOfNumbers" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_GetSeriesOfNumbers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSeriesOfNumbersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_PutSeriesOfNumbers_InputMessage">
+    <wsdl:part name="parameters" element="tns:PutSeriesOfNumbers" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_PutSeriesOfNumbers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PutSeriesOfNumbersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_UpdateSeriesOfNumbers_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateSeriesOfNumbers" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_UpdateSeriesOfNumbers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateSeriesOfNumbersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_RemoveSeriesOfNumbers_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveSeriesOfNumbers" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_RemoveSeriesOfNumbers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveSeriesOfNumbersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_RemoveSeriesOfNumbersRange_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveSeriesOfNumbersRange" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_RemoveSeriesOfNumbersRange_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveSeriesOfNumbersRangeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_RESTSettingsUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTSettingsUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_RESTSettingsUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTSettingsUpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_SettingsUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:SettingsUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_SettingsUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SettingsUpdateResponse" />
   </wsdl:message>
   <wsdl:message name="IAccountService_SettingsSheduleTimePut_InputMessage">
     <wsdl:part name="parameters" element="tns:SettingsSheduleTimePut" />
@@ -1381,6 +1719,26 @@
     <wsdl:operation name="ChangeLanguage">
       <wsdl:input wsaw:Action="http://tempuri.org/IBaseService/ChangeLanguage" message="tns:IAccountServiceREST_ChangeLanguage_InputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="RESTGetSeriesOfNumbers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTGetSeriesOfNumbers" message="tns:IAccountServiceREST_RESTGetSeriesOfNumbers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTGetSeriesOfNumbersResponse" message="tns:IAccountServiceREST_RESTGetSeriesOfNumbers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RESTPutSeriesOfNumbers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTPutSeriesOfNumbers" message="tns:IAccountServiceREST_RESTPutSeriesOfNumbers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTPutSeriesOfNumbersResponse" message="tns:IAccountServiceREST_RESTPutSeriesOfNumbers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RESTUpdateSeriesOfNumbers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTUpdateSeriesOfNumbers" message="tns:IAccountServiceREST_RESTUpdateSeriesOfNumbers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTUpdateSeriesOfNumbersResponse" message="tns:IAccountServiceREST_RESTUpdateSeriesOfNumbers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RESTRemoveSeriesOfNumbers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemoveSeriesOfNumbers" message="tns:IAccountServiceREST_RESTRemoveSeriesOfNumbers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemoveSeriesOfNumbersResponse" message="tns:IAccountServiceREST_RESTRemoveSeriesOfNumbers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RESTRemoveSeriesOfNumbersRange">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemoveSeriesOfNumbersRange" message="tns:IAccountServiceREST_RESTRemoveSeriesOfNumbersRange_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemoveSeriesOfNumbersRangeResponse" message="tns:IAccountServiceREST_RESTRemoveSeriesOfNumbersRange_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="RESTSettingsSheduleTimePut">
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTSettingsSheduleTimePut" message="tns:IAccountServiceREST_RESTSettingsSheduleTimePut_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTSettingsSheduleTimePutResponse" message="tns:IAccountServiceREST_RESTSettingsSheduleTimePut_OutputMessage" />
@@ -1485,6 +1843,34 @@
   <wsdl:portType name="IAccountService">
     <wsdl:operation name="ChangeLanguage">
       <wsdl:input wsaw:Action="http://tempuri.org/IBaseService/ChangeLanguage" message="tns:IAccountServiceREST_ChangeLanguage_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSeriesOfNumbers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/GetSeriesOfNumbers" message="tns:IAccountService_GetSeriesOfNumbers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/GetSeriesOfNumbersResponse" message="tns:IAccountService_GetSeriesOfNumbers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PutSeriesOfNumbers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/PutSeriesOfNumbers" message="tns:IAccountService_PutSeriesOfNumbers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/PutSeriesOfNumbersResponse" message="tns:IAccountService_PutSeriesOfNumbers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSeriesOfNumbers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/UpdateSeriesOfNumbers" message="tns:IAccountService_UpdateSeriesOfNumbers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/UpdateSeriesOfNumbersResponse" message="tns:IAccountService_UpdateSeriesOfNumbers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveSeriesOfNumbers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/RemoveSeriesOfNumbers" message="tns:IAccountService_RemoveSeriesOfNumbers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/RemoveSeriesOfNumbersResponse" message="tns:IAccountService_RemoveSeriesOfNumbers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveSeriesOfNumbersRange">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/RemoveSeriesOfNumbersRange" message="tns:IAccountService_RemoveSeriesOfNumbersRange_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/RemoveSeriesOfNumbersRangeResponse" message="tns:IAccountService_RemoveSeriesOfNumbersRange_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RESTSettingsUpdate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/RESTSettingsUpdate" message="tns:IAccountService_RESTSettingsUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/RESTSettingsUpdateResponse" message="tns:IAccountService_RESTSettingsUpdate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SettingsUpdate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/SettingsUpdate" message="tns:IAccountService_SettingsUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/SettingsUpdateResponse" message="tns:IAccountService_SettingsUpdate_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SettingsSheduleTimePut">
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/SettingsSheduleTimePut" message="tns:IAccountService_SettingsSheduleTimePut_InputMessage" />
@@ -1596,6 +1982,83 @@
         <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_ChangeLanguage_Input_policy" />
         <soap12:body use="literal" />
       </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="GetSeriesOfNumbers">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/GetSeriesOfNumbers" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_GetSeriesOfNumbers_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_GetSeriesOfNumbers_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PutSeriesOfNumbers">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/PutSeriesOfNumbers" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_PutSeriesOfNumbers_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_PutSeriesOfNumbers_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSeriesOfNumbers">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/UpdateSeriesOfNumbers" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_UpdateSeriesOfNumbers_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_UpdateSeriesOfNumbers_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveSeriesOfNumbers">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/RemoveSeriesOfNumbers" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RemoveSeriesOfNumbers_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RemoveSeriesOfNumbers_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveSeriesOfNumbersRange">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/RemoveSeriesOfNumbersRange" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RemoveSeriesOfNumbersRange_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RemoveSeriesOfNumbersRange_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RESTSettingsUpdate">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/RESTSettingsUpdate" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RESTSettingsUpdate_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RESTSettingsUpdate_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SettingsUpdate">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/SettingsUpdate" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_SettingsUpdate_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_SettingsUpdate_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SettingsSheduleTimePut">
       <soap12:operation soapAction="http://tempuri.org/IAccountService/SettingsSheduleTimePut" style="document" />

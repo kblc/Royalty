@@ -32,7 +32,7 @@ namespace RoyaltyRepository.Models
         /// Идентификатор аккаунта, которому принадлежат данные
         /// </summary>
         [ForeignKey("Account"), Column("account_uid"), Index("IX_DATA_ACCOUNT_UID", IsUnique = false), Required]
-        public Guid AccountID { get; set; }
+        public Guid AccountUID { get; set; }
         /// <summary>
         /// Аккаунт, которому принадлежат данные
         /// </summary>

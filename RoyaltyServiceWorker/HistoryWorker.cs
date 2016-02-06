@@ -104,7 +104,7 @@ namespace RoyaltyServiceWorker
                                 eventId = initRes.Value.EventId;
                                 inited = true;
                                 IsLoaded = true;
-                                SetError(string.Empty);
+                                SetError((string)null);
                             }
                             else
                             {
@@ -129,7 +129,7 @@ namespace RoyaltyServiceWorker
                                 if (string.IsNullOrEmpty(initRes.Error))
                                 {
                                     eventId = initRes.Value.EventId;
-                                    SetError(string.Empty);
+                                    SetError((string)null);
                                     RaiseHistoryChanged(initRes.Value);
                                 }
                                 else
@@ -138,11 +138,19 @@ namespace RoyaltyServiceWorker
                                     Thread.Sleep(ConnectionTimeInterval);
                                 }
                             }
+                            catch (ThreadAbortException ex)
+                            {
+                                throw ex;
+                            }
                             catch (TimeoutException)
                             {
                                 IsConnecting = false;
                             }
                     }
+                }
+                catch (ThreadAbortException ex)
+                {
+                    throw ex;
                 }
                 catch (Exception ex)
                 {

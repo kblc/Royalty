@@ -120,6 +120,9 @@
   <data name="BASESERVICES_BadIdentifierFormat" xml:space="preserve">
     <value>Идентификатор имеет неверный формат.</value>
   </data>
+  <data name="SERVICES_ACCOUNT_AccountSeriesOfNumbersRecordNotFound" xml:space="preserve">
+    <value>Серия номеров не найдена. Дополнительная информация во внутренних данных.</value>
+  </data>
   <data name="SERVICES_FILE_AccountNotFound" xml:space="preserve">
     <value>Аккаунт не найден. Дополнительная информация во внутренних данных.</value>
   </data>

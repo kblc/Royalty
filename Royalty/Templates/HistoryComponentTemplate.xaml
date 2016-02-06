@@ -1,0 +1,40 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:components="clr-namespace:Royalty.Components">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Royalty;component/Themes/Generic.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
+    <DataTemplate x:Key="HistoryComponentTemplate" DataType="{x:Type components:HistoryComponent}">
+        <Border Background="{StaticResource ErrorBrush}"
+                ToolTip="{Binding Error}"
+                ToolTipService.IsEnabled="True"
+                x:Name="PART_HistoryBackground">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="0.6*"/>
+                    <RowDefinition Height="0.2*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.6*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                </Grid.ColumnDefinitions>
+                <ProgressBar IsIndeterminate="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                             Grid.Column="1" Grid.Row="1" x:Name="PART_HistoryProgressBar"/>
+            </Grid>
+        </Border>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Error}" Value="{x:Null}">
+                <Setter TargetName="PART_HistoryBackground" Property="Background" Value="Transparent"/>
+                <Setter TargetName="PART_HistoryBackground" Property="ToolTipService.IsEnabled" Value="False"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsWaiting}" Value="False">
+                <Setter TargetName="PART_HistoryBackground" Property="Background" Value="{StaticResource ErrorBrush}"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+    
+</ResourceDictionary>

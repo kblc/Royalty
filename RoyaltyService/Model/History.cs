@@ -45,6 +45,10 @@ namespace RoyaltyService.Model
         [DataMember]
         [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettingsSheduleTime), typeof(long))]
         public long[] AccountSettingsSheduleTime { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSeriesOfNumbersRecord), typeof(long))]
+        public long[] AccountSeriesOfNumbersRecord { get; set; }
     }
 
     [DataContract]
@@ -73,6 +77,10 @@ namespace RoyaltyService.Model
         [DataMember]
         [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSettingsSheduleTime))]
         public AccountSettingsSheduleTime[] AccountSettingsSheduleTime { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSeriesOfNumbersRecord))]
+        public AccountSeriesOfNumbersRecord[] AccountSeriesOfNumbersRecord { get; set; }
     }
 
     [DataContract]

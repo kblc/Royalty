@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\ServicesConfigSection.cs" />
+    <Compile Include="Model\AccountSeriesOfNumbersRecord.cs" />
     <Compile Include="Model\AccountSettingsSheduleTime.cs" />
     <Compile Include="Model\AccountSettingsExportDirectory.cs" />
     <Compile Include="Model\AccountSettingsImportDirectory.cs" />
@@ -80,6 +81,10 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Services\Account\AccountService.SeriesOfNumbersREST.cs" />
+    <Compile Include="Services\Account\AccountService.SeriesOfNumbers.cs" />
+    <Compile Include="Services\Account\AccountService.SettingsREST.cs" />
+    <Compile Include="Services\Account\AccountService.Settings.cs" />
     <Compile Include="Services\Account\AccountService.Settings.SheduleTimeREST.cs" />
     <Compile Include="Services\Account\AccountService.Settings.SheduleTime.cs" />
     <Compile Include="Services\Account\AccountService.Settings.ExportDirectory.cs" />
@@ -92,6 +97,10 @@
     <Compile Include="Services\Account\AccountService.Settings.Mark.cs" />
     <Compile Include="Services\Account\AccountService.Settings.ColumnTypeREST.cs" />
     <Compile Include="Services\Account\AccountService.Settings.ColumnType.cs" />
+    <Compile Include="Services\Account\IAccountService.SeriesOfNumbersREST.cs" />
+    <Compile Include="Services\Account\IAccountService.SeriesOfNumbers.cs" />
+    <Compile Include="Services\Account\IAccountService.SettingsREST.cs" />
+    <Compile Include="Services\Account\IAccountService.Settings.cs" />
     <Compile Include="Services\Account\IAccountService.Settings.SheduleTimeREST.cs" />
     <Compile Include="Services\Account\IAccountService.Settings.SheduleTime.cs" />
     <Compile Include="Services\Account\IAccountService.Settings.ExportDirectory.cs" />
@@ -103,6 +112,8 @@
     <Compile Include="Services\Account\IAccountService.Settings.MarkREST.cs" />
     <Compile Include="Services\Account\IAccountService.Settings.Mark.cs" />
     <Compile Include="Services\Account\IAccountService.Settings.ColumnTypeREST.cs" />
+    <Compile Include="Services\Account\Result\Account.SeriesOfNumbersRecord.ExecutionResult.cs" />
+    <Compile Include="Services\Account\Result\Account.Settings.ExecutionResult.cs" />
     <Compile Include="Services\Account\Result\Account.Settings.SheduleTime.ExecutionResult.cs" />
     <Compile Include="Services\Account\Result\Account.Settings.ImportDirectory.ExecutionResult.cs" />
     <Compile Include="Services\Account\Result\Account.Settings.ExportDirectory.ExecutionResult.cs" />

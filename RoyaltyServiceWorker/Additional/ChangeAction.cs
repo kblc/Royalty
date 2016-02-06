@@ -24,4 +24,12 @@ namespace RoyaltyServiceWorker.Additional
             Action = action;
         }
     }
+
+    public class ListItemsEventArgs
+    {
+        public static ListItemsEventArgs<T> Create<T>(T[] items, ChangeAction action)
+        {
+            return new ListItemsEventArgs<T>(items, action);
+        }
+    }
 }

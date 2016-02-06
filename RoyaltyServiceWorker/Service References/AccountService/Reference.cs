@@ -15,89 +15,16 @@ namespace RoyaltyServiceWorker.AccountService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="AccountSettingsSheduleTime", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
-    [System.SerializableAttribute()]
-    public partial class AccountSettingsSheduleTime : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Guid AccountUIDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private long IdField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.TimeSpan TimeField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid AccountUID {
-            get {
-                return this.AccountUIDField;
-            }
-            set {
-                if ((this.AccountUIDField.Equals(value) != true)) {
-                    this.AccountUIDField = value;
-                    this.RaisePropertyChanged("AccountUID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public long Id {
-            get {
-                return this.IdField;
-            }
-            set {
-                if ((this.IdField.Equals(value) != true)) {
-                    this.IdField = value;
-                    this.RaisePropertyChanged("Id");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.TimeSpan Time {
-            get {
-                return this.TimeField;
-            }
-            set {
-                if ((this.TimeField.Equals(value) != true)) {
-                    this.TimeField = value;
-                    this.RaisePropertyChanged("Time");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Result", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
     [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOflong))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.LongExecutionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOflong))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.LongExecutionResults))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTimeResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSettingsExportDirectoryh3e0gNRf))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSettingsExportDirectoryResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSettingsImportDirectoryh3e0gNRf))]
@@ -116,8 +43,10 @@ namespace RoyaltyServiceWorker.AccountService {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.GuidExecutionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfguid))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.GuidExecutionResults))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTimeResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSettingsh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSettingsResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults))]
     public partial class Result : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
@@ -157,6 +86,37 @@ namespace RoyaltyServiceWorker.AccountService {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult))]
+    public partial class BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountSeriesOfNumbersRecordResult", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.SerializableAttribute()]
+    public partial class AccountSeriesOfNumbersRecordResult : RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -219,6 +179,37 @@ namespace RoyaltyServiceWorker.AccountService {
     [System.Runtime.Serialization.DataContractAttribute(Name="LongExecutionResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
     [System.SerializableAttribute()]
     public partial class LongExecutionResults : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOflong {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTimeResult))]
+    public partial class BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTime ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTime Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountSettingsSheduleTimeResult", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.SerializableAttribute()]
+    public partial class AccountSettingsSheduleTimeResult : RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -502,16 +493,16 @@ namespace RoyaltyServiceWorker.AccountService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultOfAccountSettingsh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
     [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTimeResult))]
-    public partial class BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSettingsResult))]
+    public partial class BaseExecutionResultOfAccountSettingsh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTime ValueField;
+        private RoyaltyServiceWorker.AccountService.AccountSettings ValueField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTime Value {
+        public RoyaltyServiceWorker.AccountService.AccountSettings Value {
             get {
                 return this.ValueField;
             }
@@ -526,9 +517,210 @@ namespace RoyaltyServiceWorker.AccountService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="AccountSettingsSheduleTimeResult", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountSettingsResult", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
     [System.SerializableAttribute()]
-    public partial class AccountSettingsSheduleTimeResult : RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf {
+    public partial class AccountSettingsResult : RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSettingsh3e0gNRf {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults))]
+    public partial class BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord> ValuesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord> Values {
+            get {
+                return this.ValuesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValuesField, value) != true)) {
+                    this.ValuesField = value;
+                    this.RaisePropertyChanged("Values");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountSeriesOfNumbersRecordResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.SerializableAttribute()]
+    public partial class AccountSeriesOfNumbersRecordResults : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountSeriesOfNumbersRecord", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class AccountSeriesOfNumbersRecord : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.Guid> AccountUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.TimeSpan DelayField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long DigitCountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long IdField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.Guid> AccountUID {
+            get {
+                return this.AccountUIDField;
+            }
+            set {
+                if ((this.AccountUIDField.Equals(value) != true)) {
+                    this.AccountUIDField = value;
+                    this.RaisePropertyChanged("AccountUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.TimeSpan Delay {
+            get {
+                return this.DelayField;
+            }
+            set {
+                if ((this.DelayField.Equals(value) != true)) {
+                    this.DelayField = value;
+                    this.RaisePropertyChanged("Delay");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long DigitCount {
+            get {
+                return this.DigitCountField;
+            }
+            set {
+                if ((this.DigitCountField.Equals(value) != true)) {
+                    this.DigitCountField = value;
+                    this.RaisePropertyChanged("DigitCount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountSettingsSheduleTime", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class AccountSettingsSheduleTime : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid AccountUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.TimeSpan TimeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid AccountUID {
+            get {
+                return this.AccountUIDField;
+            }
+            set {
+                if ((this.AccountUIDField.Equals(value) != true)) {
+                    this.AccountUIDField = value;
+                    this.RaisePropertyChanged("AccountUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.TimeSpan Time {
+            get {
+                return this.TimeField;
+            }
+            set {
+                if ((this.TimeField.Equals(value) != true)) {
+                    this.TimeField = value;
+                    this.RaisePropertyChanged("Time");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -1416,6 +1608,36 @@ namespace RoyaltyServiceWorker.AccountService {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IBaseService/ChangeLanguage")]
         System.Threading.Tasks.Task ChangeLanguageAsync(string codename);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTGetSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTGetSeriesOfNumbersResponse")]
+        RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults RESTGetSeriesOfNumbers(string accountId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTGetSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTGetSeriesOfNumbersResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults> RESTGetSeriesOfNumbersAsync(string accountId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTPutSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTPutSeriesOfNumbersResponse")]
+        RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult RESTPutSeriesOfNumbers(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTPutSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTPutSeriesOfNumbersResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult> RESTPutSeriesOfNumbersAsync(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTUpdateSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTUpdateSeriesOfNumbersResponse")]
+        RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult RESTUpdateSeriesOfNumbers(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTUpdateSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTUpdateSeriesOfNumbersResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult> RESTUpdateSeriesOfNumbersAsync(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveSeriesOfNumbersResponse")]
+        RoyaltyServiceWorker.AccountService.LongExecutionResult RESTRemoveSeriesOfNumbers(string identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveSeriesOfNumbersResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResult> RESTRemoveSeriesOfNumbersAsync(string identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveSeriesOfNumbersRange", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveSeriesOfNumbersRangeResponse")]
+        RoyaltyServiceWorker.AccountService.LongExecutionResults RESTRemoveSeriesOfNumbersRange(System.Collections.Generic.List<string> identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveSeriesOfNumbersRange", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveSeriesOfNumbersRangeResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RESTRemoveSeriesOfNumbersRangeAsync(System.Collections.Generic.List<string> identifier);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTSettingsSheduleTimePut", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTSettingsSheduleTimePutResponse")]
         RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTimeResult RESTSettingsSheduleTimePut(RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTime item);
         
@@ -1606,6 +1828,46 @@ namespace RoyaltyServiceWorker.AccountService {
         
         public System.Threading.Tasks.Task ChangeLanguageAsync(string codename) {
             return base.Channel.ChangeLanguageAsync(codename);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults RESTGetSeriesOfNumbers(string accountId) {
+            return base.Channel.RESTGetSeriesOfNumbers(accountId);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults> RESTGetSeriesOfNumbersAsync(string accountId) {
+            return base.Channel.RESTGetSeriesOfNumbersAsync(accountId);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult RESTPutSeriesOfNumbers(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item) {
+            return base.Channel.RESTPutSeriesOfNumbers(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult> RESTPutSeriesOfNumbersAsync(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item) {
+            return base.Channel.RESTPutSeriesOfNumbersAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult RESTUpdateSeriesOfNumbers(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item) {
+            return base.Channel.RESTUpdateSeriesOfNumbers(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult> RESTUpdateSeriesOfNumbersAsync(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item) {
+            return base.Channel.RESTUpdateSeriesOfNumbersAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.LongExecutionResult RESTRemoveSeriesOfNumbers(string identifier) {
+            return base.Channel.RESTRemoveSeriesOfNumbers(identifier);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResult> RESTRemoveSeriesOfNumbersAsync(string identifier) {
+            return base.Channel.RESTRemoveSeriesOfNumbersAsync(identifier);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.LongExecutionResults RESTRemoveSeriesOfNumbersRange(System.Collections.Generic.List<string> identifier) {
+            return base.Channel.RESTRemoveSeriesOfNumbersRange(identifier);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RESTRemoveSeriesOfNumbersRangeAsync(System.Collections.Generic.List<string> identifier) {
+            return base.Channel.RESTRemoveSeriesOfNumbersRangeAsync(identifier);
         }
         
         public RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTimeResult RESTSettingsSheduleTimePut(RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTime item) {
@@ -1819,6 +2081,48 @@ namespace RoyaltyServiceWorker.AccountService {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IBaseService/ChangeLanguage")]
         System.Threading.Tasks.Task ChangeLanguageAsync(string codename);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/GetSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountService/GetSeriesOfNumbersResponse")]
+        RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults GetSeriesOfNumbers(System.Guid accountId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/GetSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountService/GetSeriesOfNumbersResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults> GetSeriesOfNumbersAsync(System.Guid accountId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/PutSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountService/PutSeriesOfNumbersResponse")]
+        RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult PutSeriesOfNumbers(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/PutSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountService/PutSeriesOfNumbersResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult> PutSeriesOfNumbersAsync(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/UpdateSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountService/UpdateSeriesOfNumbersResponse")]
+        RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult UpdateSeriesOfNumbers(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/UpdateSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountService/UpdateSeriesOfNumbersResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult> UpdateSeriesOfNumbersAsync(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountService/RemoveSeriesOfNumbersResponse")]
+        RoyaltyServiceWorker.AccountService.LongExecutionResult RemoveSeriesOfNumbers(long identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountService/RemoveSeriesOfNumbersResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResult> RemoveSeriesOfNumbersAsync(long identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveSeriesOfNumbersRange", ReplyAction="http://tempuri.org/IAccountService/RemoveSeriesOfNumbersRangeResponse")]
+        RoyaltyServiceWorker.AccountService.LongExecutionResults RemoveSeriesOfNumbersRange(System.Collections.Generic.List<long> identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveSeriesOfNumbersRange", ReplyAction="http://tempuri.org/IAccountService/RemoveSeriesOfNumbersRangeResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RemoveSeriesOfNumbersRangeAsync(System.Collections.Generic.List<long> identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RESTSettingsUpdate", ReplyAction="http://tempuri.org/IAccountService/RESTSettingsUpdateResponse")]
+        RoyaltyServiceWorker.AccountService.AccountSettingsResult RESTSettingsUpdate(RoyaltyServiceWorker.AccountService.AccountSettings item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RESTSettingsUpdate", ReplyAction="http://tempuri.org/IAccountService/RESTSettingsUpdateResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSettingsResult> RESTSettingsUpdateAsync(RoyaltyServiceWorker.AccountService.AccountSettings item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/SettingsUpdate", ReplyAction="http://tempuri.org/IAccountService/SettingsUpdateResponse")]
+        RoyaltyServiceWorker.AccountService.AccountSettingsResult SettingsUpdate(RoyaltyServiceWorker.AccountService.AccountSettings item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/SettingsUpdate", ReplyAction="http://tempuri.org/IAccountService/SettingsUpdateResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSettingsResult> SettingsUpdateAsync(RoyaltyServiceWorker.AccountService.AccountSettings item);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/SettingsSheduleTimePut", ReplyAction="http://tempuri.org/IAccountService/SettingsSheduleTimePutResponse")]
         RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTimeResult SettingsSheduleTimePut(RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTime item);
         
@@ -2003,6 +2307,62 @@ namespace RoyaltyServiceWorker.AccountService {
         
         public System.Threading.Tasks.Task ChangeLanguageAsync(string codename) {
             return base.Channel.ChangeLanguageAsync(codename);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults GetSeriesOfNumbers(System.Guid accountId) {
+            return base.Channel.GetSeriesOfNumbers(accountId);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults> GetSeriesOfNumbersAsync(System.Guid accountId) {
+            return base.Channel.GetSeriesOfNumbersAsync(accountId);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult PutSeriesOfNumbers(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item) {
+            return base.Channel.PutSeriesOfNumbers(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult> PutSeriesOfNumbersAsync(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item) {
+            return base.Channel.PutSeriesOfNumbersAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult UpdateSeriesOfNumbers(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item) {
+            return base.Channel.UpdateSeriesOfNumbers(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult> UpdateSeriesOfNumbersAsync(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item) {
+            return base.Channel.UpdateSeriesOfNumbersAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.LongExecutionResult RemoveSeriesOfNumbers(long identifier) {
+            return base.Channel.RemoveSeriesOfNumbers(identifier);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResult> RemoveSeriesOfNumbersAsync(long identifier) {
+            return base.Channel.RemoveSeriesOfNumbersAsync(identifier);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.LongExecutionResults RemoveSeriesOfNumbersRange(System.Collections.Generic.List<long> identifier) {
+            return base.Channel.RemoveSeriesOfNumbersRange(identifier);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RemoveSeriesOfNumbersRangeAsync(System.Collections.Generic.List<long> identifier) {
+            return base.Channel.RemoveSeriesOfNumbersRangeAsync(identifier);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountSettingsResult RESTSettingsUpdate(RoyaltyServiceWorker.AccountService.AccountSettings item) {
+            return base.Channel.RESTSettingsUpdate(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSettingsResult> RESTSettingsUpdateAsync(RoyaltyServiceWorker.AccountService.AccountSettings item) {
+            return base.Channel.RESTSettingsUpdateAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountSettingsResult SettingsUpdate(RoyaltyServiceWorker.AccountService.AccountSettings item) {
+            return base.Channel.SettingsUpdate(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountSettingsResult> SettingsUpdateAsync(RoyaltyServiceWorker.AccountService.AccountSettings item) {
+            return base.Channel.SettingsUpdateAsync(item);
         }
         
         public RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTimeResult SettingsSheduleTimePut(RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTime item) {

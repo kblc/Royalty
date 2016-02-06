@@ -196,6 +196,9 @@ namespace RoyaltyServiceWorker.HistoryService {
         private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.Account> AccountField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.AccountSeriesOfNumbersRecord> AccountSeriesOfNumbersRecordField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.AccountSettings> AccountSettingsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -229,6 +232,19 @@ namespace RoyaltyServiceWorker.HistoryService {
                 if ((object.ReferenceEquals(this.AccountField, value) != true)) {
                     this.AccountField = value;
                     this.RaisePropertyChanged("Account");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.AccountSeriesOfNumbersRecord> AccountSeriesOfNumbersRecord {
+            get {
+                return this.AccountSeriesOfNumbersRecordField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccountSeriesOfNumbersRecordField, value) != true)) {
+                    this.AccountSeriesOfNumbersRecordField = value;
+                    this.RaisePropertyChanged("AccountSeriesOfNumbersRecord");
                 }
             }
         }
@@ -321,6 +337,9 @@ namespace RoyaltyServiceWorker.HistoryService {
         private System.Collections.Generic.List<System.Guid> AccountField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<long> AccountSeriesOfNumbersRecordField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Collections.Generic.List<System.Guid> AccountSettingsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -354,6 +373,19 @@ namespace RoyaltyServiceWorker.HistoryService {
                 if ((object.ReferenceEquals(this.AccountField, value) != true)) {
                     this.AccountField = value;
                     this.RaisePropertyChanged("Account");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<long> AccountSeriesOfNumbersRecord {
+            get {
+                return this.AccountSeriesOfNumbersRecordField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccountSeriesOfNumbersRecordField, value) != true)) {
+                    this.AccountSeriesOfNumbersRecordField = value;
+                    this.RaisePropertyChanged("AccountSeriesOfNumbersRecord");
                 }
             }
         }
@@ -528,6 +560,99 @@ namespace RoyaltyServiceWorker.HistoryService {
                 if ((object.ReferenceEquals(this.SettingsField, value) != true)) {
                     this.SettingsField = value;
                     this.RaisePropertyChanged("Settings");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountSeriesOfNumbersRecord", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class AccountSeriesOfNumbersRecord : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.Guid> AccountUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.TimeSpan DelayField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long DigitCountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long IdField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.Guid> AccountUID {
+            get {
+                return this.AccountUIDField;
+            }
+            set {
+                if ((this.AccountUIDField.Equals(value) != true)) {
+                    this.AccountUIDField = value;
+                    this.RaisePropertyChanged("AccountUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.TimeSpan Delay {
+            get {
+                return this.DelayField;
+            }
+            set {
+                if ((this.DelayField.Equals(value) != true)) {
+                    this.DelayField = value;
+                    this.RaisePropertyChanged("Delay");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long DigitCount {
+            get {
+                return this.DigitCountField;
+            }
+            set {
+                if ((this.DigitCountField.Equals(value) != true)) {
+                    this.DigitCountField = value;
+                    this.RaisePropertyChanged("DigitCount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
                 }
             }
         }

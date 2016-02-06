@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 namespace RoyaltyService.Model
 {
     [DataContract]
-    public class AccountSettingsColumn
+    public class AccountSeriesOfNumbersRecord
     {
         [DataMember(IsRequired = false, Name = "Id")]
-        public long AccountSettingsColumnID { get; set; }
+        public long AccountNumberSeriaRecordID { get; set; }
 
         [DataMember(IsRequired = false)]
-        public Guid AccountUID { get; set; }
+        public Guid? AccountUID { get; set; }
 
         [DataMember(IsRequired = false)]
-        public long ColumnTypeID { get; set; }
+        public long DigitCount { get; set; }
 
         [DataMember(IsRequired = false)]
-        public string ColumnName { get; set; }
+        public TimeSpan Delay { get; set; }
 
         private static bool isInitialize = false;
         [MapperInitialize]
@@ -29,8 +29,8 @@ namespace RoyaltyService.Model
             if (isInitialize)
                 return;
 #pragma warning disable 618
-            AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.AccountSettingsColumn, AccountSettingsColumn>();
-            AutoMapper.Mapper.CreateMap<AccountSettingsColumn, RoyaltyRepository.Models.AccountSettingsColumn>();
+            AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.AccountSeriesOfNumbersRecord, AccountSeriesOfNumbersRecord>();
+            AutoMapper.Mapper.CreateMap<AccountSeriesOfNumbersRecord, RoyaltyRepository.Models.AccountSeriesOfNumbersRecord>();
 #pragma warning restore 618
             isInitialize = true;
         }

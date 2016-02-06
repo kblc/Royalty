@@ -27,8 +27,8 @@
     <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="740aec23-f897-4087-93b3-288c96b30dc6" SourceId="1" SourceUrl="http://localhost:8733/royalty/account/mex" />
     <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="50ce1edf-0b26-4ee7-987f-495691eef6f7" SourceId="1" SourceUrl="http://localhost:8733/royalty/account/mex" />
     <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="7d1dc82e-8926-4381-a9e1-866ad57b272d" SourceId="1" SourceUrl="http://localhost:8733/royalty/account/mex" />
-    <MetadataFile FileName="RoyaltyService.Model.xsd" MetadataType="Schema" ID="6511c64e-5f8e-4f11-9a77-695255bdef9e" SourceId="1" SourceUrl="http://localhost:8733/royalty/account/mex" />
     <MetadataFile FileName="RoyaltyService.Services.Account.Result.xsd" MetadataType="Schema" ID="ffe36d1f-d384-4f56-a3b0-cb60b0eec43b" SourceId="1" SourceUrl="http://localhost:8733/royalty/account/mex" />
+    <MetadataFile FileName="RoyaltyService.Model.xsd" MetadataType="Schema" ID="6511c64e-5f8e-4f11-9a77-695255bdef9e" SourceId="1" SourceUrl="http://localhost:8733/royalty/account/mex" />
     <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="42f64c2b-e5e2-41d4-8dde-011a7cef5675" SourceId="1" SourceUrl="http://localhost:8733/royalty/account/mex" />
   </Metadata>
   <Extensions>

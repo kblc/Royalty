@@ -37,6 +37,7 @@
   <xs:complexType name="HistoryUpdatePart">
     <xs:sequence>
       <xs:element minOccurs="0" name="Account" nillable="true" type="tns:ArrayOfAccount" />
+      <xs:element minOccurs="0" name="AccountSeriesOfNumbersRecord" nillable="true" type="tns:ArrayOfAccountSeriesOfNumbersRecord" />
       <xs:element minOccurs="0" name="AccountSettings" nillable="true" type="tns:ArrayOfAccountSettings" />
       <xs:element minOccurs="0" name="AccountSettingsColumn" nillable="true" type="tns:ArrayOfAccountSettingsColumn" />
       <xs:element minOccurs="0" name="AccountSettingsExportDirectory" nillable="true" type="tns:ArrayOfAccountSettingsExportDirectory" />
@@ -140,6 +141,21 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="AccountSettingsSheduleTime" nillable="true" type="tns:AccountSettingsSheduleTime" />
+  <xs:complexType name="ArrayOfAccountSeriesOfNumbersRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountSeriesOfNumbersRecord" nillable="true" type="tns:AccountSeriesOfNumbersRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAccountSeriesOfNumbersRecord" nillable="true" type="tns:ArrayOfAccountSeriesOfNumbersRecord" />
+  <xs:complexType name="AccountSeriesOfNumbersRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountUID" nillable="true" type="ser:guid" />
+      <xs:element minOccurs="0" name="Delay" type="ser:duration" />
+      <xs:element minOccurs="0" name="DigitCount" type="xs:long" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccountSeriesOfNumbersRecord" nillable="true" type="tns:AccountSeriesOfNumbersRecord" />
   <xs:complexType name="ArrayOfAccountSettings">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountSettings" nillable="true" type="tns:AccountSettings" />
@@ -149,11 +165,12 @@
   <xs:complexType name="HistoryRemovePart">
     <xs:sequence>
       <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Account" nillable="true" type="q1:ArrayOfguid" />
-      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettings" nillable="true" type="q2:ArrayOfguid" />
-      <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsColumn" nillable="true" type="q3:ArrayOflong" />
-      <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsExportDirectory" nillable="true" type="q4:ArrayOflong" />
-      <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsImportDirectory" nillable="true" type="q5:ArrayOflong" />
-      <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsSheduleTime" nillable="true" type="q6:ArrayOflong" />
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSeriesOfNumbersRecord" nillable="true" type="q2:ArrayOflong" />
+      <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettings" nillable="true" type="q3:ArrayOfguid" />
+      <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsColumn" nillable="true" type="q4:ArrayOflong" />
+      <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsExportDirectory" nillable="true" type="q5:ArrayOflong" />
+      <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsImportDirectory" nillable="true" type="q6:ArrayOflong" />
+      <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsSheduleTime" nillable="true" type="q7:ArrayOflong" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="HistoryRemovePart" nillable="true" type="tns:HistoryRemovePart" />
