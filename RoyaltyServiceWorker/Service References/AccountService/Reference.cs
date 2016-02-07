@@ -1364,6 +1364,9 @@ namespace RoyaltyServiceWorker.AccountService {
         private bool IsActiveField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsBusyField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsHiddenField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -1404,6 +1407,19 @@ namespace RoyaltyServiceWorker.AccountService {
                 if ((this.IsActiveField.Equals(value) != true)) {
                     this.IsActiveField = value;
                     this.RaisePropertyChanged("IsActive");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsBusy {
+            get {
+                return this.IsBusyField;
+            }
+            set {
+                if ((this.IsBusyField.Equals(value) != true)) {
+                    this.IsBusyField = value;
+                    this.RaisePropertyChanged("IsBusy");
                 }
             }
         }

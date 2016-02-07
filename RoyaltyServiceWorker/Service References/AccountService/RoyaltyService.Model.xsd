@@ -311,6 +311,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Id" type="ser:guid" />
       <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsBusy" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsHidden" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Settings" nillable="true" type="tns:AccountSettings" />

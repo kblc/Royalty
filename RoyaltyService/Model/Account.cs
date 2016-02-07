@@ -23,6 +23,9 @@ namespace RoyaltyService.Model
         public bool IsActive { get; set; }
 
         [DataMember(IsRequired = false)]
+        public bool IsBusy { get; set; }
+
+        [DataMember(IsRequired = false)]
         public AccountSettings Settings { get; set; }
 
         private static bool isInitialize = false;
@@ -32,7 +35,11 @@ namespace RoyaltyService.Model
             if (isInitialize)
                 return;
 #pragma warning disable 618
-            AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.Account, Account>();
+            AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.Account, Account>()
+                .AfterMap((src,dst) => 
+                {
+                    dst.IsBusy = src.ImportQueue.SelectMany(iq => iq.FileInfoes).Any(fi => fi.Started != null && fi.Finished == null);
+                });
             AutoMapper.Mapper.CreateMap<Account, RoyaltyRepository.Models.Account>();
 #pragma warning restore 618
             isInitialize = true;

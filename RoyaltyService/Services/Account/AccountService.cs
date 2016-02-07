@@ -75,7 +75,6 @@ namespace RoyaltyService.Services.Account
                             ? rep.Get<RoyaltyRepository.Models.Account>(asNoTracking: true).ToArray()
                             : rep.Get<RoyaltyRepository.Models.Account>(a => identifiers.Contains(a.AccountUID), asNoTracking: true).ToArray();
                         logSession.Add($"Accounts found: {items.Length}");
-
                         var res = items.Select(i => AutoMapper.Mapper.Map<Model.Account>(i)).ToArray();
                         return new AccountExecutionResults(res);
                     }
@@ -97,10 +96,10 @@ namespace RoyaltyService.Services.Account
                 {
                     using (var rep = GetNewRepository(logSession))
                     {
-                        var mappedDbItem = AutoMapper.Mapper.Map<RoyaltyRepository.Models.Account>(item);
                         var dbItem = rep.New<RoyaltyRepository.Models.Account>((a) => 
                         {
-                            a.CopyObjectFrom(mappedDbItem, new string[] { nameof(a.AccountUID) });
+                            UpdateAccountDbItemFromModelItem(a, item, rep);
+                            a.AccountUID = Guid.NewGuid();
                         });
                         rep.Add(dbItem);
                         var res = AutoMapper.Mapper.Map<Model.Account>(dbItem);
@@ -221,6 +220,13 @@ namespace RoyaltyService.Services.Account
             dbItem.CopyObjectFrom(mappedDbItem, new string[] {
                 nameof(mappedDbItem.Settings),
             });
+
+            if (dbItem.Settings == null)
+            {
+                var settings = rep.New<RoyaltyRepository.Models.AccountSettings>(a => { a.AccountUID = dbItem.AccountUID; });
+                rep.Add(settings, saveAfterInsert: false);
+                dbItem.Settings = settings;
+            }
 
             UpdateAccountSettingsDbItemFromModelItem(dbItem.Settings, mappedDbItem.Settings, rep);
         }
