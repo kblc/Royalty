@@ -14,6 +14,12 @@ using System.Windows.Input;
 
 namespace Royalty.ViewModels
 {
+    public enum AccountEditViewModelView
+    {
+        Account,
+        Settings
+    }
+
     public class AccountEditViewModel : AbstractActionViewModel
     {
         #region Account
@@ -81,15 +87,15 @@ namespace Royalty.ViewModels
         #region SaveCommand
 
         private static readonly DependencyPropertyKey ReadOnlySaveCommandPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(SaveCommand), typeof(ICommand), typeof(AccountEditViewModel),
+            = DependencyProperty.RegisterReadOnly(nameof(SaveCommand), typeof(DelegateCommand), typeof(AccountEditViewModel),
                 new FrameworkPropertyMetadata(null,
                     FrameworkPropertyMetadataOptions.None,
                     new PropertyChangedCallback((s, e) => { })));
         public static readonly DependencyProperty ReadOnlySaveCommandProperty = ReadOnlySaveCommandPropertyKey.DependencyProperty;
 
-        public ICommand SaveCommand
+        public DelegateCommand SaveCommand
         {
-            get { return (ICommand)GetValue(ReadOnlySaveCommandProperty); }
+            get { return (DelegateCommand)GetValue(ReadOnlySaveCommandProperty); }
             private set { SetValue(ReadOnlySaveCommandPropertyKey, value); }
         }
 
@@ -97,38 +103,98 @@ namespace Royalty.ViewModels
         #region DeleteCommand
 
         private static readonly DependencyPropertyKey ReadOnlyDeleteCommandPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(DeleteCommand), typeof(ICommand), typeof(AccountEditViewModel),
+            = DependencyProperty.RegisterReadOnly(nameof(DeleteCommand), typeof(DelegateCommand), typeof(AccountEditViewModel),
                 new FrameworkPropertyMetadata(null,
                     FrameworkPropertyMetadataOptions.None,
                     new PropertyChangedCallback((s, e) => { })));
         public static readonly DependencyProperty ReadOnlyDeleteCommandProperty = ReadOnlyDeleteCommandPropertyKey.DependencyProperty;
 
-        public ICommand DeleteCommand
+        public DelegateCommand DeleteCommand
         {
-            get { return (ICommand)GetValue(ReadOnlyDeleteCommandProperty); }
+            get { return (DelegateCommand)GetValue(ReadOnlyDeleteCommandProperty); }
             private set { SetValue(ReadOnlyDeleteCommandPropertyKey, value); }
         }
 
         #endregion
+        #region SetSettingsViewCommand
 
-        private DelegateCommand saveCommand;
-        private DelegateCommand deleteCommand;
+        private static readonly DependencyPropertyKey ReadOnlySetSettingsViewCommandPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(SetSettingsViewCommand), typeof(DelegateCommand), typeof(AccountEditViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlySetSettingsViewCommandProperty = ReadOnlySetSettingsViewCommandPropertyKey.DependencyProperty;
+
+        public DelegateCommand SetSettingsViewCommand
+        {
+            get { return (DelegateCommand)GetValue(ReadOnlySetSettingsViewCommandProperty); }
+            private set { SetValue(ReadOnlySetSettingsViewCommandPropertyKey, value); }
+        }
+
+        #endregion
+        #region SetAccountViewCommand
+
+        private static readonly DependencyPropertyKey ReadOnlySetAccountViewCommandPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(SetAccountViewCommand), typeof(DelegateCommand), typeof(AccountEditViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlySetAccountViewCommandProperty = ReadOnlySetAccountViewCommandPropertyKey.DependencyProperty;
+
+        public DelegateCommand SetAccountViewCommand
+        {
+            get { return (DelegateCommand)GetValue(ReadOnlySetAccountViewCommandProperty); }
+            private set { SetValue(ReadOnlySetAccountViewCommandPropertyKey, value); }
+        }
+
+        #endregion
+        #region View
+
+        private static readonly DependencyPropertyKey ReadOnlyViewPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(View), typeof(AccountEditViewModelView), typeof(AccountEditViewModel),
+                new FrameworkPropertyMetadata(AccountEditViewModelView.Account,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyViewProperty = ReadOnlyViewPropertyKey.DependencyProperty;
+
+        public AccountEditViewModelView View
+        {
+            get { return (AccountEditViewModelView)GetValue(ReadOnlyViewProperty); }
+            private set { SetValue(ReadOnlyViewPropertyKey, value); }
+        }
+
+        #endregion
+        #region BackEvent
+
+        public static readonly RoutedEvent BackEvent = EventManager.RegisterRoutedEvent(nameof(Back), RoutingStrategy.Bubble,
+            typeof(RoutedEventHandler), typeof(AccountEditViewModel));
+
+        public event RoutedEventHandler Back
+        {
+            add { AddHandler(BackEvent, value); }
+            remove { RemoveHandler(BackEvent, value); }
+        }
+
+        #endregion
+
         public AccountEditViewModel()
         {
-            SaveCommand = saveCommand = new DelegateCommand(o => {
+            SaveCommand = new DelegateCommand(o => {
                 SaveTask(AccountEdit).ContinueWith((res) => 
                 {
                     if (res.Result)
                         BackCommand?.Execute(BackCommandParameter);
                 }, GetCancellationToken(), TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
             }, o => !IsBusy);
-            DeleteCommand = deleteCommand = new DelegateCommand(o => {
+            DeleteCommand = new DelegateCommand(o => {
                 DeleteTask(AccountEdit).ContinueWith((res) =>
                 {
                     if (res.Result)
                         BackCommand?.Execute(BackCommandParameter);
                 }, GetCancellationToken(), TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
             }, o => !IsBusy && (Account?.Id ?? Guid.Empty) != Guid.Empty);
+            SetAccountViewCommand = new DelegateCommand(o => View = AccountEditViewModelView.Account);
+            SetSettingsViewCommand = new DelegateCommand(o => View = AccountEditViewModelView.Settings, o => !IsBusy && (Account?.Id ?? Guid.Empty) != Guid.Empty);
         }
 
         private void UpdateAccount(RoyaltyServiceWorker.AccountService.Account newItem, RoyaltyServiceWorker.AccountService.Account oldItem)
@@ -138,7 +204,19 @@ namespace Royalty.ViewModels
             RaiseCommands();
             AccountEdit = new RoyaltyServiceWorker.AccountService.Account();
             if (newItem != null)
+            {
                 AccountEdit.CopyObjectFrom(newItem);
+                newItem.PropertyChanged += AccountPropertyChanged;
+            }
+            if (oldItem != null)
+            {
+                oldItem.PropertyChanged -= AccountPropertyChanged;
+            }
+        }
+
+        private void AccountPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            AccountEdit.CopyObjectFrom((RoyaltyServiceWorker.AccountService.Account)sender);
         }
 
         private Task<bool> SaveTask(RoyaltyServiceWorker.AccountService.Account item)
@@ -212,8 +290,10 @@ namespace Royalty.ViewModels
 
         protected override void RaiseCommands()
         {
-            saveCommand?.RaiseCanExecuteChanged();
-            deleteCommand?.RaiseCanExecuteChanged();
+            SaveCommand?.RaiseCanExecuteChanged();
+            DeleteCommand?.RaiseCanExecuteChanged();
+            SetAccountViewCommand?.RaiseCanExecuteChanged();
+            SetSettingsViewCommand?.RaiseCanExecuteChanged();
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace Royalty.ViewModels
 {
-    public abstract class AbstractActionViewModel : DependencyObject
+    public abstract class AbstractActionViewModel : FrameworkElement
     {
         #region IsBusy
 

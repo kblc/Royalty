@@ -67,19 +67,51 @@ namespace Royalty.ViewModels
         }
 
         #endregion
-        #region AccountsForEditSettings
+        #region AccountsForEdit
 
-        private static readonly DependencyPropertyKey AccountsForEditSettingsPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(AccountsForEditSettings), typeof(RoyaltyServiceWorker.AccountService.Account), typeof(AccountsViewModel),
+        private static readonly DependencyPropertyKey AccountsForEditPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(AccountsForEdit), typeof(RoyaltyServiceWorker.AccountService.Account), typeof(AccountsViewModel),
                 new FrameworkPropertyMetadata(null,
                     FrameworkPropertyMetadataOptions.None,
                     new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlyAccountsForEditSettingsPropertyKey = AccountsForEditSettingsPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty ReadOnlyAccountsForEditPropertyKey = AccountsForEditPropertyKey.DependencyProperty;
 
-        public RoyaltyServiceWorker.AccountService.Account AccountsForEditSettings
+        public RoyaltyServiceWorker.AccountService.Account AccountsForEdit
         {
-            get { return (RoyaltyServiceWorker.AccountService.Account)GetValue(ReadOnlyAccountsForEditSettingsPropertyKey); }
-            private set { SetValue(AccountsForEditSettingsPropertyKey, value); }
+            get { return (RoyaltyServiceWorker.AccountService.Account)GetValue(ReadOnlyAccountsForEditPropertyKey); }
+            private set { SetValue(AccountsForEditPropertyKey, value); }
+        }
+
+        #endregion
+        #region SelectAccountCommand
+
+        private static readonly DependencyPropertyKey ReadOnlySelectAccountCommandPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(SelectAccountCommand), typeof(DelegateCommand), typeof(AccountsViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlySelectAccountCommandProperty = ReadOnlySelectAccountCommandPropertyKey.DependencyProperty;
+
+        public DelegateCommand SelectAccountCommand
+        {
+            get { return (DelegateCommand)GetValue(ReadOnlySelectAccountCommandProperty); }
+            private set { SetValue(ReadOnlySelectAccountCommandPropertyKey, value); }
+        }
+
+        #endregion
+        #region NewAccountCommand
+
+        private static readonly DependencyPropertyKey ReadOnlyNewAccountCommandPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(NewAccountCommand), typeof(DelegateCommand), typeof(AccountsViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyNewAccountCommandProperty = ReadOnlyNewAccountCommandPropertyKey.DependencyProperty;
+
+        public DelegateCommand NewAccountCommand
+        {
+            get { return (DelegateCommand)GetValue(ReadOnlyNewAccountCommandProperty); }
+            private set { SetValue(ReadOnlyNewAccountCommandPropertyKey, value); }
         }
 
         #endregion
@@ -107,28 +139,10 @@ namespace Royalty.ViewModels
             FilteredAccounts?.Refresh();
         }
 
-        private DelegateCommand selectAccountSettingsCommand = null;
-        public ICommand SelectAccountSettingsCommand
+        public AccountsViewModel()
         {
-            get
-            {
-                return selectAccountSettingsCommand ?? (selectAccountSettingsCommand = new DelegateCommand((o) => 
-                    {
-                        AccountsForEditSettings = o as RoyaltyServiceWorker.AccountService.Account;
-                    }));
-            }
-        }
-
-        private DelegateCommand newAccountSettingsCommand = null;
-        public ICommand NewAccountSettingsCommand
-        {
-            get
-            {
-                return newAccountSettingsCommand ?? (newAccountSettingsCommand = new DelegateCommand((o) =>
-                {
-                    AccountsForEditSettings = new RoyaltyServiceWorker.AccountService.Account();
-                }));
-            }
+            SelectAccountCommand = new DelegateCommand((o) => AccountsForEdit = o as RoyaltyServiceWorker.AccountService.Account);
+            NewAccountCommand = new DelegateCommand((o) => AccountsForEdit = new RoyaltyServiceWorker.AccountService.Account());
         }
     }
 }

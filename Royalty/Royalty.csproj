@@ -64,6 +64,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ViewModels\AbstractActionViewModel.cs" />
+    <Compile Include="ViewModels\AccountSettingsEditViewModel.cs" />
     <Compile Include="ViewModels\AccountEditViewModel.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="ViewModels\AccountsViewModel.cs" />

@@ -9,13 +9,90 @@
 
     <BooleanToVisibilityConverter x:Key="accountsBooleanToVisibilityConverter"/>
 
+    <DataTemplate x:Key="AccountsSettingsViewModelItemTemplate" DataType="{x:Type viewModels:AccountSettingsEditViewModel}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="{Binding Account.Name, StringFormat=Настройки аккаунта {0}}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="4,4"/>
+
+            <Border Background="{StaticResource ErrorBrush}" HorizontalAlignment="Stretch" Grid.Row="1"
+                        ToolTip="{Binding Error}" 
+                        x:Name="PART_AccountSettingsEditViewModelTemplateErrorBorder">
+                <TextBlock Text="Ошибка" Margin="4,4" HorizontalAlignment="Center"/>
+            </Border>
+
+            <Border HorizontalAlignment="Stretch" Grid.Row="2"
+                        x:Name="PART_AccountSettingsEditViewModelTemplateIsBusy">
+                <StackPanel Orientation="Horizontal">
+                    <ProgressBar IsIndeterminate="True" Margin="4,4" MinWidth="16" MinHeight="16" VerticalAlignment="Center"/>
+                    <TextBlock Text="Сохранение..." Margin="4,4" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <StackPanel x:Name="PART_AccountSettingsEditViewModelTemplateControls" Orientation="Vertical">
+                    
+                    <StackPanel Margin="4,4">
+                        <TextBlock Text="TimeForTrust:" Margin="0,2"/>
+                        <TextBox Text="{Binding AccountSettingsEdit.TimeForTrust}" Margin="0,4"/>
+                    </StackPanel>
+                    <StackPanel Margin="4,4">
+                        <TextBlock Text="IgnoreExportTime:" Margin="0,2"/>
+                        <TextBox Text="{Binding AccountSettingsEdit.IgnoreExportTime}" Margin="0,4"/>
+                    </StackPanel>
+
+                    <Button HorizontalAlignment="Left" Content="Настройки колонок..." Cursor="Hand" Margin="4,4"
+                            Command="{Binding SetColumnsViewCommand}"/>
+                    <Button HorizontalAlignment="Left" Content="Настройки директорий экспорта..." Cursor="Hand" Margin="4,4"
+                            Command="{Binding SetExportDirectoriesViewCommand}"/>
+                    <Button HorizontalAlignment="Left" Content="Настройки директорий импорта..." Cursor="Hand" Margin="4,4"
+                            Command="{Binding SetImportDirectoriesViewCommand}"/>
+                    <Button HorizontalAlignment="Left" Content="Настройки времени запуска..." Cursor="Hand" Margin="4,4"
+                            Command="{Binding SetSheduleTimesViewCommand}"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="999" Margin="4,4">
+                <Button Content="Отмена"
+                            Cursor="Hand" Margin="4,4"
+                            Command="{Binding BackCommand}"
+                            CommandParameter="{Binding BackCommandParameter}"/>
+                <Button Content="Сохранить"
+                            Cursor="Hand" Margin="4,4"
+                            Command="{Binding SaveCommand}"
+                            CommandParameter="{x:Null}"/>
+            </WrapPanel>
+        </Grid>
+
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Error}" Value="{x:Null}">
+                <Setter TargetName="PART_AccountSettingsEditViewModelTemplateErrorBorder" Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsBusy}" Value="False">
+                <Setter TargetName="PART_AccountSettingsEditViewModelTemplateIsBusy" Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsBusy}" Value="True">
+                <Setter TargetName="PART_AccountSettingsEditViewModelTemplateControls" Property="IsEnabled" Value="False"/>
+            </DataTrigger>
+            <!--<DataTrigger Binding="{Binding View}" Value="Settings">
+                <Setter TargetName="PART_AccountEditViewModelTemplateSettingsViewGrid" Property="Visibility" Value="Visible"/>
+            </DataTrigger>-->
+        </DataTemplate.Triggers>
+    </DataTemplate>
+    
     <DataTemplate x:Key="AccountEditViewModelTemplate" DataType="{x:Type viewModels:AccountEditViewModel}">
-        <ScrollViewer Margin="4" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <Grid>
+        <Grid Margin="4">
+            <Grid x:Name="PART_AccountEditViewModelTemplateAccountViewGrid" Visibility="Collapsed">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
@@ -33,17 +110,20 @@
                     </StackPanel>
                 </Border>
 
-                <StackPanel Grid.Row="2" x:Name="PART_AccountEditViewModelTemplateControls" Orientation="Vertical">
-                    <StackPanel Margin="4,4">
-                        <TextBlock Text="Название аккаунта:" Margin="0,2"/>
-                        <TextBox Text="{Binding AccountEdit.Name}" Margin="0,4"/>
+                <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="PART_AccountEditViewModelTemplateControls" Orientation="Vertical">
+                        <StackPanel Margin="4,4">
+                            <TextBlock Text="Название аккаунта:" Margin="0,2"/>
+                            <TextBox Text="{Binding AccountEdit.Name}" Margin="0,4"/>
+                        </StackPanel>
+
+                        <CheckBox IsChecked="{Binding AccountEdit.IsActive}" Content="Аккаунт активен" Margin="4,4"/>
+                        <CheckBox IsChecked="{Binding AccountEdit.IsHidden}" Content="Аккаунт скрыт" IsEnabled="False" Margin="4,4"/>
+
+                        <Button HorizontalAlignment="Left" Content="Настройки..." Cursor="Hand" Margin="4,4"
+                                Command="{Binding SetSettingsViewCommand}"/>
                     </StackPanel>
-
-                    <CheckBox IsChecked="{Binding AccountEdit.IsActive}" Content="Аккаунт активен" Margin="4,4"/>
-                    <CheckBox IsChecked="{Binding AccountEdit.IsHidden}" Content="Аккаунт скрыт" IsEnabled="False" Margin="4,4"/>
-
-                    <Button HorizontalAlignment="Left" Content="Настройки..." Cursor="Hand" Margin="4,4"/>
-                </StackPanel>
+                </ScrollViewer>
 
                 <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="999" Margin="4,4">
                     <Button Content="Отмена"
@@ -61,7 +141,22 @@
                             CommandParameter="{x:Null}"/>
                 </WrapPanel>
             </Grid>
-        </ScrollViewer>
+            <Grid x:Name="PART_AccountEditViewModelTemplateSettingsViewGrid" Visibility="Collapsed">
+                <Grid.Resources>
+                    <FrameworkElement x:Key="ProxyElementAccountEditViewModel" DataContext="{Binding}"/>
+                </Grid.Resources>
+                <ContentControl Visibility="Collapsed" Content="{StaticResource ProxyElementAccountEditViewModel}"/>
+
+                <ContentPresenter ContentTemplate="{StaticResource AccountsSettingsViewModelItemTemplate}">
+                    <ContentPresenter.Content>
+                        <viewModels:AccountSettingsEditViewModel Account="{Binding Path=DataContext.Account, Source={StaticResource ProxyElementAccountEditViewModel}}"
+                                                                 BackCommand="{Binding DataContext.SetAccountViewCommand, Source={StaticResource ProxyElementAccountEditViewModel}}"
+                                                                 BackCommandParameter="{x:Null}"/>
+                    </ContentPresenter.Content>
+                </ContentPresenter>
+            </Grid>
+        </Grid>
+
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding Error}" Value="{x:Null}">
                 <Setter TargetName="PART_AccountEditViewModelTemplateErrorBorder" Property="Visibility" Value="Collapsed"/>
@@ -71,6 +166,12 @@
             </DataTrigger>
             <DataTrigger Binding="{Binding IsBusy}" Value="True">
                 <Setter TargetName="PART_AccountEditViewModelTemplateControls" Property="IsEnabled" Value="False"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding View}" Value="Account">
+                <Setter TargetName="PART_AccountEditViewModelTemplateAccountViewGrid" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding View}" Value="Settings">
+                <Setter TargetName="PART_AccountEditViewModelTemplateSettingsViewGrid" Property="Visibility" Value="Visible"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -139,7 +240,7 @@
                                 <ContentPresenter ContentTemplate="{StaticResource AccountsViewModelItemTemplate}">
                                     <ContentPresenter.Content>
                                         <viewModels:AccountViewModel Account="{Binding Source={StaticResource ProxyElementAccountsViewModelItemTemplate}, Path=DataContext}"
-                                                                     SettingsCommand="{Binding DataContext.SelectAccountSettingsCommand, Source={StaticResource ProxyElementAccountsViewModelTemplate}}"
+                                                                     SettingsCommand="{Binding DataContext.SelectAccountCommand, Source={StaticResource ProxyElementAccountsViewModelTemplate}}"
                                                                      SettingsCommandParameter="{Binding Source={StaticResource ProxyElementAccountsViewModelItemTemplate}, Path=DataContext}"/>
                                     </ContentPresenter.Content>
                                 </ContentPresenter>
@@ -151,8 +252,8 @@
                 <Grid x:Name="PART_EditGrid">
                     <ContentPresenter ContentTemplate="{StaticResource AccountEditViewModelTemplate}">
                         <ContentPresenter.Content>
-                            <viewModels:AccountEditViewModel Account="{Binding Source={StaticResource ProxyElementAccountsViewModelTemplate}, Path=DataContext.AccountsForEditSettings}"
-                                                             BackCommand="{Binding Source={StaticResource ProxyElementAccountsViewModelTemplate}, Path=DataContext.SelectAccountSettingsCommand}"
+                            <viewModels:AccountEditViewModel Account="{Binding Source={StaticResource ProxyElementAccountsViewModelTemplate}, Path=DataContext.AccountsForEdit}"
+                                                             BackCommand="{Binding Source={StaticResource ProxyElementAccountsViewModelTemplate}, Path=DataContext.SelectAccountCommand}"
                                                              BackCommandParameter="{x:Null}"/>
                         </ContentPresenter.Content>
                     </ContentPresenter>
@@ -169,7 +270,7 @@
             </Grid>
         </Grid>
         <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding AccountsForEditSettings}" Value="{x:Null}">
+            <DataTrigger Binding="{Binding AccountsForEdit}" Value="{x:Null}">
                 <Setter TargetName="PART_EditGrid" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="PART_ListBoxWithItems" Property="Visibility" Value="Visible"/>
             </DataTrigger>
