@@ -96,11 +96,13 @@ namespace RoyaltyService.Services.Account
                 {
                     using (var rep = GetNewRepository(logSession))
                     {
-                        var dbItem = rep.New<RoyaltyRepository.Models.Account>((a) => 
-                        {
-                            UpdateAccountDbItemFromModelItem(a, item, rep);
-                            a.AccountUID = Guid.NewGuid();
-                        });
+                        var dbItem = rep.NewAccount(true, item.Name);
+                        UpdateAccountDbItemFromModelItem(dbItem, item, rep);
+                        //var dbItem = rep.New<RoyaltyRepository.Models.Account>((a) => 
+                        //{
+                        //    UpdateAccountDbItemFromModelItem(a, item, rep);
+                        //    a.AccountUID = Guid.NewGuid();
+                        //});
                         rep.Add(dbItem);
                         var res = AutoMapper.Mapper.Map<Model.Account>(dbItem);
                         return new AccountExecutionResult(res);

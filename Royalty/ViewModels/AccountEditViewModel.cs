@@ -44,30 +44,6 @@ namespace Royalty.ViewModels
         }
 
         #endregion
-        #region BackCommand
-
-        public static readonly DependencyProperty BackCommandProperty = DependencyProperty.Register(nameof(BackCommand), typeof(ICommand),
-            typeof(AccountEditViewModel), new PropertyMetadata(null, (s, e) => { }));
-
-        public ICommand BackCommand
-        {
-            get { return (ICommand)GetValue(BackCommandProperty); }
-            set { SetValue(BackCommandProperty, value); }
-        }
-
-        #endregion
-        #region BackCommandParameterProperty
-
-        public static readonly DependencyProperty BackCommandParameterProperty = DependencyProperty.Register(nameof(BackCommandParameter), typeof(object),
-            typeof(AccountEditViewModel), new PropertyMetadata(null, (s, e) => { }));
-
-        public object BackCommandParameter
-        {
-            get { return GetValue(BackCommandParameterProperty); }
-            set { SetValue(BackCommandParameterProperty, value); }
-        }
-
-        #endregion
         #region AccountEdit
 
         private static readonly DependencyPropertyKey ReadOnlyAccountEditPropertyKey
@@ -81,6 +57,62 @@ namespace Royalty.ViewModels
         {
             get { return (RoyaltyServiceWorker.AccountService.Account)GetValue(ReadOnlyAccountEditProperty); }
             private set { SetValue(ReadOnlyAccountEditPropertyKey, value); }
+        }
+
+        #endregion
+        #region BackCommand
+
+        public static readonly DependencyProperty BackCommandProperty = DependencyProperty.Register(nameof(BackCommand), typeof(ICommand),
+            typeof(AccountEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public ICommand BackCommand
+        {
+            get { return (ICommand)GetValue(BackCommandProperty); }
+            set { SetValue(BackCommandProperty, value); }
+        }
+
+        #endregion
+        #region BackCommandParameter
+
+        public static readonly DependencyProperty BackCommandParameterProperty = DependencyProperty.Register(nameof(BackCommandParameter), typeof(object),
+            typeof(AccountEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public object BackCommandParameter
+        {
+            get { return GetValue(BackCommandParameterProperty); }
+            set { SetValue(BackCommandParameterProperty, value); }
+        }
+
+        #endregion
+        #region BackInternalCommand
+
+        private static readonly DependencyPropertyKey ReadOnlyBackInternalCommandPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(BackInternalCommand), typeof(DelegateCommand), typeof(AccountEditViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyBackInternalCommandProperty = ReadOnlyBackInternalCommandPropertyKey.DependencyProperty;
+
+        public DelegateCommand BackInternalCommand
+        {
+            get { return (DelegateCommand)GetValue(ReadOnlyBackInternalCommandProperty); }
+            private set { SetValue(ReadOnlyBackInternalCommandPropertyKey, value); }
+        }
+
+        #endregion
+        #region BackInternalCommandParameter
+
+        private static readonly DependencyPropertyKey ReadOnlyBackInternalCommandParameterPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(BackInternalCommandParameter), typeof(object), typeof(AccountEditViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyBackInternalCommandParameterProperty = ReadOnlyBackInternalCommandParameterPropertyKey.DependencyProperty;
+
+        public object BackInternalCommandParameter
+        {
+            get { return (object)GetValue(ReadOnlyBackInternalCommandParameterProperty); }
+            private set { SetValue(ReadOnlyBackInternalCommandParameterPropertyKey, value); }
         }
 
         #endregion
@@ -164,33 +196,27 @@ namespace Royalty.ViewModels
         }
 
         #endregion
-        #region BackEvent
-
-        public static readonly RoutedEvent BackEvent = EventManager.RegisterRoutedEvent(nameof(Back), RoutingStrategy.Bubble,
-            typeof(RoutedEventHandler), typeof(AccountEditViewModel));
-
-        public event RoutedEventHandler Back
-        {
-            add { AddHandler(BackEvent, value); }
-            remove { RemoveHandler(BackEvent, value); }
-        }
-
-        #endregion
 
         public AccountEditViewModel()
         {
+            BackInternalCommand = new DelegateCommand(o => 
+            {
+                RestoreFromSource(Account);
+                BackCommand?.Execute(BackCommandParameter);
+            });
+            BackInternalCommandParameter = null;
             SaveCommand = new DelegateCommand(o => {
                 SaveTask(AccountEdit).ContinueWith((res) => 
                 {
                     if (res.Result)
-                        BackCommand?.Execute(BackCommandParameter);
+                        BackInternalCommand?.Execute(null);
                 }, GetCancellationToken(), TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
             }, o => !IsBusy);
             DeleteCommand = new DelegateCommand(o => {
                 DeleteTask(AccountEdit).ContinueWith((res) =>
                 {
                     if (res.Result)
-                        BackCommand?.Execute(BackCommandParameter);
+                        BackInternalCommand?.Execute(null);
                 }, GetCancellationToken(), TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
             }, o => !IsBusy && (Account?.Id ?? Guid.Empty) != Guid.Empty);
             SetAccountViewCommand = new DelegateCommand(o => View = AccountEditViewModelView.Account);
@@ -202,21 +228,21 @@ namespace Royalty.ViewModels
             IsBusy = false;
             Error = null;
             RaiseCommands();
-            AccountEdit = new RoyaltyServiceWorker.AccountService.Account();
+            RestoreFromSource(newItem);
             if (newItem != null)
-            {
-                AccountEdit.CopyObjectFrom(newItem);
                 newItem.PropertyChanged += AccountPropertyChanged;
-            }
             if (oldItem != null)
-            {
                 oldItem.PropertyChanged -= AccountPropertyChanged;
-            }
         }
 
-        private void AccountPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void AccountPropertyChanged(object sender, PropertyChangedEventArgs e) => RestoreFromSource((RoyaltyServiceWorker.AccountService.Account)sender);
+
+        private void RestoreFromSource(RoyaltyServiceWorker.AccountService.Account source)
         {
-            AccountEdit.CopyObjectFrom((RoyaltyServiceWorker.AccountService.Account)sender);
+            if (AccountEdit == null)
+                AccountEdit = new RoyaltyServiceWorker.AccountService.Account();
+            if (source != null)
+                AccountEdit.CopyObjectFrom(source);
         }
 
         private Task<bool> SaveTask(RoyaltyServiceWorker.AccountService.Account item)

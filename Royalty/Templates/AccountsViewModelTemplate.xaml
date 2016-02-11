@@ -1,73 +1,81 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     xmlns:viewModels="clr-namespace:Royalty.ViewModels"
-                    xmlns:accountService="clr-namespace:RoyaltyServiceWorker.AccountService;assembly=RoyaltyServiceWorker">
+                    xmlns:accountService="clr-namespace:RoyaltyServiceWorker.AccountService;assembly=RoyaltyServiceWorker"
+                    xmlns:localConverters="clr-namespace:Royalty.Converters"
+                    xmlns:additional="clr-namespace:Royalty.Additional">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Royalty;component/Themes/Generic.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <BooleanToVisibilityConverter x:Key="accountsBooleanToVisibilityConverter"/>
+    <localConverters:TimeSpanToStringConverter x:Key="accountsTimeSpanToStringConverter"/>
 
     <DataTemplate x:Key="AccountsSettingsViewModelItemTemplate" DataType="{x:Type viewModels:AccountSettingsEditViewModel}">
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+            <Grid x:Name="PART_AccountsSettingsViewModelItemTemplateSettingsGrid" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <TextBlock Text="{Binding Account.Name, StringFormat=Настройки аккаунта {0}}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="4,4"/>
+                <TextBlock Text="{Binding Account.Name, StringFormat=Настройки аккаунта: {0}}" 
+                       TextAlignment="Center" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis"
+                       VerticalAlignment="Center" HorizontalAlignment="Center" Margin="4,4"/>
 
-            <Border Background="{StaticResource ErrorBrush}" HorizontalAlignment="Stretch" Grid.Row="1"
+                <Border Background="{StaticResource ErrorBrush}" HorizontalAlignment="Stretch" Grid.Row="1"
                         ToolTip="{Binding Error}" 
                         x:Name="PART_AccountSettingsEditViewModelTemplateErrorBorder">
-                <TextBlock Text="Ошибка" Margin="4,4" HorizontalAlignment="Center"/>
-            </Border>
+                    <TextBlock Text="Ошибка" Margin="4,4" HorizontalAlignment="Center"/>
+                </Border>
 
-            <Border HorizontalAlignment="Stretch" Grid.Row="2"
+                <Border HorizontalAlignment="Stretch" Grid.Row="2"
                         x:Name="PART_AccountSettingsEditViewModelTemplateIsBusy">
-                <StackPanel Orientation="Horizontal">
-                    <ProgressBar IsIndeterminate="True" Margin="4,4" MinWidth="16" MinHeight="16" VerticalAlignment="Center"/>
-                    <TextBlock Text="Сохранение..." Margin="4,4" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Border>
-
-            <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <StackPanel x:Name="PART_AccountSettingsEditViewModelTemplateControls" Orientation="Vertical">
-                    
-                    <StackPanel Margin="4,4">
-                        <TextBlock Text="TimeForTrust:" Margin="0,2"/>
-                        <TextBox Text="{Binding AccountSettingsEdit.TimeForTrust}" Margin="0,4"/>
+                    <StackPanel Orientation="Horizontal">
+                        <ProgressBar IsIndeterminate="True" Margin="4,4" MinWidth="16" MinHeight="16" VerticalAlignment="Center"/>
+                        <TextBlock Text="Сохранение..." Margin="4,4" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <StackPanel Margin="4,4">
-                        <TextBlock Text="IgnoreExportTime:" Margin="0,2"/>
-                        <TextBox Text="{Binding AccountSettingsEdit.IgnoreExportTime}" Margin="0,4"/>
-                    </StackPanel>
+                </Border>
 
-                    <Button HorizontalAlignment="Left" Content="Настройки колонок..." Cursor="Hand" Margin="4,4"
+                <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="PART_AccountSettingsEditViewModelTemplateControls" Orientation="Vertical">
+
+                        <StackPanel Margin="4,4">
+                            <TextBlock Text="Сколько времени должно пройти для того, что бы данные стали доверенными:" Margin="0,2" TextWrapping="WrapWithOverflow"/>
+                            <TextBox Text="{Binding AccountSettingsEdit.TimeForTrust, Converter={StaticResource accountsTimeSpanToStringConverter}}" Margin="0,4"/>
+                        </StackPanel>
+                        <StackPanel Margin="4,4">
+                            <TextBlock Text="Игнорирование времени экспорта:" Margin="0,2" TextWrapping="WrapWithOverflow"/>
+                            <TextBox Text="{Binding AccountSettingsEdit.IgnoreExportTime, Converter={StaticResource accountsTimeSpanToStringConverter}}" Margin="0,4"/>
+                        </StackPanel>
+
+                        <Button HorizontalAlignment="Left" Content="Настройки колонок..." Cursor="Hand" Margin="4,4"
                             Command="{Binding SetColumnsViewCommand}"/>
-                    <Button HorizontalAlignment="Left" Content="Настройки директорий экспорта..." Cursor="Hand" Margin="4,4"
+                        <Button HorizontalAlignment="Left" Content="Настройки директорий экспорта..." Cursor="Hand" Margin="4,4"
                             Command="{Binding SetExportDirectoriesViewCommand}"/>
-                    <Button HorizontalAlignment="Left" Content="Настройки директорий импорта..." Cursor="Hand" Margin="4,4"
+                        <Button HorizontalAlignment="Left" Content="Настройки директорий импорта..." Cursor="Hand" Margin="4,4"
                             Command="{Binding SetImportDirectoriesViewCommand}"/>
-                    <Button HorizontalAlignment="Left" Content="Настройки времени запуска..." Cursor="Hand" Margin="4,4"
+                        <Button HorizontalAlignment="Left" Content="Настройки времени запуска..." Cursor="Hand" Margin="4,4"
                             Command="{Binding SetSheduleTimesViewCommand}"/>
-                </StackPanel>
-            </ScrollViewer>
+                    </StackPanel>
+                </ScrollViewer>
 
-            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="999" Margin="4,4">
-                <Button Content="Отмена"
+                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="999" Margin="4,4">
+                    <Button Content="Отмена"
                             Cursor="Hand" Margin="4,4"
-                            Command="{Binding BackCommand}"
-                            CommandParameter="{Binding BackCommandParameter}"/>
-                <Button Content="Сохранить"
+                            Command="{Binding BackInternalCommand}"/>
+                    <Button Content="Сохранить"
                             Cursor="Hand" Margin="4,4"
                             Command="{Binding SaveCommand}"
                             CommandParameter="{x:Null}"/>
-            </WrapPanel>
+                </WrapPanel>
+            </Grid>
+
         </Grid>
 
         <DataTemplate.Triggers>
@@ -80,9 +88,9 @@
             <DataTrigger Binding="{Binding IsBusy}" Value="True">
                 <Setter TargetName="PART_AccountSettingsEditViewModelTemplateControls" Property="IsEnabled" Value="False"/>
             </DataTrigger>
-            <!--<DataTrigger Binding="{Binding View}" Value="Settings">
-                <Setter TargetName="PART_AccountEditViewModelTemplateSettingsViewGrid" Property="Visibility" Value="Visible"/>
-            </DataTrigger>-->
+            <DataTrigger Binding="{Binding View}" Value="Settings">
+                <Setter TargetName="PART_AccountsSettingsViewModelItemTemplateSettingsGrid" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
     
@@ -128,8 +136,8 @@
                 <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="999" Margin="4,4">
                     <Button Content="Отмена"
                             Cursor="Hand" Margin="4,4"
-                            Command="{Binding BackCommand}"
-                            CommandParameter="{Binding BackCommandParameter}"/>
+                            Command="{Binding BackInternalCommand}"
+                            CommandParameter="{Binding BackInternalCommandParameter}"/>
                     <Button Content="Сохранить"
                             Cursor="Hand" Margin="4,4"
                             Command="{Binding SaveCommand}"
@@ -256,10 +264,12 @@
                                                              BackCommand="{Binding Source={StaticResource ProxyElementAccountsViewModelTemplate}, Path=DataContext.SelectAccountCommand}"
                                                              BackCommandParameter="{x:Null}"/>
                         </ContentPresenter.Content>
+
                     </ContentPresenter>
                 </Grid>
 
-                <Button Content="+" Cursor="Hand" VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                <Button Content="+" Cursor="Hand" VerticalAlignment="Bottom" HorizontalAlignment="Left" 
+                        x:Name="PART_ListBoxWithItemsAddButton" Visibility="Collapsed"
                         Margin="8,8" Command="{Binding NewAccountSettingsCommand}" ToolTip="Добавить новый аккаунт"/>
             </Grid>
 
@@ -272,6 +282,7 @@
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding AccountsForEdit}" Value="{x:Null}">
                 <Setter TargetName="PART_EditGrid" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="PART_ListBoxWithItemsAddButton" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="PART_ListBoxWithItems" Property="Visibility" Value="Visible"/>
             </DataTrigger>
         </DataTemplate.Triggers>

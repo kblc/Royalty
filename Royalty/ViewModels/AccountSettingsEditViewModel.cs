@@ -59,7 +59,7 @@ namespace Royalty.ViewModels
         }
 
         #endregion
-        #region BackCommandParameterProperty
+        #region BackCommandParameter
 
         public static readonly DependencyProperty BackCommandParameterProperty = DependencyProperty.Register(nameof(BackCommandParameter), typeof(object),
             typeof(AccountSettingsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
@@ -68,6 +68,38 @@ namespace Royalty.ViewModels
         {
             get { return GetValue(BackCommandParameterProperty); }
             set { SetValue(BackCommandParameterProperty, value); }
+        }
+
+        #endregion
+        #region BackInternalCommand
+
+        private static readonly DependencyPropertyKey ReadOnlyBackInternalCommandPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(BackInternalCommand), typeof(DelegateCommand), typeof(AccountSettingsEditViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyBackInternalCommandProperty = ReadOnlyBackInternalCommandPropertyKey.DependencyProperty;
+
+        public DelegateCommand BackInternalCommand
+        {
+            get { return (DelegateCommand)GetValue(ReadOnlyBackInternalCommandProperty); }
+            private set { SetValue(ReadOnlyBackInternalCommandPropertyKey, value); }
+        }
+
+        #endregion
+        #region BackInternalCommandParameter
+
+        private static readonly DependencyPropertyKey ReadOnlyBackInternalCommandParameterPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(BackInternalCommandParameter), typeof(object), typeof(AccountSettingsEditViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyBackInternalCommandParameterProperty = ReadOnlyBackInternalCommandParameterPropertyKey.DependencyProperty;
+
+        public object BackInternalCommandParameter
+        {
+            get { return (object)GetValue(ReadOnlyBackInternalCommandParameterProperty); }
+            private set { SetValue(ReadOnlyBackInternalCommandParameterPropertyKey, value); }
         }
 
         #endregion
@@ -115,7 +147,7 @@ namespace Royalty.ViewModels
         public DelegateCommand SetSettingsViewCommand
         {
             get { return (DelegateCommand)GetValue(ReadOnlySetSettingsViewCommandProperty); }
-            private set { SetValue(ReadOnlySaveCommandPropertyKey, value); }
+            private set { SetValue(ReadOnlySetSettingsViewCommandPropertyKey, value); }
         }
 
         #endregion
@@ -202,11 +234,16 @@ namespace Royalty.ViewModels
 
         public AccountSettingsEditViewModel()
         {
+            BackInternalCommand = new DelegateCommand(o =>
+            {
+                UpdateAccountSettings(Account.Settings, AccountSettingsEdit);
+                BackCommand?.Execute(BackCommandParameter);
+            });
             SaveCommand = new DelegateCommand(o => {
                 SaveTask(AccountSettingsEdit).ContinueWith((res) => 
                 {
                     if (res.Result)
-                        BackCommand?.Execute(BackCommandParameter);
+                        BackInternalCommand?.Execute(BackInternalCommandParameter);
                 }, GetCancellationToken(), TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
             }, o => !IsBusy);
             SetSettingsViewCommand = new DelegateCommand(o => View = AccountSettingsEditViewModelView.Settings);

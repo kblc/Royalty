@@ -42,10 +42,18 @@
     <Reference Include="Helpers.WPF">
       <HintPath>..\..\Helpers\Helpers.WPF\bin\Release\Helpers.WPF.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -63,6 +71,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Additional\EventArgsParameter.cs" />
+    <Compile Include="Additional\EventToCommand.cs" />
+    <Compile Include="Additional\EventToCommand.WPF.cs" />
+    <Compile Include="Additional\IEventArgsConverter.cs" />
+    <Compile Include="Converters\TimeSpanToStringConverter.cs" />
     <Compile Include="ViewModels\AbstractActionViewModel.cs" />
     <Compile Include="ViewModels\AccountSettingsEditViewModel.cs" />
     <Compile Include="ViewModels\AccountEditViewModel.cs" />

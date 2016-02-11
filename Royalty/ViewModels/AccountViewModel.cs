@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace Royalty.ViewModels
 {
-    public class AccountViewModel : DependencyObject
+    public class AccountViewModel : FrameworkElement
     {
         #region Account
 
@@ -62,7 +62,6 @@ namespace Royalty.ViewModels
 
         private void UpdateAccount(RoyaltyServiceWorker.AccountService.Account newItem, RoyaltyServiceWorker.AccountService.Account oldItem)
         {
-            //
         }
     }
 }
