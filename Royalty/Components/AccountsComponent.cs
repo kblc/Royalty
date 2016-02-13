@@ -43,17 +43,27 @@ namespace Royalty.Components
         private NotifyCollection<RoyaltyServiceWorker.AccountService.Mark> marks = new NotifyCollection<RoyaltyServiceWorker.AccountService.Mark>();
         public IReadOnlyNotifyCollection<RoyaltyServiceWorker.AccountService.Mark> Marks => marks;
 
+        private NotifyCollection<RoyaltyServiceWorker.AccountService.ColumnType> columnTypes = new NotifyCollection<RoyaltyServiceWorker.AccountService.ColumnType>();
+        public IReadOnlyNotifyCollection<RoyaltyServiceWorker.AccountService.ColumnType> ColumnTypes => columnTypes;
+
         public AccountsComponent() : base(new RoyaltyServiceWorker.AccountWorker())
         {
+            accounts.Clear();
             var accountItems = worker.GetAccounts();
             foreach(var item in accountItems)
                 accounts.Add(item);
+            marks.Clear();
             var markItems = worker.GetMarks();
             foreach (var item in markItems)
                 marks.Add(item);
+            columnTypes.Clear();
+            var columnTypeItems = worker.GetColumnTypes();
+            foreach (var item in columnTypeItems)
+                columnTypes.Add(item);
 
             worker.OnAccountsChanged += (_,e) => RunUnderDispatcher(() => WorkerOnAccountsChanged(e));
             worker.OnMarksChanged += (_, e) => RunUnderDispatcher(() => WorkerOnMarksChanged(e));
+            worker.OnColumnTypesChanged += (_, e) => RunUnderDispatcher(() => WorkerOnColumnTypesChanged(e));
         }
 
         private void WorkerApplyHistory(object sender, RoyaltyServiceWorker.HistoryService.History e) => worker.ApplyHistoryChanges(e);
@@ -80,6 +90,18 @@ namespace Royalty.Components
 
             if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Remove)
                 e.Items.ToList().ForEach(i => marks.Remove(marks.FirstOrDefault(a => a.Id == i.Id)));
+        }
+
+        private void WorkerOnColumnTypesChanged(RoyaltyServiceWorker.Additional.ListItemsEventArgs<RoyaltyServiceWorker.AccountService.ColumnType> e)
+        {
+            if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Add)
+                e.Items.ToList().ForEach(i => columnTypes.Add(i));
+
+            if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Change)
+                e.Items.ToList().ForEach(i => columnTypes.FirstOrDefault(a => a.Id == i.Id).CopyObjectFrom(i));
+
+            if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Remove)
+                e.Items.ToList().ForEach(i => columnTypes.Remove(columnTypes.FirstOrDefault(a => a.Id == i.Id)));
         }
     }
 }

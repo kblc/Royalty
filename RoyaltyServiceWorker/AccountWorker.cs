@@ -27,6 +27,7 @@ namespace RoyaltyServiceWorker
 
         private readonly List<AccountService.Account> Accounts = new List<AccountService.Account>();
         private readonly List<AccountService.Mark> Marks = new List<AccountService.Mark>();
+        private readonly List<AccountService.ColumnType> ColumnTypes = new List<AccountService.ColumnType>();
 
         protected override bool DoStart()
         {
@@ -100,11 +101,21 @@ namespace RoyaltyServiceWorker
                             return res.Result.Values;
                         }, stopCancellationTokenSource.Token, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
 
-                        Task.WaitAll(new Task[] { getAccountsTask, getMarksTask }, stopCancellationTokenSource.Token);
-                        Task.WaitAll(new Task[] { getAccountsResTask, getMarksResTask }, stopCancellationTokenSource.Token);
+                        var getColumnTypesTask = sClient.GetColumnTypesAsync();
+                        var getColumnTypesResTask = getColumnTypesTask.ContinueWith(res =>
+                        {
+                            stopCancellationTokenSource.Token.ThrowIfCancellationRequested();
+                            if (res.Result.Error != null)
+                                throw new Exception(res.Result.Error);
+                            return res.Result.Values;
+                        }, stopCancellationTokenSource.Token, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
+
+                        Task.WaitAll(new Task[] { getAccountsTask, getMarksTask, getColumnTypesTask }, stopCancellationTokenSource.Token);
+                        Task.WaitAll(new Task[] { getAccountsResTask, getMarksResTask, getColumnTypesResTask }, stopCancellationTokenSource.Token);
 
                         modelLevelThContext.DoCallBack(() => RaiseAccountInitialize(getAccountsResTask.Result.ToArray()));
                         modelLevelThContext.DoCallBack(() => RaiseMarkInitialize(getMarksResTask.Result.ToArray()));
+                        modelLevelThContext.DoCallBack(() => RaiseColumnTypesInitialize(getColumnTypesResTask.Result.ToArray()));
 
                         inited = true;
                         SetError((string)null);
@@ -158,13 +169,33 @@ namespace RoyaltyServiceWorker
             if (oldMarks.Length > 0)
                 OnMarksChanged(this, ListItemsEventArgs.Create(oldMarks, ChangeAction.Remove));
 
-            lock (Accounts)
+            lock (Marks)
             {
                 Marks.AddRange(marks);
             }
 
             if (marks.Length > 0)
                 OnMarksChanged(this, ListItemsEventArgs.Create(marks, ChangeAction.Add));
+        }
+        private void RaiseColumnTypesInitialize(AccountService.ColumnType[] columnTypes)
+        {
+            var oldColumnTypes = new AccountService.ColumnType[] { };
+            lock (ColumnTypes)
+            {
+                oldColumnTypes = ColumnTypes.ToArray();
+                ColumnTypes.Clear();
+            }
+
+            if (oldColumnTypes.Length > 0)
+                OnColumnTypesChanged(this, ListItemsEventArgs.Create(oldColumnTypes, ChangeAction.Remove));
+
+            lock (ColumnTypes)
+            {
+                ColumnTypes.AddRange(columnTypes);
+            }
+
+            if (columnTypes.Length > 0)
+                OnColumnTypesChanged(this, ListItemsEventArgs.Create(columnTypes, ChangeAction.Add));
         }
 
         public void ApplyHistoryChanges(HistoryService.History e)
@@ -560,7 +591,16 @@ namespace RoyaltyServiceWorker
             }
         }
 
+        public AccountService.ColumnType[] GetColumnTypes()
+        {
+            lock (ColumnTypes)
+            {
+                return ColumnTypes.ToArray();
+            }
+        }
+
         public event EventHandler<ListItemsEventArgs<AccountService.Account>> OnAccountsChanged;
         public event EventHandler<ListItemsEventArgs<AccountService.Mark>> OnMarksChanged;
+        public event EventHandler<ListItemsEventArgs<AccountService.ColumnType>> OnColumnTypesChanged;
     }
 }

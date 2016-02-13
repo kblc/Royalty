@@ -76,7 +76,10 @@
     <Compile Include="Additional\EventToCommand.WPF.cs" />
     <Compile Include="Additional\IEventArgsConverter.cs" />
     <Compile Include="Converters\TimeSpanToStringConverter.cs" />
+    <Compile Include="ViewModels\AbstractActionActivationViewModel.cs" />
+    <Compile Include="ViewModels\AbstractActionWithBackViewModel.cs" />
     <Compile Include="ViewModels\AbstractActionViewModel.cs" />
+    <Compile Include="ViewModels\AccountSettingsColumnsEditViewModel.cs" />
     <Compile Include="ViewModels\AccountSettingsEditViewModel.cs" />
     <Compile Include="ViewModels\AccountEditViewModel.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />

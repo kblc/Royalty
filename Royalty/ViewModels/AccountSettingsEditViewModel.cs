@@ -14,16 +14,7 @@ using System.Windows.Input;
 
 namespace Royalty.ViewModels
 {
-    public enum AccountSettingsEditViewModelView
-    {
-        Settings,
-        Columns,
-        ExportDirectories,
-        ImportDirectories,
-        SheduleTimes
-    }
-
-    public class AccountSettingsEditViewModel : AbstractActionViewModel
+    public class AccountSettingsEditViewModel : AbstractActionWithBackViewModel
     {
         #region Account
 
@@ -44,62 +35,6 @@ namespace Royalty.ViewModels
         {
             get { return (RoyaltyServiceWorker.AccountService.Account)GetValue(AccountProperty); }
             set { SetValue(AccountProperty, value); }
-        }
-
-        #endregion
-        #region BackCommand
-
-        public static readonly DependencyProperty BackCommandProperty = DependencyProperty.Register(nameof(BackCommand), typeof(ICommand),
-            typeof(AccountSettingsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
-
-        public ICommand BackCommand
-        {
-            get { return (ICommand)GetValue(BackCommandProperty); }
-            set { SetValue(BackCommandProperty, value); }
-        }
-
-        #endregion
-        #region BackCommandParameter
-
-        public static readonly DependencyProperty BackCommandParameterProperty = DependencyProperty.Register(nameof(BackCommandParameter), typeof(object),
-            typeof(AccountSettingsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
-
-        public object BackCommandParameter
-        {
-            get { return GetValue(BackCommandParameterProperty); }
-            set { SetValue(BackCommandParameterProperty, value); }
-        }
-
-        #endregion
-        #region BackInternalCommand
-
-        private static readonly DependencyPropertyKey ReadOnlyBackInternalCommandPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(BackInternalCommand), typeof(DelegateCommand), typeof(AccountSettingsEditViewModel),
-                new FrameworkPropertyMetadata(null,
-                    FrameworkPropertyMetadataOptions.None,
-                    new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlyBackInternalCommandProperty = ReadOnlyBackInternalCommandPropertyKey.DependencyProperty;
-
-        public DelegateCommand BackInternalCommand
-        {
-            get { return (DelegateCommand)GetValue(ReadOnlyBackInternalCommandProperty); }
-            private set { SetValue(ReadOnlyBackInternalCommandPropertyKey, value); }
-        }
-
-        #endregion
-        #region BackInternalCommandParameter
-
-        private static readonly DependencyPropertyKey ReadOnlyBackInternalCommandParameterPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(BackInternalCommandParameter), typeof(object), typeof(AccountSettingsEditViewModel),
-                new FrameworkPropertyMetadata(null,
-                    FrameworkPropertyMetadataOptions.None,
-                    new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlyBackInternalCommandParameterProperty = ReadOnlyBackInternalCommandParameterPropertyKey.DependencyProperty;
-
-        public object BackInternalCommandParameter
-        {
-            get { return (object)GetValue(ReadOnlyBackInternalCommandParameterProperty); }
-            private set { SetValue(ReadOnlyBackInternalCommandParameterPropertyKey, value); }
         }
 
         #endregion
@@ -135,122 +70,110 @@ namespace Royalty.ViewModels
         }
 
         #endregion
-        #region SetSettingsViewCommand
 
-        private static readonly DependencyPropertyKey ReadOnlySetSettingsViewCommandPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(SetSettingsViewCommand), typeof(DelegateCommand), typeof(AccountSettingsEditViewModel),
-                new FrameworkPropertyMetadata(null,
-                    FrameworkPropertyMetadataOptions.None,
-                    new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlySetSettingsViewCommandProperty = ReadOnlySetSettingsViewCommandPropertyKey.DependencyProperty;
+        #region SettingsColumnsViewCommand
 
-        public DelegateCommand SetSettingsViewCommand
+        public static readonly DependencyProperty SettingsColumnsViewCommandProperty = DependencyProperty.Register(nameof(SettingsColumnsViewCommand), typeof(ICommand),
+            typeof(AccountSettingsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public ICommand SettingsColumnsViewCommand
         {
-            get { return (DelegateCommand)GetValue(ReadOnlySetSettingsViewCommandProperty); }
-            private set { SetValue(ReadOnlySetSettingsViewCommandPropertyKey, value); }
+            get { return (ICommand)GetValue(SettingsColumnsViewCommandProperty); }
+            set { SetValue(SettingsColumnsViewCommandProperty, value); }
         }
 
         #endregion
-        #region SetColumnsViewCommand
+        #region SettingsColumnsViewCommandParameter
 
-        private static readonly DependencyPropertyKey ReadOnlySetColumnsViewCommandPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(SetColumnsViewCommand), typeof(DelegateCommand), typeof(AccountSettingsEditViewModel),
-                new FrameworkPropertyMetadata(null,
-                    FrameworkPropertyMetadataOptions.None,
-                    new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlySetColumnsViewCommandProperty = ReadOnlySetColumnsViewCommandPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty SettingsColumnsViewCommandParameterProperty = DependencyProperty.Register(nameof(SettingsColumnsViewCommandParameter), typeof(object),
+            typeof(AccountSettingsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
 
-        public DelegateCommand SetColumnsViewCommand
+        public object SettingsColumnsViewCommandParameter
         {
-            get { return (DelegateCommand)GetValue(ReadOnlySetColumnsViewCommandProperty); }
-            private set { SetValue(ReadOnlySetColumnsViewCommandPropertyKey, value); }
+            get { return GetValue(SettingsColumnsViewCommandParameterProperty); }
+            set { SetValue(SettingsColumnsViewCommandParameterProperty, value); }
         }
 
         #endregion
-        #region SetExportDirectoriesViewCommand
+        #region SettingsExportDirectoriesViewCommand
 
-        private static readonly DependencyPropertyKey ReadOnlySetExportDirectoriesViewCommandPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(SetExportDirectoriesViewCommand), typeof(DelegateCommand), typeof(AccountSettingsEditViewModel),
-                new FrameworkPropertyMetadata(null,
-                    FrameworkPropertyMetadataOptions.None,
-                    new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlySetExportDirectoriesViewCommandProperty = ReadOnlySetExportDirectoriesViewCommandPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty SettingsExportDirectoriesViewCommandProperty = DependencyProperty.Register(nameof(SettingsExportDirectoriesViewCommand), typeof(ICommand),
+            typeof(AccountSettingsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
 
-        public DelegateCommand SetExportDirectoriesViewCommand
+        public ICommand SettingsExportDirectoriesViewCommand
         {
-            get { return (DelegateCommand)GetValue(ReadOnlySetExportDirectoriesViewCommandProperty); }
-            private set { SetValue(ReadOnlySetExportDirectoriesViewCommandPropertyKey, value); }
+            get { return (ICommand)GetValue(SettingsExportDirectoriesViewCommandProperty); }
+            set { SetValue(SettingsExportDirectoriesViewCommandProperty, value); }
         }
 
         #endregion
-        #region SetImportDirectoriesViewCommand
+        #region SettingsExportDirectoriesViewCommandParameter
 
-        private static readonly DependencyPropertyKey ReadOnlySetImportDirectoriesViewCommandPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(SetImportDirectoriesViewCommand), typeof(DelegateCommand), typeof(AccountSettingsEditViewModel),
-                new FrameworkPropertyMetadata(null,
-                    FrameworkPropertyMetadataOptions.None,
-                    new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlySetImportDirectoriesViewCommandProperty = ReadOnlySetImportDirectoriesViewCommandPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty SettingsExportDirectoriesViewCommandParameterProperty = DependencyProperty.Register(nameof(SettingsExportDirectoriesViewCommandParameter), typeof(object),
+            typeof(AccountSettingsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
 
-        public DelegateCommand SetImportDirectoriesViewCommand
+        public object SettingsExportDirectoriesViewCommandParameter
         {
-            get { return (DelegateCommand)GetValue(ReadOnlySetImportDirectoriesViewCommandProperty); }
-            private set { SetValue(ReadOnlySetImportDirectoriesViewCommandPropertyKey, value); }
+            get { return GetValue(SettingsExportDirectoriesViewCommandParameterProperty); }
+            set { SetValue(SettingsExportDirectoriesViewCommandParameterProperty, value); }
         }
 
         #endregion
-        #region SetSheduleTimesViewCommand
+        #region SettingsImportDirectoriesViewCommand
 
-        private static readonly DependencyPropertyKey ReadOnlySetSheduleTimesViewCommandPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(SetSheduleTimesViewCommand), typeof(DelegateCommand), typeof(AccountSettingsEditViewModel),
-                new FrameworkPropertyMetadata(null,
-                    FrameworkPropertyMetadataOptions.None,
-                    new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlySetSheduleTimesViewCommandProperty = ReadOnlySetSheduleTimesViewCommandPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty SettingsImportDirectoriesViewCommandProperty = DependencyProperty.Register(nameof(SettingsImportDirectoriesViewCommand), typeof(ICommand),
+            typeof(AccountSettingsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
 
-        public DelegateCommand SetSheduleTimesViewCommand
+        public ICommand SettingsImportDirectoriesViewCommand
         {
-            get { return (DelegateCommand)GetValue(ReadOnlySetSheduleTimesViewCommandProperty); }
-            private set { SetValue(ReadOnlySetSheduleTimesViewCommandPropertyKey, value); }
+            get { return (ICommand)GetValue(SettingsImportDirectoriesViewCommandProperty); }
+            set { SetValue(SettingsImportDirectoriesViewCommandProperty, value); }
         }
 
         #endregion
-        #region View
+        #region SettingsImportDirectoriesViewCommandParameter
 
-        private static readonly DependencyPropertyKey ReadOnlyViewPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(View), typeof(AccountSettingsEditViewModelView), typeof(AccountSettingsEditViewModel),
-                new FrameworkPropertyMetadata(AccountSettingsEditViewModelView.Settings,
-                    FrameworkPropertyMetadataOptions.None,
-                    new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlyViewProperty = ReadOnlyViewPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty SettingsImportDirectoriesViewCommandParameterProperty = DependencyProperty.Register(nameof(SettingsImportDirectoriesViewCommandParameter), typeof(object),
+            typeof(AccountSettingsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
 
-        public AccountSettingsEditViewModelView View
+        public object SettingsImportDirectoriesViewCommandParameter
         {
-            get { return (AccountSettingsEditViewModelView)GetValue(ReadOnlyViewProperty); }
-            private set { SetValue(ReadOnlyViewPropertyKey, value); }
+            get { return GetValue(SettingsImportDirectoriesViewCommandParameterProperty); }
+            set { SetValue(SettingsImportDirectoriesViewCommandParameterProperty, value); }
+        }
+
+        #endregion
+        #region SettingsSheduleTimesViewCommand
+
+        public static readonly DependencyProperty SettingsSheduleTimesViewCommandProperty = DependencyProperty.Register(nameof(SettingsSheduleTimesViewCommand), typeof(ICommand),
+            typeof(AccountSettingsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public ICommand SettingsSheduleTimesViewCommand
+        {
+            get { return (ICommand)GetValue(SettingsSheduleTimesViewCommandProperty); }
+            set { SetValue(SettingsSheduleTimesViewCommandProperty, value); }
+        }
+
+        #endregion
+        #region SettingsSheduleTimesViewCommandParameter
+
+        public static readonly DependencyProperty SettingsSheduleTimesViewCommandParameterProperty = DependencyProperty.Register(nameof(SettingsSheduleTimesViewCommandParameter), typeof(object),
+            typeof(AccountSettingsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public object SettingsSheduleTimesViewCommandParameter
+        {
+            get { return GetValue(SettingsSheduleTimesViewCommandParameterProperty); }
+            set { SetValue(SettingsSheduleTimesViewCommandParameterProperty, value); }
         }
 
         #endregion
 
         public AccountSettingsEditViewModel()
         {
-            BackInternalCommand = new DelegateCommand(o =>
-            {
-                UpdateAccountSettings(Account.Settings, AccountSettingsEdit);
-                BackCommand?.Execute(BackCommandParameter);
-            });
             SaveCommand = new DelegateCommand(o => {
-                SaveTask(AccountSettingsEdit).ContinueWith((res) => 
-                {
-                    if (res.Result)
-                        BackInternalCommand?.Execute(BackInternalCommandParameter);
-                }, GetCancellationToken(), TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
+                SaveTask(AccountSettingsEdit).ContinueWith((res) => { if (res.Result) Back(); }
+                , GetCancellationToken(), TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
             }, o => !IsBusy);
-            SetSettingsViewCommand = new DelegateCommand(o => View = AccountSettingsEditViewModelView.Settings);
-            SetColumnsViewCommand = new DelegateCommand(o => View = AccountSettingsEditViewModelView.Columns);
-            SetExportDirectoriesViewCommand = new DelegateCommand(o => View = AccountSettingsEditViewModelView.ExportDirectories);
-            SetImportDirectoriesViewCommand = new DelegateCommand(o => View = AccountSettingsEditViewModelView.ImportDirectories);
-            SetSheduleTimesViewCommand = new DelegateCommand(o => View = AccountSettingsEditViewModelView.SheduleTimes);
         }
 
         private void UpdateAccount(RoyaltyServiceWorker.AccountService.Account newItem, RoyaltyServiceWorker.AccountService.Account oldItem)
@@ -290,6 +213,12 @@ namespace Royalty.ViewModels
                 UpdateAccountSettings(Account?.Settings, AccountSettingsEdit);
         }
 
+        protected override void BackCommandExecuted(object o)
+        {
+            base.BackCommandExecuted(o);
+            UpdateAccountSettings(Account.Settings, AccountSettingsEdit);
+        }
+
         private Task<bool> SaveTask(RoyaltyServiceWorker.AccountService.AccountSettings item)
         {
             IsBusy = true;
@@ -323,12 +252,8 @@ namespace Royalty.ViewModels
 
         protected override void RaiseCommands()
         {
+            base.RaiseCommands();
             SaveCommand?.RaiseCanExecuteChanged();
-            SetSettingsViewCommand?.RaiseCanExecuteChanged();
-            SetColumnsViewCommand?.RaiseCanExecuteChanged();
-            SetExportDirectoriesViewCommand?.RaiseCanExecuteChanged();
-            SetImportDirectoriesViewCommand?.RaiseCanExecuteChanged();
-            SetSheduleTimesViewCommand?.RaiseCanExecuteChanged();
         }
     }
 }

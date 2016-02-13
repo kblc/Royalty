@@ -12,7 +12,18 @@ using System.Windows.Input;
 
 namespace Royalty.ViewModels
 {
-    public class AccountsViewModel : DependencyObject
+    public enum AccountsViewEnum
+    {
+        Accounts,
+        Account,
+        AccountSettings,
+        AccountSettingsColumns,
+        AccountSettingsExportDirectories,
+        AccountSettingsImportDirectories,
+        AccountSettingsSheduleTimes
+    }
+
+    public class AccountsViewModel : FrameworkElement
     {
         #region AccountsComponent
 
@@ -67,19 +78,51 @@ namespace Royalty.ViewModels
         }
 
         #endregion
-        #region AccountsForEdit
+        #region Marks
 
-        private static readonly DependencyPropertyKey AccountsForEditPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(AccountsForEdit), typeof(RoyaltyServiceWorker.AccountService.Account), typeof(AccountsViewModel),
+        private static readonly DependencyPropertyKey MarksPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(Marks), typeof(ICollectionView), typeof(AccountsViewModel),
                 new FrameworkPropertyMetadata(null,
                     FrameworkPropertyMetadataOptions.None,
                     new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlyAccountsForEditPropertyKey = AccountsForEditPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty ReadOnlyMarksPropertyKey = MarksPropertyKey.DependencyProperty;
 
-        public RoyaltyServiceWorker.AccountService.Account AccountsForEdit
+        public ICollectionView Marks
         {
-            get { return (RoyaltyServiceWorker.AccountService.Account)GetValue(ReadOnlyAccountsForEditPropertyKey); }
-            private set { SetValue(AccountsForEditPropertyKey, value); }
+            get { return (ICollectionView)GetValue(ReadOnlyMarksPropertyKey); }
+            private set { SetValue(MarksPropertyKey, value); }
+        }
+
+        #endregion
+        #region ColumnTypes
+
+        private static readonly DependencyPropertyKey ColumnTypesPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(ColumnTypes), typeof(ICollectionView), typeof(AccountsViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyColumnTypesPropertyKey = ColumnTypesPropertyKey.DependencyProperty;
+
+        public ICollectionView ColumnTypes
+        {
+            get { return (ICollectionView)GetValue(ReadOnlyColumnTypesPropertyKey); }
+            private set { SetValue(ColumnTypesPropertyKey, value); }
+        }
+
+        #endregion
+        #region AccountForEdit
+
+        private static readonly DependencyPropertyKey AccountForEditPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(AccountForEdit), typeof(RoyaltyServiceWorker.AccountService.Account), typeof(AccountsViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { (s as AccountsViewModel)?.OnAccountForEditChanged((RoyaltyServiceWorker.AccountService.Account)e.NewValue); })));
+        public static readonly DependencyProperty ReadOnlyAccountForEditPropertyKey = AccountForEditPropertyKey.DependencyProperty;
+
+        public RoyaltyServiceWorker.AccountService.Account AccountForEdit
+        {
+            get { return (RoyaltyServiceWorker.AccountService.Account)GetValue(ReadOnlyAccountForEditPropertyKey); }
+            private set { SetValue(AccountForEditPropertyKey, value); }
         }
 
         #endregion
@@ -115,6 +158,38 @@ namespace Royalty.ViewModels
         }
 
         #endregion
+        #region SetViewCommand
+
+        private static readonly DependencyPropertyKey ReadOnlySetViewCommandPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(SetViewCommand), typeof(DelegateCommand), typeof(AccountsViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlySetViewCommandProperty = ReadOnlySetViewCommandPropertyKey.DependencyProperty;
+
+        public DelegateCommand SetViewCommand
+        {
+            get { return (DelegateCommand)GetValue(ReadOnlySetViewCommandProperty); }
+            private set { SetValue(ReadOnlySetViewCommandPropertyKey, value); }
+        }
+
+        #endregion
+        #region View
+
+        private static readonly DependencyPropertyKey ReadOnlyViewPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(View), typeof(AccountsViewEnum), typeof(AccountsViewModel),
+                new FrameworkPropertyMetadata(AccountsViewEnum.Accounts,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyViewProperty = ReadOnlyViewPropertyKey.DependencyProperty;
+
+        public AccountsViewEnum View
+        {
+            get { return (AccountsViewEnum)GetValue(ReadOnlyViewProperty); }
+            private set { SetValue(ReadOnlyViewPropertyKey, value); }
+        }
+
+        #endregion
 
         private void UpdateAccountSource(AccountsComponent newComponent)
         {
@@ -133,16 +208,30 @@ namespace Royalty.ViewModels
                     return !item.IsHidden || ShowHidden;
                 return false;
             };
+
+            Marks = CollectionViewSource.GetDefaultView(newComponent.Marks);
+            ColumnTypes = CollectionViewSource.GetDefaultView(newComponent.ColumnTypes);
         }
         private void RefreshAccountSource()
         {
             FilteredAccounts?.Refresh();
         }
+        private void OnAccountForEditChanged(RoyaltyServiceWorker.AccountService.Account account)
+        {
+            View = (account == null)
+                ? AccountsViewEnum.Accounts
+                : AccountsViewEnum.Account;
+        }
 
         public AccountsViewModel()
         {
-            SelectAccountCommand = new DelegateCommand((o) => AccountsForEdit = o as RoyaltyServiceWorker.AccountService.Account);
-            NewAccountCommand = new DelegateCommand((o) => AccountsForEdit = new RoyaltyServiceWorker.AccountService.Account());
+            SelectAccountCommand = new DelegateCommand((o) =>
+            {
+                AccountForEdit = o as RoyaltyServiceWorker.AccountService.Account;
+                OnAccountForEditChanged(AccountForEdit);
+            });
+            NewAccountCommand = new DelegateCommand((o) => SelectAccountCommand.Execute(new RoyaltyServiceWorker.AccountService.Account()));
+            SetViewCommand = new DelegateCommand(o => View = (AccountsViewEnum)o);
         }
     }
 }
