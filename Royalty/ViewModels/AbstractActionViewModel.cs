@@ -12,7 +12,7 @@ namespace Royalty.ViewModels
     {
         #region IsBusy
 
-        private static readonly DependencyPropertyKey ReadOnlyIsBusyPropertyKey
+        protected static readonly DependencyPropertyKey ReadOnlyIsBusyPropertyKey
             = DependencyProperty.RegisterReadOnly(nameof(IsBusy), typeof(bool), typeof(AbstractActionViewModel),
                 new FrameworkPropertyMetadata(false,
                     FrameworkPropertyMetadataOptions.None,

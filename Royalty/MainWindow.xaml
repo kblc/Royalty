@@ -10,7 +10,10 @@
                 <ResourceDictionary >
                     <components:HistoryComponent x:Key="historyComponent" IsActive="True"/>
                     <components:AccountsComponent x:Key="accountComponent" IsActive="True" HistoryComponent="{StaticResource historyComponent}"/>
-                    <viewModels:AccountsViewModel x:Key="accountsViewModel" ShowHidden="True" AccountsComponent="{StaticResource accountComponent}"/>
+                    <components:AccountsSeriesOfNumbersComponent x:Key="accountsSeriesOfNumbersComponent" HistoryComponent="{StaticResource historyComponent}"/>
+                    <viewModels:AccountsViewModel x:Key="accountsViewModel" ShowHidden="True" 
+                                                  AccountsComponent="{StaticResource accountComponent}"
+                                                  AccountsSeriesOfNumbersComponent="{StaticResource accountsSeriesOfNumbersComponent}"/>
                 </ResourceDictionary>
                 <ResourceDictionary Source="pack://application:,,,/Royalty;component/Themes/Generic.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Royalty;component/Templates/HistoryComponentTemplate.xaml"/>

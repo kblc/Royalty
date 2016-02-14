@@ -14,12 +14,12 @@ using System.Windows.Input;
 
 namespace Royalty.ViewModels
 {
-    public class AccountSettingsColumnsEditViewModel : AbstractActionWithBackViewModel
+    public class AccountSettingsExportDirectoriesEditViewModel : AbstractActionWithBackViewModel
     {
         #region Account
 
         public static readonly DependencyProperty AccountProperty = DependencyProperty.Register(nameof(Account), typeof(RoyaltyServiceWorker.AccountService.Account),
-            typeof(AccountSettingsColumnsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+            typeof(AccountSettingsExportDirectoriesEditViewModel), new PropertyMetadata(null, (s, e) => { }));
 
         public RoyaltyServiceWorker.AccountService.Account Account
         {
@@ -28,22 +28,22 @@ namespace Royalty.ViewModels
         }
 
         #endregion
-        #region ColumnTypes
+        #region Marks
 
-        public static readonly DependencyProperty ColumnTypesProperty = DependencyProperty.Register(nameof(ColumnTypes), typeof(ICollectionView),
-            typeof(AccountSettingsColumnsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+        public static readonly DependencyProperty MarksProperty = DependencyProperty.Register(nameof(Marks), typeof(ICollectionView),
+            typeof(AccountSettingsExportDirectoriesEditViewModel), new PropertyMetadata(null, (s, e) => { }));
 
-        public ICollectionView ColumnTypes
+        public ICollectionView Marks
         {
-            get { return (ICollectionView)GetValue(ColumnTypesProperty); }
-            set { SetValue(ColumnTypesProperty, value); }
+            get { return (ICollectionView)GetValue(MarksProperty); }
+            set { SetValue(MarksProperty, value); }
         }
 
         #endregion
         #region AccountSettings
 
         public static readonly DependencyProperty AccountSettingsProperty = DependencyProperty.Register(nameof(AccountSettings), typeof(RoyaltyServiceWorker.AccountService.AccountSettings),
-            typeof(AccountSettingsColumnsEditViewModel), new PropertyMetadata(null, (s, e) => { (s as AccountSettingsColumnsEditViewModel).OnAccountSettingsChanged(e.NewValue as RoyaltyServiceWorker.AccountService.AccountSettings, e.OldValue as RoyaltyServiceWorker.AccountService.AccountSettings); }));
+            typeof(AccountSettingsExportDirectoriesEditViewModel), new PropertyMetadata(null, (s, e) => { (s as AccountSettingsExportDirectoriesEditViewModel).OnAccountSettingsChanged(e.NewValue as RoyaltyServiceWorker.AccountService.AccountSettings, e.OldValue as RoyaltyServiceWorker.AccountService.AccountSettings); }));
 
         public RoyaltyServiceWorker.AccountService.AccountSettings AccountSettings
         {
@@ -52,26 +52,26 @@ namespace Royalty.ViewModels
         }
 
         #endregion
-        #region AccountSettingsColumnsEdit
+        #region AccountSettingsExportDirectoriesEdit
 
-        private static readonly DependencyPropertyKey ReadOnlyAccountSettingsColumnsEditPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(AccountSettingsColumnsEdit), typeof(ICollectionView), typeof(AccountSettingsColumnsEditViewModel),
+        private static readonly DependencyPropertyKey ReadOnlyAccountSettingsExportDirectoriesEditPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(AccountSettingsExportDirectoriesEdit), typeof(ICollectionView), typeof(AccountSettingsExportDirectoriesEditViewModel),
                 new FrameworkPropertyMetadata(null,
                     FrameworkPropertyMetadataOptions.None,
                     new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlyAccountSettingsColumnsEditProperty = ReadOnlyAccountSettingsColumnsEditPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty ReadOnlyAccountSettingsExportDirectoriesEditProperty = ReadOnlyAccountSettingsExportDirectoriesEditPropertyKey.DependencyProperty;
 
-        public ICollectionView AccountSettingsColumnsEdit
+        public ICollectionView AccountSettingsExportDirectoriesEdit
         {
-            get { return (ICollectionView)GetValue(ReadOnlyAccountSettingsColumnsEditProperty); }
-            private set { SetValue(ReadOnlyAccountSettingsColumnsEditPropertyKey, value); }
+            get { return (ICollectionView)GetValue(ReadOnlyAccountSettingsExportDirectoriesEditProperty); }
+            private set { SetValue(ReadOnlyAccountSettingsExportDirectoriesEditPropertyKey, value); }
         }
 
         #endregion
         #region SaveCommand
 
         private static readonly DependencyPropertyKey ReadOnlySaveCommandPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(SaveCommand), typeof(DelegateCommand), typeof(AccountSettingsColumnsEditViewModel),
+            = DependencyProperty.RegisterReadOnly(nameof(SaveCommand), typeof(DelegateCommand), typeof(AccountSettingsExportDirectoriesEditViewModel),
                 new FrameworkPropertyMetadata(null,
                     FrameworkPropertyMetadataOptions.None,
                     new PropertyChangedCallback((s, e) => { })));
@@ -85,9 +85,9 @@ namespace Royalty.ViewModels
 
         #endregion
 
-        private List<RoyaltyServiceWorker.AccountService.AccountSettingsColumn> collectionForEdit = null;
+        private List<RoyaltyServiceWorker.AccountService.AccountSettingsExportDirectory> collectionForEdit = null;
 
-        public AccountSettingsColumnsEditViewModel()
+        public AccountSettingsExportDirectoriesEditViewModel()
         {
             SaveCommand = new DelegateCommand(o => {
                 SaveTask(collectionForEdit).ContinueWith((res) => { if (res.Result) Back(); }
@@ -103,18 +103,18 @@ namespace Royalty.ViewModels
             }
             if (newItem != null)
             {
-                collectionForEdit = newItem.Columns?.ToList() ?? new List<RoyaltyServiceWorker.AccountService.AccountSettingsColumn>();
-                AccountSettingsColumnsEdit = CollectionViewSource.GetDefaultView(collectionForEdit);
+                collectionForEdit = newItem.ExportDirectories?.ToList() ?? new List<RoyaltyServiceWorker.AccountService.AccountSettingsExportDirectory>();
+                AccountSettingsExportDirectoriesEdit = CollectionViewSource.GetDefaultView(collectionForEdit);
                 newItem.PropertyChanged += AccountSettingsPropertyChanged;
             }
         }
 
         private void AccountSettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(AccountSettings.Columns))
+            if (e.PropertyName == nameof(AccountSettings.ExportDirectories))
             {
-                collectionForEdit = AccountSettings.Columns?.ToList() ?? new List<RoyaltyServiceWorker.AccountService.AccountSettingsColumn>();
-                AccountSettingsColumnsEdit = CollectionViewSource.GetDefaultView(collectionForEdit);
+                collectionForEdit = AccountSettings.ExportDirectories?.ToList() ?? new List<RoyaltyServiceWorker.AccountService.AccountSettingsExportDirectory>();
+                AccountSettingsExportDirectoriesEdit = CollectionViewSource.GetDefaultView(collectionForEdit);
             }
         }
 
@@ -124,7 +124,7 @@ namespace Royalty.ViewModels
             OnAccountSettingsChanged(AccountSettings, AccountSettings);
         }
 
-        private Task<bool> SaveTask(IList<RoyaltyServiceWorker.AccountService.AccountSettingsColumn> newItems)
+        private Task<bool> SaveTask(IList<RoyaltyServiceWorker.AccountService.AccountSettingsExportDirectory> newItems)
         {
             IsBusy = true;
             return Task.Factory.StartNew(() => 
@@ -133,7 +133,7 @@ namespace Royalty.ViewModels
                 {
                     foreach(var i in newItems)
                         i.AccountUID = AccountSettings.Id;
-                    AccountSettings.Columns = new List<RoyaltyServiceWorker.AccountService.AccountSettingsColumn>(newItems);
+                    AccountSettings.ExportDirectories = new List<RoyaltyServiceWorker.AccountService.AccountSettingsExportDirectory>(newItems);
                     return true;
                 }
                 catch (Exception ex)

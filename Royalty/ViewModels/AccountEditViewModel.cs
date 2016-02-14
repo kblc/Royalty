@@ -116,6 +116,30 @@ namespace Royalty.ViewModels
         }
 
         #endregion
+        #region SeriesOfNumbersViewCommand
+
+        public static readonly DependencyProperty SeriesOfNumbersViewCommandProperty = DependencyProperty.Register(nameof(SeriesOfNumbersViewCommand), typeof(ICommand),
+            typeof(AccountEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public ICommand SeriesOfNumbersViewCommand
+        {
+            get { return (ICommand)GetValue(SeriesOfNumbersViewCommandProperty); }
+            set { SetValue(SeriesOfNumbersViewCommandProperty, value); }
+        }
+
+        #endregion
+        #region SeriesOfNumbersViewCommandParameter
+
+        public static readonly DependencyProperty SeriesOfNumbersViewCommandParameterProperty = DependencyProperty.Register(nameof(SeriesOfNumbersViewCommandParameter), typeof(object),
+            typeof(AccountEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public object SeriesOfNumbersViewCommandParameter
+        {
+            get { return GetValue(SeriesOfNumbersViewCommandParameterProperty); }
+            set { SetValue(SeriesOfNumbersViewCommandParameterProperty, value); }
+        }
+
+        #endregion
 
         public AccountEditViewModel()
         {

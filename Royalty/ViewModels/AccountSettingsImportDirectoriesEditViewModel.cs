@@ -14,12 +14,12 @@ using System.Windows.Input;
 
 namespace Royalty.ViewModels
 {
-    public class AccountSettingsColumnsEditViewModel : AbstractActionWithBackViewModel
+    public class AccountSettingsImportDirectoriesEditViewModel : AbstractActionWithBackViewModel
     {
         #region Account
 
         public static readonly DependencyProperty AccountProperty = DependencyProperty.Register(nameof(Account), typeof(RoyaltyServiceWorker.AccountService.Account),
-            typeof(AccountSettingsColumnsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+            typeof(AccountSettingsImportDirectoriesEditViewModel), new PropertyMetadata(null, (s, e) => { }));
 
         public RoyaltyServiceWorker.AccountService.Account Account
         {
@@ -28,22 +28,10 @@ namespace Royalty.ViewModels
         }
 
         #endregion
-        #region ColumnTypes
-
-        public static readonly DependencyProperty ColumnTypesProperty = DependencyProperty.Register(nameof(ColumnTypes), typeof(ICollectionView),
-            typeof(AccountSettingsColumnsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
-
-        public ICollectionView ColumnTypes
-        {
-            get { return (ICollectionView)GetValue(ColumnTypesProperty); }
-            set { SetValue(ColumnTypesProperty, value); }
-        }
-
-        #endregion
         #region AccountSettings
 
         public static readonly DependencyProperty AccountSettingsProperty = DependencyProperty.Register(nameof(AccountSettings), typeof(RoyaltyServiceWorker.AccountService.AccountSettings),
-            typeof(AccountSettingsColumnsEditViewModel), new PropertyMetadata(null, (s, e) => { (s as AccountSettingsColumnsEditViewModel).OnAccountSettingsChanged(e.NewValue as RoyaltyServiceWorker.AccountService.AccountSettings, e.OldValue as RoyaltyServiceWorker.AccountService.AccountSettings); }));
+            typeof(AccountSettingsImportDirectoriesEditViewModel), new PropertyMetadata(null, (s, e) => { (s as AccountSettingsImportDirectoriesEditViewModel).OnAccountSettingsChanged(e.NewValue as RoyaltyServiceWorker.AccountService.AccountSettings, e.OldValue as RoyaltyServiceWorker.AccountService.AccountSettings); }));
 
         public RoyaltyServiceWorker.AccountService.AccountSettings AccountSettings
         {
@@ -52,26 +40,26 @@ namespace Royalty.ViewModels
         }
 
         #endregion
-        #region AccountSettingsColumnsEdit
+        #region AccountSettingsImportDirectoriesEdit
 
-        private static readonly DependencyPropertyKey ReadOnlyAccountSettingsColumnsEditPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(AccountSettingsColumnsEdit), typeof(ICollectionView), typeof(AccountSettingsColumnsEditViewModel),
+        private static readonly DependencyPropertyKey ReadOnlyAccountSettingsImportDirectoriesEditPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(AccountSettingsImportDirectoriesEdit), typeof(ICollectionView), typeof(AccountSettingsImportDirectoriesEditViewModel),
                 new FrameworkPropertyMetadata(null,
                     FrameworkPropertyMetadataOptions.None,
                     new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlyAccountSettingsColumnsEditProperty = ReadOnlyAccountSettingsColumnsEditPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty ReadOnlyAccountSettingsImportDirectoriesEditProperty = ReadOnlyAccountSettingsImportDirectoriesEditPropertyKey.DependencyProperty;
 
-        public ICollectionView AccountSettingsColumnsEdit
+        public ICollectionView AccountSettingsImportDirectoriesEdit
         {
-            get { return (ICollectionView)GetValue(ReadOnlyAccountSettingsColumnsEditProperty); }
-            private set { SetValue(ReadOnlyAccountSettingsColumnsEditPropertyKey, value); }
+            get { return (ICollectionView)GetValue(ReadOnlyAccountSettingsImportDirectoriesEditProperty); }
+            private set { SetValue(ReadOnlyAccountSettingsImportDirectoriesEditPropertyKey, value); }
         }
 
         #endregion
         #region SaveCommand
 
         private static readonly DependencyPropertyKey ReadOnlySaveCommandPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(SaveCommand), typeof(DelegateCommand), typeof(AccountSettingsColumnsEditViewModel),
+            = DependencyProperty.RegisterReadOnly(nameof(SaveCommand), typeof(DelegateCommand), typeof(AccountSettingsImportDirectoriesEditViewModel),
                 new FrameworkPropertyMetadata(null,
                     FrameworkPropertyMetadataOptions.None,
                     new PropertyChangedCallback((s, e) => { })));
@@ -85,9 +73,9 @@ namespace Royalty.ViewModels
 
         #endregion
 
-        private List<RoyaltyServiceWorker.AccountService.AccountSettingsColumn> collectionForEdit = null;
+        private List<RoyaltyServiceWorker.AccountService.AccountSettingsImportDirectory> collectionForEdit = null;
 
-        public AccountSettingsColumnsEditViewModel()
+        public AccountSettingsImportDirectoriesEditViewModel()
         {
             SaveCommand = new DelegateCommand(o => {
                 SaveTask(collectionForEdit).ContinueWith((res) => { if (res.Result) Back(); }
@@ -103,18 +91,18 @@ namespace Royalty.ViewModels
             }
             if (newItem != null)
             {
-                collectionForEdit = newItem.Columns?.ToList() ?? new List<RoyaltyServiceWorker.AccountService.AccountSettingsColumn>();
-                AccountSettingsColumnsEdit = CollectionViewSource.GetDefaultView(collectionForEdit);
+                collectionForEdit = newItem.ImportDirectories?.ToList() ?? new List<RoyaltyServiceWorker.AccountService.AccountSettingsImportDirectory>();
+                AccountSettingsImportDirectoriesEdit = CollectionViewSource.GetDefaultView(collectionForEdit);
                 newItem.PropertyChanged += AccountSettingsPropertyChanged;
             }
         }
 
         private void AccountSettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(AccountSettings.Columns))
+            if (e.PropertyName == nameof(AccountSettings.ImportDirectories))
             {
-                collectionForEdit = AccountSettings.Columns?.ToList() ?? new List<RoyaltyServiceWorker.AccountService.AccountSettingsColumn>();
-                AccountSettingsColumnsEdit = CollectionViewSource.GetDefaultView(collectionForEdit);
+                collectionForEdit = AccountSettings.ImportDirectories?.ToList() ?? new List<RoyaltyServiceWorker.AccountService.AccountSettingsImportDirectory>();
+                AccountSettingsImportDirectoriesEdit = CollectionViewSource.GetDefaultView(collectionForEdit);
             }
         }
 
@@ -124,7 +112,7 @@ namespace Royalty.ViewModels
             OnAccountSettingsChanged(AccountSettings, AccountSettings);
         }
 
-        private Task<bool> SaveTask(IList<RoyaltyServiceWorker.AccountService.AccountSettingsColumn> newItems)
+        private Task<bool> SaveTask(IList<RoyaltyServiceWorker.AccountService.AccountSettingsImportDirectory> newItems)
         {
             IsBusy = true;
             return Task.Factory.StartNew(() => 
@@ -133,7 +121,7 @@ namespace Royalty.ViewModels
                 {
                     foreach(var i in newItems)
                         i.AccountUID = AccountSettings.Id;
-                    AccountSettings.Columns = new List<RoyaltyServiceWorker.AccountService.AccountSettingsColumn>(newItems);
+                    AccountSettings.ImportDirectories = new List<RoyaltyServiceWorker.AccountService.AccountSettingsImportDirectory>(newItems);
                     return true;
                 }
                 catch (Exception ex)

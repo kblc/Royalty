@@ -20,7 +20,8 @@ namespace Royalty.ViewModels
         AccountSettingsColumns,
         AccountSettingsExportDirectories,
         AccountSettingsImportDirectories,
-        AccountSettingsSheduleTimes
+        AccountSettingsSheduleTimes,
+        AccountSeriesOfNumbers,
     }
 
     public class AccountsViewModel : FrameworkElement
@@ -46,6 +47,28 @@ namespace Royalty.ViewModels
         }
 
         #endregion
+        #region AccountsSeriesOfNumbersComponent
+
+        public static readonly DependencyProperty AccountsSeriesOfNumbersComponentProperty = DependencyProperty.Register(nameof(AccountsSeriesOfNumbersComponent), typeof(AccountsSeriesOfNumbersComponent),
+            typeof(AccountsViewModel), new PropertyMetadata(null, (s, e) =>
+            {
+                var model = s as AccountsViewModel;
+                var newAccountsComponent = e.NewValue as AccountsSeriesOfNumbersComponent;
+                var oldAccountsComponent = e.OldValue as AccountsSeriesOfNumbersComponent;
+                if (model != null && newAccountsComponent != oldAccountsComponent)
+                {
+                    model.UpdateAccountsSeriesOfNumbersComponentSource(newAccountsComponent);
+                }
+            }));
+
+        public AccountsSeriesOfNumbersComponent AccountsSeriesOfNumbersComponent
+        {
+            get { return (AccountsSeriesOfNumbersComponent)GetValue(AccountsSeriesOfNumbersComponentProperty); }
+            set { SetValue(AccountsSeriesOfNumbersComponentProperty, value); }
+        }
+
+        #endregion
+
         #region ShowHidden
 
         public static readonly DependencyProperty ShowHiddenProperty = DependencyProperty.Register(nameof(ShowHidden), typeof(bool),
@@ -196,6 +219,8 @@ namespace Royalty.ViewModels
             if (newComponent == null)
             {
                 FilteredAccounts = null;
+                Marks = null;
+                ColumnTypes = null;
                 return;
             }
 
@@ -212,6 +237,9 @@ namespace Royalty.ViewModels
             Marks = CollectionViewSource.GetDefaultView(newComponent.Marks);
             ColumnTypes = CollectionViewSource.GetDefaultView(newComponent.ColumnTypes);
         }
+
+        private void UpdateAccountsSeriesOfNumbersComponentSource(AccountsSeriesOfNumbersComponent newComponent) { }
+
         private void RefreshAccountSource()
         {
             FilteredAccounts?.Refresh();
