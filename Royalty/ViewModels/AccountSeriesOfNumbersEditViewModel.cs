@@ -66,6 +66,19 @@ namespace Royalty.ViewModels
 
         #endregion
 
+        #region SelectedValue
+
+        public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register(nameof(SelectedValue), typeof(object),
+            typeof(AccountSeriesOfNumbersEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public object SelectedValue
+        {
+            get { return GetValue(SelectedValueProperty); }
+            set { SetValue(SelectedValueProperty, value); }
+        }
+
+        #endregion
+
         #region SaveCommand
 
         private static readonly DependencyPropertyKey ReadOnlySaveCommandPropertyKey
@@ -98,8 +111,27 @@ namespace Royalty.ViewModels
         }
 
         #endregion
+        #region RowEditEndingCommand
 
-        public AccountSeriesOfNumbersEditViewModel() { }
+        private static readonly DependencyPropertyKey ReadOnlyRowEditEndingCommanddPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(RowEditEndingCommand), typeof(DelegateCommand), typeof(AccountSeriesOfNumbersEditViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyRowEditEndingCommandProperty = ReadOnlyRowEditEndingCommanddPropertyKey.DependencyProperty;
+
+        public DelegateCommand RowEditEndingCommand
+        {
+            get { return (DelegateCommand)GetValue(ReadOnlyRowEditEndingCommandProperty); }
+            private set { SetValue(ReadOnlyRowEditEndingCommanddPropertyKey, value); }
+        }
+
+        #endregion
+
+        public AccountSeriesOfNumbersEditViewModel()
+        {
+            RowEditEndingCommand = new DelegateCommand(o => RowEditEnding(o as System.Windows.Controls.DataGridRowEditEndingEventArgs));
+        }
 
         private void OnAccountChanged(RoyaltyServiceWorker.AccountService.Account newItem, RoyaltyServiceWorker.AccountService.Account oldItem) { }
 
@@ -116,7 +148,6 @@ namespace Royalty.ViewModels
             if (AccountSeriesOfNumbers != null)
             {
                 AccountSeriesOfNumbers.CollectionChanged -= AccountSeriesOfNumbers_CollectionChanged;
-                AccountSeriesOfNumbers.CurrentChanging -= AccountSeriesOfNumbers_CurrentChanging;
                 AccountSeriesOfNumbers = null;
             }
 
@@ -142,7 +173,6 @@ namespace Royalty.ViewModels
 
                 AccountSeriesOfNumbers = CollectionViewSource.GetDefaultView(newItem.AccountSeriesOfNumbersRecords);
                 AccountSeriesOfNumbers.CollectionChanged += AccountSeriesOfNumbers_CollectionChanged;
-                AccountSeriesOfNumbers.CurrentChanging += AccountSeriesOfNumbers_CurrentChanging;
 
                 this.IsBusy = !AccountsSeriesOfNumbersComponent.IsLoaded;
             }
@@ -151,11 +181,6 @@ namespace Royalty.ViewModels
         private void AccountsSeriesOfNumbersComponent_IsLoadedChanged(object sender, EventArgs e)
         {
             this.IsBusy = !AccountsSeriesOfNumbersComponent.IsLoaded;
-        }
-
-        private void AccountSeriesOfNumbers_CurrentChanging(object sender, CurrentChangingEventArgs e)
-        {
-            //
         }
 
         private void AccountSeriesOfNumbers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -168,7 +193,15 @@ namespace Royalty.ViewModels
                     .ToArray();
                 if (oldItems.Length > 0)
                 {
-                    //try to delete items (and restore it on error)
+                    DeleteTask(oldItems)
+                        .ContinueWith(res => 
+                        {
+                            if (res.Result.Length > 0)
+                            {
+                                //AccountsSeriesOfNumbersComponent.AccountSeriesOfNumbersRecords
+                            }
+
+                        }, GetCancellationToken(), TaskContinuationOptions.AttachedToParent, TaskScheduler.FromCurrentSynchronizationContext());
                 }
             }
             if (e.NewItems != null)
@@ -181,7 +214,6 @@ namespace Royalty.ViewModels
                 {
                     foreach (var i in newItems)
                     {
-                        i.IsBusy = true;
                         i.AccountUID = this.Account?.Id;
                     }
                     //try to insert items (and delete it on error)
@@ -189,29 +221,50 @@ namespace Royalty.ViewModels
             }
         }
 
-        private Task<bool> SaveTask(RoyaltyServiceWorker.AccountService.Account item)
+        private void RowEditEnding(System.Windows.Controls.DataGridRowEditEndingEventArgs e)
         {
-            IsBusy = true;
+            if (SelectedValue == null || e == null)
+                return;
 
-            var client = new RoyaltyServiceWorker.AccountService.AccountServiceClient();
-            var task = Account.Id == Guid.Empty
-                ? client.PutAsync(item)
-                : client.UpdateAsync(item);
+            if (e.EditAction == System.Windows.Controls.DataGridEditAction.Commit)
+            {
+                SaveTask(SelectedValue as RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord);
+            }
+        }
 
-            var taskRes = task.ContinueWith((res) => 
+        private Task<bool> SaveTask(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item)
+        {
+            
+
+            var startTask = Task.Factory.StartNew(() => 
+            {
+                IsBusy = true;
+            }, GetCancellationToken(), TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+
+            var clientTask = startTask.ContinueWith((t) => 
+            {
+                var client = new RoyaltyServiceWorker.AccountService.AccountServiceClient();
+                try
+                {
+                    return item.Id == default(long)
+                        ? client.PutSeriesOfNumbers(item)
+                        : client.UpdateSeriesOfNumbers(item);
+                }
+                finally
+                {
+                    try { client.Close(); } catch { }
+                }
+            }, GetCancellationToken(), TaskContinuationOptions.AttachedToParent, TaskScheduler.Default);
+
+            var taskRes = clientTask.ContinueWith((res) => 
             {
                 try
                 {
                     if (res.Result.Error != null)
                         throw new Exception(res.Result.Error);
 
-                    if (Account != null)
-                    {
-                        Account.CopyObjectFrom(res.Result.Value);
-                    } else
-                    {
-                        Account = res.Result.Value;
-                    }
+                    item.CopyObjectFrom(res.Result.Value);
+                    
                     return true;
                 }
                 catch(Exception ex)
@@ -221,7 +274,6 @@ namespace Royalty.ViewModels
                 }
                 finally
                 {
-                    try { client.Close(); } catch { }
                     IsBusy = false;
                 }
             }, GetCancellationToken(), TaskContinuationOptions.AttachedToParent, TaskScheduler.FromCurrentSynchronizationContext());
@@ -229,24 +281,27 @@ namespace Royalty.ViewModels
             return taskRes;
         }
 
-        private Task<bool> DeleteTask(RoyaltyServiceWorker.AccountService.Account item)
+        private Task<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord[]> DeleteTask(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord[] items)
         {
             IsBusy = true;
 
             var client = new RoyaltyServiceWorker.AccountService.AccountServiceClient();
-            var task = client.RemoveAsync(item.Id);
+            var task = client.RemoveSeriesOfNumbersRangeAsync(items.Select(i => i.Id).ToList());
             var taskRes = task.ContinueWith((res) =>
             {
                 try
                 {
                     if (res.Result.Error != null)
                         throw new Exception(res.Result.Error);
-                    return true;
+
+                    return items
+                        .Where(i => !res.Result.Values.Contains(i.Id))
+                        .ToArray();
                 }
                 catch (Exception ex)
                 {
                     Error = ex.ToString();
-                    return false;
+                    return items;
                 }
                 finally
                 {

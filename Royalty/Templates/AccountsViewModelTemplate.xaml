@@ -48,10 +48,18 @@
                 </StackPanel>
             </Border>
 
-            <DataGrid Grid.Row="3" ItemsSource="{Binding AccountSeriesOfNumbers}" x:Name="PART_AccountSeriesOfNumbersEditViewModelTemplateControls">
-                <!--<DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Time, Converter={StaticResource accountsTimeSpanToStringConverter}}" Header="Время запуска"/>
-                </DataGrid.Columns>-->
+            <DataGrid Grid.Row="3" ItemsSource="{Binding AccountSeriesOfNumbers}" x:Name="PART_AccountSeriesOfNumbersEditViewModelTemplateControls"
+                      SelectedValue="{Binding SelectedValue}" AutoGenerateColumns="False">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="RowEditEnding">
+                        <additional:EventToCommand PassEventArgsToCommand="True" 
+                                                   Command="{Binding RowEditEndingCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding DigitCount, UpdateSourceTrigger=PropertyChanged}" Header="Количество цифр"/>
+                    <DataGridTextColumn Binding="{Binding Delay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource accountsTimeSpanToStringConverter}}" Header="Время ожидания"/>
+                </DataGrid.Columns>
             </DataGrid>
 
             <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="999" Margin="4,4">
