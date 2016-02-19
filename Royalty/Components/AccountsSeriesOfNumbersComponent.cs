@@ -10,7 +10,8 @@ using System.Windows;
 
 namespace Royalty.Components
 {
-    public class AccountsSeriesOfNumbersComponent : AbstractComponent<RoyaltyServiceWorker.AccountSeriesOfNumbersWorker>
+    public class AccountsSeriesOfNumbersComponent : AbstractComponent<RoyaltyServiceWorker.AccountSeriesOfNumbersWorker>,
+        IHistoryItemsChange<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord>
     {
         #region Account
 
@@ -49,7 +50,7 @@ namespace Royalty.Components
 
         #endregion
 
-        private NotifyCollection<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord> accountSeriesOfNumbersRecords = new NotifyCollection<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord>();
+        private NotifyCollectionWatcher<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord> accountSeriesOfNumbersRecords = new NotifyCollectionWatcher<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord>((x,y) => x.Id == y.Id);
         public IReadOnlyNotifyCollection<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord> AccountSeriesOfNumbersRecords => accountSeriesOfNumbersRecords;
 
         public AccountsSeriesOfNumbersComponent() { }
@@ -67,20 +68,10 @@ namespace Royalty.Components
         }
 
         private void Worker_OnItemsChanged(object sender, RoyaltyServiceWorker.Additional.ListItemsEventArgs<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord> e)
-            => RunUnderDispatcher(() => WorkerOnAccountSeriesOfNumbersRecordsChanged(e));
+            => RunUnderDispatcher(() => { accountSeriesOfNumbersRecords.UpdateCollection(e); Change?.Invoke(this, e); });
 
         private void WorkerApplyHistory(object sender, RoyaltyServiceWorker.HistoryService.History e) => worker?.ApplyHistoryChanges(e);
 
-        private void WorkerOnAccountSeriesOfNumbersRecordsChanged(RoyaltyServiceWorker.Additional.ListItemsEventArgs<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord> e)
-        {
-            if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Add)
-                e.Items.ToList().ForEach(i => accountSeriesOfNumbersRecords.Add(i));
-                        
-            if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Change)
-                e.Items.ToList().ForEach(i => accountSeriesOfNumbersRecords.FirstOrDefault(a => a.Id == i.Id)?.CopyObjectFrom(i));
-
-            if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Remove)
-                e.Items.ToList().ForEach(i => accountSeriesOfNumbersRecords.Remove(accountSeriesOfNumbersRecords.FirstOrDefault(a => a.Id == i.Id)));
-        }
+        public event EventHandler<RoyaltyServiceWorker.Additional.ListItemsEventArgs<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord>> Change;
     }
 }

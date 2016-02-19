@@ -20,5 +20,13 @@ namespace Royalty.Additional
 
     public class NotifyCollection<T> 
         : ObservableCollection<T>, INotifyCollection<T>, IReadOnlyNotifyCollection<T>
-    { }
+    {
+
+    }
+
+    public class NotifyCollectionWatcher<T>
+        : ObservableCollectionWatcher<T>, INotifyCollection<T>, IReadOnlyNotifyCollection<T>
+    {
+        public NotifyCollectionWatcher(Func<T,T, bool> comparer) : base(comparer) { }
+    }
 }

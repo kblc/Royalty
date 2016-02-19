@@ -1,16 +1,21 @@
 ﻿using Helpers;
 using Helpers.WPF;
+using Royalty.Additional;
 using Royalty.Components;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using RoyaltyServiceWorker.AccountService;
+using RoyaltyServiceWorker.Additional;
 
 namespace Royalty.ViewModels
 {
@@ -79,38 +84,6 @@ namespace Royalty.ViewModels
 
         #endregion
 
-        #region SaveCommand
-
-        private static readonly DependencyPropertyKey ReadOnlySaveCommandPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(SaveCommand), typeof(DelegateCommand), typeof(AccountSeriesOfNumbersEditViewModel),
-                new FrameworkPropertyMetadata(null,
-                    FrameworkPropertyMetadataOptions.None,
-                    new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlySaveCommandProperty = ReadOnlySaveCommandPropertyKey.DependencyProperty;
-
-        public DelegateCommand SaveCommand
-        {
-            get { return (DelegateCommand)GetValue(ReadOnlySaveCommandProperty); }
-            private set { SetValue(ReadOnlySaveCommandPropertyKey, value); }
-        }
-
-        #endregion
-        #region DeleteCommand
-
-        private static readonly DependencyPropertyKey ReadOnlyDeleteCommandPropertyKey
-            = DependencyProperty.RegisterReadOnly(nameof(DeleteCommand), typeof(DelegateCommand), typeof(AccountSeriesOfNumbersEditViewModel),
-                new FrameworkPropertyMetadata(null,
-                    FrameworkPropertyMetadataOptions.None,
-                    new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlyDeleteCommandProperty = ReadOnlyDeleteCommandPropertyKey.DependencyProperty;
-
-        public DelegateCommand DeleteCommand
-        {
-            get { return (DelegateCommand)GetValue(ReadOnlyDeleteCommandProperty); }
-            private set { SetValue(ReadOnlyDeleteCommandPropertyKey, value); }
-        }
-
-        #endregion
         #region RowEditEndingCommand
 
         private static readonly DependencyPropertyKey ReadOnlyRowEditEndingCommanddPropertyKey
@@ -128,31 +101,45 @@ namespace Royalty.ViewModels
 
         #endregion
 
+        protected override void OnIsActiveChanged(bool newValue)
+        {
+            base.OnIsActiveChanged(newValue);
+            localCollection.Clear();
+        }
+
+        private ObservableCollectionWatcher<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord> localCollection = null;
+
         public AccountSeriesOfNumbersEditViewModel()
         {
+            localCollection = new ObservableCollectionWatcher<AccountSeriesOfNumbersRecord>((x, y) => x.Id == y.Id);
+            AccountSeriesOfNumbers = CollectionViewSource.GetDefaultView(localCollection);
+            AccountSeriesOfNumbers.CollectionChanged += AccountSeriesOfNumbers_CollectionChanged;
             RowEditEndingCommand = new DelegateCommand(o => RowEditEnding(o as System.Windows.Controls.DataGridRowEditEndingEventArgs));
         }
 
-        private void OnAccountChanged(RoyaltyServiceWorker.AccountService.Account newItem, RoyaltyServiceWorker.AccountService.Account oldItem) { }
+        private void OnAccountChanged(RoyaltyServiceWorker.AccountService.Account newItem, RoyaltyServiceWorker.AccountService.Account oldItem)
+        {
+            localCollection.Clear();
+        }
 
         private void UpdateAccountsSeriesOfNumbersComponentSource(AccountsSeriesOfNumbersComponent newItem, AccountsSeriesOfNumbersComponent oldItem)
         {
             if (oldItem != null)
             {
+                oldItem.Change -= AccountsSeriesOfNumbersComponent_Change;
                 BindingOperations.ClearBinding(oldItem, AccountsSeriesOfNumbersComponent.AccountProperty);
-                BindingOperations.ClearBinding(oldItem, AccountsSeriesOfNumbersComponent.IsActiveProperty);
+                BindingOperations.ClearBinding(oldItem, AbstractComponent.IsActiveProperty);
                 DependencyPropertyDescriptor.FromProperty(AbstractComponent.ReadOnlyIsLoadedProperty, newItem.GetType())
                     .RemoveValueChanged(oldItem, AccountsSeriesOfNumbersComponent_IsLoadedChanged);
             }
 
-            if (AccountSeriesOfNumbers != null)
-            {
-                AccountSeriesOfNumbers.CollectionChanged -= AccountSeriesOfNumbers_CollectionChanged;
-                AccountSeriesOfNumbers = null;
-            }
+            localCollection.Clear();
 
             if (newItem != null)
             {
+                localCollection.AddRange(newItem.AccountSeriesOfNumbersRecords);
+                newItem.Change += AccountsSeriesOfNumbersComponent_Change;
+
                 var accountBinding = new Binding() {
                     Source = this,
                     Path = new PropertyPath(AccountProperty.Name),
@@ -167,15 +154,16 @@ namespace Royalty.ViewModels
 
                 BindingOperations.SetBinding(newItem, AccountsSeriesOfNumbersComponent.AccountProperty, accountBinding);
                 BindingOperations.SetBinding(newItem, AbstractComponent.IsActiveProperty, isActiveBinding);
-
                 DependencyPropertyDescriptor.FromProperty(AbstractComponent.ReadOnlyIsLoadedProperty, newItem.GetType())
                     .AddValueChanged(newItem, AccountsSeriesOfNumbersComponent_IsLoadedChanged);
 
-                AccountSeriesOfNumbers = CollectionViewSource.GetDefaultView(newItem.AccountSeriesOfNumbersRecords);
-                AccountSeriesOfNumbers.CollectionChanged += AccountSeriesOfNumbers_CollectionChanged;
-
                 this.IsBusy = !AccountsSeriesOfNumbersComponent.IsLoaded;
             }
+        }
+
+        private void AccountsSeriesOfNumbersComponent_Change(object sender, ListItemsEventArgs<AccountSeriesOfNumbersRecord> e)
+        {
+            localCollection.UpdateCollection(e);
         }
 
         private void AccountsSeriesOfNumbersComponent_IsLoadedChanged(object sender, EventArgs e)
@@ -185,40 +173,33 @@ namespace Royalty.ViewModels
 
         private void AccountSeriesOfNumbers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.OldItems != null)
+            if (e.OldItems != null && IsActive)
             {
                 var oldItems = e.OldItems
-                    .OfType<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord>()
+                    .OfType<AccountSeriesOfNumbersRecord>()
                     .Where(i => i.Id != default(long))
                     .ToArray();
                 if (oldItems.Length > 0)
                 {
                     DeleteTask(oldItems)
-                        .ContinueWith(res => 
+                        .ContinueWith(res =>
                         {
                             if (res.Result.Length > 0)
-                            {
-                                //AccountsSeriesOfNumbersComponent.AccountSeriesOfNumbersRecords
-                            }
-
+                                localCollection.AddRange(res.Result);
                         }, GetCancellationToken(), TaskContinuationOptions.AttachedToParent, TaskScheduler.FromCurrentSynchronizationContext());
                 }
             }
+            #region Set account UID for new Items
             if (e.NewItems != null)
             {
                 var newItems = e.NewItems
-                    .OfType<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord>()
+                    .OfType<AccountSeriesOfNumbersRecord>()
                     .Where(i => i.Id == default(long))
                     .ToArray();
-                if (newItems.Length > 0)
-                {
-                    foreach (var i in newItems)
-                    {
-                        i.AccountUID = this.Account?.Id;
-                    }
-                    //try to insert items (and delete it on error)
-                }
+                foreach (var i in newItems)
+                    i.AccountUID = this.Account?.Id;
             }
+            #endregion
         }
 
         private void RowEditEnding(System.Windows.Controls.DataGridRowEditEndingEventArgs e)
@@ -227,15 +208,11 @@ namespace Royalty.ViewModels
                 return;
 
             if (e.EditAction == System.Windows.Controls.DataGridEditAction.Commit)
-            {
                 SaveTask(SelectedValue as RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord);
-            }
         }
 
         private Task<bool> SaveTask(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord item)
         {
-            
-
             var startTask = Task.Factory.StartNew(() => 
             {
                 IsBusy = true;
@@ -281,13 +258,27 @@ namespace Royalty.ViewModels
             return taskRes;
         }
 
-        private Task<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord[]> DeleteTask(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord[] items)
+        private Task<AccountSeriesOfNumbersRecord[]> DeleteTask(AccountSeriesOfNumbersRecord[] items)
         {
-            IsBusy = true;
+            var startTask = Task.Factory.StartNew(() =>
+            {
+                IsBusy = true;
+            }, GetCancellationToken(), TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
 
-            var client = new RoyaltyServiceWorker.AccountService.AccountServiceClient();
-            var task = client.RemoveSeriesOfNumbersRangeAsync(items.Select(i => i.Id).ToList());
-            var taskRes = task.ContinueWith((res) =>
+            var clientTask = startTask.ContinueWith((t) =>
+            {
+                var client = new RoyaltyServiceWorker.AccountService.AccountServiceClient();
+                try
+                {
+                    return client.RemoveSeriesOfNumbersRange(items.Select(i => i.Id).ToList());
+                }
+                finally
+                {
+                    try { client.Close(); } catch { }
+                }
+            }, GetCancellationToken(), TaskContinuationOptions.AttachedToParent, TaskScheduler.Default);
+
+            var taskRes = clientTask.ContinueWith((res) =>
             {
                 try
                 {
@@ -305,7 +296,6 @@ namespace Royalty.ViewModels
                 }
                 finally
                 {
-                    try { client.Close(); } catch { }
                     IsBusy = false;
                 }
             }, GetCancellationToken(), TaskContinuationOptions.AttachedToParent, TaskScheduler.FromCurrentSynchronizationContext());
@@ -316,8 +306,7 @@ namespace Royalty.ViewModels
         protected override void RaiseCommands()
         {
             base.RaiseCommands();
-            SaveCommand?.RaiseCanExecuteChanged();
-            DeleteCommand?.RaiseCanExecuteChanged();
+            RowEditEndingCommand?.RaiseCanExecuteChanged();
         }
     }
 }
