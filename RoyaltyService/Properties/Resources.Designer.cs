@@ -70,6 +70,15 @@ namespace RoyaltyService.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account additional column not found..
+        /// </summary>
+        public static string SERVICES_ACCOUNT_AccountDataRecordAdditionalColumnNotFound {
+            get {
+                return ResourceManager.GetString("SERVICES_ACCOUNT_AccountDataRecordAdditionalColumnNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Series of numbers not found..
         /// </summary>
         public static string SERVICES_ACCOUNT_AccountSeriesOfNumbersRecordNotFound {

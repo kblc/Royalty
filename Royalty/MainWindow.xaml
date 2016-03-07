@@ -11,9 +11,11 @@
                     <components:HistoryComponent x:Key="historyComponent" IsActive="True"/>
                     <components:AccountsComponent x:Key="accountComponent" IsActive="True" HistoryComponent="{StaticResource historyComponent}"/>
                     <components:AccountsSeriesOfNumbersComponent x:Key="accountsSeriesOfNumbersComponent" HistoryComponent="{StaticResource historyComponent}"/>
+                    <components:AccountsAdditionalColumnsComponent x:Key="accountsAdditionalColumnsComponent" HistoryComponent="{StaticResource historyComponent}"/>
                     <viewModels:AccountsViewModel x:Key="accountsViewModel" ShowHidden="True" 
                                                   AccountsComponent="{StaticResource accountComponent}"
-                                                  AccountsSeriesOfNumbersComponent="{StaticResource accountsSeriesOfNumbersComponent}"/>
+                                                  AccountsSeriesOfNumbersComponent="{StaticResource accountsSeriesOfNumbersComponent}"
+                                                  AccountsAdditionalColumnsComponent="{StaticResource accountsAdditionalColumnsComponent}"/>
                 </ResourceDictionary>
                 <ResourceDictionary Source="pack://application:,,,/Royalty;component/Themes/Generic.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Royalty;component/Templates/HistoryComponentTemplate.xaml"/>

@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountAdditionalColumnsWorker.cs" />
     <Compile Include="AccountSeriesOfNumbersWorker.cs" />
     <Compile Include="AccountWorker.cs" />
     <Compile Include="Additional\AbstractBaseViewModel.cs" />
@@ -90,6 +91,12 @@
     </None>
     <None Include="Service References\AccountService\RoyaltyService.Services.Account.Result.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\AccountService\RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\AccountService\RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\AccountService\RoyaltyServiceWorker.AccountService.AccountResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>

@@ -75,5 +75,9 @@ namespace RoyaltyRepository.Models
         public string Column18 { get; set; }
         [Column("column19")]
         public string Column19 { get; set; }
+
+        public static string GetColumnName(int index)=> (index >= 0 && index < ColumnCount)
+                ? $"Column{index.ToString("00")}"
+                : null;
     }
 }

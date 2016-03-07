@@ -11,6 +11,76 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="RESTGetAdditionalColumns">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="accountId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RESTGetAdditionalColumnsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTGetAdditionalColumnsResult" nillable="true" type="q1:_x0020_AccountDataRecordAdditionalColumnResults" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RESTPutAdditionalColumn">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q2:AccountDataRecordAdditionalColumn" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RESTPutAdditionalColumnResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTPutAdditionalColumnResult" nillable="true" type="q3:_x0020_AccountDataRecordAdditionalColumnResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RESTUpdateAdditionalColumn">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q4:AccountDataRecordAdditionalColumn" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RESTUpdateAdditionalColumnResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTUpdateAdditionalColumnResult" nillable="true" type="q5:_x0020_AccountDataRecordAdditionalColumnResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RESTRemoveAdditionalColumn">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="identifier" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RESTRemoveAdditionalColumnResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTRemoveAdditionalColumnResult" nillable="true" type="q6:LongExecutionResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RESTRemoveAdditionalColumnsRange">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifier" nillable="true" type="q7:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RESTRemoveAdditionalColumnsRangeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTRemoveAdditionalColumnsRangeResult" nillable="true" type="q8:LongExecutionResults" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="RESTGetSeriesOfNumbers">
     <xs:complexType>
       <xs:sequence>
@@ -21,35 +91,35 @@
   <xs:element name="RESTGetSeriesOfNumbersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTGetSeriesOfNumbersResult" nillable="true" type="q1:AccountSeriesOfNumbersRecordResults" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTGetSeriesOfNumbersResult" nillable="true" type="q9:AccountSeriesOfNumbersRecordResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTPutSeriesOfNumbers">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q2:AccountSeriesOfNumbersRecord" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q10:AccountSeriesOfNumbersRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTPutSeriesOfNumbersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTPutSeriesOfNumbersResult" nillable="true" type="q3:AccountSeriesOfNumbersRecordResult" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTPutSeriesOfNumbersResult" nillable="true" type="q11:AccountSeriesOfNumbersRecordResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTUpdateSeriesOfNumbers">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q4:AccountSeriesOfNumbersRecord" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q12:AccountSeriesOfNumbersRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTUpdateSeriesOfNumbersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTUpdateSeriesOfNumbersResult" nillable="true" type="q5:AccountSeriesOfNumbersRecordResult" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTUpdateSeriesOfNumbersResult" nillable="true" type="q13:AccountSeriesOfNumbersRecordResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -63,49 +133,49 @@
   <xs:element name="RESTRemoveSeriesOfNumbersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTRemoveSeriesOfNumbersResult" nillable="true" type="q6:LongExecutionResult" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTRemoveSeriesOfNumbersResult" nillable="true" type="q14:LongExecutionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTRemoveSeriesOfNumbersRange">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifier" nillable="true" type="q7:ArrayOfstring" />
+        <xs:element xmlns:q15="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifier" nillable="true" type="q15:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTRemoveSeriesOfNumbersRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTRemoveSeriesOfNumbersRangeResult" nillable="true" type="q8:LongExecutionResults" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTRemoveSeriesOfNumbersRangeResult" nillable="true" type="q16:LongExecutionResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsSheduleTimePut">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q9:AccountSettingsSheduleTime" />
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q17:AccountSettingsSheduleTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsSheduleTimePutResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsSheduleTimePutResult" nillable="true" type="q10:AccountSettingsSheduleTimeResult" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsSheduleTimePutResult" nillable="true" type="q18:AccountSettingsSheduleTimeResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsSheduleTimeUpdate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q11:AccountSettingsSheduleTime" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q19:AccountSettingsSheduleTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsSheduleTimeUpdateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsSheduleTimeUpdateResult" nillable="true" type="q12:AccountSettingsSheduleTimeResult" />
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsSheduleTimeUpdateResult" nillable="true" type="q20:AccountSettingsSheduleTimeResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -119,49 +189,49 @@
   <xs:element name="RESTSettingsSheduleTimeRemoveResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsSheduleTimeRemoveResult" nillable="true" type="q13:LongExecutionResult" />
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsSheduleTimeRemoveResult" nillable="true" type="q21:LongExecutionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsSheduleTimeRemoveRange">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q14:ArrayOfstring" />
+        <xs:element xmlns:q22="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q22:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsSheduleTimeRemoveRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsSheduleTimeRemoveRangeResult" nillable="true" type="q15:LongExecutionResults" />
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsSheduleTimeRemoveRangeResult" nillable="true" type="q23:LongExecutionResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsExportDirectoryPut">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q16:AccountSettingsExportDirectory" />
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q24:AccountSettingsExportDirectory" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsExportDirectoryPutResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsExportDirectoryPutResult" nillable="true" type="q17:AccountSettingsExportDirectoryResult" />
+        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsExportDirectoryPutResult" nillable="true" type="q25:AccountSettingsExportDirectoryResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsExportDirectoryUpdate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q18:AccountSettingsExportDirectory" />
+        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q26:AccountSettingsExportDirectory" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsExportDirectoryUpdateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsExportDirectoryUpdateResult" nillable="true" type="q19:AccountSettingsExportDirectoryResult" />
+        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsExportDirectoryUpdateResult" nillable="true" type="q27:AccountSettingsExportDirectoryResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -175,49 +245,49 @@
   <xs:element name="RESTSettingsExportDirectoryRemoveResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsExportDirectoryRemoveResult" nillable="true" type="q20:LongExecutionResult" />
+        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsExportDirectoryRemoveResult" nillable="true" type="q28:LongExecutionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsExportDirectoryRemoveRange">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q21="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q21:ArrayOfstring" />
+        <xs:element xmlns:q29="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q29:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsExportDirectoryRemoveRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsExportDirectoryRemoveRangeResult" nillable="true" type="q22:LongExecutionResults" />
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsExportDirectoryRemoveRangeResult" nillable="true" type="q30:LongExecutionResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsImportDirectoryPut">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q23:AccountSettingsImportDirectory" />
+        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q31:AccountSettingsImportDirectory" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsImportDirectoryPutResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsImportDirectoryPutResult" nillable="true" type="q24:AccountSettingsImportDirectoryResult" />
+        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsImportDirectoryPutResult" nillable="true" type="q32:AccountSettingsImportDirectoryResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsImportDirectoryUpdate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q25:AccountSettingsImportDirectory" />
+        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q33:AccountSettingsImportDirectory" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsImportDirectoryUpdateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsImportDirectoryUpdateResult" nillable="true" type="q26:AccountSettingsImportDirectoryResult" />
+        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsImportDirectoryUpdateResult" nillable="true" type="q34:AccountSettingsImportDirectoryResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -231,49 +301,49 @@
   <xs:element name="RESTSettingsImportDirectoryRemoveResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsImportDirectoryRemoveResult" nillable="true" type="q27:LongExecutionResult" />
+        <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsImportDirectoryRemoveResult" nillable="true" type="q35:LongExecutionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsImportDirectoryRemoveRange">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q28="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q28:ArrayOfstring" />
+        <xs:element xmlns:q36="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q36:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsImportDirectoryRemoveRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsImportDirectoryRemoveRangeResult" nillable="true" type="q29:LongExecutionResults" />
+        <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsImportDirectoryRemoveRangeResult" nillable="true" type="q37:LongExecutionResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsColumnPut">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q30:AccountSettingsColumn" />
+        <xs:element xmlns:q38="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q38:AccountSettingsColumn" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsColumnPutResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsColumnPutResult" nillable="true" type="q31:AccountSettingsColumnsResult" />
+        <xs:element xmlns:q39="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsColumnPutResult" nillable="true" type="q39:AccountSettingsColumnsResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsColumnUpdate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q32:AccountSettingsColumn" />
+        <xs:element xmlns:q40="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q40:AccountSettingsColumn" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsColumnUpdateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsColumnUpdateResult" nillable="true" type="q33:AccountSettingsColumnsResult" />
+        <xs:element xmlns:q41="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsColumnUpdateResult" nillable="true" type="q41:AccountSettingsColumnsResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -287,21 +357,21 @@
   <xs:element name="RESTSettingsColumnRemoveResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsColumnRemoveResult" nillable="true" type="q34:LongExecutionResult" />
+        <xs:element xmlns:q42="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsColumnRemoveResult" nillable="true" type="q42:LongExecutionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsColumnRemoveRange">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q35="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q35:ArrayOfstring" />
+        <xs:element xmlns:q43="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q43:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsColumnRemoveRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q36="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsColumnRemoveRangeResult" nillable="true" type="q36:LongExecutionResults" />
+        <xs:element xmlns:q44="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTSettingsColumnRemoveRangeResult" nillable="true" type="q44:LongExecutionResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -313,7 +383,7 @@
   <xs:element name="RESTGetColumnMarksResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTGetColumnMarksResult" nillable="true" type="q37:AccountSettingsMarkResults" />
+        <xs:element xmlns:q45="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTGetColumnMarksResult" nillable="true" type="q45:AccountSettingsMarkResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -325,7 +395,7 @@
   <xs:element name="RESTGetColumnTypesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q38="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTGetColumnTypesResult" nillable="true" type="q38:AccountSettingsColumnTypeResults" />
+        <xs:element xmlns:q46="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTGetColumnTypesResult" nillable="true" type="q46:AccountSettingsColumnTypeResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -337,7 +407,7 @@
   <xs:element name="RESTGetAllResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q39="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTGetAllResult" nillable="true" type="q39:AccountResults" />
+        <xs:element xmlns:q47="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTGetAllResult" nillable="true" type="q47:AccountResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -351,49 +421,49 @@
   <xs:element name="RESTGetResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q40="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTGetResult" nillable="true" type="q40:AccountResult" />
+        <xs:element xmlns:q48="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTGetResult" nillable="true" type="q48:AccountResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTGetRange">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q41="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q41:ArrayOfstring" />
+        <xs:element xmlns:q49="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q49:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTGetRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q42="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTGetRangeResult" nillable="true" type="q42:AccountResults" />
+        <xs:element xmlns:q50="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTGetRangeResult" nillable="true" type="q50:AccountResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTPut">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q43="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q43:Account" />
+        <xs:element xmlns:q51="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q51:Account" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTPutResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q44="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTPutResult" nillable="true" type="q44:AccountResult" />
+        <xs:element xmlns:q52="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTPutResult" nillable="true" type="q52:AccountResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTUpdate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q45="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q45:Account" />
+        <xs:element xmlns:q53="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q53:Account" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTUpdateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q46="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTUpdateResult" nillable="true" type="q46:AccountResult" />
+        <xs:element xmlns:q54="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTUpdateResult" nillable="true" type="q54:AccountResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -407,63 +477,133 @@
   <xs:element name="RESTRemoveResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q47="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTRemoveResult" nillable="true" type="q47:GuidExecutionResult" />
+        <xs:element xmlns:q55="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTRemoveResult" nillable="true" type="q55:GuidExecutionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTRemoveRange">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q48="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifier" nillable="true" type="q48:ArrayOfstring" />
+        <xs:element xmlns:q56="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifier" nillable="true" type="q56:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTRemoveRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q49="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTRemoveRangeResult" nillable="true" type="q49:GuidExecutionResults" />
+        <xs:element xmlns:q57="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RESTRemoveRangeResult" nillable="true" type="q57:GuidExecutionResults" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAdditionalColumns">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q58="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="accountId" type="q58:guid" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAdditionalColumnsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q59="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="GetAdditionalColumnsResult" nillable="true" type="q59:_x0020_AccountDataRecordAdditionalColumnResults" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PutAdditionalColumn">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q60="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q60:AccountDataRecordAdditionalColumn" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PutAdditionalColumnResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q61="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="PutAdditionalColumnResult" nillable="true" type="q61:_x0020_AccountDataRecordAdditionalColumnResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateAdditionalColumn">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q62="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q62:AccountDataRecordAdditionalColumn" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateAdditionalColumnResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q63="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="UpdateAdditionalColumnResult" nillable="true" type="q63:_x0020_AccountDataRecordAdditionalColumnResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RemoveAdditionalColumn">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="identifier" type="xs:long" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RemoveAdditionalColumnResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q64="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RemoveAdditionalColumnResult" nillable="true" type="q64:LongExecutionResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RemoveAdditionalColumnsRange">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q65="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifier" nillable="true" type="q65:ArrayOflong" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RemoveAdditionalColumnsRangeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q66="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RemoveAdditionalColumnsRangeResult" nillable="true" type="q66:LongExecutionResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetSeriesOfNumbers">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q50="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="accountId" type="q50:guid" />
+        <xs:element xmlns:q67="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="accountId" type="q67:guid" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetSeriesOfNumbersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q51="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="GetSeriesOfNumbersResult" nillable="true" type="q51:AccountSeriesOfNumbersRecordResults" />
+        <xs:element xmlns:q68="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="GetSeriesOfNumbersResult" nillable="true" type="q68:AccountSeriesOfNumbersRecordResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="PutSeriesOfNumbers">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q52="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q52:AccountSeriesOfNumbersRecord" />
+        <xs:element xmlns:q69="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q69:AccountSeriesOfNumbersRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="PutSeriesOfNumbersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q53="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="PutSeriesOfNumbersResult" nillable="true" type="q53:AccountSeriesOfNumbersRecordResult" />
+        <xs:element xmlns:q70="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="PutSeriesOfNumbersResult" nillable="true" type="q70:AccountSeriesOfNumbersRecordResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="UpdateSeriesOfNumbers">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q54="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q54:AccountSeriesOfNumbersRecord" />
+        <xs:element xmlns:q71="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q71:AccountSeriesOfNumbersRecord" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="UpdateSeriesOfNumbersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q55="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="UpdateSeriesOfNumbersResult" nillable="true" type="q55:AccountSeriesOfNumbersRecordResult" />
+        <xs:element xmlns:q72="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="UpdateSeriesOfNumbersResult" nillable="true" type="q72:AccountSeriesOfNumbersRecordResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -477,77 +617,77 @@
   <xs:element name="RemoveSeriesOfNumbersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q56="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RemoveSeriesOfNumbersResult" nillable="true" type="q56:LongExecutionResult" />
+        <xs:element xmlns:q73="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RemoveSeriesOfNumbersResult" nillable="true" type="q73:LongExecutionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RemoveSeriesOfNumbersRange">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q57="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifier" nillable="true" type="q57:ArrayOflong" />
+        <xs:element xmlns:q74="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifier" nillable="true" type="q74:ArrayOflong" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RemoveSeriesOfNumbersRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q58="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RemoveSeriesOfNumbersRangeResult" nillable="true" type="q58:LongExecutionResults" />
+        <xs:element xmlns:q75="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RemoveSeriesOfNumbersRangeResult" nillable="true" type="q75:LongExecutionResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsUpdate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q59="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q59:AccountSettings" />
+        <xs:element xmlns:q76="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q76:AccountSettings" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RESTSettingsUpdateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q60="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsUpdateResult" nillable="true" type="q60:AccountSettingsResult" />
+        <xs:element xmlns:q77="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTSettingsUpdateResult" nillable="true" type="q77:AccountSettingsResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsUpdate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q61="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q61:AccountSettings" />
+        <xs:element xmlns:q78="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q78:AccountSettings" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsUpdateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q62="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsUpdateResult" nillable="true" type="q62:AccountSettingsResult" />
+        <xs:element xmlns:q79="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsUpdateResult" nillable="true" type="q79:AccountSettingsResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsSheduleTimePut">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q63="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q63:AccountSettingsSheduleTime" />
+        <xs:element xmlns:q80="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q80:AccountSettingsSheduleTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsSheduleTimePutResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q64="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsSheduleTimePutResult" nillable="true" type="q64:AccountSettingsSheduleTimeResult" />
+        <xs:element xmlns:q81="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsSheduleTimePutResult" nillable="true" type="q81:AccountSettingsSheduleTimeResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsSheduleTimeUpdate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q65="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q65:AccountSettingsSheduleTime" />
+        <xs:element xmlns:q82="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q82:AccountSettingsSheduleTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsSheduleTimeUpdateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q66="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsSheduleTimeUpdateResult" nillable="true" type="q66:AccountSettingsSheduleTimeResult" />
+        <xs:element xmlns:q83="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsSheduleTimeUpdateResult" nillable="true" type="q83:AccountSettingsSheduleTimeResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -561,49 +701,49 @@
   <xs:element name="SettingsSheduleTimeRemoveResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q67="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsSheduleTimeRemoveResult" nillable="true" type="q67:LongExecutionResult" />
+        <xs:element xmlns:q84="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsSheduleTimeRemoveResult" nillable="true" type="q84:LongExecutionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsSheduleTimeRemoveRange">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q68="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q68:ArrayOflong" />
+        <xs:element xmlns:q85="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q85:ArrayOflong" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsSheduleTimeRemoveRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q69="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsSheduleTimeRemoveRangeResult" nillable="true" type="q69:LongExecutionResults" />
+        <xs:element xmlns:q86="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsSheduleTimeRemoveRangeResult" nillable="true" type="q86:LongExecutionResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsExportDirectoryPut">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q70="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q70:AccountSettingsExportDirectory" />
+        <xs:element xmlns:q87="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q87:AccountSettingsExportDirectory" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsExportDirectoryPutResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q71="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsExportDirectoryPutResult" nillable="true" type="q71:AccountSettingsExportDirectoryResult" />
+        <xs:element xmlns:q88="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsExportDirectoryPutResult" nillable="true" type="q88:AccountSettingsExportDirectoryResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsExportDirectoryUpdate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q72="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q72:AccountSettingsExportDirectory" />
+        <xs:element xmlns:q89="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q89:AccountSettingsExportDirectory" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsExportDirectoryUpdateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q73="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsExportDirectoryUpdateResult" nillable="true" type="q73:AccountSettingsExportDirectoryResult" />
+        <xs:element xmlns:q90="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsExportDirectoryUpdateResult" nillable="true" type="q90:AccountSettingsExportDirectoryResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -617,49 +757,49 @@
   <xs:element name="SettingsExportDirectoryRemoveResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q74="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsExportDirectoryRemoveResult" nillable="true" type="q74:LongExecutionResult" />
+        <xs:element xmlns:q91="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsExportDirectoryRemoveResult" nillable="true" type="q91:LongExecutionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsExportDirectoryRemoveRange">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q75="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q75:ArrayOflong" />
+        <xs:element xmlns:q92="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q92:ArrayOflong" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsExportDirectoryRemoveRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q76="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsExportDirectoryRemoveRangeResult" nillable="true" type="q76:LongExecutionResults" />
+        <xs:element xmlns:q93="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsExportDirectoryRemoveRangeResult" nillable="true" type="q93:LongExecutionResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsImportDirectoryPut">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q77="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q77:AccountSettingsImportDirectory" />
+        <xs:element xmlns:q94="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q94:AccountSettingsImportDirectory" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsImportDirectoryPutResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q78="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsImportDirectoryPutResult" nillable="true" type="q78:AccountSettingsImportDirectoryResult" />
+        <xs:element xmlns:q95="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsImportDirectoryPutResult" nillable="true" type="q95:AccountSettingsImportDirectoryResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsImportDirectoryUpdate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q79="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q79:AccountSettingsImportDirectory" />
+        <xs:element xmlns:q96="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q96:AccountSettingsImportDirectory" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsImportDirectoryUpdateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q80="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsImportDirectoryUpdateResult" nillable="true" type="q80:AccountSettingsImportDirectoryResult" />
+        <xs:element xmlns:q97="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsImportDirectoryUpdateResult" nillable="true" type="q97:AccountSettingsImportDirectoryResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -673,49 +813,49 @@
   <xs:element name="SettingsImportDirectoryRemoveResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q81="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsImportDirectoryRemoveResult" nillable="true" type="q81:LongExecutionResult" />
+        <xs:element xmlns:q98="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsImportDirectoryRemoveResult" nillable="true" type="q98:LongExecutionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsImportDirectoryRemoveRange">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q82="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q82:ArrayOflong" />
+        <xs:element xmlns:q99="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q99:ArrayOflong" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsImportDirectoryRemoveRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q83="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsImportDirectoryRemoveRangeResult" nillable="true" type="q83:LongExecutionResults" />
+        <xs:element xmlns:q100="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsImportDirectoryRemoveRangeResult" nillable="true" type="q100:LongExecutionResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsColumnPut">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q84="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q84:AccountSettingsColumn" />
+        <xs:element xmlns:q101="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q101:AccountSettingsColumn" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsColumnPutResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q85="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsColumnPutResult" nillable="true" type="q85:AccountSettingsColumnsResult" />
+        <xs:element xmlns:q102="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsColumnPutResult" nillable="true" type="q102:AccountSettingsColumnsResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsColumnUpdate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q86="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q86:AccountSettingsColumn" />
+        <xs:element xmlns:q103="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q103:AccountSettingsColumn" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsColumnUpdateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q87="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsColumnUpdateResult" nillable="true" type="q87:AccountSettingsColumnsResult" />
+        <xs:element xmlns:q104="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="SettingsColumnUpdateResult" nillable="true" type="q104:AccountSettingsColumnsResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -729,21 +869,21 @@
   <xs:element name="SettingsColumnRemoveResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q88="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsColumnRemoveResult" nillable="true" type="q88:LongExecutionResult" />
+        <xs:element xmlns:q105="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsColumnRemoveResult" nillable="true" type="q105:LongExecutionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsColumnRemoveRange">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q89="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q89:ArrayOflong" />
+        <xs:element xmlns:q106="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q106:ArrayOflong" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SettingsColumnRemoveRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q90="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsColumnRemoveRangeResult" nillable="true" type="q90:LongExecutionResults" />
+        <xs:element xmlns:q107="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="SettingsColumnRemoveRangeResult" nillable="true" type="q107:LongExecutionResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -755,7 +895,7 @@
   <xs:element name="GetColumnMarksResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q91="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="GetColumnMarksResult" nillable="true" type="q91:AccountSettingsMarkResults" />
+        <xs:element xmlns:q108="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="GetColumnMarksResult" nillable="true" type="q108:AccountSettingsMarkResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -767,7 +907,7 @@
   <xs:element name="GetColumnTypesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q92="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="GetColumnTypesResult" nillable="true" type="q92:AccountSettingsColumnTypeResults" />
+        <xs:element xmlns:q109="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="GetColumnTypesResult" nillable="true" type="q109:AccountSettingsColumnTypeResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -779,91 +919,91 @@
   <xs:element name="GetAllResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q93="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="GetAllResult" nillable="true" type="q93:AccountResults" />
+        <xs:element xmlns:q110="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="GetAllResult" nillable="true" type="q110:AccountResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Get">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q94="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="identifier" type="q94:guid" />
+        <xs:element xmlns:q111="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="identifier" type="q111:guid" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q95="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="GetResult" nillable="true" type="q95:AccountResult" />
+        <xs:element xmlns:q112="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="GetResult" nillable="true" type="q112:AccountResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetRange">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q96="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q96:ArrayOfguid" />
+        <xs:element xmlns:q113="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifiers" nillable="true" type="q113:ArrayOfguid" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q97="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="GetRangeResult" nillable="true" type="q97:AccountResults" />
+        <xs:element xmlns:q114="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="GetRangeResult" nillable="true" type="q114:AccountResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Put">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q98="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q98:Account" />
+        <xs:element xmlns:q115="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q115:Account" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="PutResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q99="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="PutResult" nillable="true" type="q99:AccountResult" />
+        <xs:element xmlns:q116="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="PutResult" nillable="true" type="q116:AccountResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Update">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q100="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q100:Account" />
+        <xs:element xmlns:q117="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="item" nillable="true" type="q117:Account" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="UpdateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q101="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="UpdateResult" nillable="true" type="q101:AccountResult" />
+        <xs:element xmlns:q118="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="UpdateResult" nillable="true" type="q118:AccountResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="Remove">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q102="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="identifier" type="q102:guid" />
+        <xs:element xmlns:q119="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="identifier" type="q119:guid" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RemoveResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q103="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RemoveResult" nillable="true" type="q103:GuidExecutionResult" />
+        <xs:element xmlns:q120="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RemoveResult" nillable="true" type="q120:GuidExecutionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RemoveRange">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q104="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifier" nillable="true" type="q104:ArrayOfguid" />
+        <xs:element xmlns:q121="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="identifier" nillable="true" type="q121:ArrayOfguid" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RemoveRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q105="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RemoveRangeResult" nillable="true" type="q105:GuidExecutionResults" />
+        <xs:element xmlns:q122="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" minOccurs="0" name="RemoveRangeResult" nillable="true" type="q122:GuidExecutionResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

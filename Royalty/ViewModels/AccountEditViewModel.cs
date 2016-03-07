@@ -140,6 +140,30 @@ namespace Royalty.ViewModels
         }
 
         #endregion
+        #region AdditionalColumnsViewCommand
+
+        public static readonly DependencyProperty AdditionalColumnsViewCommandProperty = DependencyProperty.Register(nameof(AdditionalColumnsViewCommand), typeof(ICommand),
+            typeof(AccountEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public ICommand AdditionalColumnsViewCommand
+        {
+            get { return (ICommand)GetValue(AdditionalColumnsViewCommandProperty); }
+            set { SetValue(AdditionalColumnsViewCommandProperty, value); }
+        }
+
+        #endregion
+        #region AdditionalColumnsViewCommandParameter
+
+        public static readonly DependencyProperty AdditionalColumnsViewCommandParameterProperty = DependencyProperty.Register(nameof(AdditionalColumnsViewCommandParameter), typeof(object),
+            typeof(AccountEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public object AdditionalColumnsViewCommandParameter
+        {
+            get { return GetValue(AdditionalColumnsViewCommandParameterProperty); }
+            set { SetValue(AdditionalColumnsViewCommandParameterProperty, value); }
+        }
+
+        #endregion
 
         public AccountEditViewModel()
         {

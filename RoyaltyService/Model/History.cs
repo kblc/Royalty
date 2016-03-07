@@ -49,6 +49,10 @@ namespace RoyaltyService.Model
         [DataMember]
         [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSeriesOfNumbersRecord), typeof(long))]
         public long[] AccountSeriesOfNumbersRecord { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountDataRecordAdditionalColumn), typeof(long))]
+        public long[] AccountDataRecordAdditionalColumn { get; set; }
     }
 
     [DataContract]
@@ -81,6 +85,10 @@ namespace RoyaltyService.Model
         [DataMember]
         [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountSeriesOfNumbersRecord))]
         public AccountSeriesOfNumbersRecord[] AccountSeriesOfNumbersRecord { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountDataRecordAdditionalColumn))]
+        public AccountDataRecordAdditionalColumn[] AccountDataRecordAdditionalColumn { get; set; }
     }
 
     [DataContract]

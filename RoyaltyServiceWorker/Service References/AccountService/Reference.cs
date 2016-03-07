@@ -17,12 +17,16 @@ namespace RoyaltyServiceWorker.AccountService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Result", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
     [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountDataRecordAdditionalColumnh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOflong))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.LongExecutionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOflong))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.LongExecutionResults))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSettingsSheduleTimeResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSettingsExportDirectoryh3e0gNRf))]
@@ -45,8 +49,8 @@ namespace RoyaltyServiceWorker.AccountService {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.GuidExecutionResults))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSettingsh3e0gNRf))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSettingsResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults))]
     public partial class Result : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
@@ -90,16 +94,16 @@ namespace RoyaltyServiceWorker.AccountService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultOfAccountDataRecordAdditionalColumnh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
     [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult))]
-    public partial class BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult))]
+    public partial class BaseExecutionResultOfAccountDataRecordAdditionalColumnh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord ValueField;
+        private RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn ValueField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord Value {
+        public RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn Value {
             get {
                 return this.ValueField;
             }
@@ -114,9 +118,9 @@ namespace RoyaltyServiceWorker.AccountService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="AccountSeriesOfNumbersRecordResult", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.Runtime.Serialization.DataContractAttribute(Name=" AccountDataRecordAdditionalColumnResult", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
     [System.SerializableAttribute()]
-    public partial class AccountSeriesOfNumbersRecordResult : RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf {
+    public partial class AccountDataRecordAdditionalColumnResult : RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountDataRecordAdditionalColumnh3e0gNRf {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -179,6 +183,68 @@ namespace RoyaltyServiceWorker.AccountService {
     [System.Runtime.Serialization.DataContractAttribute(Name="LongExecutionResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
     [System.SerializableAttribute()]
     public partial class LongExecutionResults : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOflong {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults))]
+    public partial class BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord> ValuesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord> Values {
+            get {
+                return this.ValuesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValuesField, value) != true)) {
+                    this.ValuesField = value;
+                    this.RaisePropertyChanged("Values");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountSeriesOfNumbersRecordResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.SerializableAttribute()]
+    public partial class AccountSeriesOfNumbersRecordResults : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResult))]
+    public partial class BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountSeriesOfNumbersRecordResult", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.SerializableAttribute()]
+    public partial class AccountSeriesOfNumbersRecordResult : RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -524,16 +590,16 @@ namespace RoyaltyServiceWorker.AccountService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
     [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults))]
-    public partial class BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults))]
+    public partial class BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord> ValuesField;
+        private System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn> ValuesField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecord> Values {
+        public System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn> Values {
             get {
                 return this.ValuesField;
             }
@@ -548,9 +614,118 @@ namespace RoyaltyServiceWorker.AccountService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="AccountSeriesOfNumbersRecordResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.Runtime.Serialization.DataContractAttribute(Name=" AccountDataRecordAdditionalColumnResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
     [System.SerializableAttribute()]
-    public partial class AccountSeriesOfNumbersRecordResults : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf {
+    public partial class AccountDataRecordAdditionalColumnResults : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountDataRecordAdditionalColumn", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class AccountDataRecordAdditionalColumn : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.Guid> AccountUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ColumnNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ColumnSystemNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool ExportField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long IdField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.Guid> AccountUID {
+            get {
+                return this.AccountUIDField;
+            }
+            set {
+                if ((this.AccountUIDField.Equals(value) != true)) {
+                    this.AccountUIDField = value;
+                    this.RaisePropertyChanged("AccountUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ColumnName {
+            get {
+                return this.ColumnNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ColumnNameField, value) != true)) {
+                    this.ColumnNameField = value;
+                    this.RaisePropertyChanged("ColumnName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ColumnSystemName {
+            get {
+                return this.ColumnSystemNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ColumnSystemNameField, value) != true)) {
+                    this.ColumnSystemNameField = value;
+                    this.RaisePropertyChanged("ColumnSystemName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Export {
+            get {
+                return this.ExportField;
+            }
+            set {
+                if ((this.ExportField.Equals(value) != true)) {
+                    this.ExportField = value;
+                    this.RaisePropertyChanged("Export");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -1624,6 +1799,36 @@ namespace RoyaltyServiceWorker.AccountService {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IBaseService/ChangeLanguage")]
         System.Threading.Tasks.Task ChangeLanguageAsync(string codename);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTGetAdditionalColumns", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTGetAdditionalColumnsResponse")]
+        RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults RESTGetAdditionalColumns(string accountId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTGetAdditionalColumns", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTGetAdditionalColumnsResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults> RESTGetAdditionalColumnsAsync(string accountId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTPutAdditionalColumn", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTPutAdditionalColumnResponse")]
+        RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult RESTPutAdditionalColumn(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTPutAdditionalColumn", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTPutAdditionalColumnResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult> RESTPutAdditionalColumnAsync(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTUpdateAdditionalColumn", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTUpdateAdditionalColumnResponse")]
+        RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult RESTUpdateAdditionalColumn(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTUpdateAdditionalColumn", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTUpdateAdditionalColumnResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult> RESTUpdateAdditionalColumnAsync(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAdditionalColumn", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveAdditionalColumnResponse")]
+        RoyaltyServiceWorker.AccountService.LongExecutionResult RESTRemoveAdditionalColumn(string identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAdditionalColumn", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveAdditionalColumnResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResult> RESTRemoveAdditionalColumnAsync(string identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAdditionalColumnsRange", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveAdditionalColumnsRangeResponse")]
+        RoyaltyServiceWorker.AccountService.LongExecutionResults RESTRemoveAdditionalColumnsRange(System.Collections.Generic.List<string> identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAdditionalColumnsRange", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveAdditionalColumnsRangeResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RESTRemoveAdditionalColumnsRangeAsync(System.Collections.Generic.List<string> identifier);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTGetSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTGetSeriesOfNumbersResponse")]
         RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults RESTGetSeriesOfNumbers(string accountId);
         
@@ -1844,6 +2049,46 @@ namespace RoyaltyServiceWorker.AccountService {
         
         public System.Threading.Tasks.Task ChangeLanguageAsync(string codename) {
             return base.Channel.ChangeLanguageAsync(codename);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults RESTGetAdditionalColumns(string accountId) {
+            return base.Channel.RESTGetAdditionalColumns(accountId);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults> RESTGetAdditionalColumnsAsync(string accountId) {
+            return base.Channel.RESTGetAdditionalColumnsAsync(accountId);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult RESTPutAdditionalColumn(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item) {
+            return base.Channel.RESTPutAdditionalColumn(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult> RESTPutAdditionalColumnAsync(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item) {
+            return base.Channel.RESTPutAdditionalColumnAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult RESTUpdateAdditionalColumn(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item) {
+            return base.Channel.RESTUpdateAdditionalColumn(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult> RESTUpdateAdditionalColumnAsync(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item) {
+            return base.Channel.RESTUpdateAdditionalColumnAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.LongExecutionResult RESTRemoveAdditionalColumn(string identifier) {
+            return base.Channel.RESTRemoveAdditionalColumn(identifier);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResult> RESTRemoveAdditionalColumnAsync(string identifier) {
+            return base.Channel.RESTRemoveAdditionalColumnAsync(identifier);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.LongExecutionResults RESTRemoveAdditionalColumnsRange(System.Collections.Generic.List<string> identifier) {
+            return base.Channel.RESTRemoveAdditionalColumnsRange(identifier);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RESTRemoveAdditionalColumnsRangeAsync(System.Collections.Generic.List<string> identifier) {
+            return base.Channel.RESTRemoveAdditionalColumnsRangeAsync(identifier);
         }
         
         public RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults RESTGetSeriesOfNumbers(string accountId) {
@@ -2097,6 +2342,36 @@ namespace RoyaltyServiceWorker.AccountService {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IBaseService/ChangeLanguage")]
         System.Threading.Tasks.Task ChangeLanguageAsync(string codename);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/GetAdditionalColumns", ReplyAction="http://tempuri.org/IAccountService/GetAdditionalColumnsResponse")]
+        RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults GetAdditionalColumns(System.Guid accountId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/GetAdditionalColumns", ReplyAction="http://tempuri.org/IAccountService/GetAdditionalColumnsResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults> GetAdditionalColumnsAsync(System.Guid accountId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/PutAdditionalColumn", ReplyAction="http://tempuri.org/IAccountService/PutAdditionalColumnResponse")]
+        RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult PutAdditionalColumn(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/PutAdditionalColumn", ReplyAction="http://tempuri.org/IAccountService/PutAdditionalColumnResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult> PutAdditionalColumnAsync(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/UpdateAdditionalColumn", ReplyAction="http://tempuri.org/IAccountService/UpdateAdditionalColumnResponse")]
+        RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult UpdateAdditionalColumn(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/UpdateAdditionalColumn", ReplyAction="http://tempuri.org/IAccountService/UpdateAdditionalColumnResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult> UpdateAdditionalColumnAsync(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveAdditionalColumn", ReplyAction="http://tempuri.org/IAccountService/RemoveAdditionalColumnResponse")]
+        RoyaltyServiceWorker.AccountService.LongExecutionResult RemoveAdditionalColumn(long identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveAdditionalColumn", ReplyAction="http://tempuri.org/IAccountService/RemoveAdditionalColumnResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResult> RemoveAdditionalColumnAsync(long identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveAdditionalColumnsRange", ReplyAction="http://tempuri.org/IAccountService/RemoveAdditionalColumnsRangeResponse")]
+        RoyaltyServiceWorker.AccountService.LongExecutionResults RemoveAdditionalColumnsRange(System.Collections.Generic.List<long> identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveAdditionalColumnsRange", ReplyAction="http://tempuri.org/IAccountService/RemoveAdditionalColumnsRangeResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RemoveAdditionalColumnsRangeAsync(System.Collections.Generic.List<long> identifier);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/GetSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountService/GetSeriesOfNumbersResponse")]
         RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults GetSeriesOfNumbers(System.Guid accountId);
         
@@ -2323,6 +2598,46 @@ namespace RoyaltyServiceWorker.AccountService {
         
         public System.Threading.Tasks.Task ChangeLanguageAsync(string codename) {
             return base.Channel.ChangeLanguageAsync(codename);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults GetAdditionalColumns(System.Guid accountId) {
+            return base.Channel.GetAdditionalColumns(accountId);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults> GetAdditionalColumnsAsync(System.Guid accountId) {
+            return base.Channel.GetAdditionalColumnsAsync(accountId);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult PutAdditionalColumn(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item) {
+            return base.Channel.PutAdditionalColumn(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult> PutAdditionalColumnAsync(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item) {
+            return base.Channel.PutAdditionalColumnAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult UpdateAdditionalColumn(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item) {
+            return base.Channel.UpdateAdditionalColumn(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult> UpdateAdditionalColumnAsync(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn item) {
+            return base.Channel.UpdateAdditionalColumnAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.LongExecutionResult RemoveAdditionalColumn(long identifier) {
+            return base.Channel.RemoveAdditionalColumn(identifier);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResult> RemoveAdditionalColumnAsync(long identifier) {
+            return base.Channel.RemoveAdditionalColumnAsync(identifier);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.LongExecutionResults RemoveAdditionalColumnsRange(System.Collections.Generic.List<long> identifier) {
+            return base.Channel.RemoveAdditionalColumnsRange(identifier);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RemoveAdditionalColumnsRangeAsync(System.Collections.Generic.List<long> identifier) {
+            return base.Channel.RemoveAdditionalColumnsRangeAsync(identifier);
         }
         
         public RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults GetSeriesOfNumbers(System.Guid accountId) {

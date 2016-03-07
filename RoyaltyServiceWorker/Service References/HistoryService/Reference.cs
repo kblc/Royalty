@@ -196,6 +196,9 @@ namespace RoyaltyServiceWorker.HistoryService {
         private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.Account> AccountField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.AccountDataRecordAdditionalColumn> AccountDataRecordAdditionalColumnField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.AccountSeriesOfNumbersRecord> AccountSeriesOfNumbersRecordField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -232,6 +235,19 @@ namespace RoyaltyServiceWorker.HistoryService {
                 if ((object.ReferenceEquals(this.AccountField, value) != true)) {
                     this.AccountField = value;
                     this.RaisePropertyChanged("Account");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.AccountDataRecordAdditionalColumn> AccountDataRecordAdditionalColumn {
+            get {
+                return this.AccountDataRecordAdditionalColumnField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccountDataRecordAdditionalColumnField, value) != true)) {
+                    this.AccountDataRecordAdditionalColumnField = value;
+                    this.RaisePropertyChanged("AccountDataRecordAdditionalColumn");
                 }
             }
         }
@@ -337,6 +353,9 @@ namespace RoyaltyServiceWorker.HistoryService {
         private System.Collections.Generic.List<System.Guid> AccountField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<long> AccountDataRecordAdditionalColumnField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Collections.Generic.List<long> AccountSeriesOfNumbersRecordField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -373,6 +392,19 @@ namespace RoyaltyServiceWorker.HistoryService {
                 if ((object.ReferenceEquals(this.AccountField, value) != true)) {
                     this.AccountField = value;
                     this.RaisePropertyChanged("Account");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<long> AccountDataRecordAdditionalColumn {
+            get {
+                return this.AccountDataRecordAdditionalColumnField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccountDataRecordAdditionalColumnField, value) != true)) {
+                    this.AccountDataRecordAdditionalColumnField = value;
+                    this.RaisePropertyChanged("AccountDataRecordAdditionalColumn");
                 }
             }
         }
@@ -576,6 +608,115 @@ namespace RoyaltyServiceWorker.HistoryService {
                 if ((object.ReferenceEquals(this.SettingsField, value) != true)) {
                     this.SettingsField = value;
                     this.RaisePropertyChanged("Settings");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountDataRecordAdditionalColumn", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class AccountDataRecordAdditionalColumn : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.Guid> AccountUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ColumnNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ColumnSystemNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool ExportField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long IdField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.Guid> AccountUID {
+            get {
+                return this.AccountUIDField;
+            }
+            set {
+                if ((this.AccountUIDField.Equals(value) != true)) {
+                    this.AccountUIDField = value;
+                    this.RaisePropertyChanged("AccountUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ColumnName {
+            get {
+                return this.ColumnNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ColumnNameField, value) != true)) {
+                    this.ColumnNameField = value;
+                    this.RaisePropertyChanged("ColumnName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ColumnSystemName {
+            get {
+                return this.ColumnSystemNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ColumnSystemNameField, value) != true)) {
+                    this.ColumnSystemNameField = value;
+                    this.RaisePropertyChanged("ColumnSystemName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Export {
+            get {
+                return this.ExportField;
+            }
+            set {
+                if ((this.ExportField.Equals(value) != true)) {
+                    this.ExportField = value;
+                    this.RaisePropertyChanged("Export");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
                 }
             }
         }

@@ -22,40 +22,47 @@ namespace RoyaltyRepository
         /// <param name="waitUntilSaving">Wait until saving</param>
         public void AccountDataRecordAdditionalColumnAdd(AccountDataRecordAdditionalColumn instance, bool saveAfterInsert = true, bool waitUntilSaving = true)
         {
-            AccountDataRecordAdditionalColumnAdd(new AccountDataRecordAdditionalColumn[] { instance }, instance.Account, saveAfterInsert, waitUntilSaving);
+            AccountDataRecordAdditionalColumnAdd(new AccountDataRecordAdditionalColumn[] { instance }, instance?.AccountUID, saveAfterInsert, waitUntilSaving);
         }
-        /// <summary>
-        /// Add AccountDataRecordAdditionalColumn to database
-        /// </summary>
-        /// <param name="instance">AccountDataRecordAdditionalColumn instance</param>
-        /// <param name="account">Account instance for instance</param>
-        /// <param name="saveAfterInsert">Save database after insertion</param>
-        /// <param name="waitUntilSaving">Wait until saving</param>
-        public void AccountDataRecordAdditionalColumnAdd(AccountDataRecordAdditionalColumn instance, Account account, bool saveAfterInsert = true, bool waitUntilSaving = true)
-        {
-            AccountDataRecordAdditionalColumnAdd(new AccountDataRecordAdditionalColumn[] { instance }, account, saveAfterInsert, waitUntilSaving);
-        }
+
         /// <summary>
         /// Add AccountDataRecordAdditionalColumns to database
         /// </summary>
         /// <param name="instances">AccountDataRecordAdditionalColumn instance array</param>
-        /// <param name="account">Account instance for instances</param>
+        /// <param name="accountId">Account identifier for instances</param>
         /// <param name="saveAfterInsert">Save database after insertion</param>
         /// <param name="waitUntilSaving">Wait until saving</param>
-        public void AccountDataRecordAdditionalColumnAdd(IEnumerable<AccountDataRecordAdditionalColumn> instances, Account account, bool saveAfterInsert = true, bool waitUntilSaving = true)
+        public void AccountDataRecordAdditionalColumnAdd(IEnumerable<AccountDataRecordAdditionalColumn> instances, Guid? accountId, bool saveAfterInsert = true, bool waitUntilSaving = true)
         {
             try
             {
                 if (instances == null)
                     throw new ArgumentNullException("instances");
-                if (account == null)
-                    throw new ArgumentNullException("account");
+                if (!accountId.HasValue)
+                    throw new ArgumentNullException("accountId");
                 instances = instances.Where(i => i != null).ToArray();
                 try
                 {
+                    var withoutColumns = instances.Where(i => string.IsNullOrWhiteSpace(i.ColumnSystemName)).ToArray();
+                    if (withoutColumns.Any())
+                    {
+                        var existingColumnSystemNames = Get<AccountDataRecordAdditionalColumn>(ac => ac.AccountUID == accountId.Value, asNoTracking: true).Select(ac => ac.ColumnSystemName).ToArray();
+                        var freeColumnNames = Enumerable.Range(0, (int)AccountDataRecordAdditional.ColumnCount)
+                            .Select(i => new { Index = i, ColumnName = AccountDataRecordAdditional.GetColumnName(i) })
+                            .LeftOuterJoin(existingColumnSystemNames, n => n.ColumnName.ToUpper(), n => n?.ToUpper(), (n0, n1) => new { n0.Index, n0.ColumnName, Exists = n1 != null })
+                            .Where(i => !i.Exists)
+                            .OrderBy(i => i.Index)
+                            .Select(i => i.ColumnName)
+                            .ToArray();
+
+                        var itemsToAllowAdd = Math.Min(withoutColumns.Length, freeColumnNames.Length);
+                        for (int i = 0; i < itemsToAllowAdd; i++)
+                            withoutColumns[i].ColumnSystemName = freeColumnNames[i];
+                    }
+
                     foreach (var i in instances)
-                        if (i.Account != account)
-                            i.Account = account;
+                        if (i.AccountUID != accountId)
+                            i.AccountUID = accountId.Value;
 
                     this.Context.AccountDataRecordAdditionalColumns.AddRange(instances);
                     if (saveAfterInsert)
@@ -64,7 +71,7 @@ namespace RoyaltyRepository
                 catch (Exception ex)
                 {
                     var e = new Exception(ex.Message, ex);
-                    for (int i = 0; i < instances.Count();i++)
+                    for (int i = 0; i < instances.Count(); i++)
                         e.Data.Add(string.Format("instance_{0}", i), instances.ElementAt(i).ToString());
                     throw e;
                 }
@@ -75,6 +82,7 @@ namespace RoyaltyRepository
                 throw;
             }
         }
+
         /// <summary>
         /// Remove AccountDataRecordAdditionalColumn from database
         /// </summary>
