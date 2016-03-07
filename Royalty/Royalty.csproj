@@ -74,6 +74,7 @@
     <Compile Include="Additional\EventArgsParameter.cs" />
     <Compile Include="Additional\EventToCommand.cs" />
     <Compile Include="Additional\EventToCommand.WPF.cs" />
+    <Compile Include="Additional\FilterTimer.cs" />
     <Compile Include="Additional\IEventArgsConverter.cs" />
     <Compile Include="Additional\ObservableCollectionWatcher.cs" />
     <Compile Include="Components\AccountsPhoneMarksComponent.cs" />

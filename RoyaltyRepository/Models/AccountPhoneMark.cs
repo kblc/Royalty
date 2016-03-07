@@ -34,7 +34,7 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Идентификатор аккаунта, которому принадлежат данные
         /// </summary>
-        [Required, ForeignKey("Account"), Column("account_uid"), Index(IsUnique = true, Order = 1)]
+        [Required, ForeignKey("Account"), Column("account_uid"), Index("UIX_Account_Phone", IsUnique = true, Order = 1)]
         public Guid AccountUID { get; set; }
         /// <summary>
         /// Аккаунт, которому принадлежат данные
@@ -45,7 +45,7 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Идентификатор телефона
         /// </summary>
-        [Required, ForeignKey("Phone"), Column("phone_id"), Index(IsUnique = true, Order = 2)]
+        [Required, ForeignKey("Phone"), Column("phone_id"), Index("UIX_Account_Phone", IsUnique = true, Order = 2)]
         public long PhoneID { get; set; }
         /// <summary>
         /// Телефон

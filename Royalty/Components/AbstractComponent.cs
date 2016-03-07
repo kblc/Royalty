@@ -17,7 +17,7 @@ namespace Royalty.Components
             = DependencyProperty.RegisterReadOnly(nameof(IsLoaded), typeof(bool), typeof(AbstractComponent),
                 new FrameworkPropertyMetadata(false,
                     FrameworkPropertyMetadataOptions.None,
-                    new PropertyChangedCallback((s, e) => { })));
+                    new PropertyChangedCallback((s, e) => { (s as AbstractComponent)?.OnIsLoadedChanged((bool)e.NewValue); })));
         public static readonly DependencyProperty ReadOnlyIsLoadedProperty = ReadOnlyIsLoadedPropertyKey.DependencyProperty;
 
         public bool IsLoaded
@@ -100,6 +100,8 @@ namespace Royalty.Components
         }
 
         protected abstract void OnIsActiveChanged(bool value);
+
+        protected virtual void OnIsLoadedChanged(bool value) { }
         #endregion
     }
 

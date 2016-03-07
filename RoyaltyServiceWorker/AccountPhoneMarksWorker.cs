@@ -63,6 +63,7 @@ namespace RoyaltyServiceWorker
 
             var innerItems = items
                 .Where(i => i.AccountUID == accountId)
+                .Where(i => string.IsNullOrWhiteSpace(Filter) || i.PhoneNumber.Contains(Filter))
                 .Select(i => AutoMapper.Mapper.Map<AccountService.AccountPhoneMark>(i));
             var itemsToUpdate = new List<AccountService.AccountPhoneMark>();
             var itemsToInsert = new List<AccountService.AccountPhoneMark>();

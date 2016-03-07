@@ -171,7 +171,7 @@
       <xs:element minOccurs="0" name="AccountUID" nillable="true" type="ser:guid" />
       <xs:element minOccurs="0" name="Id" type="xs:long" />
       <xs:element minOccurs="0" name="MarkID" type="xs:long" />
-      <xs:element minOccurs="0" name="Phone" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PhoneNumber" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="AccountPhoneMark" nillable="true" type="tns:AccountPhoneMark" />

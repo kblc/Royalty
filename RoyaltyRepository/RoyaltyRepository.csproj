@@ -283,6 +283,10 @@
     <Compile Include="Migrations\201603071121441_Migration_ChangeAccountPhoneMark.Designer.cs">
       <DependentUpon>201603071121441_Migration_ChangeAccountPhoneMark.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603071759305_Migration_AccountPhoneMarkChangeIndex.cs" />
+    <Compile Include="Migrations\201603071759305_Migration_AccountPhoneMarkChangeIndex.Designer.cs">
+      <DependentUpon>201603071759305_Migration_AccountPhoneMarkChangeIndex.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountSettingsExportDirectory.cs" />
@@ -488,6 +492,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603071121441_Migration_ChangeAccountPhoneMark.resx">
       <DependentUpon>201603071121441_Migration_ChangeAccountPhoneMark.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603071759305_Migration_AccountPhoneMarkChangeIndex.resx">
+      <DependentUpon>201603071759305_Migration_AccountPhoneMarkChangeIndex.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

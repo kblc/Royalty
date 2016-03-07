@@ -69,7 +69,7 @@ namespace Royalty.Components
             = DependencyProperty.RegisterReadOnly(nameof(PageCount), typeof(uint), typeof(AccountsPhoneMarksComponent),
                 new FrameworkPropertyMetadata((uint)0,
                     FrameworkPropertyMetadataOptions.None,
-                    new PropertyChangedCallback((s, e) => { })));
+                    new PropertyChangedCallback((s, e) => { (s as AccountsPhoneMarksComponent)?.OnPageCountChanged((uint)e.NewValue, (uint)e.OldValue); })));
         public static readonly DependencyProperty ReadOnlyPageCountProperty = ReadOnlyPageCountPropertyKey.DependencyProperty;
 
         public uint PageCount
@@ -140,8 +140,20 @@ namespace Royalty.Components
         public IReadOnlyNotifyCollection<RoyaltyServiceWorker.AccountService.AccountPhoneMark> AccountPhoneMarks => sourceItems;
 
         public AccountsPhoneMarksComponent() {
-            DecreasePageIndexCommand = new DelegateCommand(o => { PageIndex -= 1; }, o => !IsLoaded && IsActive && PageIndex > 0);
-            IncreasePageIndexCommand = new DelegateCommand(o => { PageIndex += 1; }, o => !IsLoaded && IsActive && PageIndex < PageCount - 1);
+            DecreasePageIndexCommand = new DelegateCommand(o => { PageIndex -= 1; }, o => IsLoaded && IsActive && PageIndex > 0);
+            IncreasePageIndexCommand = new DelegateCommand(o => { PageIndex += 1; }, o => IsLoaded && IsActive && PageCount > 0 && PageIndex < PageCount - 1);
+        }
+
+        protected override void OnIsActiveChanged(bool value)
+        {
+            base.OnIsActiveChanged(value);
+            raiseUpdateCommands();
+        }
+
+        protected override void OnIsLoadedChanged(bool value)
+        {
+            base.OnIsLoadedChanged(value);
+            raiseUpdateCommands();
         }
 
         private void raiseUpdateCommands()
@@ -170,19 +182,27 @@ namespace Royalty.Components
 
         private void OnPageIndexChanged(uint newValue, uint oldValue)
         {
-            this.worker.PageIndex = newValue;
+            if (this.worker != null)
+                this.worker.PageIndex = newValue;
+            raiseUpdateCommands();
+        }
+
+        private void OnPageCountChanged(uint newValue, uint oldValue)
+        {
             raiseUpdateCommands();
         }
 
         private void OnFilterChanged(string newValue, string oldValue)
         {
-            this.worker.Filter = newValue;
+            if (this.worker != null)
+                this.worker.Filter = newValue;
             raiseUpdateCommands();
         }
 
         private void OnItemsPerPageChanged(uint newValue, uint oldValue)
         {
-            this.worker.ItemsPerPage = newValue;
+            if (this.worker != null)
+                this.worker.ItemsPerPage = newValue;
             raiseUpdateCommands();
         }
 
@@ -190,7 +210,7 @@ namespace Royalty.Components
             => RunUnderDispatcher(() => { sourceItems.UpdateCollection(e); Change?.Invoke(this, e); });
 
         private void Worker_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
+            => RunUnderDispatcher(() => {
             var existedProperty = GetType().GetProperty(e.PropertyName);
             var sourcepProperty = typeof(RoyaltyServiceWorker.AccountPhoneMarksWorker).GetProperty(e.PropertyName);
             if (existedProperty != null && existedProperty.CanWrite && sourcepProperty != null && sourcepProperty.CanRead)
@@ -208,7 +228,7 @@ namespace Royalty.Components
                 }
                 catch { }
             }
-        }
+        });
 
         private void WorkerApplyHistory(object sender, RoyaltyServiceWorker.HistoryService.History e) => worker?.ApplyHistoryChanges(e);
 

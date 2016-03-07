@@ -19,7 +19,7 @@ using RoyaltyServiceWorker.Additional;
 
 namespace Royalty.ViewModels
 {
-    public class AccountPhoneMarksEditViewModel : AbstractActionWithBackViewModel
+    public class AccountPhoneMarksEditViewModel : AbstractActionWithBackViewModel, IDisposable
     {
         #region Account
 
@@ -99,7 +99,7 @@ namespace Royalty.ViewModels
         #region Filter
 
         public static readonly DependencyProperty FilterProperty = DependencyProperty.Register(nameof(Filter), typeof(string),
-            typeof(AccountPhoneMarksEditViewModel), new PropertyMetadata(string.Empty, (s, e) => { }));
+            typeof(AccountPhoneMarksEditViewModel), new PropertyMetadata(string.Empty, (s, e) => { (s as AccountPhoneMarksEditViewModel)?.OnFilterChanged(e.NewValue as string, e.OldValue as string); }));
 
         public string Filter
         {
@@ -132,6 +132,14 @@ namespace Royalty.ViewModels
             localCollection.Clear();
         }
 
+        private FilterTimer setFilterTimer;
+
+        protected virtual void OnFilterChanged(string newFilter, string oldFilter)
+        {
+            if (setFilterTimer != null)
+                setFilterTimer.Filter = newFilter;
+        }
+
         private ObservableCollectionWatcher<RoyaltyServiceWorker.AccountService.AccountPhoneMark> localCollection = null;
 
         public AccountPhoneMarksEditViewModel()
@@ -140,11 +148,23 @@ namespace Royalty.ViewModels
             AccountPhoneMarks = CollectionViewSource.GetDefaultView(localCollection);
             AccountPhoneMarks.CollectionChanged += AccountPhoneMarks_CollectionChanged;
             RowEditEndingCommand = new DelegateCommand(o => RowEditEnding(o as System.Windows.Controls.DataGridRowEditEndingEventArgs));
+            setFilterTimer = new FilterTimer(TimeSpan.FromMilliseconds(200), (filter) =>
+            {
+                RunUnderDispatcher(() =>
+                {
+                    if (this.AccountsPhoneMarksComponent != null)
+                    {
+                        localCollection.Clear();
+                        AccountsPhoneMarksComponent.Filter = filter;
+                    }
+                });
+            });
         }
 
         private void OnAccountChanged(RoyaltyServiceWorker.AccountService.Account newItem, RoyaltyServiceWorker.AccountService.Account oldItem)
         {
             localCollection.Clear();
+            Filter = string.Empty;
         }
 
         private void UpdateAccountsPhoneMarksComponentSource(AccountsPhoneMarksComponent newItem, AccountsPhoneMarksComponent oldItem)
@@ -152,7 +172,7 @@ namespace Royalty.ViewModels
             if (oldItem != null)
             {
                 oldItem.Change -= AccountsPhoneMarksComponent_Change;
-                BindingOperations.ClearBinding(oldItem, AccountProperty);
+                BindingOperations.ClearBinding(oldItem, AccountsPhoneMarksComponent.AccountProperty);
                 BindingOperations.ClearBinding(oldItem, AbstractComponent.IsActiveProperty);
                 DependencyPropertyDescriptor.FromProperty(AbstractComponent.ReadOnlyIsLoadedProperty, newItem.GetType())
                     .RemoveValueChanged(oldItem, AccountsPhoneMarksComponent_IsLoadedChanged);
@@ -177,7 +197,7 @@ namespace Royalty.ViewModels
                     Mode = BindingMode.OneWay,
                     UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
 
-                BindingOperations.SetBinding(newItem, AccountProperty, accountBinding);
+                BindingOperations.SetBinding(newItem, AccountsPhoneMarksComponent.AccountProperty, accountBinding);
                 BindingOperations.SetBinding(newItem, AbstractComponent.IsActiveProperty, isActiveBinding);
                 DependencyPropertyDescriptor.FromProperty(AbstractComponent.ReadOnlyIsLoadedProperty, newItem.GetType())
                     .AddValueChanged(newItem, AccountsPhoneMarksComponent_IsLoadedChanged);
@@ -186,9 +206,18 @@ namespace Royalty.ViewModels
             }
         }
 
+        private bool isSourceCollectionUpdate = false;
         private void AccountsPhoneMarksComponent_Change(object sender, ListItemsEventArgs<AccountPhoneMark> e)
         {
-            localCollection.UpdateCollection(e);
+            isSourceCollectionUpdate = true;
+            try
+            {
+                localCollection.UpdateCollection(e);
+            }
+            finally
+            {
+                isSourceCollectionUpdate = false;
+            }
         }
 
         private void AccountsPhoneMarksComponent_IsLoadedChanged(object sender, EventArgs e)
@@ -198,7 +227,7 @@ namespace Royalty.ViewModels
 
         private void AccountPhoneMarks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.OldItems != null && IsActive)
+            if (e.OldItems != null && IsActive && !isSourceCollectionUpdate)
             {
                 var oldItems = e.OldItems
                     .OfType<AccountPhoneMark>()
@@ -333,5 +362,39 @@ namespace Royalty.ViewModels
             base.RaiseCommands();
             RowEditEndingCommand?.RaiseCanExecuteChanged();
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                }
+
+                if (setFilterTimer != null)
+                {
+                    setFilterTimer.Dispose();
+                    setFilterTimer = null;
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        ~AccountPhoneMarksEditViewModel()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

@@ -32,11 +32,14 @@ namespace RoyaltyService.Services.Account
 
                         var itemsCount = totalCountWithFilter.Count();
                         var pageCount = (itemsCount / itemsPerPage) * itemsPerPage < itemsCount
-                            ? (itemsCount / itemsPerPage)
-                            : (itemsCount / itemsPerPage) + 1;
+                            ? (itemsCount / itemsPerPage) + 1
+                            : (itemsCount / itemsPerPage);
+                        pageIndex = Math.Min(pageIndex, (uint)pageCount - 1);
+                        if (itemsCount == 0) pageCount = 0;
                         var items = totalCountWithFilter
                             .Skip((int)pageIndex * (int)itemsPerPage)
-                            .Take((int)itemsPerPage);
+                            .Take((int)itemsPerPage)
+                            .ToArray();
                         var res = items.Select(i => AutoMapper.Mapper.Map<Model.AccountPhoneMark>(i)).ToArray();
                         return new AccountPhoneMarkExecutionResults(res, pageIndex, (uint)pageCount);
                     }
@@ -59,10 +62,10 @@ namespace RoyaltyService.Services.Account
                     using (var rep = GetNewRepository(logSession))
                     {
                         var dbItem = rep.New<RoyaltyRepository.Models.AccountPhoneMark>(item);
-                        var phone = rep.Get<RoyaltyRepository.Models.Phone>(p => string.Compare(p.PhoneNumber, item.Phone, true) == 0).SingleOrDefault();
+                        var phone = rep.Get<RoyaltyRepository.Models.Phone>(p => string.Compare(p.PhoneNumber, item.PhoneNumber, true) == 0).SingleOrDefault();
                         if (phone == null)
                         {
-                            phone = rep.New<RoyaltyRepository.Models.Phone>((p) => { p.PhoneNumber = item.Phone; });
+                            phone = rep.New<RoyaltyRepository.Models.Phone>((p) => { p.PhoneNumber = item.PhoneNumber; });
                             rep.Add(phone, saveAfterInsert: false);
                         }
                         dbItem.Phone = phone;
@@ -134,19 +137,26 @@ namespace RoyaltyService.Services.Account
                 {
                     using (var rep = GetNewRepository(logSession))
                     {
-                        var dbItem = rep.Get<RoyaltyRepository.Models.AccountPhoneMark>(a => a.AccountPhoneMarkID == item.AccountPhoneMarkID, new[] { "Phone" })
+                        var dbItem = rep.Get<RoyaltyRepository.Models.AccountPhoneMark>(a => a.AccountPhoneMarkID == item.AccountPhoneMarkID, new[] { nameof(RoyaltyRepository.Models.AccountPhoneMark.Phone) })
                             .SingleOrDefault();
                         if (dbItem == null)
                             throw new Exception(Properties.Resources.SERVICES_ACCOUNT_AccountPhoneMarkColumnNotFound);
 
-                        var phone = rep.Get<RoyaltyRepository.Models.Phone>(p => string.Compare(p.PhoneNumber, item.Phone, true) == 0).SingleOrDefault();
+                        dbItem.CopyObjectFrom(item);
+
+                        var phone = rep.Get<RoyaltyRepository.Models.Phone>(p => string.Compare(p.PhoneNumber, item.PhoneNumber, true) == 0).SingleOrDefault();
                         if (phone == null)
                         {
-                            phone = rep.New<RoyaltyRepository.Models.Phone>((p) => { p.PhoneNumber = item.Phone; });
+                            phone = rep.New<RoyaltyRepository.Models.Phone>((p) => { p.PhoneNumber = item.PhoneNumber; });
                             rep.Add(phone, saveAfterInsert: false);
+                            dbItem.PhoneID = default(long);
+                            dbItem.Phone = phone;
                         }
-                        dbItem.CopyObjectFrom(item);
-                        dbItem.Phone = phone;
+                        else
+                        {
+                            if (dbItem.PhoneID != phone.PhoneID)
+                                dbItem.PhoneID = phone.PhoneID;
+                        }
                         rep.SaveChanges();
 
                         var res = AutoMapper.Mapper.Map<Model.AccountPhoneMark>(dbItem);

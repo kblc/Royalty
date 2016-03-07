@@ -782,7 +782,7 @@ namespace RoyaltyServiceWorker.HistoryService {
         private long MarkIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string PhoneField;
+        private string PhoneNumberField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -834,14 +834,14 @@ namespace RoyaltyServiceWorker.HistoryService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Phone {
+        public string PhoneNumber {
             get {
-                return this.PhoneField;
+                return this.PhoneNumberField;
             }
             set {
-                if ((object.ReferenceEquals(this.PhoneField, value) != true)) {
-                    this.PhoneField = value;
-                    this.RaisePropertyChanged("Phone");
+                if ((object.ReferenceEquals(this.PhoneNumberField, value) != true)) {
+                    this.PhoneNumberField = value;
+                    this.RaisePropertyChanged("PhoneNumber");
                 }
             }
         }
