@@ -108,6 +108,73 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BaseExecutionResultsOflong" nillable="true" type="tns:BaseExecutionResultsOflong" />
+  <xs:complexType name="BasePagedExecutionResultsOfAccountPhoneMarkh3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BasePagedExecutionResultsOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="AccountPhoneMark" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:BaseExecutionResultsOfAccountPhoneMarkh3e0gNRf">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="PageCount" type="xs:long" />
+          <xs:element minOccurs="0" name="PageIndex" type="xs:long" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BasePagedExecutionResultsOfAccountPhoneMarkh3e0gNRf" nillable="true" type="tns:BasePagedExecutionResultsOfAccountPhoneMarkh3e0gNRf" />
+  <xs:complexType name="BaseExecutionResultsOfAccountPhoneMarkh3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultsOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="AccountPhoneMark" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Values" nillable="true" type="tns:ArrayOfAccountPhoneMark" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultsOfAccountPhoneMarkh3e0gNRf" nillable="true" type="tns:BaseExecutionResultsOfAccountPhoneMarkh3e0gNRf" />
+  <xs:complexType name="ArrayOfAccountPhoneMark">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountPhoneMark" nillable="true" type="tns:AccountPhoneMark" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAccountPhoneMark" nillable="true" type="tns:ArrayOfAccountPhoneMark" />
+  <xs:complexType name="AccountPhoneMark">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountUID" nillable="true" type="ser:guid" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="MarkID" type="xs:long" />
+      <xs:element minOccurs="0" name="Phone" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccountPhoneMark" nillable="true" type="tns:AccountPhoneMark" />
+  <xs:complexType name="BaseExecutionResultOfAccountPhoneMarkh3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="AccountPhoneMark" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" nillable="true" type="tns:AccountPhoneMark" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultOfAccountPhoneMarkh3e0gNRf" nillable="true" type="tns:BaseExecutionResultOfAccountPhoneMarkh3e0gNRf" />
   <xs:complexType name="BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf">
     <xs:annotation>
       <xs:appinfo>

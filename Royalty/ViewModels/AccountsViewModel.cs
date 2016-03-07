@@ -23,6 +23,7 @@ namespace Royalty.ViewModels
         AccountSettingsSheduleTimes,
         AccountSeriesOfNumbers,
         AccountAdditionalColumns,
+        AccountPhoneMarks,
     }
 
     public class AccountsViewModel : FrameworkElement
@@ -87,6 +88,27 @@ namespace Royalty.ViewModels
         {
             get { return (AccountsAdditionalColumnsComponent)GetValue(AccountsAdditionalColumnsComponentComponentProperty); }
             set { SetValue(AccountsAdditionalColumnsComponentComponentProperty, value); }
+        }
+
+        #endregion
+        #region AccountsPhoneMarksComponent
+
+        public static readonly DependencyProperty AccountsPhoneMarksComponentProperty = DependencyProperty.Register(nameof(AccountsPhoneMarksComponent), typeof(AccountsPhoneMarksComponent),
+            typeof(AccountsViewModel), new PropertyMetadata(null, (s, e) =>
+            {
+                var model = s as AccountsViewModel;
+                var newAccountsComponent = e.NewValue as AccountsPhoneMarksComponent;
+                var oldAccountsComponent = e.OldValue as AccountsPhoneMarksComponent;
+                if (model != null && newAccountsComponent != oldAccountsComponent)
+                {
+                    model.UpdateAccountsPhoneMarksComponentSource(newAccountsComponent);
+                }
+            }));
+
+        public AccountsPhoneMarksComponent AccountsPhoneMarksComponent
+        {
+            get { return (AccountsPhoneMarksComponent)GetValue(AccountsPhoneMarksComponentProperty); }
+            set { SetValue(AccountsPhoneMarksComponentProperty, value); }
         }
 
         #endregion
@@ -263,6 +285,8 @@ namespace Royalty.ViewModels
         private void UpdateAccountsSeriesOfNumbersComponentSource(AccountsSeriesOfNumbersComponent newComponent) { }
 
         private void UpdateAccountsAdditionalColumnsComponentSource(AccountsAdditionalColumnsComponent newComponent) { }
+
+        private void UpdateAccountsPhoneMarksComponentSource(AccountsPhoneMarksComponent newComponent) { }
 
         private void RefreshAccountSource()
         {

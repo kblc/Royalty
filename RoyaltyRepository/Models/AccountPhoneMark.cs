@@ -24,12 +24,18 @@ namespace RoyaltyRepository.Models
     [Table("account_phone_mark")]
     public partial class AccountPhoneMark : HistoryEntityBase
     {
+        /// <summary>
+        /// Идентификатор записи
+        /// </summary>
+        [Key, Column("account_phone_mark_id"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long AccountPhoneMarkID { get; set; }
+
         #region Account
         /// <summary>
         /// Идентификатор аккаунта, которому принадлежат данные
         /// </summary>
-        [Key, ForeignKey("Account"), Column("account_uid", Order = 1)]
-        public Guid AccountID { get; set; }
+        [Required, ForeignKey("Account"), Column("account_uid"), Index(IsUnique = true, Order = 1)]
+        public Guid AccountUID { get; set; }
         /// <summary>
         /// Аккаунт, которому принадлежат данные
         /// </summary>
@@ -39,7 +45,7 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Идентификатор телефона
         /// </summary>
-        [Key, ForeignKey("Phone"), Column("phone_id", Order = 2)]
+        [Required, ForeignKey("Phone"), Column("phone_id"), Index(IsUnique = true, Order = 2)]
         public long PhoneID { get; set; }
         /// <summary>
         /// Телефон

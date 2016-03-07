@@ -50,6 +50,24 @@ namespace RoyaltyService.Model
     }
 
     [DataContract]
+    public abstract class BasePagedExecutionResults<T> : BaseExecutionResults<T>
+    {
+        public BasePagedExecutionResults() { }
+        public BasePagedExecutionResults(T[] values, uint pageIndex, uint pageCount) {
+            Values = values;
+            PageCount = pageCount;
+            PageIndex = pageIndex;
+        }
+        public BasePagedExecutionResults(Exception ex) : base(ex) { }
+
+        [DataMember(IsRequired = false)]
+        public long PageCount { get; set; }
+
+        [DataMember(IsRequired = false)]
+        public long PageIndex { get; set; }
+    }
+
+    [DataContract]
     public class GuidExecutionResult : BaseExecutionResult<Guid>
     {
         public GuidExecutionResult() { }

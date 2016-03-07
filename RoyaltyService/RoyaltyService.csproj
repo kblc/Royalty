@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\ServicesConfigSection.cs" />
+    <Compile Include="Model\AccountPhoneMark.cs" />
     <Compile Include="Model\AccountDataRecordAdditionalColumn.cs" />
     <Compile Include="Model\AccountSeriesOfNumbersRecord.cs" />
     <Compile Include="Model\AccountSettingsSheduleTime.cs" />
@@ -82,6 +83,8 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Services\Account\AccountService.PhoneMarkREST.cs" />
+    <Compile Include="Services\Account\AccountService.PhoneMark.cs" />
     <Compile Include="Services\Account\AccountService.AdditionalColumn.cs" />
     <Compile Include="Services\Account\AccountService.AdditionalColumnREST.cs" />
     <Compile Include="Services\Account\AccountService.SeriesOfNumbersREST.cs" />
@@ -102,6 +105,8 @@
     <Compile Include="Services\Account\AccountService.Settings.ColumnType.cs" />
     <Compile Include="Services\Account\IAccountService.AdditionalColumnREST.cs" />
     <Compile Include="Services\Account\IAccountService.AdditionalColumn.cs" />
+    <Compile Include="Services\Account\IAccountService.PhoneMarkREST.cs" />
+    <Compile Include="Services\Account\IAccountService.PhoneMark.cs" />
     <Compile Include="Services\Account\IAccountService.SeriesOfNumbersREST.cs" />
     <Compile Include="Services\Account\IAccountService.SeriesOfNumbers.cs" />
     <Compile Include="Services\Account\IAccountService.SettingsREST.cs" />
@@ -117,6 +122,7 @@
     <Compile Include="Services\Account\IAccountService.Settings.MarkREST.cs" />
     <Compile Include="Services\Account\IAccountService.Settings.Mark.cs" />
     <Compile Include="Services\Account\IAccountService.Settings.ColumnTypeREST.cs" />
+    <Compile Include="Services\Account\Result\Account.PhoneMarksResult.cs" />
     <Compile Include="Services\Account\Result\Account.SeriesOfNumbersRecord.ExecutionResult.cs" />
     <Compile Include="Services\Account\Result\Account.AdditionalColumnResult.cs" />
     <Compile Include="Services\Account\Result\Account.Settings.ExecutionResult.cs" />

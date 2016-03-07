@@ -79,6 +79,15 @@ namespace RoyaltyService.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account phone mark not found..
+        /// </summary>
+        public static string SERVICES_ACCOUNT_AccountPhoneMarkColumnNotFound {
+            get {
+                return ResourceManager.GetString("SERVICES_ACCOUNT_AccountPhoneMarkColumnNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Series of numbers not found..
         /// </summary>
         public static string SERVICES_ACCOUNT_AccountSeriesOfNumbersRecordNotFound {

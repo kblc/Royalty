@@ -279,6 +279,10 @@
     <Compile Include="Migrations\201602011730574_Migration_AddPKToAccountSettingsColumn.Designer.cs">
       <DependentUpon>201602011730574_Migration_AddPKToAccountSettingsColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603071121441_Migration_ChangeAccountPhoneMark.cs" />
+    <Compile Include="Migrations\201603071121441_Migration_ChangeAccountPhoneMark.Designer.cs">
+      <DependentUpon>201603071121441_Migration_ChangeAccountPhoneMark.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\AccountSettingsExportDirectory.cs" />
@@ -481,6 +485,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201602011730574_Migration_AddPKToAccountSettingsColumn.resx">
       <DependentUpon>201602011730574_Migration_AddPKToAccountSettingsColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603071121441_Migration_ChangeAccountPhoneMark.resx">
+      <DependentUpon>201603071121441_Migration_ChangeAccountPhoneMark.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

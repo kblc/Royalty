@@ -60,6 +60,18 @@ namespace RoyaltyServiceWorker.Additional
             State = (DoStop()) ? WorkerState.Stoped : WorkerState.Error;
         }
 
+        public void Refresh()
+        {
+            if (State == WorkerState.None || State == WorkerState.Stoped)
+                DoStart();
+
+            if (State == WorkerState.Started)
+            {
+                DoStop();
+                DoStart();
+            }
+        }
+
         private WorkerState state = WorkerState.None;
         public WorkerState State
         {

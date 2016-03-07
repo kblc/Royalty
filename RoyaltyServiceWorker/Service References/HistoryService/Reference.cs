@@ -199,6 +199,9 @@ namespace RoyaltyServiceWorker.HistoryService {
         private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.AccountDataRecordAdditionalColumn> AccountDataRecordAdditionalColumnField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.AccountPhoneMark> AccountPhoneMarkField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.AccountSeriesOfNumbersRecord> AccountSeriesOfNumbersRecordField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -248,6 +251,19 @@ namespace RoyaltyServiceWorker.HistoryService {
                 if ((object.ReferenceEquals(this.AccountDataRecordAdditionalColumnField, value) != true)) {
                     this.AccountDataRecordAdditionalColumnField = value;
                     this.RaisePropertyChanged("AccountDataRecordAdditionalColumn");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.AccountPhoneMark> AccountPhoneMark {
+            get {
+                return this.AccountPhoneMarkField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccountPhoneMarkField, value) != true)) {
+                    this.AccountPhoneMarkField = value;
+                    this.RaisePropertyChanged("AccountPhoneMark");
                 }
             }
         }
@@ -356,6 +372,9 @@ namespace RoyaltyServiceWorker.HistoryService {
         private System.Collections.Generic.List<long> AccountDataRecordAdditionalColumnField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<long> AccountPhoneMarkField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Collections.Generic.List<long> AccountSeriesOfNumbersRecordField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -405,6 +424,19 @@ namespace RoyaltyServiceWorker.HistoryService {
                 if ((object.ReferenceEquals(this.AccountDataRecordAdditionalColumnField, value) != true)) {
                     this.AccountDataRecordAdditionalColumnField = value;
                     this.RaisePropertyChanged("AccountDataRecordAdditionalColumn");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<long> AccountPhoneMark {
+            get {
+                return this.AccountPhoneMarkField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccountPhoneMarkField, value) != true)) {
+                    this.AccountPhoneMarkField = value;
+                    this.RaisePropertyChanged("AccountPhoneMark");
                 }
             }
         }
@@ -717,6 +749,99 @@ namespace RoyaltyServiceWorker.HistoryService {
                 if ((this.IdField.Equals(value) != true)) {
                     this.IdField = value;
                     this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountPhoneMark", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class AccountPhoneMark : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.Guid> AccountUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long MarkIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PhoneField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.Guid> AccountUID {
+            get {
+                return this.AccountUIDField;
+            }
+            set {
+                if ((this.AccountUIDField.Equals(value) != true)) {
+                    this.AccountUIDField = value;
+                    this.RaisePropertyChanged("AccountUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long MarkID {
+            get {
+                return this.MarkIDField;
+            }
+            set {
+                if ((this.MarkIDField.Equals(value) != true)) {
+                    this.MarkIDField = value;
+                    this.RaisePropertyChanged("MarkID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Phone {
+            get {
+                return this.PhoneField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PhoneField, value) != true)) {
+                    this.PhoneField = value;
+                    this.RaisePropertyChanged("Phone");
                 }
             }
         }

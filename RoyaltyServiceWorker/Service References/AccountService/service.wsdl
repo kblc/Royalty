@@ -305,6 +305,196 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_GetAccountPhoneMark_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_GetAccountPhoneMark_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_PutAccountPhoneMark_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_PutAccountPhoneMark_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_UpdateAccountPhoneMark_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_UpdateAccountPhoneMark_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_RemoveAccountPhoneMark_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_RemoveAccountPhoneMark_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_RemoveAccountPhoneMarkRange_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_RemoveAccountPhoneMarkRange_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_GetSeriesOfNumbers_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -1563,6 +1753,36 @@
   <wsdl:message name="IAccountServiceREST_RESTRemoveAdditionalColumnsRange_OutputMessage">
     <wsdl:part name="parameters" element="tns:RESTRemoveAdditionalColumnsRangeResponse" />
   </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTGetAccountPhoneMark_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTGetAccountPhoneMark" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTGetAccountPhoneMark_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTGetAccountPhoneMarkResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTPutAccountPhoneMark_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTPutAccountPhoneMark" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTPutAccountPhoneMark_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTPutAccountPhoneMarkResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTUpdateAccountPhoneMark_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTUpdateAccountPhoneMark" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTUpdateAccountPhoneMark_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTUpdateAccountPhoneMarkResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTRemoveAccountPhoneMark_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTRemoveAccountPhoneMark" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTRemoveAccountPhoneMark_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTRemoveAccountPhoneMarkResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTRemoveAccountPhoneMarkRange_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTRemoveAccountPhoneMarkRange" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTRemoveAccountPhoneMarkRange_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTRemoveAccountPhoneMarkRangeResponse" />
+  </wsdl:message>
   <wsdl:message name="IAccountServiceREST_RESTGetSeriesOfNumbers_InputMessage">
     <wsdl:part name="parameters" element="tns:RESTGetSeriesOfNumbers" />
   </wsdl:message>
@@ -1772,6 +1992,36 @@
   </wsdl:message>
   <wsdl:message name="IAccountService_RemoveAdditionalColumnsRange_OutputMessage">
     <wsdl:part name="parameters" element="tns:RemoveAdditionalColumnsRangeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_GetAccountPhoneMark_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAccountPhoneMark" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_GetAccountPhoneMark_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAccountPhoneMarkResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_PutAccountPhoneMark_InputMessage">
+    <wsdl:part name="parameters" element="tns:PutAccountPhoneMark" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_PutAccountPhoneMark_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PutAccountPhoneMarkResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_UpdateAccountPhoneMark_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateAccountPhoneMark" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_UpdateAccountPhoneMark_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateAccountPhoneMarkResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_RemoveAccountPhoneMark_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveAccountPhoneMark" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_RemoveAccountPhoneMark_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveAccountPhoneMarkResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_RemoveAccountPhoneMarkRange_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveAccountPhoneMarkRange" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_RemoveAccountPhoneMarkRange_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveAccountPhoneMarkRangeResponse" />
   </wsdl:message>
   <wsdl:message name="IAccountService_GetSeriesOfNumbers_InputMessage">
     <wsdl:part name="parameters" element="tns:GetSeriesOfNumbers" />
@@ -1989,6 +2239,26 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAdditionalColumnsRange" message="tns:IAccountServiceREST_RESTRemoveAdditionalColumnsRange_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAdditionalColumnsRangeResponse" message="tns:IAccountServiceREST_RESTRemoveAdditionalColumnsRange_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="RESTGetAccountPhoneMark">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTGetAccountPhoneMark" message="tns:IAccountServiceREST_RESTGetAccountPhoneMark_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTGetAccountPhoneMarkResponse" message="tns:IAccountServiceREST_RESTGetAccountPhoneMark_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RESTPutAccountPhoneMark">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTPutAccountPhoneMark" message="tns:IAccountServiceREST_RESTPutAccountPhoneMark_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTPutAccountPhoneMarkResponse" message="tns:IAccountServiceREST_RESTPutAccountPhoneMark_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RESTUpdateAccountPhoneMark">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTUpdateAccountPhoneMark" message="tns:IAccountServiceREST_RESTUpdateAccountPhoneMark_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTUpdateAccountPhoneMarkResponse" message="tns:IAccountServiceREST_RESTUpdateAccountPhoneMark_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RESTRemoveAccountPhoneMark">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAccountPhoneMark" message="tns:IAccountServiceREST_RESTRemoveAccountPhoneMark_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAccountPhoneMarkResponse" message="tns:IAccountServiceREST_RESTRemoveAccountPhoneMark_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RESTRemoveAccountPhoneMarkRange">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAccountPhoneMarkRange" message="tns:IAccountServiceREST_RESTRemoveAccountPhoneMarkRange_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAccountPhoneMarkRangeResponse" message="tns:IAccountServiceREST_RESTRemoveAccountPhoneMarkRange_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="RESTGetSeriesOfNumbers">
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTGetSeriesOfNumbers" message="tns:IAccountServiceREST_RESTGetSeriesOfNumbers_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTGetSeriesOfNumbersResponse" message="tns:IAccountServiceREST_RESTGetSeriesOfNumbers_OutputMessage" />
@@ -2133,6 +2403,26 @@
     <wsdl:operation name="RemoveAdditionalColumnsRange">
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/RemoveAdditionalColumnsRange" message="tns:IAccountService_RemoveAdditionalColumnsRange_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/RemoveAdditionalColumnsRangeResponse" message="tns:IAccountService_RemoveAdditionalColumnsRange_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountPhoneMark">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/GetAccountPhoneMark" message="tns:IAccountService_GetAccountPhoneMark_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/GetAccountPhoneMarkResponse" message="tns:IAccountService_GetAccountPhoneMark_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PutAccountPhoneMark">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/PutAccountPhoneMark" message="tns:IAccountService_PutAccountPhoneMark_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/PutAccountPhoneMarkResponse" message="tns:IAccountService_PutAccountPhoneMark_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAccountPhoneMark">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/UpdateAccountPhoneMark" message="tns:IAccountService_UpdateAccountPhoneMark_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/UpdateAccountPhoneMarkResponse" message="tns:IAccountService_UpdateAccountPhoneMark_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveAccountPhoneMark">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/RemoveAccountPhoneMark" message="tns:IAccountService_RemoveAccountPhoneMark_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/RemoveAccountPhoneMarkResponse" message="tns:IAccountService_RemoveAccountPhoneMark_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveAccountPhoneMarkRange">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/RemoveAccountPhoneMarkRange" message="tns:IAccountService_RemoveAccountPhoneMarkRange_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/RemoveAccountPhoneMarkRangeResponse" message="tns:IAccountService_RemoveAccountPhoneMarkRange_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetSeriesOfNumbers">
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/GetSeriesOfNumbers" message="tns:IAccountService_GetSeriesOfNumbers_InputMessage" />
@@ -2325,6 +2615,61 @@
       </wsdl:input>
       <wsdl:output>
         <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RemoveAdditionalColumnsRange_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountPhoneMark">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/GetAccountPhoneMark" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_GetAccountPhoneMark_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_GetAccountPhoneMark_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PutAccountPhoneMark">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/PutAccountPhoneMark" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_PutAccountPhoneMark_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_PutAccountPhoneMark_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAccountPhoneMark">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/UpdateAccountPhoneMark" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_UpdateAccountPhoneMark_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_UpdateAccountPhoneMark_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveAccountPhoneMark">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/RemoveAccountPhoneMark" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RemoveAccountPhoneMark_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RemoveAccountPhoneMark_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveAccountPhoneMarkRange">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/RemoveAccountPhoneMarkRange" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RemoveAccountPhoneMarkRange_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RemoveAccountPhoneMarkRange_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

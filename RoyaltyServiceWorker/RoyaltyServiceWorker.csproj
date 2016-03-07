@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountAdditionalColumnsWorker.cs" />
+    <Compile Include="AccountPhoneMarksWorker.cs" />
     <Compile Include="AccountSeriesOfNumbersWorker.cs" />
     <Compile Include="AccountWorker.cs" />
     <Compile Include="Additional\AbstractBaseViewModel.cs" />
@@ -96,6 +97,12 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\AccountService\RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\AccountService\RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\AccountService\RoyaltyServiceWorker.AccountService.AccountPhoneMarkResults.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\AccountService\RoyaltyServiceWorker.AccountService.AccountResult.datasource">

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RoyaltyService.Services.Account.Result
 {
-    [DataContract(Name = " AccountDataRecordAdditionalColumnResult")]
+    [DataContract(Name = "AccountDataRecordAdditionalColumnResult")]
     public class AccountDataRecordAdditionalColumnExecutionResult : Model.BaseExecutionResult<Model.AccountDataRecordAdditionalColumn>
     {
         public AccountDataRecordAdditionalColumnExecutionResult() { }
@@ -15,7 +15,7 @@ namespace RoyaltyService.Services.Account.Result
         public AccountDataRecordAdditionalColumnExecutionResult(Exception ex) : base(ex) { }
     }
 
-    [DataContract(Name = " AccountDataRecordAdditionalColumnResults")]
+    [DataContract(Name = "AccountDataRecordAdditionalColumnResults")]
     public class AccountDataRecordAdditionalColumnExecutionResults : Model.BaseExecutionResults<Model.AccountDataRecordAdditionalColumn>
     {
         public AccountDataRecordAdditionalColumnExecutionResults() { }

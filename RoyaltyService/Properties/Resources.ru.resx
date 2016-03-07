@@ -123,6 +123,9 @@
   <data name="SERVICES_ACCOUNT_AccountDataRecordAdditionalColumnNotFound" xml:space="preserve">
     <value>Дополнительная колонка не найдена. Дополнительная информация во внутренних данных.</value>
   </data>
+  <data name="SERVICES_ACCOUNT_AccountPhoneMarkColumnNotFound" xml:space="preserve">
+    <value>Телефон с меткой не найден. Дополнительная информация во внутренних данных.</value>
+  </data>
   <data name="SERVICES_ACCOUNT_AccountSeriesOfNumbersRecordNotFound" xml:space="preserve">
     <value>Серия номеров не найдена. Дополнительная информация во внутренних данных.</value>
   </data>

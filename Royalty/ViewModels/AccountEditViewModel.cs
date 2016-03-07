@@ -164,6 +164,30 @@ namespace Royalty.ViewModels
         }
 
         #endregion
+        #region PhoneMarksViewCommand
+
+        public static readonly DependencyProperty PhoneMarksViewCommandProperty = DependencyProperty.Register(nameof(PhoneMarksViewCommand), typeof(ICommand),
+            typeof(AccountEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public ICommand PhoneMarksViewCommand
+        {
+            get { return (ICommand)GetValue(PhoneMarksViewCommandProperty); }
+            set { SetValue(PhoneMarksViewCommandProperty, value); }
+        }
+
+        #endregion
+        #region PhoneMarksViewCommandParameter
+
+        public static readonly DependencyProperty PhoneMarksViewCommandParameterProperty = DependencyProperty.Register(nameof(PhoneMarksViewCommandParameter), typeof(object),
+            typeof(AccountEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public object PhoneMarksViewCommandParameter
+        {
+            get { return GetValue(PhoneMarksViewCommandParameterProperty); }
+            set { SetValue(PhoneMarksViewCommandParameterProperty, value); }
+        }
+
+        #endregion
 
         public AccountEditViewModel()
         {

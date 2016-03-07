@@ -132,12 +132,13 @@ namespace RoyaltyRepository.Models
                 new ColumnType() { SystemName = ColumnTypes.Exported.ToString().ToUpper(), ImportRowValidation = false, ImportTableValidation = false, ExportColumnIndex = 8, Export = true },
             };
 
-            context.ColumnTypes.AddRange(
-                defColumnTypes
+            var itemsToAdd = defColumnTypes
                     .LeftOuterJoin(context.ColumnTypes, ct => ct.SystemName, c => c.SystemName, (def, existed) => new { Default = def, Existed = existed })
                     .Where(i => i.Existed == null)
                     .Select(i => i.Default)
-                );
+                    .ToArray();
+
+            context.ColumnTypes.AddRange(itemsToAdd);
         }
 
         public override string ToString()

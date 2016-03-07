@@ -76,6 +76,7 @@
     <Compile Include="Additional\EventToCommand.WPF.cs" />
     <Compile Include="Additional\IEventArgsConverter.cs" />
     <Compile Include="Additional\ObservableCollectionWatcher.cs" />
+    <Compile Include="Components\AccountsPhoneMarksComponent.cs" />
     <Compile Include="Components\AccountsAdditionalColumnsComponent.cs" />
     <Compile Include="Components\AccountsSeriesOfNumbersComponent.cs" />
     <Compile Include="Additional\IHistoryItemsChange.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="ViewModels\AbstractActionWithBackViewModel.cs" />
     <Compile Include="ViewModels\AbstractActionViewModel.cs" />
     <Compile Include="ViewModels\AccountAdditionalColumnsEditViewModel.cs" />
+    <Compile Include="ViewModels\AccountPhoneMarksEditViewModel.cs" />
     <Compile Include="ViewModels\AccountSeriesOfNumbersEditViewModel.cs" />
     <Compile Include="ViewModels\AccountSettingsSheduleTimesEditViewModel.cs" />
     <Compile Include="ViewModels\AccountSettingsImportDirectoriesEditViewModel.cs" />

@@ -23,6 +23,11 @@ namespace RoyaltyServiceWorker.AccountService {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.LongExecutionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOflong))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.LongExecutionResults))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountPhoneMarkh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BasePagedExecutionResultsOfAccountPhoneMarkh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountPhoneMarkResults))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountPhoneMarkh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf))]
@@ -118,7 +123,7 @@ namespace RoyaltyServiceWorker.AccountService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name=" AccountDataRecordAdditionalColumnResult", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountDataRecordAdditionalColumnResult", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
     [System.SerializableAttribute()]
     public partial class AccountDataRecordAdditionalColumnResult : RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountDataRecordAdditionalColumnh3e0gNRf {
     }
@@ -183,6 +188,109 @@ namespace RoyaltyServiceWorker.AccountService {
     [System.Runtime.Serialization.DataContractAttribute(Name="LongExecutionResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
     [System.SerializableAttribute()]
     public partial class LongExecutionResults : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOflong {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultsOfAccountPhoneMarkh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BasePagedExecutionResultsOfAccountPhoneMarkh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountPhoneMarkResults))]
+    public partial class BaseExecutionResultsOfAccountPhoneMarkh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.AccountPhoneMark> ValuesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.AccountPhoneMark> Values {
+            get {
+                return this.ValuesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValuesField, value) != true)) {
+                    this.ValuesField = value;
+                    this.RaisePropertyChanged("Values");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BasePagedExecutionResultsOfAccountPhoneMarkh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountPhoneMarkResults))]
+    public partial class BasePagedExecutionResultsOfAccountPhoneMarkh3e0gNRf : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountPhoneMarkh3e0gNRf {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long PageCountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long PageIndexField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long PageCount {
+            get {
+                return this.PageCountField;
+            }
+            set {
+                if ((this.PageCountField.Equals(value) != true)) {
+                    this.PageCountField = value;
+                    this.RaisePropertyChanged("PageCount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long PageIndex {
+            get {
+                return this.PageIndexField;
+            }
+            set {
+                if ((this.PageIndexField.Equals(value) != true)) {
+                    this.PageIndexField = value;
+                    this.RaisePropertyChanged("PageIndex");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountPhoneMarkResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.SerializableAttribute()]
+    public partial class AccountPhoneMarkResults : RoyaltyServiceWorker.AccountService.BasePagedExecutionResultsOfAccountPhoneMarkh3e0gNRf {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultOfAccountPhoneMarkh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult))]
+    public partial class BaseExecutionResultOfAccountPhoneMarkh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private RoyaltyServiceWorker.AccountService.AccountPhoneMark ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public RoyaltyServiceWorker.AccountService.AccountPhoneMark Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountPhoneMarkResult", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.SerializableAttribute()]
+    public partial class AccountPhoneMarkResult : RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountPhoneMarkh3e0gNRf {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -614,7 +722,7 @@ namespace RoyaltyServiceWorker.AccountService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name=" AccountDataRecordAdditionalColumnResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountDataRecordAdditionalColumnResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
     [System.SerializableAttribute()]
     public partial class AccountDataRecordAdditionalColumnResults : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf {
     }
@@ -714,6 +822,99 @@ namespace RoyaltyServiceWorker.AccountService {
                 if ((this.IdField.Equals(value) != true)) {
                     this.IdField = value;
                     this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountPhoneMark", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class AccountPhoneMark : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.Guid> AccountUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long MarkIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PhoneField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.Guid> AccountUID {
+            get {
+                return this.AccountUIDField;
+            }
+            set {
+                if ((this.AccountUIDField.Equals(value) != true)) {
+                    this.AccountUIDField = value;
+                    this.RaisePropertyChanged("AccountUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long MarkID {
+            get {
+                return this.MarkIDField;
+            }
+            set {
+                if ((this.MarkIDField.Equals(value) != true)) {
+                    this.MarkIDField = value;
+                    this.RaisePropertyChanged("MarkID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Phone {
+            get {
+                return this.PhoneField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PhoneField, value) != true)) {
+                    this.PhoneField = value;
+                    this.RaisePropertyChanged("Phone");
                 }
             }
         }
@@ -1829,6 +2030,36 @@ namespace RoyaltyServiceWorker.AccountService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAdditionalColumnsRange", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveAdditionalColumnsRangeResponse")]
         System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RESTRemoveAdditionalColumnsRangeAsync(System.Collections.Generic.List<string> identifier);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTGetAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTGetAccountPhoneMarkResponse")]
+        RoyaltyServiceWorker.AccountService.AccountPhoneMarkResults RESTGetAccountPhoneMark(string accountId, string filter, string pageIndex, string itemsPerPage);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTGetAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTGetAccountPhoneMarkResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountPhoneMarkResults> RESTGetAccountPhoneMarkAsync(string accountId, string filter, string pageIndex, string itemsPerPage);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTPutAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTPutAccountPhoneMarkResponse")]
+        RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult RESTPutAccountPhoneMark(RoyaltyServiceWorker.AccountService.AccountPhoneMark item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTPutAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTPutAccountPhoneMarkResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult> RESTPutAccountPhoneMarkAsync(RoyaltyServiceWorker.AccountService.AccountPhoneMark item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTUpdateAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTUpdateAccountPhoneMarkResponse")]
+        RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult RESTUpdateAccountPhoneMark(RoyaltyServiceWorker.AccountService.AccountPhoneMark item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTUpdateAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTUpdateAccountPhoneMarkResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult> RESTUpdateAccountPhoneMarkAsync(RoyaltyServiceWorker.AccountService.AccountPhoneMark item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveAccountPhoneMarkResponse")]
+        RoyaltyServiceWorker.AccountService.LongExecutionResult RESTRemoveAccountPhoneMark(string identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveAccountPhoneMarkResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResult> RESTRemoveAccountPhoneMarkAsync(string identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAccountPhoneMarkRange", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveAccountPhoneMarkRangeResponse")]
+        RoyaltyServiceWorker.AccountService.LongExecutionResults RESTRemoveAccountPhoneMarkRange(System.Collections.Generic.List<string> identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveAccountPhoneMarkRange", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveAccountPhoneMarkRangeResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RESTRemoveAccountPhoneMarkRangeAsync(System.Collections.Generic.List<string> identifier);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTGetSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTGetSeriesOfNumbersResponse")]
         RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults RESTGetSeriesOfNumbers(string accountId);
         
@@ -2089,6 +2320,46 @@ namespace RoyaltyServiceWorker.AccountService {
         
         public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RESTRemoveAdditionalColumnsRangeAsync(System.Collections.Generic.List<string> identifier) {
             return base.Channel.RESTRemoveAdditionalColumnsRangeAsync(identifier);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountPhoneMarkResults RESTGetAccountPhoneMark(string accountId, string filter, string pageIndex, string itemsPerPage) {
+            return base.Channel.RESTGetAccountPhoneMark(accountId, filter, pageIndex, itemsPerPage);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountPhoneMarkResults> RESTGetAccountPhoneMarkAsync(string accountId, string filter, string pageIndex, string itemsPerPage) {
+            return base.Channel.RESTGetAccountPhoneMarkAsync(accountId, filter, pageIndex, itemsPerPage);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult RESTPutAccountPhoneMark(RoyaltyServiceWorker.AccountService.AccountPhoneMark item) {
+            return base.Channel.RESTPutAccountPhoneMark(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult> RESTPutAccountPhoneMarkAsync(RoyaltyServiceWorker.AccountService.AccountPhoneMark item) {
+            return base.Channel.RESTPutAccountPhoneMarkAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult RESTUpdateAccountPhoneMark(RoyaltyServiceWorker.AccountService.AccountPhoneMark item) {
+            return base.Channel.RESTUpdateAccountPhoneMark(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult> RESTUpdateAccountPhoneMarkAsync(RoyaltyServiceWorker.AccountService.AccountPhoneMark item) {
+            return base.Channel.RESTUpdateAccountPhoneMarkAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.LongExecutionResult RESTRemoveAccountPhoneMark(string identifier) {
+            return base.Channel.RESTRemoveAccountPhoneMark(identifier);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResult> RESTRemoveAccountPhoneMarkAsync(string identifier) {
+            return base.Channel.RESTRemoveAccountPhoneMarkAsync(identifier);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.LongExecutionResults RESTRemoveAccountPhoneMarkRange(System.Collections.Generic.List<string> identifier) {
+            return base.Channel.RESTRemoveAccountPhoneMarkRange(identifier);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RESTRemoveAccountPhoneMarkRangeAsync(System.Collections.Generic.List<string> identifier) {
+            return base.Channel.RESTRemoveAccountPhoneMarkRangeAsync(identifier);
         }
         
         public RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults RESTGetSeriesOfNumbers(string accountId) {
@@ -2372,6 +2643,36 @@ namespace RoyaltyServiceWorker.AccountService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveAdditionalColumnsRange", ReplyAction="http://tempuri.org/IAccountService/RemoveAdditionalColumnsRangeResponse")]
         System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RemoveAdditionalColumnsRangeAsync(System.Collections.Generic.List<long> identifier);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/GetAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountService/GetAccountPhoneMarkResponse")]
+        RoyaltyServiceWorker.AccountService.AccountPhoneMarkResults GetAccountPhoneMark(System.Guid accountId, string filter, uint pageIndex, uint itemsPerPage);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/GetAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountService/GetAccountPhoneMarkResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountPhoneMarkResults> GetAccountPhoneMarkAsync(System.Guid accountId, string filter, uint pageIndex, uint itemsPerPage);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/PutAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountService/PutAccountPhoneMarkResponse")]
+        RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult PutAccountPhoneMark(RoyaltyServiceWorker.AccountService.AccountPhoneMark item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/PutAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountService/PutAccountPhoneMarkResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult> PutAccountPhoneMarkAsync(RoyaltyServiceWorker.AccountService.AccountPhoneMark item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/UpdateAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountService/UpdateAccountPhoneMarkResponse")]
+        RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult UpdateAccountPhoneMark(RoyaltyServiceWorker.AccountService.AccountPhoneMark item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/UpdateAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountService/UpdateAccountPhoneMarkResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult> UpdateAccountPhoneMarkAsync(RoyaltyServiceWorker.AccountService.AccountPhoneMark item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountService/RemoveAccountPhoneMarkResponse")]
+        RoyaltyServiceWorker.AccountService.LongExecutionResult RemoveAccountPhoneMark(long identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveAccountPhoneMark", ReplyAction="http://tempuri.org/IAccountService/RemoveAccountPhoneMarkResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResult> RemoveAccountPhoneMarkAsync(long identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveAccountPhoneMarkRange", ReplyAction="http://tempuri.org/IAccountService/RemoveAccountPhoneMarkRangeResponse")]
+        RoyaltyServiceWorker.AccountService.LongExecutionResults RemoveAccountPhoneMarkRange(System.Collections.Generic.List<long> identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveAccountPhoneMarkRange", ReplyAction="http://tempuri.org/IAccountService/RemoveAccountPhoneMarkRangeResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RemoveAccountPhoneMarkRangeAsync(System.Collections.Generic.List<long> identifier);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/GetSeriesOfNumbers", ReplyAction="http://tempuri.org/IAccountService/GetSeriesOfNumbersResponse")]
         RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults GetSeriesOfNumbers(System.Guid accountId);
         
@@ -2638,6 +2939,46 @@ namespace RoyaltyServiceWorker.AccountService {
         
         public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RemoveAdditionalColumnsRangeAsync(System.Collections.Generic.List<long> identifier) {
             return base.Channel.RemoveAdditionalColumnsRangeAsync(identifier);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountPhoneMarkResults GetAccountPhoneMark(System.Guid accountId, string filter, uint pageIndex, uint itemsPerPage) {
+            return base.Channel.GetAccountPhoneMark(accountId, filter, pageIndex, itemsPerPage);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountPhoneMarkResults> GetAccountPhoneMarkAsync(System.Guid accountId, string filter, uint pageIndex, uint itemsPerPage) {
+            return base.Channel.GetAccountPhoneMarkAsync(accountId, filter, pageIndex, itemsPerPage);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult PutAccountPhoneMark(RoyaltyServiceWorker.AccountService.AccountPhoneMark item) {
+            return base.Channel.PutAccountPhoneMark(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult> PutAccountPhoneMarkAsync(RoyaltyServiceWorker.AccountService.AccountPhoneMark item) {
+            return base.Channel.PutAccountPhoneMarkAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult UpdateAccountPhoneMark(RoyaltyServiceWorker.AccountService.AccountPhoneMark item) {
+            return base.Channel.UpdateAccountPhoneMark(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.AccountPhoneMarkResult> UpdateAccountPhoneMarkAsync(RoyaltyServiceWorker.AccountService.AccountPhoneMark item) {
+            return base.Channel.UpdateAccountPhoneMarkAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.LongExecutionResult RemoveAccountPhoneMark(long identifier) {
+            return base.Channel.RemoveAccountPhoneMark(identifier);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResult> RemoveAccountPhoneMarkAsync(long identifier) {
+            return base.Channel.RemoveAccountPhoneMarkAsync(identifier);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.LongExecutionResults RemoveAccountPhoneMarkRange(System.Collections.Generic.List<long> identifier) {
+            return base.Channel.RemoveAccountPhoneMarkRange(identifier);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.LongExecutionResults> RemoveAccountPhoneMarkRangeAsync(System.Collections.Generic.List<long> identifier) {
+            return base.Channel.RemoveAccountPhoneMarkRangeAsync(identifier);
         }
         
         public RoyaltyServiceWorker.AccountService.AccountSeriesOfNumbersRecordResults GetSeriesOfNumbers(System.Guid accountId) {
