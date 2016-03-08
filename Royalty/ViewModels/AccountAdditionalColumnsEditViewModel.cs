@@ -167,7 +167,7 @@ namespace Royalty.ViewModels
         
         private void AccountAdditionalColumns_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.OldItems != null && IsActive)
+            if (e.OldItems != null && IsActive && !localCollection.IsCollectionUpdating)
             {
                 var oldItems = e.OldItems
                     .OfType<AccountDataRecordAdditionalColumn>()

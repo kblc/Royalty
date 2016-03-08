@@ -206,19 +206,8 @@ namespace Royalty.ViewModels
             }
         }
 
-        private bool isSourceCollectionUpdate = false;
         private void AccountsPhoneMarksComponent_Change(object sender, ListItemsEventArgs<AccountPhoneMark> e)
-        {
-            isSourceCollectionUpdate = true;
-            try
-            {
-                localCollection.UpdateCollection(e);
-            }
-            finally
-            {
-                isSourceCollectionUpdate = false;
-            }
-        }
+         => localCollection.UpdateCollection(e);
 
         private void AccountsPhoneMarksComponent_IsLoadedChanged(object sender, EventArgs e)
         {
@@ -227,7 +216,7 @@ namespace Royalty.ViewModels
 
         private void AccountPhoneMarks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.OldItems != null && IsActive && !isSourceCollectionUpdate)
+            if (e.OldItems != null && IsActive && !localCollection.IsCollectionUpdating)
             {
                 var oldItems = e.OldItems
                     .OfType<AccountPhoneMark>()

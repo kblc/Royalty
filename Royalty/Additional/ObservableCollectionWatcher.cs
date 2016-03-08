@@ -21,6 +21,8 @@ namespace Royalty.Additional
             this.comparer = comparer;
         }
 
+        public bool IsCollectionUpdating { get; private set; } = false;
+
         public event EventHandler<ListItemsEventArgs<T>> Change;
 
         public void AddRange(IEnumerable<T> items)
@@ -31,24 +33,31 @@ namespace Royalty.Additional
 
         public void UpdateCollection(ListItemsEventArgs<T> e)
         {
-            if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Change || e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Add)
-                e.Items.ToList().ForEach(i => 
-                {
-                    var item = this.FirstOrDefault(a => comparer(a, i));
-                    if (item == null)
-                        this.Add(i); else
-                        item.CopyObjectFrom(i);
-                });
+            IsCollectionUpdating = true;
+            try
+            {
+                if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Change || e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Add)
+                    e.Items.ToList().ForEach(i => 
+                    {
+                        var item = this.FirstOrDefault(a => comparer(a, i));
+                        if (item == null)
+                            this.Add(i); else
+                            item.CopyObjectFrom(i);
+                    });
             
-            if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Remove)
-                e.Items.ToList().ForEach(i => 
-                {
-                    var item = this.FirstOrDefault(a => comparer(a, i));
-                    if (item != null)
-                        this.Remove(item);
-                });
-
-            Change?.Invoke(this, e);
+                if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Remove)
+                    e.Items.ToList().ForEach(i => 
+                    {
+                        var item = this.FirstOrDefault(a => comparer(a, i));
+                        if (item != null)
+                            this.Remove(item);
+                    });
+                Change?.Invoke(this, e);
+            }
+            finally
+            {
+                IsCollectionUpdating = false;
+            }
         }
     }
 

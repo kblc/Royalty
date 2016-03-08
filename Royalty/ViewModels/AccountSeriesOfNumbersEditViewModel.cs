@@ -173,7 +173,7 @@ namespace Royalty.ViewModels
 
         private void AccountSeriesOfNumbers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.OldItems != null && IsActive)
+            if (e.OldItems != null && IsActive && !localCollection.IsCollectionUpdating)
             {
                 var oldItems = e.OldItems
                     .OfType<AccountSeriesOfNumbersRecord>()
