@@ -20,6 +20,7 @@ namespace RoyaltyService.Services.Account
         {
             Model.ColumnType.InitializeMap();
             Model.Mark.InitializeMap();
+            Model.ImportQueueRecordState.InitializeMap();
 
             Model.Account.InitializeMap();
             Model.AccountSettingsColumn.InitializeMap();
@@ -28,6 +29,12 @@ namespace RoyaltyService.Services.Account
             Model.AccountSettingsSheduleTime.InitializeMap();
 
             Model.AccountSeriesOfNumbersRecord.InitializeMap();
+            Model.AccountDataRecordAdditionalColumn.InitializeMap();
+            Model.AccountPhoneMark.InitializeMap();
+            Model.ImportQueueRecord.InitializeMap();
+            Model.ImportQueueRecordFileInfo.InitializeMap();
+            Model.ImportQueueRecordFileInfoFile.InitializeMap();
+            Model.ImportQueueRecordFileAccountDataRecord.InitializeMap();
         }
 
         #endregion

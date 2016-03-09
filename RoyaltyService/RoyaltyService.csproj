@@ -65,6 +65,10 @@
   <ItemGroup>
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\ServicesConfigSection.cs" />
+    <Compile Include="Model\ImportQueueRecordFileAccountDataRecord.cs" />
+    <Compile Include="Model\ImportQueueRecordFileInfoFile.cs" />
+    <Compile Include="Model\ImportQueueRecordFileInfo.cs" />
+    <Compile Include="Model\ImportQueueRecord.cs" />
     <Compile Include="Model\AccountPhoneMark.cs" />
     <Compile Include="Model\AccountDataRecordAdditionalColumn.cs" />
     <Compile Include="Model\AccountSeriesOfNumbersRecord.cs" />
@@ -72,6 +76,7 @@
     <Compile Include="Model\AccountSettingsExportDirectory.cs" />
     <Compile Include="Model\AccountSettingsImportDirectory.cs" />
     <Compile Include="Model\AccountSettingsColumn.cs" />
+    <Compile Include="Model\ImportQueueRecordState.cs" />
     <Compile Include="Model\Mark.cs" />
     <Compile Include="Model\ColumnType.cs" />
     <Compile Include="Model\AccountSettings.cs" />
@@ -83,12 +88,20 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Services\Account\AccountService.ImportQueueRecordREST.cs" />
+    <Compile Include="Services\Account\AccountService.ImportQueueRecord.cs" />
     <Compile Include="Services\Account\AccountService.PhoneMarkREST.cs" />
     <Compile Include="Services\Account\AccountService.PhoneMark.cs" />
     <Compile Include="Services\Account\AccountService.AdditionalColumn.cs" />
     <Compile Include="Services\Account\AccountService.AdditionalColumnREST.cs" />
     <Compile Include="Services\Account\AccountService.SeriesOfNumbersREST.cs" />
     <Compile Include="Services\Account\AccountService.SeriesOfNumbers.cs" />
+    <Compile Include="Services\Account\IAccountService.ImportQueueRecordREST.cs" />
+    <Compile Include="Services\Account\IAccountService.ImportQueueRecord.cs" />
+    <Compile Include="Services\Account\IImportQueueRecordStateREST.cs" />
+    <Compile Include="Services\Account\IImportQueueRecordState.cs" />
+    <Compile Include="Services\Account\ImportQueueRecordStateREST.cs" />
+    <Compile Include="Services\Account\ImportQueueRecordState.cs" />
     <Compile Include="Services\Account\AccountService.SettingsREST.cs" />
     <Compile Include="Services\Account\AccountService.Settings.cs" />
     <Compile Include="Services\Account\AccountService.Settings.SheduleTimeREST.cs" />
@@ -122,6 +135,8 @@
     <Compile Include="Services\Account\IAccountService.Settings.MarkREST.cs" />
     <Compile Include="Services\Account\IAccountService.Settings.Mark.cs" />
     <Compile Include="Services\Account\IAccountService.Settings.ColumnTypeREST.cs" />
+    <Compile Include="Services\Account\Result\ImportQueueRecordState.ExecutionResult.cs" />
+    <Compile Include="Services\Account\Result\ImportQueueRecord.ExecutionResult.cs" />
     <Compile Include="Services\Account\Result\Account.PhoneMarksResult.cs" />
     <Compile Include="Services\Account\Result\Account.SeriesOfNumbersRecord.ExecutionResult.cs" />
     <Compile Include="Services\Account\Result\Account.AdditionalColumnResult.cs" />

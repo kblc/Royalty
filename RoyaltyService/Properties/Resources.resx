@@ -123,6 +123,9 @@
   <data name="SERVICES_ACCOUNT_AccountDataRecordAdditionalColumnNotFound" xml:space="preserve">
     <value>Account additional column not found.</value>
   </data>
+  <data name="SERVICES_ACCOUNT_AccountNotFound" xml:space="preserve">
+    <value>Account not found.</value>
+  </data>
   <data name="SERVICES_ACCOUNT_AccountPhoneMarkColumnNotFound" xml:space="preserve">
     <value>Account phone mark not found.</value>
   </data>

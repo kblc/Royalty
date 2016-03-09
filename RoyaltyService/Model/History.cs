@@ -57,6 +57,22 @@ namespace RoyaltyService.Model
         [DataMember]
         [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountPhoneMark), typeof(long))]
         public long[] AccountPhoneMark { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.ImportQueueRecord), typeof(Guid))]
+        public Guid[] ImportQueueRecord { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.ImportQueueRecordFileAccountDataRecord), typeof(long))]
+        public long[] ImportQueueRecordFileAccountDataRecord { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.ImportQueueRecordFileInfo), typeof(Guid))]
+        public Guid[] ImportQueueRecordFileInfo { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.ImportQueueRecordFileInfoFile), typeof(Guid))]
+        public Guid[] ImportQueueRecordFileInfoFile { get; set; }
     }
 
     [DataContract]
@@ -97,6 +113,22 @@ namespace RoyaltyService.Model
         [DataMember]
         [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.AccountPhoneMark))]
         public AccountPhoneMark[] AccountPhoneMark { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.ImportQueueRecord))]
+        public ImportQueueRecord[] ImportQueueRecord { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.ImportQueueRecordFileAccountDataRecord))]
+        public ImportQueueRecordFileAccountDataRecord[] ImportQueueRecordFileAccountDataRecord { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.ImportQueueRecordFileInfo))]
+        public ImportQueueRecordFileInfo[] ImportQueueRecordFileInfo { get; set; }
+
+        [DataMember]
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.ImportQueueRecordFileInfoFile))]
+        public ImportQueueRecordFileInfoFile[] ImportQueueRecordFileInfoFile { get; set; }
     }
 
     [DataContract]

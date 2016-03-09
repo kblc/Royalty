@@ -135,7 +135,7 @@ namespace RoyaltyWorker
                                     .OrderBy(r => r.CreatedDate)
                                     .FirstOrDefault()
                                 : rep.ImportQueueRecordGet()
-                                    .Where(r => r.ProcessedDate == null && r.AccountID == prm.AccountForCheck.AccountUID)
+                                    .Where(r => r.ProcessedDate == null && r.AccountUID == prm.AccountForCheck.AccountUID)
                                     .OrderBy(r => r.CreatedDate)
                                     .FirstOrDefault();
 

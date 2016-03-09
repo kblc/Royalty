@@ -21,11 +21,14 @@ namespace RoyaltyRepository.Models
     [Table("import_queue_file_data_records")]
     public partial class ImportQueueRecordFileAccountDataRecord : HistoryEntityBase
     {
+        [Key, Column("import_queue_file_data_records_id")]
+        public long ImportQueueRecordFileAccountDataRecordID { get; set; }
+
         #region ImportQueueRecordFile
         /// <summary>
         /// Идентификатор файла очереди загрузки, которой принадлежит данная запись
         /// </summary>
-        [Key, ForeignKey(nameof(ImportQueueRecordFile)), Column("import_queue_file_uid", Order = 1)]
+        [Required, ForeignKey(nameof(ImportQueueRecordFile)), Column("import_queue_file_uid"), Index("UIX_ImportQueueRecordFileAccountDataRecord_AccountDataRecord", IsUnique = true, Order = 1)]
         public Guid ImportQueueRecordFileUID { get; set; }
         /// <summary>
         /// Очереди загрузки, которой принадлежит данный файл
@@ -36,7 +39,7 @@ namespace RoyaltyRepository.Models
         /// <summary>
         /// Идентификатор записи, которой принадлежат данные
         /// </summary>
-        [Key, Column("data_uid", Order = 2), ForeignKey(nameof(AccountDataRecord))]
+        [Required, Column("data_uid"), ForeignKey(nameof(AccountDataRecord)), Index("UIX_ImportQueueRecordFileAccountDataRecord_AccountDataRecord", IsUnique = true, Order = 2)]
         public Guid AccountDataRecordID { get; set; }
         /// <summary>
         /// Запись, которой принадлежат данные
