@@ -45,6 +45,10 @@
       <xs:element minOccurs="0" name="AccountSettingsExportDirectory" nillable="true" type="tns:ArrayOfAccountSettingsExportDirectory" />
       <xs:element minOccurs="0" name="AccountSettingsImportDirectory" nillable="true" type="tns:ArrayOfAccountSettingsImportDirectory" />
       <xs:element minOccurs="0" name="AccountSettingsSheduleTime" nillable="true" type="tns:ArrayOfAccountSettingsSheduleTime" />
+      <xs:element minOccurs="0" name="ImportQueueRecord" nillable="true" type="tns:ArrayOfImportQueueRecord" />
+      <xs:element minOccurs="0" name="ImportQueueRecordFileAccountDataRecord" nillable="true" type="tns:ArrayOfImportQueueRecordFileAccountDataRecord" />
+      <xs:element minOccurs="0" name="ImportQueueRecordFileInfo" nillable="true" type="tns:ArrayOfImportQueueRecordFileInfo" />
+      <xs:element minOccurs="0" name="ImportQueueRecordFileInfoFile" nillable="true" type="tns:ArrayOfImportQueueRecordFileInfoFile" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="HistoryUpdatePart" nillable="true" type="tns:HistoryUpdatePart" />
@@ -196,6 +200,76 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfAccountSettings" nillable="true" type="tns:ArrayOfAccountSettings" />
+  <xs:complexType name="ArrayOfImportQueueRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ImportQueueRecord" nillable="true" type="tns:ImportQueueRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfImportQueueRecord" nillable="true" type="tns:ArrayOfImportQueueRecord" />
+  <xs:complexType name="ImportQueueRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="CreatedDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FileInfoes" nillable="true" type="tns:ArrayOfImportQueueRecordFileInfo" />
+      <xs:element minOccurs="0" name="HasError" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Id" type="ser:guid" />
+      <xs:element minOccurs="0" name="ProcessedDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ImportQueueRecord" nillable="true" type="tns:ImportQueueRecord" />
+  <xs:complexType name="ArrayOfImportQueueRecordFileInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ImportQueueRecordFileInfo" nillable="true" type="tns:ImportQueueRecordFileInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfImportQueueRecordFileInfo" nillable="true" type="tns:ArrayOfImportQueueRecordFileInfo" />
+  <xs:complexType name="ImportQueueRecordFileInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Files" nillable="true" type="tns:ArrayOfImportQueueRecordFileInfoFile" />
+      <xs:element minOccurs="0" name="Finished" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ForAnalize" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Id" type="ser:guid" />
+      <xs:element minOccurs="0" name="ImportQueueRecordStateID" type="xs:long" />
+      <xs:element minOccurs="0" name="ImportQueueRecordUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="LoadedRecords" nillable="true" type="tns:ArrayOfImportQueueRecordFileAccountDataRecord" />
+      <xs:element minOccurs="0" name="SourceFilePath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Started" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ImportQueueRecordFileInfo" nillable="true" type="tns:ImportQueueRecordFileInfo" />
+  <xs:complexType name="ArrayOfImportQueueRecordFileInfoFile">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ImportQueueRecordFileInfoFile" nillable="true" type="tns:ImportQueueRecordFileInfoFile" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfImportQueueRecordFileInfoFile" nillable="true" type="tns:ArrayOfImportQueueRecordFileInfoFile" />
+  <xs:complexType name="ImportQueueRecordFileInfoFile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FileUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="Id" type="ser:guid" />
+      <xs:element minOccurs="0" name="ImportQueueRecordFileInfoUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="TypeName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TypeSystemName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ImportQueueRecordFileInfoFile" nillable="true" type="tns:ImportQueueRecordFileInfoFile" />
+  <xs:complexType name="ArrayOfImportQueueRecordFileAccountDataRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ImportQueueRecordFileAccountDataRecord" nillable="true" type="tns:ImportQueueRecordFileAccountDataRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfImportQueueRecordFileAccountDataRecord" nillable="true" type="tns:ArrayOfImportQueueRecordFileAccountDataRecord" />
+  <xs:complexType name="ImportQueueRecordFileAccountDataRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountDataRecordID" type="ser:guid" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="ImportQueueRecordFileUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="LoadDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ImportQueueRecordFileAccountDataRecord" nillable="true" type="tns:ImportQueueRecordFileAccountDataRecord" />
   <xs:complexType name="HistoryRemovePart">
     <xs:sequence>
       <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Account" nillable="true" type="q1:ArrayOfguid" />
@@ -207,6 +281,10 @@
       <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsExportDirectory" nillable="true" type="q7:ArrayOflong" />
       <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsImportDirectory" nillable="true" type="q8:ArrayOflong" />
       <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="AccountSettingsSheduleTime" nillable="true" type="q9:ArrayOflong" />
+      <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ImportQueueRecord" nillable="true" type="q10:ArrayOfguid" />
+      <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ImportQueueRecordFileAccountDataRecord" nillable="true" type="q11:ArrayOflong" />
+      <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ImportQueueRecordFileInfo" nillable="true" type="q12:ArrayOfguid" />
+      <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ImportQueueRecordFileInfoFile" nillable="true" type="q13:ArrayOfguid" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="HistoryRemovePart" nillable="true" type="tns:HistoryRemovePart" />

@@ -115,6 +115,196 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_GetImportQueueRecords_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_GetImportQueueRecords_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_PutImportQueueRecord_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_PutImportQueueRecord_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_RemovemportQueueRecord_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_RemovemportQueueRecord_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_RemoveImportQueueRecordRange_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_RemoveImportQueueRecordRange_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_ImportQueueRecordStates_Input_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_ImportQueueRecordStates_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_GetAdditionalColumns_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -1723,6 +1913,36 @@
   <wsdl:message name="IAccountServiceREST_ChangeLanguage_InputMessage">
     <wsdl:part name="parameters" element="tns:ChangeLanguage" />
   </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTGetImportQueueRecords_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTGetImportQueueRecords" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTGetImportQueueRecords_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTGetImportQueueRecordsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTPutImportQueueRecord_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTPutImportQueueRecord" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTPutImportQueueRecord_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTPutImportQueueRecordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTRemovemportQueueRecord_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTRemovemportQueueRecord" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTRemovemportQueueRecord_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTRemovemportQueueRecordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTRemoveImportQueueRecordRange_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTRemoveImportQueueRecordRange" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTRemoveImportQueueRecordRange_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTRemoveImportQueueRecordRangeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTImportQueueRecordStates_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTImportQueueRecordStates" />
+  </wsdl:message>
+  <wsdl:message name="IAccountServiceREST_RESTImportQueueRecordStates_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTImportQueueRecordStatesResponse" />
+  </wsdl:message>
   <wsdl:message name="IAccountServiceREST_RESTGetAdditionalColumns_InputMessage">
     <wsdl:part name="parameters" element="tns:RESTGetAdditionalColumns" />
   </wsdl:message>
@@ -1962,6 +2182,36 @@
   </wsdl:message>
   <wsdl:message name="IAccountServiceREST_RESTRemoveRange_OutputMessage">
     <wsdl:part name="parameters" element="tns:RESTRemoveRangeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_GetImportQueueRecords_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetImportQueueRecords" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_GetImportQueueRecords_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetImportQueueRecordsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_PutImportQueueRecord_InputMessage">
+    <wsdl:part name="parameters" element="tns:PutImportQueueRecord" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_PutImportQueueRecord_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PutImportQueueRecordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_RemovemportQueueRecord_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemovemportQueueRecord" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_RemovemportQueueRecord_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemovemportQueueRecordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_RemoveImportQueueRecordRange_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveImportQueueRecordRange" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_RemoveImportQueueRecordRange_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveImportQueueRecordRangeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_ImportQueueRecordStates_InputMessage">
+    <wsdl:part name="parameters" element="tns:ImportQueueRecordStates" />
+  </wsdl:message>
+  <wsdl:message name="IAccountService_ImportQueueRecordStates_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ImportQueueRecordStatesResponse" />
   </wsdl:message>
   <wsdl:message name="IAccountService_GetAdditionalColumns_InputMessage">
     <wsdl:part name="parameters" element="tns:GetAdditionalColumns" />
@@ -2219,6 +2469,26 @@
     <wsdl:operation name="ChangeLanguage">
       <wsdl:input wsaw:Action="http://tempuri.org/IBaseService/ChangeLanguage" message="tns:IAccountServiceREST_ChangeLanguage_InputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="RESTGetImportQueueRecords">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTGetImportQueueRecords" message="tns:IAccountServiceREST_RESTGetImportQueueRecords_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTGetImportQueueRecordsResponse" message="tns:IAccountServiceREST_RESTGetImportQueueRecords_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RESTPutImportQueueRecord">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTPutImportQueueRecord" message="tns:IAccountServiceREST_RESTPutImportQueueRecord_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTPutImportQueueRecordResponse" message="tns:IAccountServiceREST_RESTPutImportQueueRecord_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RESTRemovemportQueueRecord">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemovemportQueueRecord" message="tns:IAccountServiceREST_RESTRemovemportQueueRecord_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemovemportQueueRecordResponse" message="tns:IAccountServiceREST_RESTRemovemportQueueRecord_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RESTRemoveImportQueueRecordRange">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemoveImportQueueRecordRange" message="tns:IAccountServiceREST_RESTRemoveImportQueueRecordRange_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemoveImportQueueRecordRangeResponse" message="tns:IAccountServiceREST_RESTRemoveImportQueueRecordRange_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RESTImportQueueRecordStates">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTImportQueueRecordStates" message="tns:IAccountServiceREST_RESTImportQueueRecordStates_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTImportQueueRecordStatesResponse" message="tns:IAccountServiceREST_RESTImportQueueRecordStates_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="RESTGetAdditionalColumns">
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTGetAdditionalColumns" message="tns:IAccountServiceREST_RESTGetAdditionalColumns_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTGetAdditionalColumnsResponse" message="tns:IAccountServiceREST_RESTGetAdditionalColumns_OutputMessage" />
@@ -2383,6 +2653,26 @@
   <wsdl:portType name="IAccountService">
     <wsdl:operation name="ChangeLanguage">
       <wsdl:input wsaw:Action="http://tempuri.org/IBaseService/ChangeLanguage" message="tns:IAccountServiceREST_ChangeLanguage_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetImportQueueRecords">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/GetImportQueueRecords" message="tns:IAccountService_GetImportQueueRecords_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/GetImportQueueRecordsResponse" message="tns:IAccountService_GetImportQueueRecords_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PutImportQueueRecord">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/PutImportQueueRecord" message="tns:IAccountService_PutImportQueueRecord_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/PutImportQueueRecordResponse" message="tns:IAccountService_PutImportQueueRecord_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemovemportQueueRecord">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/RemovemportQueueRecord" message="tns:IAccountService_RemovemportQueueRecord_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/RemovemportQueueRecordResponse" message="tns:IAccountService_RemovemportQueueRecord_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveImportQueueRecordRange">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/RemoveImportQueueRecordRange" message="tns:IAccountService_RemoveImportQueueRecordRange_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/RemoveImportQueueRecordRangeResponse" message="tns:IAccountService_RemoveImportQueueRecordRange_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ImportQueueRecordStates">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/ImportQueueRecordStates" message="tns:IAccountService_ImportQueueRecordStates_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/ImportQueueRecordStatesResponse" message="tns:IAccountService_ImportQueueRecordStates_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetAdditionalColumns">
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/GetAdditionalColumns" message="tns:IAccountService_GetAdditionalColumns_InputMessage" />
@@ -2562,6 +2852,61 @@
         <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_ChangeLanguage_Input_policy" />
         <soap12:body use="literal" />
       </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="GetImportQueueRecords">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/GetImportQueueRecords" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_GetImportQueueRecords_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_GetImportQueueRecords_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PutImportQueueRecord">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/PutImportQueueRecord" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_PutImportQueueRecord_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_PutImportQueueRecord_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemovemportQueueRecord">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/RemovemportQueueRecord" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RemovemportQueueRecord_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RemovemportQueueRecord_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveImportQueueRecordRange">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/RemoveImportQueueRecordRange" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RemoveImportQueueRecordRange_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_RemoveImportQueueRecordRange_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportQueueRecordStates">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/ImportQueueRecordStates" style="document" />
+      <wsdl:input>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_ImportQueueRecordStates_Input_policy" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_ImportQueueRecordStates_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetAdditionalColumns">
       <soap12:operation soapAction="http://tempuri.org/IAccountService/GetAdditionalColumns" style="document" />

@@ -2,6 +2,215 @@
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="BasePagedExecutionResultsOfImportQueueRecordh3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BasePagedExecutionResultsOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="ImportQueueRecord" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:BaseExecutionResultsOfImportQueueRecordh3e0gNRf">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="PageCount" type="xs:long" />
+          <xs:element minOccurs="0" name="PageIndex" type="xs:long" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BasePagedExecutionResultsOfImportQueueRecordh3e0gNRf" nillable="true" type="tns:BasePagedExecutionResultsOfImportQueueRecordh3e0gNRf" />
+  <xs:complexType name="BaseExecutionResultsOfImportQueueRecordh3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultsOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="ImportQueueRecord" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Values" nillable="true" type="tns:ArrayOfImportQueueRecord" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultsOfImportQueueRecordh3e0gNRf" nillable="true" type="tns:BaseExecutionResultsOfImportQueueRecordh3e0gNRf" />
+  <xs:complexType name="Result">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Result" nillable="true" type="tns:Result" />
+  <xs:complexType name="ArrayOfImportQueueRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ImportQueueRecord" nillable="true" type="tns:ImportQueueRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfImportQueueRecord" nillable="true" type="tns:ArrayOfImportQueueRecord" />
+  <xs:complexType name="ImportQueueRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="CreatedDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FileInfoes" nillable="true" type="tns:ArrayOfImportQueueRecordFileInfo" />
+      <xs:element minOccurs="0" name="HasError" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Id" type="ser:guid" />
+      <xs:element minOccurs="0" name="ProcessedDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ImportQueueRecord" nillable="true" type="tns:ImportQueueRecord" />
+  <xs:complexType name="ArrayOfImportQueueRecordFileInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ImportQueueRecordFileInfo" nillable="true" type="tns:ImportQueueRecordFileInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfImportQueueRecordFileInfo" nillable="true" type="tns:ArrayOfImportQueueRecordFileInfo" />
+  <xs:complexType name="ImportQueueRecordFileInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Files" nillable="true" type="tns:ArrayOfImportQueueRecordFileInfoFile" />
+      <xs:element minOccurs="0" name="Finished" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ForAnalize" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Id" type="ser:guid" />
+      <xs:element minOccurs="0" name="ImportQueueRecordStateID" type="xs:long" />
+      <xs:element minOccurs="0" name="ImportQueueRecordUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="LoadedRecords" nillable="true" type="tns:ArrayOfImportQueueRecordFileAccountDataRecord" />
+      <xs:element minOccurs="0" name="SourceFilePath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Started" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ImportQueueRecordFileInfo" nillable="true" type="tns:ImportQueueRecordFileInfo" />
+  <xs:complexType name="ArrayOfImportQueueRecordFileInfoFile">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ImportQueueRecordFileInfoFile" nillable="true" type="tns:ImportQueueRecordFileInfoFile" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfImportQueueRecordFileInfoFile" nillable="true" type="tns:ArrayOfImportQueueRecordFileInfoFile" />
+  <xs:complexType name="ImportQueueRecordFileInfoFile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FileUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="Id" type="ser:guid" />
+      <xs:element minOccurs="0" name="ImportQueueRecordFileInfoUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="TypeName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TypeSystemName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ImportQueueRecordFileInfoFile" nillable="true" type="tns:ImportQueueRecordFileInfoFile" />
+  <xs:complexType name="ArrayOfImportQueueRecordFileAccountDataRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ImportQueueRecordFileAccountDataRecord" nillable="true" type="tns:ImportQueueRecordFileAccountDataRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfImportQueueRecordFileAccountDataRecord" nillable="true" type="tns:ArrayOfImportQueueRecordFileAccountDataRecord" />
+  <xs:complexType name="ImportQueueRecordFileAccountDataRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountDataRecordID" type="ser:guid" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="ImportQueueRecordFileUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="LoadDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ImportQueueRecordFileAccountDataRecord" nillable="true" type="tns:ImportQueueRecordFileAccountDataRecord" />
+  <xs:complexType name="BaseExecutionResultOfImportQueueRecordh3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="ImportQueueRecord" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" nillable="true" type="tns:ImportQueueRecord" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultOfImportQueueRecordh3e0gNRf" nillable="true" type="tns:BaseExecutionResultOfImportQueueRecordh3e0gNRf" />
+  <xs:complexType name="GuidExecutionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:BaseExecutionResultOfguid">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GuidExecutionResult" nillable="true" type="tns:GuidExecutionResult" />
+  <xs:complexType name="BaseExecutionResultOfguid">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="guid" Namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" type="ser:guid" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultOfguid" nillable="true" type="tns:BaseExecutionResultOfguid" />
+  <xs:complexType name="GuidExecutionResults">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:BaseExecutionResultsOfguid">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GuidExecutionResults" nillable="true" type="tns:GuidExecutionResults" />
+  <xs:complexType name="BaseExecutionResultsOfguid">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultsOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="guid" Namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Values" nillable="true" type="q1:ArrayOfguid" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultsOfguid" nillable="true" type="tns:BaseExecutionResultsOfguid" />
+  <xs:complexType name="BaseExecutionResultsOfImportQueueRecordStateh3e0gNRf">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BaseExecutionResultsOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="ImportQueueRecordState" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Result">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Values" nillable="true" type="tns:ArrayOfImportQueueRecordState" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BaseExecutionResultsOfImportQueueRecordStateh3e0gNRf" nillable="true" type="tns:BaseExecutionResultsOfImportQueueRecordStateh3e0gNRf" />
+  <xs:complexType name="ArrayOfImportQueueRecordState">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ImportQueueRecordState" nillable="true" type="tns:ImportQueueRecordState" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfImportQueueRecordState" nillable="true" type="tns:ArrayOfImportQueueRecordState" />
+  <xs:complexType name="ImportQueueRecordState">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SystemName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ImportQueueRecordState" nillable="true" type="tns:ImportQueueRecordState" />
   <xs:complexType name="BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf">
     <xs:annotation>
       <xs:appinfo>
@@ -19,12 +228,6 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf" nillable="true" type="tns:BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf" />
-  <xs:complexType name="Result">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="Result" nillable="true" type="tns:Result" />
   <xs:complexType name="ArrayOfAccountDataRecordAdditionalColumn">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="AccountDataRecordAdditionalColumn" nillable="true" type="tns:AccountDataRecordAdditionalColumn" />
@@ -102,7 +305,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:Result">
         <xs:sequence>
-          <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Values" nillable="true" type="q1:ArrayOflong" />
+          <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Values" nillable="true" type="q2:ArrayOflong" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -488,56 +691,6 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BaseExecutionResultOfAccounth3e0gNRf" nillable="true" type="tns:BaseExecutionResultOfAccounth3e0gNRf" />
-  <xs:complexType name="GuidExecutionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:BaseExecutionResultOfguid">
-        <xs:sequence />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GuidExecutionResult" nillable="true" type="tns:GuidExecutionResult" />
-  <xs:complexType name="BaseExecutionResultOfguid">
-    <xs:annotation>
-      <xs:appinfo>
-        <GenericType Name="BaseExecutionResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
-          <GenericParameter Name="guid" Namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-        </GenericType>
-      </xs:appinfo>
-    </xs:annotation>
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:Result">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Value" type="ser:guid" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="BaseExecutionResultOfguid" nillable="true" type="tns:BaseExecutionResultOfguid" />
-  <xs:complexType name="GuidExecutionResults">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:BaseExecutionResultsOfguid">
-        <xs:sequence />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GuidExecutionResults" nillable="true" type="tns:GuidExecutionResults" />
-  <xs:complexType name="BaseExecutionResultsOfguid">
-    <xs:annotation>
-      <xs:appinfo>
-        <GenericType Name="BaseExecutionResultsOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
-          <GenericParameter Name="guid" Namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-        </GenericType>
-      </xs:appinfo>
-    </xs:annotation>
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:Result">
-        <xs:sequence>
-          <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Values" nillable="true" type="q2:ArrayOfguid" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="BaseExecutionResultsOfguid" nillable="true" type="tns:BaseExecutionResultsOfguid" />
   <xs:complexType name="BaseExecutionResultOfAccountSettingsh3e0gNRf">
     <xs:annotation>
       <xs:appinfo>

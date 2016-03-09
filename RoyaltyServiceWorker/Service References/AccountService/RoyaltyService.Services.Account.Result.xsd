@@ -1,9 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" />
+  <xs:complexType name="ImportQueueRecordResults">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q1:BasePagedExecutionResultsOfImportQueueRecordh3e0gNRf">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ImportQueueRecordResults" nillable="true" type="tns:ImportQueueRecordResults" />
+  <xs:complexType name="ImportQueueRecordResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q2:BaseExecutionResultOfImportQueueRecordh3e0gNRf">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ImportQueueRecordResult" nillable="true" type="tns:ImportQueueRecordResult" />
+  <xs:complexType name="ImportQueueRecordStateResults">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q3:BaseExecutionResultsOfImportQueueRecordStateh3e0gNRf">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ImportQueueRecordStateResults" nillable="true" type="tns:ImportQueueRecordStateResults" />
   <xs:complexType name="AccountDataRecordAdditionalColumnResults">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q1:BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf">
+      <xs:extension xmlns:q4="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q4:BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
@@ -11,7 +35,7 @@
   <xs:element name="AccountDataRecordAdditionalColumnResults" nillable="true" type="tns:AccountDataRecordAdditionalColumnResults" />
   <xs:complexType name="AccountDataRecordAdditionalColumnResult">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q2:BaseExecutionResultOfAccountDataRecordAdditionalColumnh3e0gNRf">
+      <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q5:BaseExecutionResultOfAccountDataRecordAdditionalColumnh3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
@@ -19,7 +43,7 @@
   <xs:element name="AccountDataRecordAdditionalColumnResult" nillable="true" type="tns:AccountDataRecordAdditionalColumnResult" />
   <xs:complexType name="AccountPhoneMarkResults">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q3:BasePagedExecutionResultsOfAccountPhoneMarkh3e0gNRf">
+      <xs:extension xmlns:q6="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q6:BasePagedExecutionResultsOfAccountPhoneMarkh3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
@@ -27,7 +51,7 @@
   <xs:element name="AccountPhoneMarkResults" nillable="true" type="tns:AccountPhoneMarkResults" />
   <xs:complexType name="AccountPhoneMarkResult">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q4="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q4:BaseExecutionResultOfAccountPhoneMarkh3e0gNRf">
+      <xs:extension xmlns:q7="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q7:BaseExecutionResultOfAccountPhoneMarkh3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
@@ -35,7 +59,7 @@
   <xs:element name="AccountPhoneMarkResult" nillable="true" type="tns:AccountPhoneMarkResult" />
   <xs:complexType name="AccountSeriesOfNumbersRecordResults">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q5:BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf">
+      <xs:extension xmlns:q8="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q8:BaseExecutionResultsOfAccountSeriesOfNumbersRecordh3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
@@ -43,7 +67,7 @@
   <xs:element name="AccountSeriesOfNumbersRecordResults" nillable="true" type="tns:AccountSeriesOfNumbersRecordResults" />
   <xs:complexType name="AccountSeriesOfNumbersRecordResult">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q6="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q6:BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf">
+      <xs:extension xmlns:q9="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q9:BaseExecutionResultOfAccountSeriesOfNumbersRecordh3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
@@ -51,7 +75,7 @@
   <xs:element name="AccountSeriesOfNumbersRecordResult" nillable="true" type="tns:AccountSeriesOfNumbersRecordResult" />
   <xs:complexType name="AccountSettingsSheduleTimeResult">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q7="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q7:BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf">
+      <xs:extension xmlns:q10="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q10:BaseExecutionResultOfAccountSettingsSheduleTimeh3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
@@ -59,7 +83,7 @@
   <xs:element name="AccountSettingsSheduleTimeResult" nillable="true" type="tns:AccountSettingsSheduleTimeResult" />
   <xs:complexType name="AccountSettingsExportDirectoryResult">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q8="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q8:BaseExecutionResultOfAccountSettingsExportDirectoryh3e0gNRf">
+      <xs:extension xmlns:q11="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q11:BaseExecutionResultOfAccountSettingsExportDirectoryh3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
@@ -67,7 +91,7 @@
   <xs:element name="AccountSettingsExportDirectoryResult" nillable="true" type="tns:AccountSettingsExportDirectoryResult" />
   <xs:complexType name="AccountSettingsImportDirectoryResult">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q9="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q9:BaseExecutionResultOfAccountSettingsImportDirectoryh3e0gNRf">
+      <xs:extension xmlns:q12="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q12:BaseExecutionResultOfAccountSettingsImportDirectoryh3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
@@ -75,7 +99,7 @@
   <xs:element name="AccountSettingsImportDirectoryResult" nillable="true" type="tns:AccountSettingsImportDirectoryResult" />
   <xs:complexType name="AccountSettingsColumnsResult">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q10="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q10:BaseExecutionResultOfAccountSettingsColumnh3e0gNRf">
+      <xs:extension xmlns:q13="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q13:BaseExecutionResultOfAccountSettingsColumnh3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
@@ -83,7 +107,7 @@
   <xs:element name="AccountSettingsColumnsResult" nillable="true" type="tns:AccountSettingsColumnsResult" />
   <xs:complexType name="AccountSettingsMarkResults">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q11="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q11:BaseExecutionResultsOfMarkh3e0gNRf">
+      <xs:extension xmlns:q14="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q14:BaseExecutionResultsOfMarkh3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
@@ -91,7 +115,7 @@
   <xs:element name="AccountSettingsMarkResults" nillable="true" type="tns:AccountSettingsMarkResults" />
   <xs:complexType name="AccountSettingsColumnTypeResults">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q12="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q12:BaseExecutionResultsOfColumnTypeh3e0gNRf">
+      <xs:extension xmlns:q15="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q15:BaseExecutionResultsOfColumnTypeh3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
@@ -99,7 +123,7 @@
   <xs:element name="AccountSettingsColumnTypeResults" nillable="true" type="tns:AccountSettingsColumnTypeResults" />
   <xs:complexType name="AccountResults">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q13="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q13:BaseExecutionResultsOfAccounth3e0gNRf">
+      <xs:extension xmlns:q16="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q16:BaseExecutionResultsOfAccounth3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
@@ -107,7 +131,7 @@
   <xs:element name="AccountResults" nillable="true" type="tns:AccountResults" />
   <xs:complexType name="AccountResult">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q14="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q14:BaseExecutionResultOfAccounth3e0gNRf">
+      <xs:extension xmlns:q17="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q17:BaseExecutionResultOfAccounth3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
@@ -115,7 +139,7 @@
   <xs:element name="AccountResult" nillable="true" type="tns:AccountResult" />
   <xs:complexType name="AccountSettingsResult">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q15="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q15:BaseExecutionResultOfAccountSettingsh3e0gNRf">
+      <xs:extension xmlns:q18="http://schemas.datacontract.org/2004/07/RoyaltyService.Model" base="q18:BaseExecutionResultOfAccountSettingsh3e0gNRf">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>

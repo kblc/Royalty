@@ -17,6 +17,16 @@ namespace RoyaltyServiceWorker.AccountService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Result", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
     [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfImportQueueRecordh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.ImportQueueRecordResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfguid))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.GuidExecutionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfguid))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.GuidExecutionResults))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfImportQueueRecordStateh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountDataRecordAdditionalColumnh3e0gNRf))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOflong))]
@@ -48,14 +58,11 @@ namespace RoyaltyServiceWorker.AccountService {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountResults))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccounth3e0gNRf))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfguid))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.GuidExecutionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfguid))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.GuidExecutionResults))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultOfAccountSettingsh3e0gNRf))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSettingsResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfImportQueueRecordh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BasePagedExecutionResultsOfImportQueueRecordh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.ImportQueueRecordResults))]
     public partial class Result : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
@@ -95,6 +102,161 @@ namespace RoyaltyServiceWorker.AccountService {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultOfImportQueueRecordh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.ImportQueueRecordResult))]
+    public partial class BaseExecutionResultOfImportQueueRecordh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private RoyaltyServiceWorker.AccountService.ImportQueueRecord ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public RoyaltyServiceWorker.AccountService.ImportQueueRecord Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ImportQueueRecordResult", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.SerializableAttribute()]
+    public partial class ImportQueueRecordResult : RoyaltyServiceWorker.AccountService.BaseExecutionResultOfImportQueueRecordh3e0gNRf {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultOfguid", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.GuidExecutionResult))]
+    public partial class BaseExecutionResultOfguid : RoyaltyServiceWorker.AccountService.Result {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((this.ValueField.Equals(value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="GuidExecutionResult", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class GuidExecutionResult : RoyaltyServiceWorker.AccountService.BaseExecutionResultOfguid {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultsOfguid", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.GuidExecutionResults))]
+    public partial class BaseExecutionResultsOfguid : RoyaltyServiceWorker.AccountService.Result {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<System.Guid> ValuesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<System.Guid> Values {
+            get {
+                return this.ValuesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValuesField, value) != true)) {
+                    this.ValuesField = value;
+                    this.RaisePropertyChanged("Values");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="GuidExecutionResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class GuidExecutionResults : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfguid {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultsOfImportQueueRecordStateh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults))]
+    public partial class BaseExecutionResultsOfImportQueueRecordStateh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.ImportQueueRecordState> ValuesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.ImportQueueRecordState> Values {
+            get {
+                return this.ValuesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValuesField, value) != true)) {
+                    this.ValuesField = value;
+                    this.RaisePropertyChanged("Values");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ImportQueueRecordStateResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.SerializableAttribute()]
+    public partial class ImportQueueRecordStateResults : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfImportQueueRecordStateh3e0gNRf {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults))]
+    public partial class BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn> ValuesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn> Values {
+            get {
+                return this.ValuesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValuesField, value) != true)) {
+                    this.ValuesField = value;
+                    this.RaisePropertyChanged("Values");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AccountDataRecordAdditionalColumnResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.SerializableAttribute()]
+    public partial class AccountDataRecordAdditionalColumnResults : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -605,68 +767,6 @@ namespace RoyaltyServiceWorker.AccountService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultOfguid", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
-    [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.GuidExecutionResult))]
-    public partial class BaseExecutionResultOfguid : RoyaltyServiceWorker.AccountService.Result {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Guid ValueField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid Value {
-            get {
-                return this.ValueField;
-            }
-            set {
-                if ((this.ValueField.Equals(value) != true)) {
-                    this.ValueField = value;
-                    this.RaisePropertyChanged("Value");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="GuidExecutionResult", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
-    [System.SerializableAttribute()]
-    public partial class GuidExecutionResult : RoyaltyServiceWorker.AccountService.BaseExecutionResultOfguid {
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultsOfguid", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
-    [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.GuidExecutionResults))]
-    public partial class BaseExecutionResultsOfguid : RoyaltyServiceWorker.AccountService.Result {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.List<System.Guid> ValuesField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.List<System.Guid> Values {
-            get {
-                return this.ValuesField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ValuesField, value) != true)) {
-                    this.ValuesField = value;
-                    this.RaisePropertyChanged("Values");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="GuidExecutionResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
-    [System.SerializableAttribute()]
-    public partial class GuidExecutionResults : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfguid {
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultOfAccountSettingsh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountSettingsResult))]
@@ -698,16 +798,17 @@ namespace RoyaltyServiceWorker.AccountService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BaseExecutionResultsOfImportQueueRecordh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
     [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults))]
-    public partial class BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.BasePagedExecutionResultsOfImportQueueRecordh3e0gNRf))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.ImportQueueRecordResults))]
+    public partial class BaseExecutionResultsOfImportQueueRecordh3e0gNRf : RoyaltyServiceWorker.AccountService.Result {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn> ValuesField;
+        private System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.ImportQueueRecord> ValuesField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumn> Values {
+        public System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.ImportQueueRecord> Values {
             get {
                 return this.ValuesField;
             }
@@ -722,9 +823,658 @@ namespace RoyaltyServiceWorker.AccountService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="AccountDataRecordAdditionalColumnResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BasePagedExecutionResultsOfImportQueueRecordh3e0gNRf", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
     [System.SerializableAttribute()]
-    public partial class AccountDataRecordAdditionalColumnResults : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfAccountDataRecordAdditionalColumnh3e0gNRf {
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(RoyaltyServiceWorker.AccountService.ImportQueueRecordResults))]
+    public partial class BasePagedExecutionResultsOfImportQueueRecordh3e0gNRf : RoyaltyServiceWorker.AccountService.BaseExecutionResultsOfImportQueueRecordh3e0gNRf {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long PageCountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long PageIndexField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long PageCount {
+            get {
+                return this.PageCountField;
+            }
+            set {
+                if ((this.PageCountField.Equals(value) != true)) {
+                    this.PageCountField = value;
+                    this.RaisePropertyChanged("PageCount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long PageIndex {
+            get {
+                return this.PageIndexField;
+            }
+            set {
+                if ((this.PageIndexField.Equals(value) != true)) {
+                    this.PageIndexField = value;
+                    this.RaisePropertyChanged("PageIndex");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ImportQueueRecordResults", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result")]
+    [System.SerializableAttribute()]
+    public partial class ImportQueueRecordResults : RoyaltyServiceWorker.AccountService.BasePagedExecutionResultsOfImportQueueRecordh3e0gNRf {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ImportQueueRecord", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class ImportQueueRecord : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid AccountUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime CreatedDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ErrorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.ImportQueueRecordFileInfo> FileInfoesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool HasErrorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime ProcessedDateField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid AccountUID {
+            get {
+                return this.AccountUIDField;
+            }
+            set {
+                if ((this.AccountUIDField.Equals(value) != true)) {
+                    this.AccountUIDField = value;
+                    this.RaisePropertyChanged("AccountUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime CreatedDate {
+            get {
+                return this.CreatedDateField;
+            }
+            set {
+                if ((this.CreatedDateField.Equals(value) != true)) {
+                    this.CreatedDateField = value;
+                    this.RaisePropertyChanged("CreatedDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Error {
+            get {
+                return this.ErrorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ErrorField, value) != true)) {
+                    this.ErrorField = value;
+                    this.RaisePropertyChanged("Error");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.ImportQueueRecordFileInfo> FileInfoes {
+            get {
+                return this.FileInfoesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FileInfoesField, value) != true)) {
+                    this.FileInfoesField = value;
+                    this.RaisePropertyChanged("FileInfoes");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool HasError {
+            get {
+                return this.HasErrorField;
+            }
+            set {
+                if ((this.HasErrorField.Equals(value) != true)) {
+                    this.HasErrorField = value;
+                    this.RaisePropertyChanged("HasError");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime ProcessedDate {
+            get {
+                return this.ProcessedDateField;
+            }
+            set {
+                if ((this.ProcessedDateField.Equals(value) != true)) {
+                    this.ProcessedDateField = value;
+                    this.RaisePropertyChanged("ProcessedDate");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ImportQueueRecordFileInfo", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class ImportQueueRecordFileInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ErrorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.ImportQueueRecordFileInfoFile> FilesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> FinishedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool ForAnalizeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long ImportQueueRecordStateIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid ImportQueueRecordUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.ImportQueueRecordFileAccountDataRecord> LoadedRecordsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SourceFilePathField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> StartedField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Error {
+            get {
+                return this.ErrorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ErrorField, value) != true)) {
+                    this.ErrorField = value;
+                    this.RaisePropertyChanged("Error");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.ImportQueueRecordFileInfoFile> Files {
+            get {
+                return this.FilesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FilesField, value) != true)) {
+                    this.FilesField = value;
+                    this.RaisePropertyChanged("Files");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> Finished {
+            get {
+                return this.FinishedField;
+            }
+            set {
+                if ((this.FinishedField.Equals(value) != true)) {
+                    this.FinishedField = value;
+                    this.RaisePropertyChanged("Finished");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool ForAnalize {
+            get {
+                return this.ForAnalizeField;
+            }
+            set {
+                if ((this.ForAnalizeField.Equals(value) != true)) {
+                    this.ForAnalizeField = value;
+                    this.RaisePropertyChanged("ForAnalize");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long ImportQueueRecordStateID {
+            get {
+                return this.ImportQueueRecordStateIDField;
+            }
+            set {
+                if ((this.ImportQueueRecordStateIDField.Equals(value) != true)) {
+                    this.ImportQueueRecordStateIDField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordStateID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid ImportQueueRecordUID {
+            get {
+                return this.ImportQueueRecordUIDField;
+            }
+            set {
+                if ((this.ImportQueueRecordUIDField.Equals(value) != true)) {
+                    this.ImportQueueRecordUIDField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.AccountService.ImportQueueRecordFileAccountDataRecord> LoadedRecords {
+            get {
+                return this.LoadedRecordsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LoadedRecordsField, value) != true)) {
+                    this.LoadedRecordsField = value;
+                    this.RaisePropertyChanged("LoadedRecords");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SourceFilePath {
+            get {
+                return this.SourceFilePathField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SourceFilePathField, value) != true)) {
+                    this.SourceFilePathField = value;
+                    this.RaisePropertyChanged("SourceFilePath");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> Started {
+            get {
+                return this.StartedField;
+            }
+            set {
+                if ((this.StartedField.Equals(value) != true)) {
+                    this.StartedField = value;
+                    this.RaisePropertyChanged("Started");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ImportQueueRecordFileInfoFile", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class ImportQueueRecordFileInfoFile : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid FileUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid ImportQueueRecordFileInfoUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TypeNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TypeSystemNameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid FileUID {
+            get {
+                return this.FileUIDField;
+            }
+            set {
+                if ((this.FileUIDField.Equals(value) != true)) {
+                    this.FileUIDField = value;
+                    this.RaisePropertyChanged("FileUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid ImportQueueRecordFileInfoUID {
+            get {
+                return this.ImportQueueRecordFileInfoUIDField;
+            }
+            set {
+                if ((this.ImportQueueRecordFileInfoUIDField.Equals(value) != true)) {
+                    this.ImportQueueRecordFileInfoUIDField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordFileInfoUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string TypeName {
+            get {
+                return this.TypeNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TypeNameField, value) != true)) {
+                    this.TypeNameField = value;
+                    this.RaisePropertyChanged("TypeName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string TypeSystemName {
+            get {
+                return this.TypeSystemNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TypeSystemNameField, value) != true)) {
+                    this.TypeSystemNameField = value;
+                    this.RaisePropertyChanged("TypeSystemName");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ImportQueueRecordFileAccountDataRecord", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class ImportQueueRecordFileAccountDataRecord : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid AccountDataRecordIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid ImportQueueRecordFileUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime LoadDateField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid AccountDataRecordID {
+            get {
+                return this.AccountDataRecordIDField;
+            }
+            set {
+                if ((this.AccountDataRecordIDField.Equals(value) != true)) {
+                    this.AccountDataRecordIDField = value;
+                    this.RaisePropertyChanged("AccountDataRecordID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid ImportQueueRecordFileUID {
+            get {
+                return this.ImportQueueRecordFileUIDField;
+            }
+            set {
+                if ((this.ImportQueueRecordFileUIDField.Equals(value) != true)) {
+                    this.ImportQueueRecordFileUIDField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordFileUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime LoadDate {
+            get {
+                return this.LoadDateField;
+            }
+            set {
+                if ((this.LoadDateField.Equals(value) != true)) {
+                    this.LoadDateField = value;
+                    this.RaisePropertyChanged("LoadDate");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ImportQueueRecordState", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class ImportQueueRecordState : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SystemNameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SystemName {
+            get {
+                return this.SystemNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SystemNameField, value) != true)) {
+                    this.SystemNameField = value;
+                    this.RaisePropertyChanged("SystemName");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -2000,6 +2750,36 @@ namespace RoyaltyServiceWorker.AccountService {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IBaseService/ChangeLanguage")]
         System.Threading.Tasks.Task ChangeLanguageAsync(string codename);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTGetImportQueueRecords", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTGetImportQueueRecordsResponse")]
+        RoyaltyServiceWorker.AccountService.ImportQueueRecordResults RESTGetImportQueueRecords(string accountId, string from, string to, string pageIndex, string itemsPerPage);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTGetImportQueueRecords", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTGetImportQueueRecordsResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResults> RESTGetImportQueueRecordsAsync(string accountId, string from, string to, string pageIndex, string itemsPerPage);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTPutImportQueueRecord", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTPutImportQueueRecordResponse")]
+        RoyaltyServiceWorker.AccountService.ImportQueueRecordResult RESTPutImportQueueRecord(RoyaltyServiceWorker.AccountService.ImportQueueRecord item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTPutImportQueueRecord", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTPutImportQueueRecordResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResult> RESTPutImportQueueRecordAsync(RoyaltyServiceWorker.AccountService.ImportQueueRecord item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemovemportQueueRecord", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemovemportQueueRecordResponse")]
+        RoyaltyServiceWorker.AccountService.GuidExecutionResult RESTRemovemportQueueRecord(string identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemovemportQueueRecord", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemovemportQueueRecordResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.GuidExecutionResult> RESTRemovemportQueueRecordAsync(string identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveImportQueueRecordRange", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveImportQueueRecordRangeResponse")]
+        RoyaltyServiceWorker.AccountService.GuidExecutionResults RESTRemoveImportQueueRecordRange(System.Collections.Generic.List<string> identifiers);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveImportQueueRecordRange", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveImportQueueRecordRangeResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.GuidExecutionResults> RESTRemoveImportQueueRecordRangeAsync(System.Collections.Generic.List<string> identifiers);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTImportQueueRecordStates", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTImportQueueRecordStatesResponse")]
+        RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults RESTImportQueueRecordStates();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTImportQueueRecordStates", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTImportQueueRecordStatesResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults> RESTImportQueueRecordStatesAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTGetAdditionalColumns", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTGetAdditionalColumnsResponse")]
         RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults RESTGetAdditionalColumns(string accountId);
         
@@ -2280,6 +3060,46 @@ namespace RoyaltyServiceWorker.AccountService {
         
         public System.Threading.Tasks.Task ChangeLanguageAsync(string codename) {
             return base.Channel.ChangeLanguageAsync(codename);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.ImportQueueRecordResults RESTGetImportQueueRecords(string accountId, string from, string to, string pageIndex, string itemsPerPage) {
+            return base.Channel.RESTGetImportQueueRecords(accountId, from, to, pageIndex, itemsPerPage);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResults> RESTGetImportQueueRecordsAsync(string accountId, string from, string to, string pageIndex, string itemsPerPage) {
+            return base.Channel.RESTGetImportQueueRecordsAsync(accountId, from, to, pageIndex, itemsPerPage);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.ImportQueueRecordResult RESTPutImportQueueRecord(RoyaltyServiceWorker.AccountService.ImportQueueRecord item) {
+            return base.Channel.RESTPutImportQueueRecord(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResult> RESTPutImportQueueRecordAsync(RoyaltyServiceWorker.AccountService.ImportQueueRecord item) {
+            return base.Channel.RESTPutImportQueueRecordAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.GuidExecutionResult RESTRemovemportQueueRecord(string identifier) {
+            return base.Channel.RESTRemovemportQueueRecord(identifier);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.GuidExecutionResult> RESTRemovemportQueueRecordAsync(string identifier) {
+            return base.Channel.RESTRemovemportQueueRecordAsync(identifier);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.GuidExecutionResults RESTRemoveImportQueueRecordRange(System.Collections.Generic.List<string> identifiers) {
+            return base.Channel.RESTRemoveImportQueueRecordRange(identifiers);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.GuidExecutionResults> RESTRemoveImportQueueRecordRangeAsync(System.Collections.Generic.List<string> identifiers) {
+            return base.Channel.RESTRemoveImportQueueRecordRangeAsync(identifiers);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults RESTImportQueueRecordStates() {
+            return base.Channel.RESTImportQueueRecordStates();
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults> RESTImportQueueRecordStatesAsync() {
+            return base.Channel.RESTImportQueueRecordStatesAsync();
         }
         
         public RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults RESTGetAdditionalColumns(string accountId) {
@@ -2613,6 +3433,36 @@ namespace RoyaltyServiceWorker.AccountService {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IBaseService/ChangeLanguage")]
         System.Threading.Tasks.Task ChangeLanguageAsync(string codename);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/GetImportQueueRecords", ReplyAction="http://tempuri.org/IAccountService/GetImportQueueRecordsResponse")]
+        RoyaltyServiceWorker.AccountService.ImportQueueRecordResults GetImportQueueRecords(System.Guid accountId, System.Nullable<System.DateTime> from, System.Nullable<System.DateTime> to, uint pageIndex, uint itemsPerPage);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/GetImportQueueRecords", ReplyAction="http://tempuri.org/IAccountService/GetImportQueueRecordsResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResults> GetImportQueueRecordsAsync(System.Guid accountId, System.Nullable<System.DateTime> from, System.Nullable<System.DateTime> to, uint pageIndex, uint itemsPerPage);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/PutImportQueueRecord", ReplyAction="http://tempuri.org/IAccountService/PutImportQueueRecordResponse")]
+        RoyaltyServiceWorker.AccountService.ImportQueueRecordResult PutImportQueueRecord(RoyaltyServiceWorker.AccountService.ImportQueueRecord item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/PutImportQueueRecord", ReplyAction="http://tempuri.org/IAccountService/PutImportQueueRecordResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResult> PutImportQueueRecordAsync(RoyaltyServiceWorker.AccountService.ImportQueueRecord item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemovemportQueueRecord", ReplyAction="http://tempuri.org/IAccountService/RemovemportQueueRecordResponse")]
+        RoyaltyServiceWorker.AccountService.GuidExecutionResult RemovemportQueueRecord(System.Guid identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemovemportQueueRecord", ReplyAction="http://tempuri.org/IAccountService/RemovemportQueueRecordResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.GuidExecutionResult> RemovemportQueueRecordAsync(System.Guid identifier);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveImportQueueRecordRange", ReplyAction="http://tempuri.org/IAccountService/RemoveImportQueueRecordRangeResponse")]
+        RoyaltyServiceWorker.AccountService.GuidExecutionResults RemoveImportQueueRecordRange(System.Collections.Generic.List<System.Guid> identifiers);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveImportQueueRecordRange", ReplyAction="http://tempuri.org/IAccountService/RemoveImportQueueRecordRangeResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.GuidExecutionResults> RemoveImportQueueRecordRangeAsync(System.Collections.Generic.List<System.Guid> identifiers);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/ImportQueueRecordStates", ReplyAction="http://tempuri.org/IAccountService/ImportQueueRecordStatesResponse")]
+        RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults ImportQueueRecordStates();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/ImportQueueRecordStates", ReplyAction="http://tempuri.org/IAccountService/ImportQueueRecordStatesResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults> ImportQueueRecordStatesAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/GetAdditionalColumns", ReplyAction="http://tempuri.org/IAccountService/GetAdditionalColumnsResponse")]
         RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults GetAdditionalColumns(System.Guid accountId);
         
@@ -2899,6 +3749,46 @@ namespace RoyaltyServiceWorker.AccountService {
         
         public System.Threading.Tasks.Task ChangeLanguageAsync(string codename) {
             return base.Channel.ChangeLanguageAsync(codename);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.ImportQueueRecordResults GetImportQueueRecords(System.Guid accountId, System.Nullable<System.DateTime> from, System.Nullable<System.DateTime> to, uint pageIndex, uint itemsPerPage) {
+            return base.Channel.GetImportQueueRecords(accountId, from, to, pageIndex, itemsPerPage);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResults> GetImportQueueRecordsAsync(System.Guid accountId, System.Nullable<System.DateTime> from, System.Nullable<System.DateTime> to, uint pageIndex, uint itemsPerPage) {
+            return base.Channel.GetImportQueueRecordsAsync(accountId, from, to, pageIndex, itemsPerPage);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.ImportQueueRecordResult PutImportQueueRecord(RoyaltyServiceWorker.AccountService.ImportQueueRecord item) {
+            return base.Channel.PutImportQueueRecord(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResult> PutImportQueueRecordAsync(RoyaltyServiceWorker.AccountService.ImportQueueRecord item) {
+            return base.Channel.PutImportQueueRecordAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.GuidExecutionResult RemovemportQueueRecord(System.Guid identifier) {
+            return base.Channel.RemovemportQueueRecord(identifier);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.GuidExecutionResult> RemovemportQueueRecordAsync(System.Guid identifier) {
+            return base.Channel.RemovemportQueueRecordAsync(identifier);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.GuidExecutionResults RemoveImportQueueRecordRange(System.Collections.Generic.List<System.Guid> identifiers) {
+            return base.Channel.RemoveImportQueueRecordRange(identifiers);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.GuidExecutionResults> RemoveImportQueueRecordRangeAsync(System.Collections.Generic.List<System.Guid> identifiers) {
+            return base.Channel.RemoveImportQueueRecordRangeAsync(identifiers);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults ImportQueueRecordStates() {
+            return base.Channel.ImportQueueRecordStates();
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults> ImportQueueRecordStatesAsync() {
+            return base.Channel.ImportQueueRecordStatesAsync();
         }
         
         public RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults GetAdditionalColumns(System.Guid accountId) {

@@ -144,6 +144,15 @@
     <None Include="Service References\AccountService\RoyaltyServiceWorker.AccountService.GuidExecutionResults.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\AccountService\RoyaltyServiceWorker.AccountService.ImportQueueRecordResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\AccountService\RoyaltyServiceWorker.AccountService.ImportQueueRecordResults.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\AccountService\RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\AccountService\RoyaltyServiceWorker.AccountService.LongExecutionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

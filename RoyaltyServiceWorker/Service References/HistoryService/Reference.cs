@@ -219,6 +219,18 @@ namespace RoyaltyServiceWorker.HistoryService {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.AccountSettingsSheduleTime> AccountSettingsSheduleTimeField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.ImportQueueRecord> ImportQueueRecordField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.ImportQueueRecordFileAccountDataRecord> ImportQueueRecordFileAccountDataRecordField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.ImportQueueRecordFileInfo> ImportQueueRecordFileInfoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.ImportQueueRecordFileInfoFile> ImportQueueRecordFileInfoFileField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -346,6 +358,58 @@ namespace RoyaltyServiceWorker.HistoryService {
             }
         }
         
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.ImportQueueRecord> ImportQueueRecord {
+            get {
+                return this.ImportQueueRecordField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ImportQueueRecordField, value) != true)) {
+                    this.ImportQueueRecordField = value;
+                    this.RaisePropertyChanged("ImportQueueRecord");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.ImportQueueRecordFileAccountDataRecord> ImportQueueRecordFileAccountDataRecord {
+            get {
+                return this.ImportQueueRecordFileAccountDataRecordField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ImportQueueRecordFileAccountDataRecordField, value) != true)) {
+                    this.ImportQueueRecordFileAccountDataRecordField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordFileAccountDataRecord");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.ImportQueueRecordFileInfo> ImportQueueRecordFileInfo {
+            get {
+                return this.ImportQueueRecordFileInfoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ImportQueueRecordFileInfoField, value) != true)) {
+                    this.ImportQueueRecordFileInfoField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordFileInfo");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.ImportQueueRecordFileInfoFile> ImportQueueRecordFileInfoFile {
+            get {
+                return this.ImportQueueRecordFileInfoFileField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ImportQueueRecordFileInfoFileField, value) != true)) {
+                    this.ImportQueueRecordFileInfoFileField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordFileInfoFile");
+                }
+            }
+        }
+        
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         
         protected void RaisePropertyChanged(string propertyName) {
@@ -391,6 +455,18 @@ namespace RoyaltyServiceWorker.HistoryService {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Collections.Generic.List<long> AccountSettingsSheduleTimeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<System.Guid> ImportQueueRecordField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<long> ImportQueueRecordFileAccountDataRecordField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<System.Guid> ImportQueueRecordFileInfoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<System.Guid> ImportQueueRecordFileInfoFileField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -515,6 +591,58 @@ namespace RoyaltyServiceWorker.HistoryService {
                 if ((object.ReferenceEquals(this.AccountSettingsSheduleTimeField, value) != true)) {
                     this.AccountSettingsSheduleTimeField = value;
                     this.RaisePropertyChanged("AccountSettingsSheduleTime");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<System.Guid> ImportQueueRecord {
+            get {
+                return this.ImportQueueRecordField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ImportQueueRecordField, value) != true)) {
+                    this.ImportQueueRecordField = value;
+                    this.RaisePropertyChanged("ImportQueueRecord");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<long> ImportQueueRecordFileAccountDataRecord {
+            get {
+                return this.ImportQueueRecordFileAccountDataRecordField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ImportQueueRecordFileAccountDataRecordField, value) != true)) {
+                    this.ImportQueueRecordFileAccountDataRecordField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordFileAccountDataRecord");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<System.Guid> ImportQueueRecordFileInfo {
+            get {
+                return this.ImportQueueRecordFileInfoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ImportQueueRecordFileInfoField, value) != true)) {
+                    this.ImportQueueRecordFileInfoField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordFileInfo");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<System.Guid> ImportQueueRecordFileInfoFile {
+            get {
+                return this.ImportQueueRecordFileInfoFileField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ImportQueueRecordFileInfoFileField, value) != true)) {
+                    this.ImportQueueRecordFileInfoFileField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordFileInfoFile");
                 }
             }
         }
@@ -1560,6 +1688,538 @@ namespace RoyaltyServiceWorker.HistoryService {
                 if ((this.TimeField.Equals(value) != true)) {
                     this.TimeField = value;
                     this.RaisePropertyChanged("Time");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ImportQueueRecord", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class ImportQueueRecord : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid AccountUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime CreatedDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ErrorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.ImportQueueRecordFileInfo> FileInfoesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool HasErrorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime ProcessedDateField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid AccountUID {
+            get {
+                return this.AccountUIDField;
+            }
+            set {
+                if ((this.AccountUIDField.Equals(value) != true)) {
+                    this.AccountUIDField = value;
+                    this.RaisePropertyChanged("AccountUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime CreatedDate {
+            get {
+                return this.CreatedDateField;
+            }
+            set {
+                if ((this.CreatedDateField.Equals(value) != true)) {
+                    this.CreatedDateField = value;
+                    this.RaisePropertyChanged("CreatedDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Error {
+            get {
+                return this.ErrorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ErrorField, value) != true)) {
+                    this.ErrorField = value;
+                    this.RaisePropertyChanged("Error");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.ImportQueueRecordFileInfo> FileInfoes {
+            get {
+                return this.FileInfoesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FileInfoesField, value) != true)) {
+                    this.FileInfoesField = value;
+                    this.RaisePropertyChanged("FileInfoes");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool HasError {
+            get {
+                return this.HasErrorField;
+            }
+            set {
+                if ((this.HasErrorField.Equals(value) != true)) {
+                    this.HasErrorField = value;
+                    this.RaisePropertyChanged("HasError");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime ProcessedDate {
+            get {
+                return this.ProcessedDateField;
+            }
+            set {
+                if ((this.ProcessedDateField.Equals(value) != true)) {
+                    this.ProcessedDateField = value;
+                    this.RaisePropertyChanged("ProcessedDate");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ImportQueueRecordFileAccountDataRecord", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class ImportQueueRecordFileAccountDataRecord : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid AccountDataRecordIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid ImportQueueRecordFileUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime LoadDateField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid AccountDataRecordID {
+            get {
+                return this.AccountDataRecordIDField;
+            }
+            set {
+                if ((this.AccountDataRecordIDField.Equals(value) != true)) {
+                    this.AccountDataRecordIDField = value;
+                    this.RaisePropertyChanged("AccountDataRecordID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid ImportQueueRecordFileUID {
+            get {
+                return this.ImportQueueRecordFileUIDField;
+            }
+            set {
+                if ((this.ImportQueueRecordFileUIDField.Equals(value) != true)) {
+                    this.ImportQueueRecordFileUIDField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordFileUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime LoadDate {
+            get {
+                return this.LoadDateField;
+            }
+            set {
+                if ((this.LoadDateField.Equals(value) != true)) {
+                    this.LoadDateField = value;
+                    this.RaisePropertyChanged("LoadDate");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ImportQueueRecordFileInfo", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class ImportQueueRecordFileInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ErrorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.ImportQueueRecordFileInfoFile> FilesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> FinishedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool ForAnalizeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long ImportQueueRecordStateIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid ImportQueueRecordUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.ImportQueueRecordFileAccountDataRecord> LoadedRecordsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SourceFilePathField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> StartedField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Error {
+            get {
+                return this.ErrorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ErrorField, value) != true)) {
+                    this.ErrorField = value;
+                    this.RaisePropertyChanged("Error");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.ImportQueueRecordFileInfoFile> Files {
+            get {
+                return this.FilesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FilesField, value) != true)) {
+                    this.FilesField = value;
+                    this.RaisePropertyChanged("Files");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> Finished {
+            get {
+                return this.FinishedField;
+            }
+            set {
+                if ((this.FinishedField.Equals(value) != true)) {
+                    this.FinishedField = value;
+                    this.RaisePropertyChanged("Finished");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool ForAnalize {
+            get {
+                return this.ForAnalizeField;
+            }
+            set {
+                if ((this.ForAnalizeField.Equals(value) != true)) {
+                    this.ForAnalizeField = value;
+                    this.RaisePropertyChanged("ForAnalize");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long ImportQueueRecordStateID {
+            get {
+                return this.ImportQueueRecordStateIDField;
+            }
+            set {
+                if ((this.ImportQueueRecordStateIDField.Equals(value) != true)) {
+                    this.ImportQueueRecordStateIDField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordStateID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid ImportQueueRecordUID {
+            get {
+                return this.ImportQueueRecordUIDField;
+            }
+            set {
+                if ((this.ImportQueueRecordUIDField.Equals(value) != true)) {
+                    this.ImportQueueRecordUIDField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<RoyaltyServiceWorker.HistoryService.ImportQueueRecordFileAccountDataRecord> LoadedRecords {
+            get {
+                return this.LoadedRecordsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LoadedRecordsField, value) != true)) {
+                    this.LoadedRecordsField = value;
+                    this.RaisePropertyChanged("LoadedRecords");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SourceFilePath {
+            get {
+                return this.SourceFilePathField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SourceFilePathField, value) != true)) {
+                    this.SourceFilePathField = value;
+                    this.RaisePropertyChanged("SourceFilePath");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> Started {
+            get {
+                return this.StartedField;
+            }
+            set {
+                if ((this.StartedField.Equals(value) != true)) {
+                    this.StartedField = value;
+                    this.RaisePropertyChanged("Started");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ImportQueueRecordFileInfoFile", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class ImportQueueRecordFileInfoFile : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid FileUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid ImportQueueRecordFileInfoUIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TypeNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TypeSystemNameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid FileUID {
+            get {
+                return this.FileUIDField;
+            }
+            set {
+                if ((this.FileUIDField.Equals(value) != true)) {
+                    this.FileUIDField = value;
+                    this.RaisePropertyChanged("FileUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid ImportQueueRecordFileInfoUID {
+            get {
+                return this.ImportQueueRecordFileInfoUIDField;
+            }
+            set {
+                if ((this.ImportQueueRecordFileInfoUIDField.Equals(value) != true)) {
+                    this.ImportQueueRecordFileInfoUIDField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordFileInfoUID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string TypeName {
+            get {
+                return this.TypeNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TypeNameField, value) != true)) {
+                    this.TypeNameField = value;
+                    this.RaisePropertyChanged("TypeName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string TypeSystemName {
+            get {
+                return this.TypeSystemNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TypeSystemNameField, value) != true)) {
+                    this.TypeSystemNameField = value;
+                    this.RaisePropertyChanged("TypeSystemName");
                 }
             }
         }

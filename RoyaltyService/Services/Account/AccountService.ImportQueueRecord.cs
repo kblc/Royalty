@@ -19,6 +19,9 @@ namespace RoyaltyService.Services.Account
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
                 try
                 {
+                    if (itemsPerPage == 0)
+                        throw new ArgumentException("itemsPerPage");
+
                     using (var rep = GetNewRepository(logSession))
                     {
                         var totalItemsWithFilter = 
