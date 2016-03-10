@@ -119,7 +119,7 @@ namespace RoyaltyServiceWorker
                 OnItemsChanged(this, ListItemsEventArgs.Create(items, ChangeAction.Add));
         }
 
-        public void ApplyHistoryChanges(HistoryService.History e)
+        public virtual void ApplyHistoryChanges(HistoryService.History e)
         {
             if (!IsLoaded)
                 return;

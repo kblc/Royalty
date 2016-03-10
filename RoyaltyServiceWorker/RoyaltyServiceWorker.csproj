@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountAdditionalColumnsWorker.cs" />
+    <Compile Include="AccountImportQueueRecordsWorker.cs" />
     <Compile Include="AccountPhoneMarksWorker.cs" />
     <Compile Include="AccountSeriesOfNumbersWorker.cs" />
     <Compile Include="AccountWorker.cs" />
