@@ -24,28 +24,28 @@ namespace RoyaltyServiceWorker
             AutoMapper.Mapper.CreateMap<HistoryService.ImportQueueRecordFileInfoFile, AccountService.ImportQueueRecordFileInfoFile>();
         }
 
-        private readonly Guid accountId;
+        private Guid accountId;
         private uint pageIndex = 0;
         private uint pageCount = 0;
         private uint itemsPerPage = DEFAULT_ITEMS_PER_PAGE;
         private DateTime? to = null;
         private DateTime? from = null;
 
-        public AccountImportQueueRecordsWorker(Guid accountId)
+        public AccountImportQueueRecordsWorker()
             : base(h => h.ImportQueueRecord.Select(i => AutoMapper.Mapper.Map<AccountService.ImportQueueRecord>(i))
             , h => h.ImportQueueRecord) 
-        {
-            this.accountId = accountId;
-        }
+        { }
 
         public uint PageIndex { get { return pageIndex; } set { pageIndex = value; RaisePropertyChanged(); Refresh(); } }
         public uint PageCount { get { return pageCount; } private set { pageCount = value; RaisePropertyChanged(); Refresh(); } }
         public uint ItemsPerPage { get { return itemsPerPage; } set { itemsPerPage = value; RaisePropertyChanged(); Refresh(); } }
         public DateTime? From { get { return from; } set { from = value; RaisePropertyChanged(); Refresh(); } }
         public DateTime? To { get { return to; } set { to = value; RaisePropertyChanged(); Refresh(); } }
+        public Guid AccountId { get { return accountId; } set { accountId = value; RaisePropertyChanged(); Refresh(); } }
 
         protected override AccountService.ImportQueueRecord[] ServiceGetData() 
         {
+            if (accountId != Guid.Empty)
             using (var sClient = new AccountService.AccountServiceClient())
             {
                 var taskRes = sClient.GetImportQueueRecords(accountId, From, To, PageIndex, ItemsPerPage);
@@ -60,6 +60,7 @@ namespace RoyaltyServiceWorker
 
                 return taskRes.Values.ToArray();
             }
+            return new AccountService.ImportQueueRecord[] { };
         }
 
         protected override void ApplyHistoryChange(IEnumerable<AccountService.ImportQueueRecord> items)

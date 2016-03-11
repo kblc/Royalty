@@ -28,6 +28,7 @@ namespace RoyaltyServiceWorker
         private readonly List<AccountService.Account> Accounts = new List<AccountService.Account>();
         private readonly List<AccountService.Mark> Marks = new List<AccountService.Mark>();
         private readonly List<AccountService.ColumnType> ColumnTypes = new List<AccountService.ColumnType>();
+        private readonly List<AccountService.ImportQueueRecordState> ImportQueueRecordStates = new List<AccountService.ImportQueueRecordState>();
 
         protected override bool DoStart()
         {
@@ -101,6 +102,15 @@ namespace RoyaltyServiceWorker
                             return res.Result.Values;
                         }, stopCancellationTokenSource.Token, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
 
+                        var getImportQueueRecordStatesTask = sClient.GetImportQueueRecordStatesAsync();
+                        var getImportQueueRecordStatesResTask = getImportQueueRecordStatesTask.ContinueWith(res =>
+                        {
+                            stopCancellationTokenSource.Token.ThrowIfCancellationRequested();
+                            if (res.Result.Error != null)
+                                throw new Exception(res.Result.Error);
+                            return res.Result.Values;
+                        }, stopCancellationTokenSource.Token, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
+
                         var getColumnTypesTask = sClient.GetColumnTypesAsync();
                         var getColumnTypesResTask = getColumnTypesTask.ContinueWith(res =>
                         {
@@ -110,12 +120,13 @@ namespace RoyaltyServiceWorker
                             return res.Result.Values;
                         }, stopCancellationTokenSource.Token, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
 
-                        Task.WaitAll(new Task[] { getAccountsTask, getMarksTask, getColumnTypesTask }, stopCancellationTokenSource.Token);
-                        Task.WaitAll(new Task[] { getAccountsResTask, getMarksResTask, getColumnTypesResTask }, stopCancellationTokenSource.Token);
+                        Task.WaitAll(new Task[] { getAccountsTask, getMarksTask, getColumnTypesTask, getImportQueueRecordStatesTask }, stopCancellationTokenSource.Token);
+                        Task.WaitAll(new Task[] { getAccountsResTask, getMarksResTask, getColumnTypesResTask, getImportQueueRecordStatesResTask }, stopCancellationTokenSource.Token);
 
                         modelLevelThContext.DoCallBack(() => RaiseAccountInitialize(getAccountsResTask.Result.ToArray()));
                         modelLevelThContext.DoCallBack(() => RaiseMarkInitialize(getMarksResTask.Result.ToArray()));
                         modelLevelThContext.DoCallBack(() => RaiseColumnTypesInitialize(getColumnTypesResTask.Result.ToArray()));
+                        modelLevelThContext.DoCallBack(() => RaiseImportQueueRecordStateInitialize(getImportQueueRecordStatesResTask.Result.ToArray()));
 
                         inited = true;
                         SetError((string)null);
@@ -196,6 +207,26 @@ namespace RoyaltyServiceWorker
 
             if (columnTypes.Length > 0)
                 OnColumnTypesChanged(this, ListItemsEventArgs.Create(columnTypes, ChangeAction.Add));
+        }
+        private void RaiseImportQueueRecordStateInitialize(AccountService.ImportQueueRecordState[] states)
+        {
+            var oldItems = new AccountService.ImportQueueRecordState[] { };
+            lock (ImportQueueRecordStates)
+            {
+                oldItems = ImportQueueRecordStates.ToArray();
+                ImportQueueRecordStates.Clear();
+            }
+
+            if (oldItems.Length > 0)
+                OnImportQueueRecordStatesChanged(this, ListItemsEventArgs.Create(oldItems, ChangeAction.Remove));
+
+            lock (ImportQueueRecordStates)
+            {
+                ImportQueueRecordStates.AddRange(states);
+            }
+
+            if (oldItems.Length > 0)
+                OnImportQueueRecordStatesChanged(this, ListItemsEventArgs.Create(states, ChangeAction.Add));
         }
 
         public void ApplyHistoryChanges(HistoryService.History e)
@@ -599,8 +630,17 @@ namespace RoyaltyServiceWorker
             }
         }
 
+        public AccountService.ImportQueueRecordState[] GetImportQueueRecordStates()
+        {
+            lock (ImportQueueRecordStates)
+            {
+                return ImportQueueRecordStates.ToArray();
+            }
+        }
+
         public event EventHandler<ListItemsEventArgs<AccountService.Account>> OnAccountsChanged;
         public event EventHandler<ListItemsEventArgs<AccountService.Mark>> OnMarksChanged;
         public event EventHandler<ListItemsEventArgs<AccountService.ColumnType>> OnColumnTypesChanged;
+        public event EventHandler<ListItemsEventArgs<AccountService.ImportQueueRecordState>> OnImportQueueRecordStatesChanged;
     }
 }

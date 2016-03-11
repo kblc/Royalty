@@ -119,6 +119,14 @@ namespace Royalty.Components
 
         protected void InitializeWorker(TWorker worker)
         {
+            if (this.worker == worker && this.worker != null)
+            {
+                Error = null;
+                if (IsActive)
+                    worker.Refresh();
+                return;
+            }
+
             if (this.worker != null)
             {
                 this.worker.OnErrorChanged -= Worker_OnErrorChanged;

@@ -267,7 +267,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_ImportQueueRecordStates_Input_policy">
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_GetImportQueueRecordStates_Input_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -286,7 +286,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_ImportQueueRecordStates_output_policy">
+  <wsp:Policy wsu:Id="WSHttpBinding_IAccountService_GetImportQueueRecordStates_output_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
@@ -1937,11 +1937,11 @@
   <wsdl:message name="IAccountServiceREST_RESTRemoveImportQueueRecordRange_OutputMessage">
     <wsdl:part name="parameters" element="tns:RESTRemoveImportQueueRecordRangeResponse" />
   </wsdl:message>
-  <wsdl:message name="IAccountServiceREST_RESTImportQueueRecordStates_InputMessage">
-    <wsdl:part name="parameters" element="tns:RESTImportQueueRecordStates" />
+  <wsdl:message name="IAccountServiceREST_RESTGetImportQueueRecordStates_InputMessage">
+    <wsdl:part name="parameters" element="tns:RESTGetImportQueueRecordStates" />
   </wsdl:message>
-  <wsdl:message name="IAccountServiceREST_RESTImportQueueRecordStates_OutputMessage">
-    <wsdl:part name="parameters" element="tns:RESTImportQueueRecordStatesResponse" />
+  <wsdl:message name="IAccountServiceREST_RESTGetImportQueueRecordStates_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RESTGetImportQueueRecordStatesResponse" />
   </wsdl:message>
   <wsdl:message name="IAccountServiceREST_RESTGetAdditionalColumns_InputMessage">
     <wsdl:part name="parameters" element="tns:RESTGetAdditionalColumns" />
@@ -2207,11 +2207,11 @@
   <wsdl:message name="IAccountService_RemoveImportQueueRecordRange_OutputMessage">
     <wsdl:part name="parameters" element="tns:RemoveImportQueueRecordRangeResponse" />
   </wsdl:message>
-  <wsdl:message name="IAccountService_ImportQueueRecordStates_InputMessage">
-    <wsdl:part name="parameters" element="tns:ImportQueueRecordStates" />
+  <wsdl:message name="IAccountService_GetImportQueueRecordStates_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetImportQueueRecordStates" />
   </wsdl:message>
-  <wsdl:message name="IAccountService_ImportQueueRecordStates_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ImportQueueRecordStatesResponse" />
+  <wsdl:message name="IAccountService_GetImportQueueRecordStates_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetImportQueueRecordStatesResponse" />
   </wsdl:message>
   <wsdl:message name="IAccountService_GetAdditionalColumns_InputMessage">
     <wsdl:part name="parameters" element="tns:GetAdditionalColumns" />
@@ -2485,9 +2485,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemoveImportQueueRecordRange" message="tns:IAccountServiceREST_RESTRemoveImportQueueRecordRange_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTRemoveImportQueueRecordRangeResponse" message="tns:IAccountServiceREST_RESTRemoveImportQueueRecordRange_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="RESTImportQueueRecordStates">
-      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTImportQueueRecordStates" message="tns:IAccountServiceREST_RESTImportQueueRecordStates_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTImportQueueRecordStatesResponse" message="tns:IAccountServiceREST_RESTImportQueueRecordStates_OutputMessage" />
+    <wsdl:operation name="RESTGetImportQueueRecordStates">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTGetImportQueueRecordStates" message="tns:IAccountServiceREST_RESTGetImportQueueRecordStates_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTGetImportQueueRecordStatesResponse" message="tns:IAccountServiceREST_RESTGetImportQueueRecordStates_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="RESTGetAdditionalColumns">
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountServiceREST/RESTGetAdditionalColumns" message="tns:IAccountServiceREST_RESTGetAdditionalColumns_InputMessage" />
@@ -2670,9 +2670,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/RemoveImportQueueRecordRange" message="tns:IAccountService_RemoveImportQueueRecordRange_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/RemoveImportQueueRecordRangeResponse" message="tns:IAccountService_RemoveImportQueueRecordRange_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="ImportQueueRecordStates">
-      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/ImportQueueRecordStates" message="tns:IAccountService_ImportQueueRecordStates_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/ImportQueueRecordStatesResponse" message="tns:IAccountService_ImportQueueRecordStates_OutputMessage" />
+    <wsdl:operation name="GetImportQueueRecordStates">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/GetImportQueueRecordStates" message="tns:IAccountService_GetImportQueueRecordStates_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAccountService/GetImportQueueRecordStatesResponse" message="tns:IAccountService_GetImportQueueRecordStates_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetAdditionalColumns">
       <wsdl:input wsaw:Action="http://tempuri.org/IAccountService/GetAdditionalColumns" message="tns:IAccountService_GetAdditionalColumns_InputMessage" />
@@ -2897,14 +2897,14 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ImportQueueRecordStates">
-      <soap12:operation soapAction="http://tempuri.org/IAccountService/ImportQueueRecordStates" style="document" />
+    <wsdl:operation name="GetImportQueueRecordStates">
+      <soap12:operation soapAction="http://tempuri.org/IAccountService/GetImportQueueRecordStates" style="document" />
       <wsdl:input>
-        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_ImportQueueRecordStates_Input_policy" />
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_GetImportQueueRecordStates_Input_policy" />
         <soap12:body use="literal" />
       </wsdl:input>
       <wsdl:output>
-        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_ImportQueueRecordStates_output_policy" />
+        <wsp:PolicyReference URI="#WSHttpBinding_IAccountService_GetImportQueueRecordStates_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

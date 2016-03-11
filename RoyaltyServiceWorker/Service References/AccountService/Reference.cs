@@ -2774,11 +2774,11 @@ namespace RoyaltyServiceWorker.AccountService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemoveImportQueueRecordRange", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemoveImportQueueRecordRangeResponse")]
         System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.GuidExecutionResults> RESTRemoveImportQueueRecordRangeAsync(System.Collections.Generic.List<string> identifiers);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTImportQueueRecordStates", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTImportQueueRecordStatesResponse")]
-        RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults RESTImportQueueRecordStates();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTGetImportQueueRecordStates", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTGetImportQueueRecordStatesResponse")]
+        RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults RESTGetImportQueueRecordStates();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTImportQueueRecordStates", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTImportQueueRecordStatesResponse")]
-        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults> RESTImportQueueRecordStatesAsync();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTGetImportQueueRecordStates", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTGetImportQueueRecordStatesResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults> RESTGetImportQueueRecordStatesAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTGetAdditionalColumns", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTGetAdditionalColumnsResponse")]
         RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults RESTGetAdditionalColumns(string accountId);
@@ -3094,12 +3094,12 @@ namespace RoyaltyServiceWorker.AccountService {
             return base.Channel.RESTRemoveImportQueueRecordRangeAsync(identifiers);
         }
         
-        public RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults RESTImportQueueRecordStates() {
-            return base.Channel.RESTImportQueueRecordStates();
+        public RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults RESTGetImportQueueRecordStates() {
+            return base.Channel.RESTGetImportQueueRecordStates();
         }
         
-        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults> RESTImportQueueRecordStatesAsync() {
-            return base.Channel.RESTImportQueueRecordStatesAsync();
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults> RESTGetImportQueueRecordStatesAsync() {
+            return base.Channel.RESTGetImportQueueRecordStatesAsync();
         }
         
         public RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults RESTGetAdditionalColumns(string accountId) {
@@ -3457,11 +3457,11 @@ namespace RoyaltyServiceWorker.AccountService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemoveImportQueueRecordRange", ReplyAction="http://tempuri.org/IAccountService/RemoveImportQueueRecordRangeResponse")]
         System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.GuidExecutionResults> RemoveImportQueueRecordRangeAsync(System.Collections.Generic.List<System.Guid> identifiers);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/ImportQueueRecordStates", ReplyAction="http://tempuri.org/IAccountService/ImportQueueRecordStatesResponse")]
-        RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults ImportQueueRecordStates();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/GetImportQueueRecordStates", ReplyAction="http://tempuri.org/IAccountService/GetImportQueueRecordStatesResponse")]
+        RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults GetImportQueueRecordStates();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/ImportQueueRecordStates", ReplyAction="http://tempuri.org/IAccountService/ImportQueueRecordStatesResponse")]
-        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults> ImportQueueRecordStatesAsync();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/GetImportQueueRecordStates", ReplyAction="http://tempuri.org/IAccountService/GetImportQueueRecordStatesResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults> GetImportQueueRecordStatesAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/GetAdditionalColumns", ReplyAction="http://tempuri.org/IAccountService/GetAdditionalColumnsResponse")]
         RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults GetAdditionalColumns(System.Guid accountId);
@@ -3783,12 +3783,12 @@ namespace RoyaltyServiceWorker.AccountService {
             return base.Channel.RemoveImportQueueRecordRangeAsync(identifiers);
         }
         
-        public RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults ImportQueueRecordStates() {
-            return base.Channel.ImportQueueRecordStates();
+        public RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults GetImportQueueRecordStates() {
+            return base.Channel.GetImportQueueRecordStates();
         }
         
-        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults> ImportQueueRecordStatesAsync() {
-            return base.Channel.ImportQueueRecordStatesAsync();
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordStateResults> GetImportQueueRecordStatesAsync() {
+            return base.Channel.GetImportQueueRecordStatesAsync();
         }
         
         public RoyaltyServiceWorker.AccountService.AccountDataRecordAdditionalColumnResults GetAdditionalColumns(System.Guid accountId) {

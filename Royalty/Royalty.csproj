@@ -77,6 +77,7 @@
     <Compile Include="Additional\FilterTimer.cs" />
     <Compile Include="Additional\IEventArgsConverter.cs" />
     <Compile Include="Additional\ObservableCollectionWatcher.cs" />
+    <Compile Include="Components\AccountsImportQueueRecordsComponent.cs" />
     <Compile Include="Components\AccountsPhoneMarksComponent.cs" />
     <Compile Include="Components\AccountsAdditionalColumnsComponent.cs" />
     <Compile Include="Components\AccountsSeriesOfNumbersComponent.cs" />

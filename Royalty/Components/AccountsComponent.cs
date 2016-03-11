@@ -46,6 +46,9 @@ namespace Royalty.Components
         private NotifyCollection<RoyaltyServiceWorker.AccountService.ColumnType> columnTypes = new NotifyCollection<RoyaltyServiceWorker.AccountService.ColumnType>();
         public IReadOnlyNotifyCollection<RoyaltyServiceWorker.AccountService.ColumnType> ColumnTypes => columnTypes;
 
+        private NotifyCollection<RoyaltyServiceWorker.AccountService.ImportQueueRecordState> importQueueRecordStates = new NotifyCollection<RoyaltyServiceWorker.AccountService.ImportQueueRecordState>();
+        public IReadOnlyNotifyCollection<RoyaltyServiceWorker.AccountService.ImportQueueRecordState> ImportQueueRecordStates => importQueueRecordStates;
+
         public AccountsComponent() : base(new RoyaltyServiceWorker.AccountWorker())
         {
             accounts.Clear();
@@ -60,10 +63,15 @@ namespace Royalty.Components
             var columnTypeItems = worker.GetColumnTypes();
             foreach (var item in columnTypeItems)
                 columnTypes.Add(item);
+            marks.Clear();
+            var importQueueRecordStatesItems = worker.GetImportQueueRecordStates();
+            foreach (var item in importQueueRecordStatesItems)
+                importQueueRecordStates.Add(item);
 
             worker.OnAccountsChanged += (_,e) => RunUnderDispatcher(() => WorkerOnAccountsChanged(e));
             worker.OnMarksChanged += (_, e) => RunUnderDispatcher(() => WorkerOnMarksChanged(e));
             worker.OnColumnTypesChanged += (_, e) => RunUnderDispatcher(() => WorkerOnColumnTypesChanged(e));
+            worker.OnImportQueueRecordStatesChanged += (_, e) => RunUnderDispatcher(() => WorkerOnImportQueueRecordStatesChanged(e));
         }
 
         private void WorkerApplyHistory(object sender, RoyaltyServiceWorker.HistoryService.History e) => worker.ApplyHistoryChanges(e);
@@ -102,6 +110,18 @@ namespace Royalty.Components
 
             if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Remove)
                 e.Items.ToList().ForEach(i => columnTypes.Remove(columnTypes.FirstOrDefault(a => a.Id == i.Id)));
+        }
+
+        private void WorkerOnImportQueueRecordStatesChanged(RoyaltyServiceWorker.Additional.ListItemsEventArgs<RoyaltyServiceWorker.AccountService.ImportQueueRecordState> e)
+        {
+            if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Add)
+                e.Items.ToList().ForEach(i => importQueueRecordStates.Add(i));
+
+            if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Change)
+                e.Items.ToList().ForEach(i => importQueueRecordStates.FirstOrDefault(a => a.Id == i.Id).CopyObjectFrom(i));
+
+            if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Remove)
+                e.Items.ToList().ForEach(i => importQueueRecordStates.Remove(importQueueRecordStates.FirstOrDefault(a => a.Id == i.Id)));
         }
     }
 }

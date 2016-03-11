@@ -16,6 +16,6 @@ namespace RoyaltyService.Services.Account
         /// <returns>Available import queue record states</returns>
         [OperationContract]
         [WebInvoke(UriTemplate = "/importQueueRecordStates", Method = "GET", BodyStyle = WebMessageBodyStyle.Wrapped, ResponseFormat = WebMessageFormat.Json)]
-        Result.ImportQueueRecordStateResults RESTImportQueueRecordStates();
+        Result.ImportQueueRecordStateResults RESTGetImportQueueRecordStates();
     }
 }

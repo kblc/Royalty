@@ -13,6 +13,6 @@ namespace RoyaltyService.Services.Account
 {
     public partial class AccountService : Base.BaseService, IAccountServiceREST
     {
-        public Result.ImportQueueRecordStateResults RESTImportQueueRecordStates() => ImportQueueRecordStates();
+        public Result.ImportQueueRecordStateResults RESTGetImportQueueRecordStates() => GetImportQueueRecordStates();
     }
 }

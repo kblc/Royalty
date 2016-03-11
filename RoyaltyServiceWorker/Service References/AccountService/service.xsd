@@ -71,15 +71,15 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RESTImportQueueRecordStates">
+  <xs:element name="RESTGetImportQueueRecordStates">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="RESTImportQueueRecordStatesResponse">
+  <xs:element name="RESTGetImportQueueRecordStatesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTImportQueueRecordStatesResult" nillable="true" type="q7:ImportQueueRecordStateResults" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="RESTGetImportQueueRecordStatesResult" nillable="true" type="q7:ImportQueueRecordStateResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -700,15 +700,15 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ImportQueueRecordStates">
+  <xs:element name="GetImportQueueRecordStates">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="ImportQueueRecordStatesResponse">
+  <xs:element name="GetImportQueueRecordStatesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q81="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="ImportQueueRecordStatesResult" nillable="true" type="q81:ImportQueueRecordStateResults" />
+        <xs:element xmlns:q81="http://schemas.datacontract.org/2004/07/RoyaltyService.Services.Account.Result" minOccurs="0" name="GetImportQueueRecordStatesResult" nillable="true" type="q81:ImportQueueRecordStateResults" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

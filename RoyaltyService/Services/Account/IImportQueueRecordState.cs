@@ -15,6 +15,6 @@ namespace RoyaltyService.Services.Account
         /// </summary>
         /// <returns>Available import queue record states</returns>
         [OperationContract]
-        Result.ImportQueueRecordStateResults ImportQueueRecordStates();
+        Result.ImportQueueRecordStateResults GetImportQueueRecordStates();
     }
 }

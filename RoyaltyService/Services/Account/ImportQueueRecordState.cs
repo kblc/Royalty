@@ -13,7 +13,7 @@ namespace RoyaltyService.Services.Account
 {
     public partial class AccountService : Base.BaseService, IAccountService
     {
-        public Result.ImportQueueRecordStateResults ImportQueueRecordStates()
+        public Result.ImportQueueRecordStateResults GetImportQueueRecordStates()
         {
             UpdateSessionCulture();
             using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
