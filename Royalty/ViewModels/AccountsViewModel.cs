@@ -112,7 +112,27 @@ namespace Royalty.ViewModels
         }
 
         #endregion
+        #region AccountsImportQueueRecordsComponent
 
+        public static readonly DependencyProperty AccountsImportQueueRecordsComponentProperty = DependencyProperty.Register(nameof(AccountsImportQueueRecordsComponent), typeof(AccountsImportQueueRecordsComponent),
+            typeof(AccountsViewModel), new PropertyMetadata(null, (s, e) =>
+            {
+                var model = s as AccountsViewModel;
+                var newAccountsComponent = e.NewValue as AccountsImportQueueRecordsComponent;
+                var oldAccountsComponent = e.OldValue as AccountsImportQueueRecordsComponent;
+                if (model != null && newAccountsComponent != oldAccountsComponent)
+                {
+                    model.UpdateAccountsImportQueueRecordsComponentSource(newAccountsComponent);
+                }
+            }));
+
+        public AccountsImportQueueRecordsComponent AccountsImportQueueRecordsComponent
+        {
+            get { return (AccountsImportQueueRecordsComponent)GetValue(AccountsImportQueueRecordsComponentProperty); }
+            set { SetValue(AccountsImportQueueRecordsComponentProperty, value); }
+        }
+
+        #endregion
         #region ShowHidden
 
         public static readonly DependencyProperty ShowHiddenProperty = DependencyProperty.Register(nameof(ShowHidden), typeof(bool),
@@ -287,6 +307,8 @@ namespace Royalty.ViewModels
         private void UpdateAccountsAdditionalColumnsComponentSource(AccountsAdditionalColumnsComponent newComponent) { }
 
         private void UpdateAccountsPhoneMarksComponentSource(AccountsPhoneMarksComponent newComponent) { }
+
+        private void UpdateAccountsImportQueueRecordsComponentSource(AccountsImportQueueRecordsComponent newComponent) { }
 
         private void RefreshAccountSource()
         {
