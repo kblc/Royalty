@@ -265,7 +265,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="AccountDataRecordID" type="ser:guid" />
       <xs:element minOccurs="0" name="Id" type="xs:long" />
-      <xs:element minOccurs="0" name="ImportQueueRecordFileUID" type="ser:guid" />
+      <xs:element minOccurs="0" name="ImportQueueRecordFileInfoUID" type="ser:guid" />
       <xs:element minOccurs="0" name="LoadDate" type="xs:dateTime" />
     </xs:sequence>
   </xs:complexType>

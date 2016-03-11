@@ -14,7 +14,7 @@ namespace RoyaltyService.Model
         public long ImportQueueRecordFileAccountDataRecordID { get; set; }
 
         [DataMember(IsRequired = false)]
-        public Guid ImportQueueRecordFileUID { get; set; }
+        public Guid ImportQueueRecordFileInfoUID { get; set; }
 
         [DataMember(IsRequired = false)]
         public Guid AccountDataRecordID { get; set; }

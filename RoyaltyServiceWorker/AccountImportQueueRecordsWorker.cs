@@ -117,11 +117,41 @@ namespace RoyaltyServiceWorker
 
         protected void ApplyHistoryChangeFileAccountDataRecord(IEnumerable<AccountService.ImportQueueRecordFileAccountDataRecord> items)
         {
-
+            var raiseItems = new AccountService.ImportQueueRecord[] { };
+            lock (Items)
+            {
+                var itemsToChange = Items
+                    .SelectMany(i => i.FileInfoes.Select(fi => new { item = i, fileInfo = fi }))
+                    .Join(items, i => i.fileInfo.Id, i => i.ImportQueueRecordFileInfoUID, (item, changed) => new { item.item, item.fileInfo, changed })
+                    .Select(i => new { i.item, i.fileInfo, i.changed, existed = i.fileInfo.LoadedRecords.FirstOrDefault(f => f.Id == i.changed.Id) })
+                    .ToArray();
+                foreach (var i in itemsToChange)
+                {
+                    if (i.existed == null)
+                        i.fileInfo.LoadedRecords.Add(i.changed);
+                    else
+                        i.existed.CopyObjectFrom(i.changed);
+                }
+                raiseItems = itemsToChange.Select(i => i.item).Distinct().ToArray();
+            }
+            if (raiseItems.Length > 0)
+                RaiseOnItemsChanged(raiseItems, ChangeAction.Change);
         }
         protected void ApplyHistoryRemoveFileAccountDataRecord(IEnumerable<long> ids)
         {
+            var raiseItems = new AccountService.ImportQueueRecord[] { };
+            lock (Items)
+            {
+                var itemsToChange = Items.SelectMany(i => i.FileInfoes.SelectMany(fi => fi.LoadedRecords.Select(r => new { item = i, fileInfo = fi, record = r })))
+                    .Join(ids, i => i.record.Id, i => i, (item, changed) => new { item.item, item.fileInfo, item.record })
+                    .ToArray();
+                foreach (var i in itemsToChange)
+                    i.fileInfo.LoadedRecords.Remove(i.record);
 
+                raiseItems = itemsToChange.Select(i => i.item).Distinct().ToArray();
+            }
+            if (raiseItems.Length > 0)
+                RaiseOnItemsChanged(raiseItems, ChangeAction.Change);
         }
 
         protected void ApplyHistoryChangeFileInfo(IEnumerable<AccountService.ImportQueueRecordFileInfo> items)
@@ -163,11 +193,41 @@ namespace RoyaltyServiceWorker
 
         protected void ApplyHistoryChangeFileInfoFile(IEnumerable<AccountService.ImportQueueRecordFileInfoFile> items)
         {
-
+            var raiseItems = new AccountService.ImportQueueRecord[] { };
+            lock (Items)
+            {
+                var itemsToChange = Items
+                    .SelectMany(i => i.FileInfoes.Select(fi => new { item = i, fileInfo = fi }))
+                    .Join(items, i => i.fileInfo.Id, i => i.ImportQueueRecordFileInfoUID, (item, changed) => new { item.item, item.fileInfo, changed })
+                    .Select(i => new { i.item, i.fileInfo, i.changed, existed = i.fileInfo.Files.FirstOrDefault(f => f.Id == i.changed.Id) })
+                    .ToArray();
+                foreach (var i in itemsToChange)
+                {
+                    if (i.existed == null)
+                        i.fileInfo.Files.Add(i.changed);
+                    else
+                        i.existed.CopyObjectFrom(i.changed);
+                }
+                raiseItems = itemsToChange.Select(i => i.item).Distinct().ToArray();
+            }
+            if (raiseItems.Length > 0)
+                RaiseOnItemsChanged(raiseItems, ChangeAction.Change);
         }
         protected void ApplyHistoryRemoveFileInfoFile(IEnumerable<Guid> ids)
         {
+            var raiseItems = new AccountService.ImportQueueRecord[] { };
+            lock (Items)
+            {
+                var itemsToChange = Items.SelectMany(i => i.FileInfoes.SelectMany(fi => fi.Files.Select(f => new { item = i, fileInfo = fi, file = f })))
+                    .Join(ids, i => i.file.Id, i => i, (item, changed) => new { item.item, item.fileInfo, item.file })
+                    .ToArray();
+                foreach (var i in itemsToChange)
+                    i.fileInfo.Files.Remove(i.file);
 
+                raiseItems = itemsToChange.Select(i => i.item).Distinct().ToArray();
+            }
+            if (raiseItems.Length > 0)
+                RaiseOnItemsChanged(raiseItems, ChangeAction.Change);
         }
 
         public override void ApplyHistoryChanges(History e)

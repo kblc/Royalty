@@ -1323,7 +1323,7 @@ namespace RoyaltyServiceWorker.AccountService {
         private long IdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Guid ImportQueueRecordFileUIDField;
+        private System.Guid ImportQueueRecordFileInfoUIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime LoadDateField;
@@ -1365,14 +1365,14 @@ namespace RoyaltyServiceWorker.AccountService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid ImportQueueRecordFileUID {
+        public System.Guid ImportQueueRecordFileInfoUID {
             get {
-                return this.ImportQueueRecordFileUIDField;
+                return this.ImportQueueRecordFileInfoUIDField;
             }
             set {
-                if ((this.ImportQueueRecordFileUIDField.Equals(value) != true)) {
-                    this.ImportQueueRecordFileUIDField = value;
-                    this.RaisePropertyChanged("ImportQueueRecordFileUID");
+                if ((this.ImportQueueRecordFileInfoUIDField.Equals(value) != true)) {
+                    this.ImportQueueRecordFileInfoUIDField = value;
+                    this.RaisePropertyChanged("ImportQueueRecordFileInfoUID");
                 }
             }
         }
