@@ -106,6 +106,15 @@ namespace RoyaltyService.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account import queue record not found..
+        /// </summary>
+        public static string SERVICES_ACCOUNT_ImportQueueRecord_NotFound {
+            get {
+                return ResourceManager.GetString("SERVICES_ACCOUNT_ImportQueueRecord_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account not found..
         /// </summary>
         public static string SERVICES_FILE_AccountNotFound {
@@ -115,7 +124,7 @@ namespace RoyaltyService.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File not found. See data for details..
+        ///   Looks up a localized string similar to File not found..
         /// </summary>
         public static string SERVICES_FILE_FileNotFound {
             get {

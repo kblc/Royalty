@@ -31,7 +31,7 @@ namespace RoyaltyRepository.Models
         /// Идентификатор записи
         /// </summary>
         [Key, Column("import_queue_file_uid")]
-        public Guid ImportQueueRecordFileUID { get; set; }
+        public Guid ImportQueueRecordFileInfoUID { get; set; }
 
         #region ImportQueueRecord
         /// <summary>

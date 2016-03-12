@@ -46,6 +46,9 @@ namespace RoyaltyService.Services.Account
         public ImportQueueRecordExecutionResult RESTPutImportQueueRecord(Model.ImportQueueRecord item)
             => PutImportQueueRecord(item);
 
+        public ImportQueueRecordExecutionResult RESTUpdateImportQueueRecord(Model.ImportQueueRecord item)
+            => UpdateImportQueueRecord(item);
+
         public GuidExecutionResult RESTRemovemportQueueRecord(string identifier)
         {
             UpdateSessionCulture();

@@ -2762,6 +2762,12 @@ namespace RoyaltyServiceWorker.AccountService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTPutImportQueueRecord", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTPutImportQueueRecordResponse")]
         System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResult> RESTPutImportQueueRecordAsync(RoyaltyServiceWorker.AccountService.ImportQueueRecord item);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTUpdateImportQueueRecord", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTUpdateImportQueueRecordResponse")]
+        RoyaltyServiceWorker.AccountService.ImportQueueRecordResult RESTUpdateImportQueueRecord(RoyaltyServiceWorker.AccountService.ImportQueueRecord item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTUpdateImportQueueRecord", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTUpdateImportQueueRecordResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResult> RESTUpdateImportQueueRecordAsync(RoyaltyServiceWorker.AccountService.ImportQueueRecord item);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountServiceREST/RESTRemovemportQueueRecord", ReplyAction="http://tempuri.org/IAccountServiceREST/RESTRemovemportQueueRecordResponse")]
         RoyaltyServiceWorker.AccountService.GuidExecutionResult RESTRemovemportQueueRecord(string identifier);
         
@@ -3076,6 +3082,14 @@ namespace RoyaltyServiceWorker.AccountService {
         
         public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResult> RESTPutImportQueueRecordAsync(RoyaltyServiceWorker.AccountService.ImportQueueRecord item) {
             return base.Channel.RESTPutImportQueueRecordAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.ImportQueueRecordResult RESTUpdateImportQueueRecord(RoyaltyServiceWorker.AccountService.ImportQueueRecord item) {
+            return base.Channel.RESTUpdateImportQueueRecord(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResult> RESTUpdateImportQueueRecordAsync(RoyaltyServiceWorker.AccountService.ImportQueueRecord item) {
+            return base.Channel.RESTUpdateImportQueueRecordAsync(item);
         }
         
         public RoyaltyServiceWorker.AccountService.GuidExecutionResult RESTRemovemportQueueRecord(string identifier) {
@@ -3445,6 +3459,12 @@ namespace RoyaltyServiceWorker.AccountService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/PutImportQueueRecord", ReplyAction="http://tempuri.org/IAccountService/PutImportQueueRecordResponse")]
         System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResult> PutImportQueueRecordAsync(RoyaltyServiceWorker.AccountService.ImportQueueRecord item);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/UpdateImportQueueRecord", ReplyAction="http://tempuri.org/IAccountService/UpdateImportQueueRecordResponse")]
+        RoyaltyServiceWorker.AccountService.ImportQueueRecordResult UpdateImportQueueRecord(RoyaltyServiceWorker.AccountService.ImportQueueRecord item);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/UpdateImportQueueRecord", ReplyAction="http://tempuri.org/IAccountService/UpdateImportQueueRecordResponse")]
+        System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResult> UpdateImportQueueRecordAsync(RoyaltyServiceWorker.AccountService.ImportQueueRecord item);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAccountService/RemovemportQueueRecord", ReplyAction="http://tempuri.org/IAccountService/RemovemportQueueRecordResponse")]
         RoyaltyServiceWorker.AccountService.GuidExecutionResult RemovemportQueueRecord(System.Guid identifier);
         
@@ -3765,6 +3785,14 @@ namespace RoyaltyServiceWorker.AccountService {
         
         public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResult> PutImportQueueRecordAsync(RoyaltyServiceWorker.AccountService.ImportQueueRecord item) {
             return base.Channel.PutImportQueueRecordAsync(item);
+        }
+        
+        public RoyaltyServiceWorker.AccountService.ImportQueueRecordResult UpdateImportQueueRecord(RoyaltyServiceWorker.AccountService.ImportQueueRecord item) {
+            return base.Channel.UpdateImportQueueRecord(item);
+        }
+        
+        public System.Threading.Tasks.Task<RoyaltyServiceWorker.AccountService.ImportQueueRecordResult> UpdateImportQueueRecordAsync(RoyaltyServiceWorker.AccountService.ImportQueueRecord item) {
+            return base.Channel.UpdateImportQueueRecordAsync(item);
         }
         
         public RoyaltyServiceWorker.AccountService.GuidExecutionResult RemovemportQueueRecord(System.Guid identifier) {

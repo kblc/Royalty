@@ -34,6 +34,15 @@ namespace RoyaltyService.Services.Account
         ImportQueueRecordExecutionResult RESTPutImportQueueRecord(Model.ImportQueueRecord item);
 
         /// <summary>
+        /// Update account import queue record
+        /// </summary>
+        /// <param name="item">Account import queue record</param>
+        /// <returns>Account import queue record info</returns>
+        [OperationContract]
+        [WebInvoke(UriTemplate = "/importQueueRecords", Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json)]
+        ImportQueueRecordExecutionResult RESTUpdateImportQueueRecord(Model.ImportQueueRecord item);
+
+        /// <summary>
         /// Remove account import queue record by identifier
         /// </summary>
         /// <param name="identifier">Account import queue record identifier</param>

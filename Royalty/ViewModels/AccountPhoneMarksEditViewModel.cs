@@ -132,7 +132,7 @@ namespace Royalty.ViewModels
             localCollection.Clear();
         }
 
-        private FilterTimer setFilterTimer;
+        private FilterTimer<string> setFilterTimer;
 
         protected virtual void OnFilterChanged(string newFilter, string oldFilter)
         {
@@ -148,7 +148,7 @@ namespace Royalty.ViewModels
             AccountPhoneMarks = CollectionViewSource.GetDefaultView(localCollection);
             AccountPhoneMarks.CollectionChanged += AccountPhoneMarks_CollectionChanged;
             RowEditEndingCommand = new DelegateCommand(o => RowEditEnding(o as System.Windows.Controls.DataGridRowEditEndingEventArgs));
-            setFilterTimer = new FilterTimer(TimeSpan.FromMilliseconds(200), (filter) =>
+            setFilterTimer = new FilterTimer<string>(TimeSpan.FromMilliseconds(200), (filter) =>
             {
                 RunUnderDispatcher(() =>
                 {

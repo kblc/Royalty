@@ -15,7 +15,125 @@
     <localConverters:TimeSpanToStringConverter x:Key="accountsTimeSpanToStringConverter"/>
     <helpersConverter:ApplyConverter x:Key="accountsApplyConverter"/>
     <helpersConverter:IsEqualsConverter x:Key="accountsIsEqualsConverter"/>
+    <helpersConverter:IsEqualVisibilityConverter x:Key="accountsIsEqualVisibilityConverter"/>
 
+    <DataTemplate x:Key="AccountImportQueueRecordsEditViewModelTemplate" DataType="{x:Type viewModels:AccountImportQueueRecordsEditViewModel}">
+        <Grid>
+            <Grid.Resources>
+                <FrameworkElement x:Key="PROXY_AccountImportQueueRecordsEditViewModel" DataContext="{Binding}"/>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <ContentControl Visibility="Collapsed" Content="{StaticResource PROXY_AccountImportQueueRecordsEditViewModel}"/>
+
+            <TextBlock Text="{Binding Account.Name, StringFormat=Данные импорта: {0}}" 
+                    TextAlignment="Center" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis"
+                    VerticalAlignment="Center" HorizontalAlignment="Center" Margin="4,4"/>
+
+            <Border Background="{StaticResource ErrorBrush}" HorizontalAlignment="Stretch" Grid.Row="1"
+                    ToolTip="{Binding Error}" 
+                    x:Name="PART_AccountImportQueueRecordsEditViewModelTemplateErrorBorder">
+                <TextBlock Text="Ошибка" Margin="4,4" HorizontalAlignment="Center"/>
+            </Border>
+
+            <Border HorizontalAlignment="Stretch" Grid.Row="2"
+                    x:Name="PART_AccountImportQueueRecordsEditViewModelTemplateIsBusy">
+                <StackPanel Orientation="Horizontal">
+                    <ProgressBar IsIndeterminate="True" Margin="4,4" MinWidth="16" MinHeight="16" VerticalAlignment="Center"/>
+                    <TextBlock Text="Обработка..." Margin="4,4" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <Grid Grid.Row="3" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                </Grid.ColumnDefinitions>
+                <DatePicker Grid.Column="0" Margin="4" HorizontalAlignment="Stretch" SelectedDate="{Binding From, UpdateSourceTrigger=PropertyChanged}"/>
+                <DatePicker Grid.Column="1" Margin="4" HorizontalAlignment="Stretch" SelectedDate="{Binding To, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
+
+            <!--<DataGrid Grid.Row="4" ItemsSource="{Binding AccountPhoneMarks}" x:Name="PART_AccountImportQueueRecordsEditViewModelTemplateControls"
+                      SelectedValue="{Binding SelectedValue}" AutoGenerateColumns="False">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="RowEditEnding">
+                        <additional:EventToCommand PassEventArgsToCommand="True" 
+                                                   Command="{Binding RowEditEndingCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}" Header="Телефон"/>
+                    <DataGridComboBoxColumn Header="Метка"
+                                            SelectedValueBinding="{Binding MarkID}"
+                                            SelectedValuePath="Id"
+                                            DisplayMemberPath="Name"
+                                            ItemsSource="{Binding Source={StaticResource PROXY_AccountPhoneMarksEditViewModel}, Path=DataContext.Marks}">
+                        --><!--<DataGridComboBoxColumn.ItemsSource>
+                            <CompositeCollection>
+                                <ComboBoxItem Content="Без метки"/>
+                                <CollectionContainer Collection="{Binding Source={StaticResource PROXY_AccountPhoneMarksEditViewModel}, Path=DataContext.Marks}"/>
+                            </CompositeCollection>
+                        </DataGridComboBoxColumn.ItemsSource>--><!--
+                    </DataGridComboBoxColumn>
+                </DataGrid.Columns>
+            </DataGrid>-->
+
+            <ListBox Grid.Row="4" ItemsSource="{Binding ImportQueueRecords}" x:Name="PART_AccountImportQueueRecordsEditViewModelTemplateControls">
+                
+            </ListBox>
+
+            <Button Content="+" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8"
+                    ToolTip="Добавить новую запись..." Command="{Binding InsertCommand}"/>
+
+            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="5" Margin="4,4">
+                <Button Content="Предыдущая"
+                        Cursor="Hand" Margin="4,4"
+                        Command="{Binding AccountsImportQueueRecordsComponent.DecreasePageIndexCommand}"
+                        VerticalAlignment="Center"/>
+
+                <TextBlock Margin="4,4">
+                    <TextBlock.Text>
+                        <MultiBinding  StringFormat="страница: {0}/{1}">
+                            <Binding Path="AccountsImportQueueRecordsComponent.PageIndex" Converter="{StaticResource accountsApplyConverter}" ConverterParameter="1"/>
+                            <Binding Path="AccountsImportQueueRecordsComponent.PageCount"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <Button Content="Следующая"
+                        Cursor="Hand" Margin="4,4"
+                        Command="{Binding AccountsImportQueueRecordsComponent.IncreasePageIndexCommand}"
+                        VerticalAlignment="Center"/>
+            </WrapPanel>
+
+            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="999" Margin="4,4">
+                <Button Content="Назад"
+                        Cursor="Hand" Margin="4,4"
+                        Command="{Binding BackInternalCommand}"
+                        CommandParameter="{Binding BackCommandParameter}"/>
+            </WrapPanel>
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Error}" Value="{x:Null}">
+                <Setter TargetName="PART_AccountImportQueueRecordsEditViewModelTemplateErrorBorder" Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsBusy}" Value="False">
+                <Setter TargetName="PART_AccountImportQueueRecordsEditViewModelTemplateIsBusy" Property="Visibility" Value="Hidden"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsBusy}" Value="True">
+                <Setter TargetName="PART_AccountImportQueueRecordsEditViewModelTemplateControls" Property="IsEnabled" Value="False"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+    
     <DataTemplate x:Key="AccountPhoneMarksEditViewModelTemplate" DataType="{x:Type viewModels:AccountPhoneMarksEditViewModel}">
         <Grid>
             <Grid.Resources>
@@ -662,6 +780,10 @@
                     <Button HorizontalAlignment="Left" Content="Телефоны..." Cursor="Hand" Margin="4,4"
                             Command="{Binding PhoneMarksViewCommand}"
                             CommandParameter="{Binding PhoneMarksViewCommandParameter}"/>
+
+                    <Button HorizontalAlignment="Left" Content="Импорт..." Cursor="Hand" Margin="4,4"
+                            Command="{Binding ImportQueueRecordsViewCommand}"
+                            CommandParameter="{Binding ImportQueueRecordsViewCommandParameter}"/>
                 </StackPanel>
             </ScrollViewer>
 
@@ -747,7 +869,9 @@
                     AdditionalColumnsViewCommand="{Binding Path=DataContext.SetViewCommand, Source={StaticResource PROXY_AccountsViewModel}, Mode=OneWay}"
                     AdditionalColumnsViewCommandParameter="{x:Static viewModels:AccountsViewEnum.AccountAdditionalColumns}"
                     PhoneMarksViewCommand="{Binding Path=DataContext.SetViewCommand, Source={StaticResource PROXY_AccountsViewModel}, Mode=OneWay}"                                  
-                    PhoneMarksViewCommandParameter="{x:Static viewModels:AccountsViewEnum.AccountPhoneMarks}"                                     
+                    PhoneMarksViewCommandParameter="{x:Static viewModels:AccountsViewEnum.AccountPhoneMarks}"
+                    ImportQueueRecordsViewCommand="{Binding Path=DataContext.SetViewCommand, Source={StaticResource PROXY_AccountsViewModel}, Mode=OneWay}"
+                    ImportQueueRecordsViewCommandParameter="{x:Static viewModels:AccountsViewEnum.ImportQueueRecords}"
                     />
                 <viewModels:AccountSettingsEditViewModel x:Key="SOURCE_AccountSettingsEditViewModel"
                     Account="{Binding Path=DataContext.AccountForEdit, Source={StaticResource PROXY_AccountsViewModel}, Mode=OneWay}"
@@ -802,6 +926,13 @@
                     BackCommand="{Binding Path=DataContext.SetViewCommand, Source={StaticResource PROXY_AccountsViewModel}, Mode=OneWay}"
                     BackCommandParameter="{x:Static viewModels:AccountsViewEnum.Account}" 
                     IsActive="{Binding Path=DataContext.View, Source={StaticResource PROXY_AccountsViewModel}, Mode=OneWay, Converter={StaticResource accountsIsEqualsConverter}, ConverterParameter={x:Static viewModels:AccountsViewEnum.AccountPhoneMarks}}"/>
+                <viewModels:AccountImportQueueRecordsEditViewModel x:Key="SOURCE_AccountImportQueueRecordsEditViewModel"
+                    Account="{Binding Path=DataContext.AccountForEdit, Source={StaticResource PROXY_AccountsViewModel}, Mode=OneWay}"
+                    AccountsImportQueueRecordsComponent="{Binding Path=DataContext.AccountsImportQueueRecordsComponent, Source={StaticResource PROXY_AccountsViewModel}, Mode=OneWay}"
+                    States="{Binding Path=DataContext.ImportQueueRecordStates, Source={StaticResource PROXY_AccountsViewModel}, Mode=OneWay}"
+                    BackCommand="{Binding Path=DataContext.SetViewCommand, Source={StaticResource PROXY_AccountsViewModel}, Mode=OneWay}"
+                    BackCommandParameter="{x:Static viewModels:AccountsViewEnum.Account}" 
+                    IsActive="{Binding Path=DataContext.View, Source={StaticResource PROXY_AccountsViewModel}, Mode=OneWay, Converter={StaticResource accountsIsEqualsConverter}, ConverterParameter={x:Static viewModels:AccountsViewEnum.ImportQueueRecords}}"/>
             </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300" MinWidth="150"/>
@@ -819,6 +950,7 @@
             <ContentControl Content="{StaticResource SOURCE_AccountSeriesOfNumbersEditViewModel}" Visibility="Collapsed"/>
             <ContentControl Content="{StaticResource SOURCE_AccountAdditionalColumnsEditViewModel}" Visibility="Collapsed"/>
             <ContentControl Content="{StaticResource SOURCE_AccountPhoneMarksEditViewModel}" Visibility="Collapsed"/>
+            <ContentControl Content="{StaticResource SOURCE_AccountImportQueueRecordsEditViewModel}" Visibility="Collapsed"/>
 
             <Grid Grid.Column="0">
                 <Grid x:Name="PART_AccountsView" Visibility="Collapsed">
@@ -881,6 +1013,10 @@
                 <ContentPresenter ContentTemplate="{StaticResource AccountPhoneMarksEditViewModelTemplate}" 
                                   Content="{StaticResource SOURCE_AccountPhoneMarksEditViewModel}"
                                   x:Name="SOURCE_AccountPhoneMarksEditViewModelEditViewModel" Visibility="Collapsed"/>
+
+                <ContentPresenter ContentTemplate="{StaticResource AccountImportQueueRecordsEditViewModelTemplate}" 
+                                  Content="{StaticResource SOURCE_AccountImportQueueRecordsEditViewModel}"
+                                  Visibility="{Binding Path=DataContext.View, Source={StaticResource PROXY_AccountsViewModel}, Mode=OneWay, Converter={StaticResource accountsIsEqualVisibilityConverter}, ConverterParameter={x:Static viewModels:AccountsViewEnum.ImportQueueRecords}}"/>
             </Grid>
 
             <GridSplitter VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="1"/>
@@ -920,6 +1056,9 @@
             <DataTrigger Binding="{Binding View}" Value="{x:Static viewModels:AccountsViewEnum.AccountPhoneMarks}">
                 <Setter TargetName="SOURCE_AccountPhoneMarksEditViewModelEditViewModel" Property="Visibility" Value="Visible"/>
             </DataTrigger>
+            <!--<DataTrigger Binding="{Binding View}" Value="{x:Static viewModels:AccountsViewEnum.ImportQueueRecords}">
+                <Setter TargetName="SOURCE_AccountImportQueueRecordsEditViewModel" Property="Visibility" Value="Visible"/>
+            </DataTrigger>-->
         </DataTemplate.Triggers>
     </DataTemplate>
     

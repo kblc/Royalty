@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Royalty.Additional
 {
-    public class FilterTimer : IDisposable
+    public class FilterTimer<T> : IDisposable
     {
         private Timer timer;
         private TimeSpan waitInterval;
-        private Action<string> fireAction;
-        private string filter;
+        private Action<T> fireAction;
+        private T filter;
 
-        public FilterTimer(TimeSpan waitInterval, Action<string> fireAction)
+        public FilterTimer(TimeSpan waitInterval, Action<T> fireAction)
         {
             if (waitInterval == null)
                 throw new ArgumentNullException(nameof(waitInterval));
@@ -24,7 +24,7 @@ namespace Royalty.Additional
             this.fireAction = fireAction;
         }
 
-        public string Filter {
+        public T Filter {
             get { return filter; }
             set
             {
@@ -36,7 +36,7 @@ namespace Royalty.Additional
                 filter = value;
                 timer = new Timer((o) => 
                 {
-                    fireAction(o as string);
+                    fireAction((T)o);
                 }, filter, (int)waitInterval.TotalMilliseconds, Timeout.Infinite);
             }
         }

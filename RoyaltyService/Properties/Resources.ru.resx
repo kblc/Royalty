@@ -121,21 +121,24 @@
     <value>Идентификатор имеет неверный формат.</value>
   </data>
   <data name="SERVICES_ACCOUNT_AccountDataRecordAdditionalColumnNotFound" xml:space="preserve">
-    <value>Дополнительная колонка не найдена. Дополнительная информация во внутренних данных.</value>
+    <value>Дополнительная колонка не найдена.</value>
   </data>
   <data name="SERVICES_ACCOUNT_AccountNotFound" xml:space="preserve">
-    <value>Аккаунт не найден. Дополнительная информация во внутренних данных.</value>
+    <value>Аккаунт не найден.</value>
   </data>
   <data name="SERVICES_ACCOUNT_AccountPhoneMarkColumnNotFound" xml:space="preserve">
-    <value>Телефон с меткой не найден. Дополнительная информация во внутренних данных.</value>
+    <value>Телефон с меткой не найден.</value>
   </data>
   <data name="SERVICES_ACCOUNT_AccountSeriesOfNumbersRecordNotFound" xml:space="preserve">
-    <value>Серия номеров не найдена. Дополнительная информация во внутренних данных.</value>
+    <value>Серия номеров не найдена.</value>
+  </data>
+  <data name="SERVICES_ACCOUNT_ImportQueueRecord_NotFound" xml:space="preserve">
+    <value>Запись об импорте не найдена.</value>
   </data>
   <data name="SERVICES_FILE_AccountNotFound" xml:space="preserve">
-    <value>Аккаунт не найден. Дополнительная информация во внутренних данных.</value>
+    <value>Аккаунт не найден.</value>
   </data>
   <data name="SERVICES_FILE_FileNotFound" xml:space="preserve">
-    <value>Файл не найден. Дополнительная информация во внутренних данных.</value>
+    <value>Файл не найден.</value>
   </data>
 </root>

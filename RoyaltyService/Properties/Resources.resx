@@ -132,10 +132,13 @@
   <data name="SERVICES_ACCOUNT_AccountSeriesOfNumbersRecordNotFound" xml:space="preserve">
     <value>Series of numbers not found.</value>
   </data>
+  <data name="SERVICES_ACCOUNT_ImportQueueRecord_NotFound" xml:space="preserve">
+    <value>Account import queue record not found.</value>
+  </data>
   <data name="SERVICES_FILE_AccountNotFound" xml:space="preserve">
     <value>Account not found.</value>
   </data>
   <data name="SERVICES_FILE_FileNotFound" xml:space="preserve">
-    <value>File not found. See data for details.</value>
+    <value>File not found.</value>
   </data>
 </root>

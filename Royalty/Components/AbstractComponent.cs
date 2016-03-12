@@ -50,7 +50,7 @@ namespace Royalty.Components
                 new FrameworkPropertyMetadata(RoyaltyServiceWorker.Additional.WorkerState.None,
                     FrameworkPropertyMetadataOptions.None,
                     new PropertyChangedCallback((s, e) => { })));
-        public static readonly DependencyProperty ReadOnlyStateProperty = ReadOnlyErrorPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty ReadOnlyStateProperty = ReadOnlyStatePropertyKey.DependencyProperty;
 
         public RoyaltyServiceWorker.Additional.WorkerState State
         {
@@ -117,6 +117,30 @@ namespace Royalty.Components
             InitializeWorker(worker);
         }
 
+        private void ConnectToWorker(RoyaltyServiceWorker.Additional.AbstractBaseWorker worker)
+        {
+            if (worker == null)
+                return;
+            
+            Error = null;
+            State = RoyaltyServiceWorker.Additional.WorkerState.None;
+            worker.OnErrorChanged += Worker_OnErrorChanged;
+            worker.OnLoadedChanged += Worker_OnLoadedChanged;
+            worker.OnStateChanged += Worker_OnStateChanged;
+            worker.ServiceCultureInfo = ServiceCultureInfo;
+            IsLoaded = worker.IsLoaded;
+        }
+
+        private void DisconnectFromWorker(RoyaltyServiceWorker.Additional.AbstractBaseWorker worker)
+        {
+            if (worker == null)
+                return;
+
+            worker.OnErrorChanged -= Worker_OnErrorChanged;
+            worker.OnLoadedChanged -= Worker_OnLoadedChanged;
+            worker.OnStateChanged -= Worker_OnStateChanged;
+        }
+
         protected void InitializeWorker(TWorker worker)
         {
             if (this.worker == worker && this.worker != null)
@@ -127,28 +151,17 @@ namespace Royalty.Components
                 return;
             }
 
+            DisconnectFromWorker(this.worker);
             if (this.worker != null)
             {
-                this.worker.OnErrorChanged -= Worker_OnErrorChanged;
-                this.worker.OnLoadedChanged -= Worker_OnLoadedChanged;
-                this.worker.OnStateChanged -= Worker_OnStateChanged;
                 this.worker.Dispose();
                 this.worker = null;
             }
 
-            if (worker != null)
-            {
-                Error = null;
-                State = RoyaltyServiceWorker.Additional.WorkerState.None;
-
-                this.worker = worker;
-                this.worker.OnErrorChanged += Worker_OnErrorChanged;
-                this.worker.OnLoadedChanged += Worker_OnLoadedChanged;
-                this.worker.OnStateChanged += Worker_OnStateChanged;
-                this.worker.ServiceCultureInfo = ServiceCultureInfo;
-                if (IsActive)
-                    this.worker.Start();
-            }
+            this.worker = worker;
+            ConnectToWorker(worker);
+            if (worker != null && IsActive)
+                worker.Start();
         }
 
         private void Worker_OnStateChanged(object sender, RoyaltyServiceWorker.Additional.WorkerState e) => RunUnderDispatcher(() => State = e);

@@ -188,6 +188,30 @@ namespace Royalty.ViewModels
         }
 
         #endregion
+        #region ImportQueueRecordsViewCommand
+
+        public static readonly DependencyProperty ImportQueueRecordsViewCommandProperty = DependencyProperty.Register(nameof(ImportQueueRecordsViewCommand), typeof(ICommand),
+            typeof(AccountEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public ICommand ImportQueueRecordsViewCommand
+        {
+            get { return (ICommand)GetValue(ImportQueueRecordsViewCommandProperty); }
+            set { SetValue(ImportQueueRecordsViewCommandProperty, value); }
+        }
+
+        #endregion
+        #region ImportQueueRecordsViewCommandParameter
+
+        public static readonly DependencyProperty ImportQueueRecordsViewCommandParameterProperty = DependencyProperty.Register(nameof(ImportQueueRecordsViewCommandParameter), typeof(object),
+            typeof(AccountEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public object ImportQueueRecordsViewCommandParameter
+        {
+            get { return GetValue(ImportQueueRecordsViewCommandParameterProperty); }
+            set { SetValue(ImportQueueRecordsViewCommandParameterProperty, value); }
+        }
+
+        #endregion
 
         public AccountEditViewModel()
         {

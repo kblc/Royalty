@@ -140,7 +140,7 @@ namespace RoyaltyRepository
                 var dt = DateTime.UtcNow;
                 var res = new ImportQueueRecordFileInfo()
                 { 
-                    ImportQueueRecordFileUID = Guid.NewGuid(),
+                    ImportQueueRecordFileInfoUID = Guid.NewGuid(),
                     ImportQueueRecordState = ImportQueueRecordStateGetDefault(),
                 };
                 if (anonymousFiller != null)

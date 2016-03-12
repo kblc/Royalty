@@ -152,7 +152,7 @@ namespace RoyaltyWorker
                                     .Where(f => f.Finished == null)
                                     .Select(f => new { File = f, Progress = prgImport.GetChild() })
                                     .ToList();
-                                var buildEvent = new Func<WorkerProcessElement>(() => new WorkerProcessElement(queueItem.ImportQueueRecordUID, progress.Value, filesElement.Select(i => new WorkerProcessFileProgress(i.File.ImportQueueRecordFileUID, i.Progress.Value))));
+                                var buildEvent = new Func<WorkerProcessElement>(() => new WorkerProcessElement(queueItem.ImportQueueRecordUID, progress.Value, filesElement.Select(i => new WorkerProcessFileProgress(i.File.ImportQueueRecordFileInfoUID, i.Progress.Value))));
 
                                 logSession.Add($"Queue record files count to process: {filesElement.Count}");
 

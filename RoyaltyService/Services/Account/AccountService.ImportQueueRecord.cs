@@ -100,6 +100,40 @@ namespace RoyaltyService.Services.Account
                 }
         }
 
+        public ImportQueueRecordExecutionResult UpdateImportQueueRecord(Model.ImportQueueRecord item)
+        {
+            UpdateSessionCulture();
+            using (var logSession = Helpers.Log.Session($"{GetType()}.{System.Reflection.MethodBase.GetCurrentMethod().Name}()", VerboseLog, RaiseLog))
+                try
+                {
+                    using (var rep = GetNewRepository(logSession))
+                    {
+                        var account = rep.Get<RoyaltyRepository.Models.Account>(p => p.AccountUID == item.AccountUID).SingleOrDefault();
+                        if (account == null)
+                            throw new Exception(Properties.Resources.SERVICES_ACCOUNT_AccountNotFound);
+
+                        var dbItem = rep.Get<RoyaltyRepository.Models.ImportQueueRecord>((i) => i.ImportQueueRecordUID == item.ImportQueueRecordUID).FirstOrDefault();
+                        if (dbItem == null)
+                            throw new Exception(Properties.Resources.SERVICES_ACCOUNT_ImportQueueRecord_NotFound);
+
+                        dbItem.CopyObjectFrom(item, new[] { nameof(dbItem.FileInfoes) });
+
+                        UpdateFileInfoes(rep, dbItem, item.FileInfoes);
+
+                        rep.SaveChanges();
+                        var res = AutoMapper.Mapper.Map<Model.ImportQueueRecord>(dbItem);
+                        return new ImportQueueRecordExecutionResult(res);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ex.Data.Add(nameof(item), item);
+                    logSession.Enabled = true;
+                    logSession.Add(ex);
+                    return new ImportQueueRecordExecutionResult(ex);
+                }
+        }
+
         public GuidExecutionResult RemovemportQueueRecord(Guid identifier)
         {
             UpdateSessionCulture();
@@ -151,6 +185,7 @@ namespace RoyaltyService.Services.Account
             foreach(var item in fileInfoes)
             {
                 var dbItem = rep.New<RoyaltyRepository.Models.ImportQueueRecordFileInfo>((i) => {
+                    i.ImportQueueRecordFileInfoUID = Guid.NewGuid();
                     i.ForAnalize = item.ForAnalize;
                     i.ImportQueueRecord = destination;
                     i.SourceFilePath = item.SourceFilePath;
@@ -171,6 +206,11 @@ namespace RoyaltyService.Services.Account
                 });
                 rep.Add(dbItem, saveAfterInsert: false);
             }
+        }
+
+        private void UpdateFileInfoes(RoyaltyRepository.Repository rep, RoyaltyRepository.Models.ImportQueueRecord destination, IEnumerable<ImportQueueRecordFileInfo> fileInfoes)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -24,6 +24,7 @@ namespace Royalty.ViewModels
         AccountSeriesOfNumbers,
         AccountAdditionalColumns,
         AccountPhoneMarks,
+        ImportQueueRecords,
     }
 
     public class AccountsViewModel : FrameworkElement
@@ -181,6 +182,22 @@ namespace Royalty.ViewModels
         }
 
         #endregion
+        #region ImportQueueRecordStates
+
+        private static readonly DependencyPropertyKey ImportQueueRecordStatesPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(ImportQueueRecordStates), typeof(ICollectionView), typeof(AccountsViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyImportQueueRecordStatesPropertyKey = ImportQueueRecordStatesPropertyKey.DependencyProperty;
+
+        public ICollectionView ImportQueueRecordStates
+        {
+            get { return (ICollectionView)GetValue(ReadOnlyImportQueueRecordStatesPropertyKey); }
+            private set { SetValue(ImportQueueRecordStatesPropertyKey, value); }
+        }
+
+        #endregion
         #region ColumnTypes
 
         private static readonly DependencyPropertyKey ColumnTypesPropertyKey
@@ -285,6 +302,7 @@ namespace Royalty.ViewModels
                 FilteredAccounts = null;
                 Marks = null;
                 ColumnTypes = null;
+                ImportQueueRecordStates = null;
                 return;
             }
 
@@ -300,6 +318,7 @@ namespace Royalty.ViewModels
 
             Marks = CollectionViewSource.GetDefaultView(newComponent.Marks);
             ColumnTypes = CollectionViewSource.GetDefaultView(newComponent.ColumnTypes);
+            ImportQueueRecordStates = CollectionViewSource.GetDefaultView(newComponent.ImportQueueRecordStates);
         }
 
         private void UpdateAccountsSeriesOfNumbersComponentSource(AccountsSeriesOfNumbersComponent newComponent) { }

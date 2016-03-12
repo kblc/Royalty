@@ -87,6 +87,7 @@
     <Compile Include="ViewModels\AbstractActionWithBackViewModel.cs" />
     <Compile Include="ViewModels\AbstractActionViewModel.cs" />
     <Compile Include="ViewModels\AccountAdditionalColumnsEditViewModel.cs" />
+    <Compile Include="ViewModels\AccountImportQueueRecordsEditViewModel.cs" />
     <Compile Include="ViewModels\AccountPhoneMarksEditViewModel.cs" />
     <Compile Include="ViewModels\AccountSeriesOfNumbersEditViewModel.cs" />
     <Compile Include="ViewModels\AccountSettingsSheduleTimesEditViewModel.cs" />

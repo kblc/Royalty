@@ -11,7 +11,7 @@ namespace RoyaltyService.Model
     public class ImportQueueRecordFileInfo
     {
         [DataMember(IsRequired = false, Name = "Id")]
-        public Guid ImportQueueRecordFileUID { get; set; }
+        public Guid ImportQueueRecordFileInfoUID { get; set; }
 
         [DataMember(IsRequired = false)]
         public Guid ImportQueueRecordUID { get; set; }
