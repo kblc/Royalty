@@ -60,6 +60,7 @@
     <Compile Include="Additional\AbstractBaseWorker.cs" />
     <Compile Include="Additional\ChangeAction.cs" />
     <Compile Include="Additional\NotificationItem.cs" />
+    <Compile Include="Additional\StorageServiceExtensions.cs" />
     <Compile Include="HistoryWorker.cs" />
     <Compile Include="ListWorker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,6 +75,11 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Service References\HistoryService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\StorageService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -186,10 +192,36 @@
     <None Include="Service References\HistoryService\service1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\StorageService\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\StorageService\Message.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\StorageService\RoyaltyService.Model.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\StorageService\RoyaltyService.Services.File.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\StorageService\RoyaltyServiceWorker.StorageService.FileResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\StorageService\RoyaltyServiceWorker.StorageService.FileResults.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\StorageService\service.wsdl" />
+    <None Include="Service References\StorageService\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\StorageService\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\AccountService\" />
     <WCFMetadataStorage Include="Service References\HistoryService\" />
+    <WCFMetadataStorage Include="Service References\StorageService\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\HistoryService\configuration91.svcinfo" />
@@ -217,6 +249,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\AccountService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\StorageService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\StorageService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\StorageService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

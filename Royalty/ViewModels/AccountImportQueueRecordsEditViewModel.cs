@@ -16,6 +16,8 @@ using System.Windows.Data;
 using System.Windows.Input;
 using RoyaltyServiceWorker.AccountService;
 using RoyaltyServiceWorker.Additional;
+using System.IO;
+using RoyaltyServiceWorker.Additional;
 
 namespace Royalty.ViewModels
 {
@@ -299,13 +301,33 @@ namespace Royalty.ViewModels
             var ofd = new Microsoft.Win32.OpenFileDialog {
                 CheckFileExists = true,
                 CheckPathExists = true,
-                Filter = "CSV-файлы;*.csv;Все файлы;*.*",
+                Filter = "CSV-файлы|*.csv|Все файлы|*.*",
                 Multiselect = true
             };
             if (ofd.ShowDialog() == true)
             {
-                //load file on server
-                //then add to queue items and save
+                IsBusy = true;
+
+                var encoding = Encoding.UTF8;
+                var fullLoadTask = Task.Factory.StartNew(() => {
+                    var storageClient = new RoyaltyServiceWorker.StorageService.FileServiceClient();
+                    var accountClient = new RoyaltyServiceWorker.AccountService.AccountServiceClient();
+
+                    var loadFileTasks = storageClient.UploadFiles(ofd.FileNames, encoding, GetCancellationToken());
+                    //wait upload all files
+                    Task.WaitAll(loadFileTasks);
+
+                    var newRecord = new ImportQueueRecord();
+
+
+                    var res = accountClient.PutImportQueueRecord(newRecord);
+                    if (res.Error != null)
+                        throw new Exception(res.Error);
+
+                    newRecord.CopyObjectFrom(res.Value);
+                    return newRecord;
+                }, GetCancellationToken(), TaskCreationOptions.None, TaskScheduler.Default)
+                .ContinueWith(r => { }, System.Threading.CancellationToken.None, TaskContinuationOptions.AttachedToParent, TaskScheduler.FromCurrentSynchronizationContext());
             }
         }
 
