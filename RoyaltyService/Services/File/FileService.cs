@@ -133,13 +133,13 @@ namespace RoyaltyService.Services.File
                     using (var rep = GetNewRepository(logSession))
                     {
                         logSession.Add($"Try to get file with id = '{identifier}' from database...");
-                        var file = rep.GetFile(identifier);
+                        var file = rep.Get<RoyaltyRepository.Models.File>(i => i.FileUID == identifier).FirstOrDefault();
                         if (file != null)
                         {
                             logSession.Add($"File found: '{file}'.");
                             rep.Remove(file);
                             logSession.Add($"File with id = '{identifier}' deleted from database.");
-                            FileStorage.FileDelete(file.FileID);
+                            FileStorage.FileDelete(file.FileUID);
                             logSession.Add($"File with id = '{identifier}' deleted from file storage.");
                         }
                         else
@@ -197,7 +197,7 @@ namespace RoyaltyService.Services.File
                 {
                     using (var rep = GetNewRepository(logSession))
                     {
-                        var res = rep.Get<RoyaltyRepository.Models.File>(f => identifiers.Contains(f.FileID))
+                        var res = rep.Get<RoyaltyRepository.Models.File>(f => identifiers.Contains(f.FileUID))
                             .ToArray()
                             .Select(f => Mapper.Map<Model.File>(f))
                             .ToArray();
@@ -226,7 +226,7 @@ namespace RoyaltyService.Services.File
                 {
                     using (var rep = GetNewRepository(logSession))
                     {
-                        var file = rep.GetFile(identifier);
+                        var file = rep.Get<RoyaltyRepository.Models.File>(i => i.FileUID == identifier).FirstOrDefault();
                         if (file != null)
                             SetOutputResponseHeaders(file.MimeType, file.Encoding, file.FileName, logSession);
                     }
@@ -291,7 +291,7 @@ namespace RoyaltyService.Services.File
 
                         GetInputRequestHeaders(out mimeType, out encoding, out fileName, logSession);
 
-                        var dbFile = rep.New<RoyaltyRepository.Models.File>((f) =>
+                        var dbFile = rep.NewFile((f) =>
                         {
                             f.FileName = string.IsNullOrWhiteSpace(fileName) ? DefaultFileName : fileName;
                             f.Encoding = encoding;
@@ -299,7 +299,7 @@ namespace RoyaltyService.Services.File
                         });
 
                         logSession.Add($"Try to save file to file storage...");
-                        var fi = FileStorage.FilePut(dbFile.FileID, content, dbFile.FileName);
+                        var fi = FileStorage.FilePut(dbFile.FileUID, content, dbFile.FileName);
 
                         dbFile.FileSize = fi.Length;
                         dbFile.OriginalFileName = fi.Name;
@@ -331,28 +331,25 @@ namespace RoyaltyService.Services.File
                 {
                     using (var rep = GetNewRepository(logSession))
                     {
-                        logSession.Add($"Try to get file with id = '{item.FileID}' from database...");
-                        var id = GetGuidByString(item.FileID);
-
-                        var dbFile = rep.GetFile(id);
+                        logSession.Add($"Try to get file with id = '{item.FileUID}' from database...");
+                        var dbFile = rep.Get<RoyaltyRepository.Models.File>(i => i.FileUID == item.FileUID).FirstOrDefault();
                         if (dbFile == null)
                             throw new Exception(Properties.Resources.SERVICES_FILE_FileNotFound);
 
                         if (item.Encoding != null)
                             dbFile.Encoding = item.Encoding;
 
-                        dbFile.MimeType = (string.IsNullOrEmpty(item.MimeType)) 
-                            ? RoyaltyFileStorage.MimeTypes.GetMimeTypeFromFileName(dbFile.OriginalFileName) 
-                            : item.MimeType;
-
-                        if (!string.IsNullOrEmpty(item.FileName))
+                        if (!string.IsNullOrEmpty(item.FileName) && (string.Compare(dbFile.FileName, item.FileName, false) != 0))
                         {
                             dbFile.FileName = System.IO.Path.GetFileName(item.FileName);
-
                             logSession.Add($"Try to rename file in file storage...");
-                            var fi = FileStorage.FileRename(id, dbFile.FileName);
+                            var fi = FileStorage.FileRename(item.FileUID, dbFile.FileName);
                             dbFile.OriginalFileName = fi.Name;
                         }
+
+                        dbFile.MimeType = (string.IsNullOrEmpty(item.MimeType))
+                            ? RoyaltyFileStorage.MimeTypes.GetMimeTypeFromFileName(dbFile.OriginalFileName)
+                            : item.MimeType;
 
                         logSession.Add($"Try to update file in database...");
                         rep.SaveChanges();

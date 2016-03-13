@@ -267,16 +267,16 @@
   <data name="HISTORYACTIONTYPE_Remove" xml:space="preserve">
     <value>Запись удалена</value>
   </data>
-  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_Export" xml:space="preserve">
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_EXPORT" xml:space="preserve">
     <value>Экспортируемый файл</value>
   </data>
-  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_ExportPhones" xml:space="preserve">
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_EXPORTPHONES" xml:space="preserve">
     <value>Экспортируемый файл телефонов</value>
   </data>
-  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_Import" xml:space="preserve">
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_IMPORT" xml:space="preserve">
     <value>Импортируемый файл</value>
   </data>
-  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_Log" xml:space="preserve">
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_LOG" xml:space="preserve">
     <value>Файл журнала</value>
   </data>
   <data name="COLUMNTYPE_CHANGED" xml:space="preserve">

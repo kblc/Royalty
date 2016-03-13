@@ -28,7 +28,7 @@ namespace RoyaltyRepository.Models
         /// Идентификатор записи
         /// </summary>
         [Key, Column("file_uid")]
-        public Guid FileID { get; set; }
+        public Guid FileUID { get; set; }
         /// <summary>
         /// Имя файла
         /// </summary>

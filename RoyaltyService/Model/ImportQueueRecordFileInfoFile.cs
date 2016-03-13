@@ -11,13 +11,16 @@ namespace RoyaltyService.Model
     public class ImportQueueRecordFileInfoFile
     {
         [DataMember(IsRequired = false, Name = "Id")]
-        public Guid ImportQueueRecordFileInfoFileID { get; set; }
+        public long ImportQueueRecordFileInfoFileID { get; set; }
 
         [DataMember(IsRequired = false)]
         public Guid ImportQueueRecordFileInfoUID { get; set; }
 
         [DataMember(IsRequired = false)]
         public Guid FileUID { get; set; }
+
+        [DataMember(IsRequired = false)]
+        public File File { get; set; }
 
         [DataMember(IsRequired = false)]
         public string TypeName { get; set; }

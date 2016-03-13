@@ -8,12 +8,14 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary >
+                    <components:TimeComponent x:Key="timeComponent"/>
                     <components:HistoryComponent x:Key="historyComponent" IsActive="True"/>
                     <components:AccountsComponent x:Key="accountComponent" IsActive="True" HistoryComponent="{StaticResource historyComponent}"/>
                     <components:AccountsSeriesOfNumbersComponent x:Key="accountsSeriesOfNumbersComponent" HistoryComponent="{StaticResource historyComponent}"/>
                     <components:AccountsAdditionalColumnsComponent x:Key="accountsAdditionalColumnsComponent" HistoryComponent="{StaticResource historyComponent}"/>
                     <components:AccountsPhoneMarksComponent x:Key="accountsPhoneMarksComponent" HistoryComponent="{StaticResource historyComponent}"/>
-                    <components:AccountsImportQueueRecordsComponent x:Key="accountsImportQueueRecordsComponent" HistoryComponent="{StaticResource historyComponent}"/>
+                    <components:AccountsImportQueueRecordsComponent x:Key="accountsImportQueueRecordsComponent" HistoryComponent="{StaticResource historyComponent}"
+                                                                    TimeComponent="{StaticResource timeComponent}"/>
                     <viewModels:AccountsViewModel x:Key="accountsViewModel" ShowHidden="True" 
                                                   AccountsComponent="{StaticResource accountComponent}"
                                                   AccountsSeriesOfNumbersComponent="{StaticResource accountsSeriesOfNumbersComponent}"

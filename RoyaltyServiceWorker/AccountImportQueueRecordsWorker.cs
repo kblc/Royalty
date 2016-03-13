@@ -36,12 +36,12 @@ namespace RoyaltyServiceWorker
             , h => h.ImportQueueRecord) 
         { }
 
-        public uint PageIndex { get { return pageIndex; } set { pageIndex = value; RaisePropertyChanged(); Refresh(); } }
-        public uint PageCount { get { return pageCount; } private set { pageCount = value; RaisePropertyChanged(); Refresh(); } }
-        public uint ItemsPerPage { get { return itemsPerPage; } set { itemsPerPage = value; RaisePropertyChanged(); Refresh(); } }
-        public DateTime? From { get { return from; } set { from = value; RaisePropertyChanged(); Refresh(); } }
-        public DateTime? To { get { return to; } set { to = value; RaisePropertyChanged(); Refresh(); } }
-        public Guid AccountId { get { return accountId; } set { accountId = value; RaisePropertyChanged(); Refresh(); } }
+        public uint PageIndex { get { return pageIndex; } set { pageIndex = value; RaisePropertyChanged(); } }
+        public uint PageCount { get { return pageCount; } private set { pageCount = value; RaisePropertyChanged(); } }
+        public uint ItemsPerPage { get { return itemsPerPage; } set { itemsPerPage = value; RaisePropertyChanged(); } }
+        public DateTime? From { get { return from; } set { from = value; RaisePropertyChanged(); } }
+        public DateTime? To { get { return to; } set { to = value; RaisePropertyChanged(); } }
+        public Guid AccountId { get { return accountId; } set { accountId = value; RaisePropertyChanged(); } }
 
         protected override AccountService.ImportQueueRecord[] ServiceGetData() 
         {
@@ -214,7 +214,7 @@ namespace RoyaltyServiceWorker
             if (raiseItems.Length > 0)
                 RaiseOnItemsChanged(raiseItems, ChangeAction.Change);
         }
-        protected void ApplyHistoryRemoveFileInfoFile(IEnumerable<Guid> ids)
+        protected void ApplyHistoryRemoveFileInfoFile(IEnumerable<long> ids)
         {
             var raiseItems = new AccountService.ImportQueueRecord[] { };
             lock (Items)

@@ -90,14 +90,29 @@
   <xs:element name="ArrayOfImportQueueRecordFileInfoFile" nillable="true" type="tns:ArrayOfImportQueueRecordFileInfoFile" />
   <xs:complexType name="ImportQueueRecordFileInfoFile">
     <xs:sequence>
+      <xs:element minOccurs="0" name="File" nillable="true" type="tns:File" />
       <xs:element minOccurs="0" name="FileUID" type="ser:guid" />
-      <xs:element minOccurs="0" name="Id" type="ser:guid" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
       <xs:element minOccurs="0" name="ImportQueueRecordFileInfoUID" type="ser:guid" />
       <xs:element minOccurs="0" name="TypeName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TypeSystemName" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ImportQueueRecordFileInfoFile" nillable="true" type="tns:ImportQueueRecordFileInfoFile" />
+  <xs:complexType name="File">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Encoding" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FileSize" type="xs:long" />
+      <xs:element minOccurs="0" name="Id" type="ser:guid" />
+      <xs:element minOccurs="0" name="MimeType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Preview" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PreviewSmall" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="StoredFileName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="File" nillable="true" type="tns:File" />
   <xs:complexType name="ArrayOfImportQueueRecordFileAccountDataRecord">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ImportQueueRecordFileAccountDataRecord" nillable="true" type="tns:ImportQueueRecordFileAccountDataRecord" />

@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     xmlns:viewModels="clr-namespace:Royalty.ViewModels"
+                    xmlns:viewModelsAdd="clr-namespace:Royalty.ViewModels.Additional"
                     xmlns:accountService="clr-namespace:RoyaltyServiceWorker.AccountService;assembly=RoyaltyServiceWorker"
                     xmlns:localConverters="clr-namespace:Royalty.Converters"
                     xmlns:additional="clr-namespace:Royalty.Additional"
@@ -57,8 +58,12 @@
                     <ColumnDefinition Width="0.5*"/>
                     <ColumnDefinition Width="0.5*"/>
                 </Grid.ColumnDefinitions>
-                <DatePicker Grid.Column="0" Margin="4" HorizontalAlignment="Stretch" SelectedDate="{Binding From, UpdateSourceTrigger=PropertyChanged}"/>
-                <DatePicker Grid.Column="1" Margin="4" HorizontalAlignment="Stretch" SelectedDate="{Binding To, UpdateSourceTrigger=PropertyChanged}"/>
+                <DatePicker Grid.Column="0" Margin="4" HorizontalAlignment="Stretch" SelectedDate="{Binding From, UpdateSourceTrigger=PropertyChanged}"
+                            x:Name="PART_AccountImportQueueRecordsEditViewModelTemplate_DatePickerStart"
+                            DisplayDateEnd="{Binding AccountsImportQueueRecordsComponent.TimeComponent.Current, Mode=OneWay}"/>
+                <DatePicker Grid.Column="1" Margin="4" HorizontalAlignment="Stretch" SelectedDate="{Binding To, UpdateSourceTrigger=PropertyChanged}"
+                            DisplayDateStart="{Binding ElementName=PART_AccountImportQueueRecordsEditViewModelTemplate_DatePickerStart, Path=SelectedDate, Mode=OneWay}"
+                            DisplayDateEnd="{Binding AccountsImportQueueRecordsComponent.TimeComponent.Current, Mode=OneWay}"/>
             </Grid>
 
             <!--<DataGrid Grid.Row="4" ItemsSource="{Binding AccountPhoneMarks}" x:Name="PART_AccountImportQueueRecordsEditViewModelTemplateControls"
@@ -86,8 +91,90 @@
                 </DataGrid.Columns>
             </DataGrid>-->
 
-            <ListBox Grid.Row="4" ItemsSource="{Binding ImportQueueRecords}" x:Name="PART_AccountImportQueueRecordsEditViewModelTemplateControls">
-                
+            <ListBox Grid.Row="4" ItemsSource="{Binding ImportQueueRecords}" 
+                     HorizontalContentAlignment="Stretch"
+                     x:Name="PART_AccountImportQueueRecordsEditViewModelTemplateControls">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type accountService:ImportQueueRecord}">
+                        <Grid x:Name="PART_AccountImportQueueRecordsEditViewModelTemplateItemRoot">
+                            <Grid.Resources>
+                                <viewModelsAdd:ImportQueueRecordViewModel x:Key="importQueueRecordViewModel" ImportQueueRecord="{Binding}"/>
+                            </Grid.Resources>
+                            <ContentControl Content="{StaticResource importQueueRecordViewModel}" Visibility="Collapsed"/>
+                            <Grid DataContext="{StaticResource importQueueRecordViewModel}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Row="0" Text="{Binding ImportQueueRecord.CreatedDate, StringFormat=Дата создания: {0}}"/>
+                                <TextBlock Grid.Row="1" Text="{Binding ImportQueueRecord.ProcessedDate, StringFormat=Дата выполнения: {0}}"/>
+                                <Expander Grid.Row="2" IsExpanded="False">
+                                    <Expander.Header>
+                                        <TextBlock Text="{Binding ImportQueueRecord.FileInfoes.Count, StringFormat=Файлы: {0}}"/>
+                                    </Expander.Header>
+                                    <StackPanel Orientation="Vertical">
+                                        <Border Visibility="{Binding ImportQueueRecord.HasError, Converter={StaticResource accountsBooleanToVisibilityConverter}}">
+                                            <TextBlock Text="{Binding ImportQueueRecord.Error, StringFormat=Ошибка: {0}}"/>
+                                        </Border>
+                                        <ListBox ItemsSource="{Binding ImportQueueRecord.FileInfoes}">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type accountService:ImportQueueRecordFileInfo}">
+                                                    <Expander>
+                                                        <Expander.Header>
+                                                            <TextBlock Text="{Binding SourceFilePath, StringFormat=Файл: {0}}"/>
+                                                        </Expander.Header>
+                                                        <StackPanel Orientation="Vertical">
+                                                            <TextBlock Text="{Binding Started, StringFormat=Запуск: {0}}"/>
+                                                            <TextBlock Text="{Binding Finished, StringFormat=Окончание: {0}}"/>
+                                                            <TextBlock Text="{Binding LoadedRecords.Count, StringFormat=Записей обработано: {0}}"/>
+                                                            <TextBlock Text="{Binding ForAnalize, StringFormat=Для анализа: {0}}"/>
+                                                            <TextBlock Text="{Binding Error, StringFormat=Ошибка: {0}}"/>
+                                                            <Expander>
+                                                                <Expander.Header>
+                                                                    <TextBlock Text="{Binding Files.Count, StringFormat=Файлы ({0}):}"/>
+                                                                </Expander.Header>
+                                                                <ItemsControl ItemsSource="{Binding Files}">
+                                                                    <ItemsControl.ItemTemplate>
+                                                                        <DataTemplate DataType="{x:Type accountService:ImportQueueRecordFileInfoFile}">
+                                                                            <TextBlock>
+                                                                                <Hyperlink NavigateUri="{Binding File.StoredFileName}">
+                                                                                    <TextBlock>
+                                                                                        <TextBlock.Text>
+                                                                                            <MultiBinding StringFormat="{}{0}: {1} ({2} байт)">
+                                                                                                <Binding Path="TypeName"/>
+                                                                                                <Binding Path="File.FileName"/>
+                                                                                                <Binding Path="File.FileSize"/>
+                                                                                            </MultiBinding>
+                                                                                        </TextBlock.Text>
+                                                                                    </TextBlock>
+                                                                                </Hyperlink>
+                                                                            </TextBlock>
+
+                                                                        </DataTemplate>
+                                                                    </ItemsControl.ItemTemplate>
+                                                                </ItemsControl>
+                                                            </Expander>
+                                                        </StackPanel>
+                                                    </Expander>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </StackPanel>
+                                </Expander>
+                            </Grid>
+                        </Grid>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding HasError}">
+                                <Setter TargetName="PART_AccountImportQueueRecordsEditViewModelTemplateItemRoot" Property="Background" Value="{StaticResource ErrorBrush}"/>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
 
             <Button Content="+" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8"

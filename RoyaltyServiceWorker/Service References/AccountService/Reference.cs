@@ -1208,10 +1208,13 @@ namespace RoyaltyServiceWorker.AccountService {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private RoyaltyServiceWorker.AccountService.File FileField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Guid FileUIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Guid IdField;
+        private long IdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Guid ImportQueueRecordFileInfoUIDField;
@@ -1233,6 +1236,19 @@ namespace RoyaltyServiceWorker.AccountService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public RoyaltyServiceWorker.AccountService.File File {
+            get {
+                return this.FileField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FileField, value) != true)) {
+                    this.FileField = value;
+                    this.RaisePropertyChanged("File");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Guid FileUID {
             get {
                 return this.FileUIDField;
@@ -1246,7 +1262,7 @@ namespace RoyaltyServiceWorker.AccountService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid Id {
+        public long Id {
             get {
                 return this.IdField;
             }
@@ -1386,6 +1402,179 @@ namespace RoyaltyServiceWorker.AccountService {
                 if ((this.LoadDateField.Equals(value) != true)) {
                     this.LoadDateField = value;
                     this.RaisePropertyChanged("LoadDate");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="File", Namespace="http://schemas.datacontract.org/2004/07/RoyaltyService.Model")]
+    [System.SerializableAttribute()]
+    public partial class File : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime DateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string EncodingField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FileNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long FileSizeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Guid IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MimeTypeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PreviewField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PreviewSmallField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string StoredFileNameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime Date {
+            get {
+                return this.DateField;
+            }
+            set {
+                if ((this.DateField.Equals(value) != true)) {
+                    this.DateField = value;
+                    this.RaisePropertyChanged("Date");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Encoding {
+            get {
+                return this.EncodingField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.EncodingField, value) != true)) {
+                    this.EncodingField = value;
+                    this.RaisePropertyChanged("Encoding");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FileName {
+            get {
+                return this.FileNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FileNameField, value) != true)) {
+                    this.FileNameField = value;
+                    this.RaisePropertyChanged("FileName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long FileSize {
+            get {
+                return this.FileSizeField;
+            }
+            set {
+                if ((this.FileSizeField.Equals(value) != true)) {
+                    this.FileSizeField = value;
+                    this.RaisePropertyChanged("FileSize");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Guid Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string MimeType {
+            get {
+                return this.MimeTypeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MimeTypeField, value) != true)) {
+                    this.MimeTypeField = value;
+                    this.RaisePropertyChanged("MimeType");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Preview {
+            get {
+                return this.PreviewField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PreviewField, value) != true)) {
+                    this.PreviewField = value;
+                    this.RaisePropertyChanged("Preview");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string PreviewSmall {
+            get {
+                return this.PreviewSmallField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PreviewSmallField, value) != true)) {
+                    this.PreviewSmallField = value;
+                    this.RaisePropertyChanged("PreviewSmall");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string StoredFileName {
+            get {
+                return this.StoredFileNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.StoredFileNameField, value) != true)) {
+                    this.StoredFileNameField = value;
+                    this.RaisePropertyChanged("StoredFileName");
                 }
             }
         }

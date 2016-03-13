@@ -21,7 +21,8 @@ namespace Royalty.Additional
             this.comparer = comparer;
         }
 
-        public bool IsCollectionUpdating { get; private set; } = false;
+        private long CollectionUpdatingCounter = 0;
+        public bool IsCollectionUpdating { get { return CollectionUpdatingCounter > 0; } }
 
         public event EventHandler<ListItemsEventArgs<T>> Change;
 
@@ -33,30 +34,69 @@ namespace Royalty.Additional
 
         public void UpdateCollection(ListItemsEventArgs<T> e)
         {
-            IsCollectionUpdating = true;
+            CollectionUpdatingCounter++;
             try
             {
                 if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Change || e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Add)
-                    e.Items.ToList().ForEach(i => 
-                    {
-                        var item = this.FirstOrDefault(a => comparer(a, i));
-                        if (item == null)
-                            this.Add(i); else
-                            item.CopyObjectFrom(i);
-                    });
-            
+                    UpdateCollectionAddOrUpdate(e.Items);
+
                 if (e.Action == RoyaltyServiceWorker.Additional.ChangeAction.Remove)
-                    e.Items.ToList().ForEach(i => 
-                    {
-                        var item = this.FirstOrDefault(a => comparer(a, i));
-                        if (item != null)
-                            this.Remove(item);
-                    });
-                Change?.Invoke(this, e);
+                    UpdateCollectionRemove(e.Items);
             }
             finally
             {
-                IsCollectionUpdating = false;
+                CollectionUpdatingCounter--;
+            }
+        }
+
+        public void UpdateCollectionAddOrUpdate(T[] items)
+        {
+            CollectionUpdatingCounter++;
+            try
+            {
+                var itemsToUpdate = new List<T> { };
+                var itemsToAdd = new List<T> { };
+                items.ToList().ForEach(i =>
+                {
+                    var item = this.FirstOrDefault(a => comparer(a, i));
+                    if (item == null)
+                    {
+                        this.Add(i);
+                        itemsToAdd.Add(i);
+                    }
+                    else {
+                        item.CopyObjectFrom(i);
+                        itemsToUpdate.Add(i);
+                    }
+                });
+                if (itemsToAdd.Count > 0)
+                    Change?.Invoke(this, new ListItemsEventArgs<T>(itemsToAdd.ToArray(), ChangeAction.Add));
+                if (itemsToUpdate.Count > 0)
+                    Change?.Invoke(this, new ListItemsEventArgs<T>(itemsToUpdate.ToArray(), ChangeAction.Change));
+            }
+            finally
+            {
+                CollectionUpdatingCounter--;
+            }
+        }
+
+        public void UpdateCollectionRemove(T[] items)
+        {
+            CollectionUpdatingCounter++;
+            try
+            {
+                items.ToList().ForEach(i =>
+                {
+                    var item = this.FirstOrDefault(a => comparer(a, i));
+                    if (item != null)
+                        this.Remove(item);
+                });
+                var args = new ListItemsEventArgs<T>(items, ChangeAction.Remove);
+                Change?.Invoke(this, args);
+            }
+            finally
+            {
+                CollectionUpdatingCounter--;
             }
         }
     }

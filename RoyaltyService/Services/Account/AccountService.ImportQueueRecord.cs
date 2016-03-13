@@ -182,6 +182,7 @@ namespace RoyaltyService.Services.Account
 
         private void LoadFileInfoes(RoyaltyRepository.Repository rep, RoyaltyRepository.Models.ImportQueueRecord destination, IEnumerable<ImportQueueRecordFileInfo> fileInfoes)
         {
+            var stateDafault = rep.ImportQueueRecordStateGetDefault();
             foreach(var item in fileInfoes)
             {
                 var dbItem = rep.New<RoyaltyRepository.Models.ImportQueueRecordFileInfo>((i) => {
@@ -189,6 +190,7 @@ namespace RoyaltyService.Services.Account
                     i.ForAnalize = item.ForAnalize;
                     i.ImportQueueRecord = destination;
                     i.SourceFilePath = item.SourceFilePath;
+                    i.ImportQueueRecordState = stateDafault;
                 });
                 rep.Add(dbItem, saveAfterInsert: false);
                 LoadFiles(rep, dbItem, item.Files);
@@ -200,7 +202,7 @@ namespace RoyaltyService.Services.Account
             foreach (var item in files)
             {
                 var dbItem = rep.New<RoyaltyRepository.Models.ImportQueueRecordFileInfoFile>((i) => {
-                    i.FileUID = item.FileUID;
+                    i.FileUID = item.File != null ? item.File.FileUID : item.FileUID;
                     i.ImportQueueRecordFileInfo = destination;
                     i.Type = RoyaltyRepository.Models.ImportQueueRecordFileInfoFileType.Import;
                 });

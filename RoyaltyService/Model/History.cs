@@ -71,8 +71,8 @@ namespace RoyaltyService.Model
         public Guid[] ImportQueueRecordFileInfo { get; set; }
 
         [DataMember]
-        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.ImportQueueRecordFileInfoFile), typeof(Guid))]
-        public Guid[] ImportQueueRecordFileInfoFile { get; set; }
+        [RepositoryHistoryLink(typeof(RoyaltyRepository.Models.ImportQueueRecordFileInfoFile), typeof(long))]
+        public long[] ImportQueueRecordFileInfoFile { get; set; }
     }
 
     [DataContract]

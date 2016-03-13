@@ -48,7 +48,7 @@ namespace RoyaltyService.Model
     public class File
     {
         [DataMember(IsRequired = false, Name = "Id")]
-        public string FileID { get; set; }
+        public Guid FileUID { get; set; }
         [DataMember(IsRequired = false)]
         public string FileName { get; set; }
         [DataMember(IsRequired = false)]
@@ -84,9 +84,7 @@ namespace RoyaltyService.Model
 
 #pragma warning disable 618
             AutoMapper.Mapper.CreateMap<RoyaltyRepository.Models.File, File>()
-                .ForMember(dst => dst.FileID, a => a.ResolveUsing<GuidToStringConverter>().FromMember(src => src.FileID))
                 .ForMember(dst => dst.StoredFileName, a => a.ResolveUsing<AddUrlPrefixConverter>().FromMember(src => src.OriginalFileName))
-                .ForMember(dst => dst.EncodingName, a => a.MapFrom(src => src.EncodingName))
                 .AfterMap((src, dst) =>
                 {
                     var mimeInfo = RoyaltyFileStorage.MimeTypes.GetPreviewImagesForMimeType(dst.MimeType);
@@ -98,9 +96,7 @@ namespace RoyaltyService.Model
                 })
                 ;
 
-            AutoMapper.Mapper.CreateMap<File, RoyaltyRepository.Models.File>()
-                .ForMember(dst => dst.FileID, a => a.ResolveUsing<StringToGuidConverter>().FromMember(src => src.FileID))
-                .ForMember(dst => dst.EncodingName, a => a.MapFrom(src => src.EncodingName));
+            AutoMapper.Mapper.CreateMap<File, RoyaltyRepository.Models.File>();
 #pragma warning restore 618
             isInitialized = true;
         }

@@ -17,7 +17,7 @@ namespace RoyaltyWorker.Extensions
                     f.FileName = fileName;
                     f.MimeType = MimeTypes.GetMimeTypeFromFileName(fileName);
                 });
-            var fileInfo = storage.FilePut(repFile.FileID, streamToUpload, fileName);
+            var fileInfo = storage.FilePut(repFile.FileUID, streamToUpload, fileName);
             repFile.OriginalFileName = fileInfo.Name;
             repFile.FileSize = fileInfo.Length;
             repFile.Encoding = encoding;
@@ -58,7 +58,7 @@ namespace RoyaltyWorker.Extensions
                 throw new ArgumentNullException(nameof(storage));
 
             var res = new List<string>();
-            using (var fileStream = storage.FileGet(repositoryFile.FileID))
+            using (var fileStream = storage.FileGet(repositoryFile.FileUID))
             using (var sr = new System.IO.StreamReader(fileStream, repositoryFile.Encoding))
             {
                 var line = string.Empty;

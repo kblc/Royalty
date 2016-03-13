@@ -51,6 +51,18 @@ namespace Royalty.Components
         }
 
         #endregion
+        #region TimeComponent
+
+        public static readonly DependencyProperty TimeComponentProperty = DependencyProperty.Register(nameof(TimeComponent), typeof(TimeComponent),
+            typeof(AccountsImportQueueRecordsComponent), new PropertyMetadata(null, (s, e) => { }));
+
+        public TimeComponent TimeComponent
+        {
+            get { return (TimeComponent)GetValue(TimeComponentProperty); }
+            set { SetValue(TimeComponentProperty, value); }
+        }
+
+        #endregion
         #region PageIndex
 
         public static readonly DependencyProperty PageIndexProperty = DependencyProperty.Register(nameof(PageIndex), typeof(uint),
@@ -184,13 +196,23 @@ namespace Royalty.Components
         private void OnAccountChanged(RoyaltyServiceWorker.AccountService.Account newValue, RoyaltyServiceWorker.AccountService.Account oldValue)
         {
             sourceItems.Clear();
-            worker.AccountId = newValue == null ? Guid.Empty : newValue.Id;
+            if (this.worker != null)
+            {
+                worker.AccountId = newValue == null ? Guid.Empty : newValue.Id;
+                if (this.IsActive)
+                    worker.Refresh();
+            }
+            raiseUpdateCommands();
         }
 
         private void OnPageIndexChanged(uint newValue, uint oldValue)
         {
             if (this.worker != null)
+            {
                 this.worker.PageIndex = newValue;
+                if (this.IsActive)
+                    worker.Refresh();
+            }
             raiseUpdateCommands();
         }
 
@@ -202,21 +224,33 @@ namespace Royalty.Components
         private void OnToChanged(DateTime? newValue, DateTime? oldValue)
         {
             if (this.worker != null)
+            {
                 this.worker.To = newValue;
+                if (this.IsActive)
+                    worker.Refresh();
+            }
             raiseUpdateCommands();
         }
 
         private void OnFromChanged(DateTime? newValue, DateTime? oldValue)
         {
             if (this.worker != null)
+            {
                 this.worker.From = newValue;
+                if (this.IsActive)
+                    worker.Refresh();
+            }
             raiseUpdateCommands();
         }
 
         private void OnItemsPerPageChanged(uint newValue, uint oldValue)
         {
             if (this.worker != null)
+            {
                 this.worker.ItemsPerPage = newValue;
+                if (this.IsActive)
+                    worker.Refresh();
+            }
             raiseUpdateCommands();
         }
 

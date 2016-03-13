@@ -82,6 +82,7 @@
     <Compile Include="Components\AccountsAdditionalColumnsComponent.cs" />
     <Compile Include="Components\AccountsSeriesOfNumbersComponent.cs" />
     <Compile Include="Additional\IHistoryItemsChange.cs" />
+    <Compile Include="Components\TimeComponent.cs" />
     <Compile Include="Converters\TimeSpanToStringConverter.cs" />
     <Compile Include="ViewModels\AbstractActionActivationViewModel.cs" />
     <Compile Include="ViewModels\AbstractActionWithBackViewModel.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="ViewModels\AccountEditViewModel.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="ViewModels\AccountsViewModel.cs" />
+    <Compile Include="ViewModels\Additional\ImportQueueRecordViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

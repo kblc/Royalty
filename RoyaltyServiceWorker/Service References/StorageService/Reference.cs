@@ -146,7 +146,7 @@ namespace RoyaltyServiceWorker.StorageService {
         private long FileSizeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string IdField;
+        private System.Guid IdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string MimeTypeField;
@@ -223,12 +223,12 @@ namespace RoyaltyServiceWorker.StorageService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Id {
+        public System.Guid Id {
             get {
                 return this.IdField;
             }
             set {
-                if ((object.ReferenceEquals(this.IdField, value) != true)) {
+                if ((this.IdField.Equals(value) != true)) {
                     this.IdField = value;
                     this.RaisePropertyChanged("Id");
                 }

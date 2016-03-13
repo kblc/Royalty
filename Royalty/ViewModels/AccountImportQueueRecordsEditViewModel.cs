@@ -17,7 +17,6 @@ using System.Windows.Input;
 using RoyaltyServiceWorker.AccountService;
 using RoyaltyServiceWorker.Additional;
 using System.IO;
-using RoyaltyServiceWorker.Additional;
 
 namespace Royalty.ViewModels
 {
@@ -193,7 +192,7 @@ namespace Royalty.ViewModels
         {
             localCollection = new ObservableCollectionWatcher<ImportQueueRecord>((x, y) => x.Id == y.Id);
             ImportQueueRecords = CollectionViewSource.GetDefaultView(localCollection);
-            ImportQueueRecords.CollectionChanged += ImportQueueRecords_CollectionChanged;
+            //ImportQueueRecords.CollectionChanged += ImportQueueRecords_CollectionChanged;
             ImportQueueRecords.SortDescriptions.Add(new SortDescription(nameof(ImportQueueRecord.CreatedDate), ListSortDirection.Descending));
             setFilterTimer = new FilterTimer<DateTimeFilter>(TimeSpan.FromMilliseconds(500), (filter) =>
             {
@@ -208,7 +207,7 @@ namespace Royalty.ViewModels
                 });
             });
             InsertCommand = new DelegateCommand((o) => InsertNew());
-            DeleteCommand = new DelegateCommand((o) => MessageBox.Show($"File delete there: {o}"));
+            DeleteCommand = new DelegateCommand((o) => DeleteFromCollection(o as ImportQueueRecord));
         }
 
         private void OnAccountChanged(RoyaltyServiceWorker.AccountService.Account newItem, RoyaltyServiceWorker.AccountService.Account oldItem)
@@ -265,36 +264,36 @@ namespace Royalty.ViewModels
             this.IsBusy = !AccountsImportQueueRecordsComponent.IsLoaded;
         }
 
-        private void ImportQueueRecords_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.OldItems != null && IsActive && !localCollection.IsCollectionUpdating)
-            {
-                var oldItems = e.OldItems
-                    .OfType<ImportQueueRecord>()
-                    .Where(i => i.Id != default(Guid))
-                    .ToArray();
-                if (oldItems.Length > 0)
-                {
-                    DeleteTask(oldItems)
-                        .ContinueWith(res =>
-                        {
-                            if (res.Result.Length > 0)
-                                localCollection.AddRange(res.Result);
-                        }, GetCancellationToken(), TaskContinuationOptions.AttachedToParent, TaskScheduler.FromCurrentSynchronizationContext());
-                }
-            }
-            #region Set account UID for new Items
-            if (e.NewItems != null && this.Account != null)
-            {
-                var newItems = e.NewItems
-                    .OfType<ImportQueueRecord>()
-                    .Where(i => i.Id == default(Guid))
-                    .ToArray();
-                foreach (var i in newItems)
-                    i.AccountUID = this.Account.Id;
-            }
-            #endregion
-        }
+        //private void ImportQueueRecords_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        //{
+        //    if (e.OldItems != null && IsActive && !localCollection.IsCollectionUpdating)
+        //    {
+        //        var oldItems = e.OldItems
+        //            .OfType<ImportQueueRecord>()
+        //            .Where(i => i.Id != default(Guid))
+        //            .ToArray();
+        //        if (oldItems.Length > 0)
+        //        {
+        //            DeleteTask(oldItems)
+        //                .ContinueWith(res =>
+        //                {
+        //                    if (res.Result.Length > 0)
+        //                        localCollection.AddRange(res.Result);
+        //                }, GetCancellationToken(), TaskContinuationOptions.AttachedToParent, TaskScheduler.FromCurrentSynchronizationContext());
+        //        }
+        //    }
+        //    #region Set account UID for new Items
+        //    if (e.NewItems != null && this.Account != null)
+        //    {
+        //        var newItems = e.NewItems
+        //            .OfType<ImportQueueRecord>()
+        //            .Where(i => i.Id == default(Guid))
+        //            .ToArray();
+        //        foreach (var i in newItems)
+        //            i.AccountUID = this.Account.Id;
+        //    }
+        //    #endregion
+        //}
 
         private void InsertNew()
         {
@@ -308,75 +307,118 @@ namespace Royalty.ViewModels
             {
                 IsBusy = true;
 
+                var forAnalize = false;
                 var encoding = Encoding.UTF8;
-                var fullLoadTask = Task.Factory.StartNew(() => {
-                    var storageClient = new RoyaltyServiceWorker.StorageService.FileServiceClient();
-                    var accountClient = new RoyaltyServiceWorker.AccountService.AccountServiceClient();
-
-                    var loadFileTasks = storageClient.UploadFiles(ofd.FileNames, encoding, GetCancellationToken());
-                    //wait upload all files
-                    Task.WaitAll(loadFileTasks);
-
-                    var newRecord = new ImportQueueRecord();
-
-
-                    var res = accountClient.PutImportQueueRecord(newRecord);
-                    if (res.Error != null)
-                        throw new Exception(res.Error);
-
-                    newRecord.CopyObjectFrom(res.Value);
-                    return newRecord;
-                }, GetCancellationToken(), TaskCreationOptions.None, TaskScheduler.Default)
-                .ContinueWith(r => { }, System.Threading.CancellationToken.None, TaskContinuationOptions.AttachedToParent, TaskScheduler.FromCurrentSynchronizationContext());
+                InsertNew(ofd.FileNames, forAnalize, encoding);
             }
         }
 
-        private Task<bool> SaveTask(ImportQueueRecord item)
+        private void InsertNew(string[] filePath, bool forAnalize, Encoding encoding)
         {
-            var startTask = Task.Factory.StartNew(() => 
-            {
-                IsBusy = true;
-            }, GetCancellationToken(), TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+            IsBusy = true;
+            var accountId = Account.Id;
+            var cancellationToken = GetCancellationToken();
+            var fullLoadTask = Task.Factory.StartNew(() => {
+                var storageClient = new RoyaltyServiceWorker.StorageService.FileServiceClient();
+                var accountClient = new RoyaltyServiceWorker.AccountService.AccountServiceClient();
 
-            var clientTask = startTask.ContinueWith((t) => 
-            {
-                var client = new RoyaltyServiceWorker.AccountService.AccountServiceClient();
-                try
-                {
-                    return item.Id == default(Guid)
-                        ? client.PutImportQueueRecord(item)
-                        : client.UpdateImportQueueRecord(item);
-                }
-                finally
-                {
-                    try { client.Close(); } catch { }
-                }
-            }, GetCancellationToken(), TaskContinuationOptions.AttachedToParent, TaskScheduler.Default);
+                var loadFileTasks = storageClient.UploadFiles(filePath, encoding, cancellationToken);
+                //wait upload all files
+                Task.WaitAll(loadFileTasks);
+                var loadFileResult = loadFileTasks.Select(t => t.Result).ToArray();
 
-            var taskRes = clientTask.ContinueWith((res) => 
-            {
-                try
-                {
-                    if (res.Result.Error != null)
-                        throw new Exception(res.Result.Error);
+                var newRecord = new ImportQueueRecord() {
+                    AccountUID = accountId,
+                    FileInfoes = loadFileResult.Select(f =>
+                    new ImportQueueRecordFileInfo()
+                    {
+                        ForAnalize = forAnalize,
+                        SourceFilePath = f.FileName,
+                        Files = (new[] { new ImportQueueRecordFileInfoFile() { FileUID = f.Id } }).ToList()
+                    }
+                    ).ToList()
+                };
 
-                    item.CopyObjectFrom(res.Result.Value);
-                    
-                    return true;
-                }
-                catch(Exception ex)
-                {
-                    Error = ex.ToString();
-                    return false;
-                }
-                finally
-                {
-                    IsBusy = false;
-                }
+                var res = accountClient.PutImportQueueRecord(newRecord);
+                if (res.Error != null)
+                    throw new Exception(res.Error);
+
+                newRecord.CopyObjectFrom(res.Value);
+                return newRecord;
+            }, GetCancellationToken(), TaskCreationOptions.None, TaskScheduler.Default)
+            .ContinueWith(r => {
+                IsBusy = false;
+                if (r.Exception != null)
+                    Error = r.Exception.ToString();
+                localCollection.UpdateCollectionAddOrUpdate(new[] { r.Result });
+            }, System.Threading.CancellationToken.None, TaskContinuationOptions.AttachedToParent, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        private void DeleteFromCollection(ImportQueueRecord item)
+        {
+            if (item == null)
+                return;
+
+            var task = DeleteTask(new[] { item });
+            task.ContinueWith((t) => {
+
+                if (t.Exception != null)
+                    return;
+
+                if (t.Result.Length > 0)
+                    return;
+
+                localCollection.Remove(item);
             }, GetCancellationToken(), TaskContinuationOptions.AttachedToParent, TaskScheduler.FromCurrentSynchronizationContext());
 
-            return taskRes;
         }
+
+        //private Task<bool> SaveTask(ImportQueueRecord item)
+        //{
+        //    var startTask = Task.Factory.StartNew(() => 
+        //    {
+        //        IsBusy = true;
+        //    }, GetCancellationToken(), TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+
+        //    var clientTask = startTask.ContinueWith((t) => 
+        //    {
+        //        var client = new RoyaltyServiceWorker.AccountService.AccountServiceClient();
+        //        try
+        //        {
+        //            return item.Id == default(Guid)
+        //                ? client.PutImportQueueRecord(item)
+        //                : client.UpdateImportQueueRecord(item);
+        //        }
+        //        finally
+        //        {
+        //            try { client.Close(); } catch { }
+        //        }
+        //    }, GetCancellationToken(), TaskContinuationOptions.AttachedToParent, TaskScheduler.Default);
+
+        //    var taskRes = clientTask.ContinueWith((res) => 
+        //    {
+        //        try
+        //        {
+        //            if (res.Result.Error != null)
+        //                throw new Exception(res.Result.Error);
+
+        //            item.CopyObjectFrom(res.Result.Value);
+                    
+        //            return true;
+        //        }
+        //        catch(Exception ex)
+        //        {
+        //            Error = ex.ToString();
+        //            return false;
+        //        }
+        //        finally
+        //        {
+        //            IsBusy = false;
+        //        }
+        //    }, GetCancellationToken(), TaskContinuationOptions.AttachedToParent, TaskScheduler.FromCurrentSynchronizationContext());
+
+        //    return taskRes;
+        //}
 
         private Task<ImportQueueRecord[]> DeleteTask(ImportQueueRecord[] items)
         {

@@ -8,7 +8,35 @@ using System.Windows;
 
 namespace Royalty.ViewModels
 {
-    public abstract class AbstractActionViewModel : FrameworkElement// DependencyObject
+    public abstract class AbstractViewModel : FrameworkElement
+    {
+        #region CancellationToken
+
+        public static readonly DependencyProperty CancellationTokenProperty = DependencyProperty.Register(nameof(CancellationToken), typeof(CancellationToken?),
+            typeof(AbstractViewModel), new PropertyMetadata(null, (s, e) => { (s as AbstractViewModel)?.RaiseCommands(); }));
+
+        public CancellationToken? CancellationToken
+        {
+            get { return (CancellationToken?)GetValue(CancellationTokenProperty); }
+            set { SetValue(CancellationTokenProperty, value); }
+        }
+
+        #endregion
+
+        protected void RunUnderDispatcher(Action a)
+        {
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, a);
+        }
+
+        protected CancellationToken GetCancellationToken()
+        {
+            return CancellationToken ?? System.Threading.CancellationToken.None;
+        }
+
+        protected virtual void RaiseCommands() { }
+    }
+
+    public abstract class AbstractActionViewModel : AbstractViewModel
     {
         #region IsBusy
 
@@ -42,29 +70,5 @@ namespace Royalty.ViewModels
         }
 
         #endregion
-        #region CancellationToken
-
-        public static readonly DependencyProperty CancellationTokenProperty = DependencyProperty.Register(nameof(CancellationToken), typeof(CancellationToken?),
-            typeof(AccountEditViewModel), new PropertyMetadata(null, (s, e) => { (s as AbstractActionViewModel)?.RaiseCommands(); }));
-
-        public CancellationToken? CancellationToken
-        {
-            get { return (CancellationToken?)GetValue(CancellationTokenProperty); }
-            set { SetValue(CancellationTokenProperty, value); }
-        }
-
-        #endregion
-
-        protected void RunUnderDispatcher(Action a)
-        {
-            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, a);
-        }
-
-        protected CancellationToken GetCancellationToken()
-        {
-            return CancellationToken ?? System.Threading.CancellationToken.None;
-        }
-
-        protected virtual void RaiseCommands() { }
     }
 }

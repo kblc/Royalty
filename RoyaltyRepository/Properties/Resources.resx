@@ -258,25 +258,25 @@
   <data name="Logic_Street_StreetRemove_StreetContainsDataRecords_TerminateDeletion" xml:space="preserve">
     <value>Terminate deletion.</value>
   </data>
-  <data name="HISTORYACTIONTYPE_Add" xml:space="preserve">
+  <data name="HISTORYACTIONTYPE_ADD" xml:space="preserve">
     <value>Record added</value>
   </data>
-  <data name="HISTORYACTIONTYPE_Change" xml:space="preserve">
+  <data name="HISTORYACTIONTYPE_CHANGE" xml:space="preserve">
     <value>Record changed</value>
   </data>
-  <data name="HISTORYACTIONTYPE_Remove" xml:space="preserve">
+  <data name="HISTORYACTIONTYPE_REMOVE" xml:space="preserve">
     <value>Record removed</value>
   </data>
-  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_Export" xml:space="preserve">
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_EXPORT" xml:space="preserve">
     <value>Exported file</value>
   </data>
-  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_ExportPhones" xml:space="preserve">
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_EXPORTPHONES" xml:space="preserve">
     <value>Exported phones file</value>
   </data>
-  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_Import" xml:space="preserve">
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_IMPORT" xml:space="preserve">
     <value>Imported file</value>
   </data>
-  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_Log" xml:space="preserve">
+  <data name="IMPORTQUEUERECORDFILEINFOFILETYPE_LOG" xml:space="preserve">
     <value>Log file</value>
   </data>
   <data name="COLUMNTYPE_CHANGED" xml:space="preserve">
