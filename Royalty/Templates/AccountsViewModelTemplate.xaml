@@ -22,6 +22,8 @@
         <Grid>
             <Grid.Resources>
                 <FrameworkElement x:Key="PROXY_AccountImportQueueRecordsEditViewModel" DataContext="{Binding}"/>
+                <localConverters:ImportQueueRecordStateGetterMultiValueConverter x:Key="importQueueRecordStateGetterMultiValueConverter"
+                                                                                 States="{Binding States, Mode=OneWay}"/>
             </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -31,9 +33,11 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <ContentControl Visibility="Collapsed" Content="{StaticResource PROXY_AccountImportQueueRecordsEditViewModel}"/>
+            <ContentControl Visibility="Collapsed" Content="{StaticResource importQueueRecordStateGetterMultiValueConverter}"/>
 
             <TextBlock Text="{Binding Account.Name, StringFormat=Данные импорта: {0}}" 
                     TextAlignment="Center" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis"
@@ -66,33 +70,8 @@
                             DisplayDateEnd="{Binding AccountsImportQueueRecordsComponent.TimeComponent.Current, Mode=OneWay}"/>
             </Grid>
 
-            <!--<DataGrid Grid.Row="4" ItemsSource="{Binding AccountPhoneMarks}" x:Name="PART_AccountImportQueueRecordsEditViewModelTemplateControls"
-                      SelectedValue="{Binding SelectedValue}" AutoGenerateColumns="False">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="RowEditEnding">
-                        <additional:EventToCommand PassEventArgsToCommand="True" 
-                                                   Command="{Binding RowEditEndingCommand}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}" Header="Телефон"/>
-                    <DataGridComboBoxColumn Header="Метка"
-                                            SelectedValueBinding="{Binding MarkID}"
-                                            SelectedValuePath="Id"
-                                            DisplayMemberPath="Name"
-                                            ItemsSource="{Binding Source={StaticResource PROXY_AccountPhoneMarksEditViewModel}, Path=DataContext.Marks}">
-                        --><!--<DataGridComboBoxColumn.ItemsSource>
-                            <CompositeCollection>
-                                <ComboBoxItem Content="Без метки"/>
-                                <CollectionContainer Collection="{Binding Source={StaticResource PROXY_AccountPhoneMarksEditViewModel}, Path=DataContext.Marks}"/>
-                            </CompositeCollection>
-                        </DataGridComboBoxColumn.ItemsSource>--><!--
-                    </DataGridComboBoxColumn>
-                </DataGrid.Columns>
-            </DataGrid>-->
-
             <ListBox Grid.Row="4" ItemsSource="{Binding ImportQueueRecords}" 
-                     HorizontalContentAlignment="Stretch"
+                     HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="True"
                      x:Name="PART_AccountImportQueueRecordsEditViewModelTemplateControls">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type accountService:ImportQueueRecord}">
@@ -118,7 +97,8 @@
                                         <TextBlock Text="{Binding ImportQueueRecord.FileInfoes.Count, StringFormat=Файлы: {0}}"/>
                                     </Expander.Header>
                                     <StackPanel Orientation="Vertical">
-                                        <Border Visibility="{Binding ImportQueueRecord.HasError, Converter={StaticResource accountsBooleanToVisibilityConverter}}">
+                                        <Border Visibility="{Binding ImportQueueRecord.HasError, Converter={StaticResource accountsBooleanToVisibilityConverter}}"
+                                                Background="{StaticResource ErrorBrush}">
                                             <TextBlock Text="{Binding ImportQueueRecord.Error, StringFormat=Ошибка: {0}}"/>
                                         </Border>
                                         <ListBox ItemsSource="{Binding ImportQueueRecord.FileInfoes}">
@@ -126,7 +106,10 @@
                                                 <DataTemplate DataType="{x:Type accountService:ImportQueueRecordFileInfo}">
                                                     <Expander>
                                                         <Expander.Header>
-                                                            <TextBlock Text="{Binding SourceFilePath, StringFormat=Файл: {0}}"/>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBlock Text="{Binding SourceFilePath, StringFormat=Файл: {0}}" Margin="0,0,4,0"/>
+                                                                <TextBlock Text="{Binding ImportQueueRecordStateID, StringFormat={} [{0}], Converter={StaticResource importQueueRecordStateGetterMultiValueConverter}}"/>
+                                                            </StackPanel>
                                                         </Expander.Header>
                                                         <StackPanel Orientation="Vertical">
                                                             <TextBlock Text="{Binding Started, StringFormat=Запуск: {0}}"/>
@@ -142,7 +125,8 @@
                                                                     <ItemsControl.ItemTemplate>
                                                                         <DataTemplate DataType="{x:Type accountService:ImportQueueRecordFileInfoFile}">
                                                                             <TextBlock>
-                                                                                <Hyperlink NavigateUri="{Binding File.StoredFileName}">
+                                                                                <Hyperlink CommandParameter="{Binding File.StoredFileName}"
+                                                                                           Command="{x:Static additional:StaticCommands.OpenUrlCommand}">
                                                                                     <TextBlock>
                                                                                         <TextBlock.Text>
                                                                                             <MultiBinding StringFormat="{}{0}: {1} ({2} байт)">
@@ -177,10 +161,14 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <Button Content="+" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8"
-                    ToolTip="Добавить новую запись..." Command="{Binding InsertCommand}"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="5" Margin="4,4">
+                <ComboBox ItemsSource="{Binding Encodings}" DisplayMemberPath="WebName" SelectedItem="{Binding SelectedEncoding}" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding LoadTypes}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedLoadType}" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                <Button Content="+" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8"
+                        ToolTip="Добавить новую запись..." Command="{Binding InsertCommand}"/>
+            </StackPanel>                
 
-            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="5" Margin="4,4">
+            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="6" Margin="4,4">
                 <Button Content="Предыдущая"
                         Cursor="Hand" Margin="4,4"
                         Command="{Binding AccountsImportQueueRecordsComponent.DecreasePageIndexCommand}"

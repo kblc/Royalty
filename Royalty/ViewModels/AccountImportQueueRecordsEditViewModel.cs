@@ -17,6 +17,7 @@ using System.Windows.Input;
 using RoyaltyServiceWorker.AccountService;
 using RoyaltyServiceWorker.Additional;
 using System.IO;
+using Royalty.ViewModels.Additional;
 
 namespace Royalty.ViewModels
 {
@@ -129,18 +130,64 @@ namespace Royalty.ViewModels
 
         #endregion
 
-        //#region SelectedValue
+        #region Encodings
 
-        //public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register(nameof(SelectedValue), typeof(object),
-        //    typeof(AccountImportQueueRecordsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+        private static readonly DependencyPropertyKey EncodingsPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(Encodings), typeof(ICollectionView), typeof(AccountImportQueueRecordsEditViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyEncodingsPropertyKey = EncodingsPropertyKey.DependencyProperty;
 
-        //public object SelectedValue
-        //{
-        //    get { return GetValue(SelectedValueProperty); }
-        //    set { SetValue(SelectedValueProperty, value); }
-        //}
+        public ICollectionView Encodings
+        {
+            get { return (ICollectionView)GetValue(ReadOnlyEncodingsPropertyKey); }
+            private set { SetValue(EncodingsPropertyKey, value); }
+        }
 
-        //#endregion
+        #endregion
+        #region LoadTypes
+
+        private static readonly DependencyPropertyKey LoadTypesPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(LoadTypes), typeof(ICollectionView), typeof(AccountImportQueueRecordsEditViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyLoadTypesPropertyKey = LoadTypesPropertyKey.DependencyProperty;
+
+        public ICollectionView LoadTypes
+        {
+            get { return (ICollectionView)GetValue(ReadOnlyLoadTypesPropertyKey); }
+            private set { SetValue(LoadTypesPropertyKey, value); }
+        }
+
+        #endregion
+
+        #region SelectedEncoding
+
+        public static readonly DependencyProperty SelectedEncodingProperty = DependencyProperty.Register(nameof(SelectedEncoding), typeof(object),
+            typeof(AccountImportQueueRecordsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public object SelectedEncoding
+        {
+            get { return GetValue(SelectedEncodingProperty); }
+            set { SetValue(SelectedEncodingProperty, value); }
+        }
+
+        #endregion
+        #region SelectedLoadType
+
+        public static readonly DependencyProperty SelectedLoadTypeProperty = DependencyProperty.Register(nameof(SelectedLoadType), typeof(object),
+            typeof(AccountImportQueueRecordsEditViewModel), new PropertyMetadata(null, (s, e) => { }));
+
+        public object SelectedLoadType
+        {
+            get { return GetValue(SelectedLoadTypeProperty); }
+            set { SetValue(SelectedLoadTypeProperty, value); }
+        }
+
+        #endregion
+
         #region From
 
         public static readonly DependencyProperty FromProperty = DependencyProperty.Register(nameof(From), typeof(DateTime?),
@@ -187,9 +234,20 @@ namespace Royalty.ViewModels
         }
 
         private ObservableCollectionWatcher<RoyaltyServiceWorker.AccountService.ImportQueueRecord> localCollection = null;
+        public ObservableCollection<Encoding> encodings = null;
+        public ObservableCollection<LoadType> loadTypes = null;
 
         public AccountImportQueueRecordsEditViewModel()
         {
+            encodings = new ObservableCollection<Encoding>(new[] { Encoding.UTF8, Encoding.ASCII, Encoding.GetEncoding(1252), Encoding.Unicode });
+            Encodings = CollectionViewSource.GetDefaultView(encodings);
+            Encodings.SortDescriptions.Add(new SortDescription(nameof(Encoding.WebName), ListSortDirection.Ascending));
+            SelectedEncoding = encodings.FirstOrDefault();
+
+            loadTypes = new ObservableCollection<LoadType>(new[] { new LoadType("Для анализа", true), new LoadType("Обычная загрузка", false) });
+            LoadTypes = CollectionViewSource.GetDefaultView(loadTypes);
+            SelectedLoadType = loadTypes.FirstOrDefault();
+
             localCollection = new ObservableCollectionWatcher<ImportQueueRecord>((x, y) => x.Id == y.Id);
             ImportQueueRecords = CollectionViewSource.GetDefaultView(localCollection);
             //ImportQueueRecords.CollectionChanged += ImportQueueRecords_CollectionChanged;
@@ -307,8 +365,8 @@ namespace Royalty.ViewModels
             {
                 IsBusy = true;
 
-                var forAnalize = false;
-                var encoding = Encoding.UTF8;
+                var forAnalize = ((LoadType)SelectedLoadType).ForAnalize;
+                var encoding = (Encoding)SelectedEncoding;
                 InsertNew(ofd.FileNames, forAnalize, encoding);
             }
         }

@@ -203,6 +203,7 @@ namespace RoyaltyService.Services.Account
             {
                 var dbItem = rep.New<RoyaltyRepository.Models.ImportQueueRecordFileInfoFile>((i) => {
                     i.FileUID = item.File != null ? item.File.FileUID : item.FileUID;
+                    i.File = rep.Get<RoyaltyRepository.Models.File>(f => f.FileUID == i.FileUID).FirstOrDefault();
                     i.ImportQueueRecordFileInfo = destination;
                     i.Type = RoyaltyRepository.Models.ImportQueueRecordFileInfoFileType.Import;
                 });

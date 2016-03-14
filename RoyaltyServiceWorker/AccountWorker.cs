@@ -225,7 +225,7 @@ namespace RoyaltyServiceWorker
                 ImportQueueRecordStates.AddRange(states);
             }
 
-            if (oldItems.Length > 0)
+            if (states.Length > 0)
                 OnImportQueueRecordStatesChanged(this, ListItemsEventArgs.Create(states, ChangeAction.Add));
         }
 

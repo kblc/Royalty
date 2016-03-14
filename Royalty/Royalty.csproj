@@ -77,12 +77,14 @@
     <Compile Include="Additional\FilterTimer.cs" />
     <Compile Include="Additional\IEventArgsConverter.cs" />
     <Compile Include="Additional\ObservableCollectionWatcher.cs" />
+    <Compile Include="Additional\StaticCommands.cs" />
     <Compile Include="Components\AccountsImportQueueRecordsComponent.cs" />
     <Compile Include="Components\AccountsPhoneMarksComponent.cs" />
     <Compile Include="Components\AccountsAdditionalColumnsComponent.cs" />
     <Compile Include="Components\AccountsSeriesOfNumbersComponent.cs" />
     <Compile Include="Additional\IHistoryItemsChange.cs" />
     <Compile Include="Components\TimeComponent.cs" />
+    <Compile Include="Converters\ImportQueueRecordStateGetterMultiValueConverter.cs" />
     <Compile Include="Converters\TimeSpanToStringConverter.cs" />
     <Compile Include="ViewModels\AbstractActionActivationViewModel.cs" />
     <Compile Include="ViewModels\AbstractActionWithBackViewModel.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="ViewModels\AccountsViewModel.cs" />
     <Compile Include="ViewModels\Additional\ImportQueueRecordViewModel.cs" />
+    <Compile Include="ViewModels\Additional\LoadType.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
