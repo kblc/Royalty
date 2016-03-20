@@ -140,6 +140,22 @@ namespace Royalty.ViewModels
         }
 
         #endregion
+        #region SeriesOfNumbersViewInternalCommand
+
+        private static readonly DependencyPropertyKey SeriesOfNumbersViewInternalCommandPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(SeriesOfNumbersViewInternalCommand), typeof(DelegateCommand), typeof(AccountEditViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlySeriesOfNumbersViewInternalCommandPropertyKey = SeriesOfNumbersViewInternalCommandPropertyKey.DependencyProperty;
+
+        public DelegateCommand SeriesOfNumbersViewInternalCommand
+        {
+            get { return (DelegateCommand)GetValue(ReadOnlySeriesOfNumbersViewInternalCommandPropertyKey); }
+            private set { SetValue(SeriesOfNumbersViewInternalCommandPropertyKey, value); }
+        }
+
+        #endregion
         #region AdditionalColumnsViewCommand
 
         public static readonly DependencyProperty AdditionalColumnsViewCommandProperty = DependencyProperty.Register(nameof(AdditionalColumnsViewCommand), typeof(ICommand),
@@ -161,6 +177,22 @@ namespace Royalty.ViewModels
         {
             get { return GetValue(AdditionalColumnsViewCommandParameterProperty); }
             set { SetValue(AdditionalColumnsViewCommandParameterProperty, value); }
+        }
+
+        #endregion
+        #region AdditionalColumnsViewInternalCommand
+
+        private static readonly DependencyPropertyKey AdditionalColumnsViewInternalCommandPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(AdditionalColumnsViewInternalCommand), typeof(DelegateCommand), typeof(AccountEditViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyAdditionalColumnsViewInternalCommandPropertyKey = AdditionalColumnsViewInternalCommandPropertyKey.DependencyProperty;
+
+        public DelegateCommand AdditionalColumnsViewInternalCommand
+        {
+            get { return (DelegateCommand)GetValue(ReadOnlyAdditionalColumnsViewInternalCommandPropertyKey); }
+            private set { SetValue(AdditionalColumnsViewInternalCommandPropertyKey, value); }
         }
 
         #endregion
@@ -188,6 +220,22 @@ namespace Royalty.ViewModels
         }
 
         #endregion
+        #region PhoneMarksViewInternalCommand
+
+        private static readonly DependencyPropertyKey PhoneMarksViewInternalCommandPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(PhoneMarksViewInternalCommand), typeof(DelegateCommand), typeof(AccountEditViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyPhoneMarksViewInternalCommandPropertyKey = PhoneMarksViewInternalCommandPropertyKey.DependencyProperty;
+
+        public DelegateCommand PhoneMarksViewInternalCommand
+        {
+            get { return (DelegateCommand)GetValue(ReadOnlyPhoneMarksViewInternalCommandPropertyKey); }
+            private set { SetValue(PhoneMarksViewInternalCommandPropertyKey, value); }
+        }
+
+        #endregion
         #region ImportQueueRecordsViewCommand
 
         public static readonly DependencyProperty ImportQueueRecordsViewCommandProperty = DependencyProperty.Register(nameof(ImportQueueRecordsViewCommand), typeof(ICommand),
@@ -212,6 +260,22 @@ namespace Royalty.ViewModels
         }
 
         #endregion
+        #region ImportQueueRecordsViewInternalCommand
+
+        private static readonly DependencyPropertyKey ImportQueueRecordsViewInternalCommandPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(ImportQueueRecordsViewInternalCommand), typeof(DelegateCommand), typeof(AccountEditViewModel),
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { })));
+        public static readonly DependencyProperty ReadOnlyImportQueueRecordsViewInternalCommandPropertyKey = ImportQueueRecordsViewInternalCommandPropertyKey.DependencyProperty;
+
+        public DelegateCommand ImportQueueRecordsViewInternalCommand
+        {
+            get { return (DelegateCommand)GetValue(ReadOnlyImportQueueRecordsViewInternalCommandPropertyKey); }
+            private set { SetValue(ImportQueueRecordsViewInternalCommandPropertyKey, value); }
+        }
+
+        #endregion
 
         public AccountEditViewModel()
         {
@@ -229,7 +293,14 @@ namespace Royalty.ViewModels
                         BackInternalCommand?.Execute(null);
                 }, GetCancellationToken(), TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
             }, o => !IsBusy && (Account?.Id ?? Guid.Empty) != Guid.Empty);
-            SettingsViewInternalCommand = new DelegateCommand(o => SettingsViewCommand?.Execute(o), o => !IsBusy && (Account?.Id ?? Guid.Empty) != Guid.Empty);
+
+            var checkInternalFunc = new Func<bool>(() => !IsBusy && (Account?.Id ?? Guid.Empty) != Guid.Empty);
+
+            SettingsViewInternalCommand = new DelegateCommand(o => SettingsViewCommand?.Execute(o), o => checkInternalFunc() && SettingsViewCommand != null && SettingsViewCommand.CanExecute(o));
+            SeriesOfNumbersViewInternalCommand = new DelegateCommand(o => SeriesOfNumbersViewCommand?.Execute(o), o => checkInternalFunc() && SeriesOfNumbersViewCommand != null && SeriesOfNumbersViewCommand.CanExecute(o));
+            AdditionalColumnsViewInternalCommand = new DelegateCommand(o => AdditionalColumnsViewCommand?.Execute(o), o => checkInternalFunc() && AdditionalColumnsViewCommand != null && AdditionalColumnsViewCommand.CanExecute(o));
+            PhoneMarksViewInternalCommand = new DelegateCommand(o => PhoneMarksViewCommand?.Execute(o), o => checkInternalFunc() && PhoneMarksViewCommand != null && PhoneMarksViewCommand.CanExecute(o));
+            ImportQueueRecordsViewInternalCommand = new DelegateCommand(o => ImportQueueRecordsViewCommand?.Execute(o), o => checkInternalFunc() && ImportQueueRecordsViewCommand != null && ImportQueueRecordsViewCommand.CanExecute(o));
         }
 
         private void OnAccountChanged(RoyaltyServiceWorker.AccountService.Account newItem, RoyaltyServiceWorker.AccountService.Account oldItem)
@@ -326,9 +397,17 @@ namespace Royalty.ViewModels
         protected override void RaiseCommands()
         {
             base.RaiseCommands();
-            SaveCommand?.RaiseCanExecuteChanged();
-            DeleteCommand?.RaiseCanExecuteChanged();
-            SettingsViewInternalCommand?.RaiseCanExecuteChanged();
+            var cmds = new[] {
+                SaveCommand,
+                DeleteCommand,
+                SettingsViewInternalCommand,
+                SeriesOfNumbersViewInternalCommand,
+                AdditionalColumnsViewInternalCommand,
+                PhoneMarksViewInternalCommand,
+                ImportQueueRecordsViewInternalCommand,
+            };
+            foreach(var cmd in cmds)
+                cmd?.RaiseCanExecuteChanged();
         }
     }
 }

@@ -77,7 +77,9 @@
                     <DataTemplate DataType="{x:Type accountService:ImportQueueRecord}">
                         <Grid x:Name="PART_AccountImportQueueRecordsEditViewModelTemplateItemRoot">
                             <Grid.Resources>
-                                <viewModelsAdd:ImportQueueRecordViewModel x:Key="importQueueRecordViewModel" ImportQueueRecord="{Binding}"/>
+                                <viewModelsAdd:ImportQueueRecordViewModel x:Key="importQueueRecordViewModel" 
+                                                                          ImportQueueRecord="{Binding}"
+                                                                          DeleteCommand="{Binding Source={StaticResource PROXY_AccountImportQueueRecordsEditViewModel}, Path=DataContext.DeleteCommand}"/>
                             </Grid.Resources>
                             <ContentControl Content="{StaticResource importQueueRecordViewModel}" Visibility="Collapsed"/>
                             <Grid DataContext="{StaticResource importQueueRecordViewModel}">
@@ -151,20 +153,31 @@
                                     </StackPanel>
                                 </Expander>
                             </Grid>
+                            <StackPanel x:Name="PART_AccountImportQueueRecordsEditViewModelTemplateActionBar" Orientation="Horizontal"
+                                        DataContext="{StaticResource importQueueRecordViewModel}"
+                                         VerticalAlignment="Top" HorizontalAlignment="Right" Margin="8,8">
+                                <Button Content="Удалить"
+                                        Command="{Binding DeleteCommandInternal}"
+                                        CommandParameter="{Binding ImportQueueRecord}"/>
+                            </StackPanel>
                         </Grid>
                         <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}, Mode=FindAncestor}, Path=IsMouseOver}" Value="True">
+                                <Setter TargetName="PART_AccountImportQueueRecordsEditViewModelTemplateActionBar" Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
                             <DataTrigger Binding="{Binding HasError}">
                                 <Setter TargetName="PART_AccountImportQueueRecordsEditViewModelTemplateItemRoot" Property="Background" Value="{StaticResource ErrorBrush}"/>
                             </DataTrigger>
                         </DataTemplate.Triggers>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+                
             </ListBox>
 
             <StackPanel Orientation="Horizontal" Grid.Row="5" Margin="4,4">
                 <ComboBox ItemsSource="{Binding Encodings}" DisplayMemberPath="WebName" SelectedItem="{Binding SelectedEncoding}" Margin="0,0,4,0" VerticalAlignment="Center"/>
                 <ComboBox ItemsSource="{Binding LoadTypes}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedLoadType}" Margin="0,0,4,0" VerticalAlignment="Center"/>
-                <Button Content="+" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8"
+                <Button Content="Добавить..." Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="8"
                         ToolTip="Добавить новую запись..." Command="{Binding InsertCommand}"/>
             </StackPanel>                
 
@@ -845,19 +858,19 @@
                             CommandParameter="{Binding SettingsViewCommandParameter}"/>
 
                     <Button HorizontalAlignment="Left" Content="Серии номеров..." Cursor="Hand" Margin="4,4"
-                            Command="{Binding SeriesOfNumbersViewCommand}"
+                            Command="{Binding SeriesOfNumbersViewInternalCommand}"
                             CommandParameter="{Binding SeriesOfNumbersViewCommandParameter}"/>
 
                     <Button HorizontalAlignment="Left" Content="Дополнительные колонки..." Cursor="Hand" Margin="4,4"
-                            Command="{Binding AdditionalColumnsViewCommand}"
+                            Command="{Binding AdditionalColumnsViewInternalCommand}"
                             CommandParameter="{Binding AdditionalColumnsViewCommandParameter}"/>
 
                     <Button HorizontalAlignment="Left" Content="Телефоны..." Cursor="Hand" Margin="4,4"
-                            Command="{Binding PhoneMarksViewCommand}"
+                            Command="{Binding PhoneMarksViewInternalCommand}"
                             CommandParameter="{Binding PhoneMarksViewCommandParameter}"/>
 
                     <Button HorizontalAlignment="Left" Content="Импорт..." Cursor="Hand" Margin="4,4"
-                            Command="{Binding ImportQueueRecordsViewCommand}"
+                            Command="{Binding ImportQueueRecordsViewInternalCommand}"
                             CommandParameter="{Binding ImportQueueRecordsViewCommandParameter}"/>
                 </StackPanel>
             </ScrollViewer>
@@ -1048,7 +1061,7 @@
                     </ListBox>
 
                     <Button Content="+" Cursor="Hand" VerticalAlignment="Bottom" HorizontalAlignment="Left" 
-                            Visibility="Collapsed" Margin="8,8" 
+                            Margin="8,8" 
                             Command="{Binding NewAccountCommand}" 
                             ToolTip="Добавить новый аккаунт"/>
                 </Grid>

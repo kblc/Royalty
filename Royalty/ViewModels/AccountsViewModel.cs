@@ -39,7 +39,7 @@ namespace Royalty.ViewModels
                 var oldAccountsComponent = e.OldValue as AccountsComponent;
                 if (model != null && newAccountsComponent != oldAccountsComponent)
                 {
-                    model.UpdateAccountSource(newAccountsComponent);
+                    model.UpdateAccountSource(newAccountsComponent, oldAccountsComponent);
                 }
             }));
 
@@ -294,9 +294,33 @@ namespace Royalty.ViewModels
         }
 
         #endregion
+        #region IsBusy
 
-        private void UpdateAccountSource(AccountsComponent newComponent)
+        protected static readonly DependencyPropertyKey ReadOnlyIsBusyPropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(IsBusy), typeof(bool), typeof(AccountsViewModel),
+                new FrameworkPropertyMetadata(false,
+                    FrameworkPropertyMetadataOptions.None,
+                    new PropertyChangedCallback((s, e) => { (s as AccountsViewModel)?.RaiseCommands(); })));
+        public static readonly DependencyProperty ReadOnlyIsBusyProperty = ReadOnlyIsBusyPropertyKey.DependencyProperty;
+
+        public bool IsBusy
         {
+            get { return (bool)GetValue(ReadOnlyIsBusyProperty); }
+            protected set { SetValue(ReadOnlyIsBusyPropertyKey, value); }
+        }
+
+        #endregion
+
+        private void UpdateAccountSource(AccountsComponent newComponent, AccountsComponent oldComponent)
+        {
+            if (oldComponent != null)
+            {
+                DependencyPropertyDescriptor.FromProperty(AbstractComponent.ReadOnlyIsLoadedProperty, oldComponent.GetType())
+                    .RemoveValueChanged(oldComponent, AccountsComponent_IsLoadedChanged);
+                DependencyPropertyDescriptor.FromProperty(AbstractComponent.IsActiveProperty, oldComponent.GetType())
+                    .RemoveValueChanged(oldComponent, AccountsComponent_IsActiveChanged);
+            }
+
             if (newComponent == null)
             {
                 FilteredAccounts = null;
@@ -319,6 +343,11 @@ namespace Royalty.ViewModels
             Marks = CollectionViewSource.GetDefaultView(newComponent.Marks);
             ColumnTypes = CollectionViewSource.GetDefaultView(newComponent.ColumnTypes);
             ImportQueueRecordStates = CollectionViewSource.GetDefaultView(newComponent.ImportQueueRecordStates);
+
+            DependencyPropertyDescriptor.FromProperty(AbstractComponent.ReadOnlyIsLoadedProperty, newComponent.GetType())
+                .AddValueChanged(newComponent, AccountsComponent_IsLoadedChanged);
+            DependencyPropertyDescriptor.FromProperty(AbstractComponent.IsActiveProperty, newComponent.GetType())
+                .AddValueChanged(newComponent, AccountsComponent_IsActiveChanged);
         }
 
         private void UpdateAccountsSeriesOfNumbersComponentSource(AccountsSeriesOfNumbersComponent newComponent) { }
@@ -347,8 +376,24 @@ namespace Royalty.ViewModels
                 AccountForEdit = o as RoyaltyServiceWorker.AccountService.Account;
                 OnAccountForEditChanged(AccountForEdit);
             });
-            NewAccountCommand = new DelegateCommand((o) => SelectAccountCommand.Execute(new RoyaltyServiceWorker.AccountService.Account()));
+            this.IsBusy = true;
+            NewAccountCommand = new DelegateCommand((o) => SelectAccountCommand.Execute(new RoyaltyServiceWorker.AccountService.Account()), o => !IsBusy);
             SetViewCommand = new DelegateCommand(o => View = (AccountsViewEnum)o);
+        }
+
+        private void AccountsComponent_IsLoadedChanged(object sender, EventArgs e)
+        {
+            this.IsBusy = !AccountsComponent.IsLoaded || !AccountsComponent.IsActive;
+        }
+
+        private void AccountsComponent_IsActiveChanged(object sender, EventArgs e)
+        {
+            this.IsBusy = !AccountsComponent.IsLoaded || !AccountsComponent.IsActive;
+        }
+
+        private void RaiseCommands()
+        {
+            NewAccountCommand?.RaiseCanExecuteChanged();
         }
     }
 }

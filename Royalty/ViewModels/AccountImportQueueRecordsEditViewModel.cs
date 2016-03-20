@@ -282,7 +282,7 @@ namespace Royalty.ViewModels
                 oldItem.Change -= AccountsImportQueueRecordsComponent_Change;
                 BindingOperations.ClearBinding(oldItem, AccountsImportQueueRecordsComponent.AccountProperty);
                 BindingOperations.ClearBinding(oldItem, AbstractComponent.IsActiveProperty);
-                DependencyPropertyDescriptor.FromProperty(AbstractComponent.ReadOnlyIsLoadedProperty, newItem.GetType())
+                DependencyPropertyDescriptor.FromProperty(AbstractComponent.ReadOnlyIsLoadedProperty, oldItem.GetType())
                     .RemoveValueChanged(oldItem, AccountsImportQueueRecordsComponent_IsLoadedChanged);
             }
 
