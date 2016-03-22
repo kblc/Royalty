@@ -22,7 +22,7 @@ namespace RoyaltyRepository.Models
     /// Город
     /// </summary>
     [Table("city")]
-    public partial class City
+    public partial class City : HistoryEntityBase
     {
         public City()
         {

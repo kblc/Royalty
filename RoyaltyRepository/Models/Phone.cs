@@ -22,7 +22,7 @@ namespace RoyaltyRepository.Models
     /// Телефон
     /// </summary>
     [Table("phone")]
-    public partial class Phone
+    public partial class Phone : HistoryEntityBase
     {
         /// <summary>
         /// Идентификатор записи

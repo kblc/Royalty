@@ -22,7 +22,7 @@ namespace RoyaltyRepository.Models
     /// Хост
     /// </summary>
     [Table("host")]
-    public partial class Host
+    public partial class Host : HistoryEntityBase
     {
         /// <summary>
         /// Идентификатор записи

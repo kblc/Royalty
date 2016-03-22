@@ -53,8 +53,7 @@ namespace RoyaltyService.Model
     public abstract class BasePagedExecutionResults<T> : BaseExecutionResults<T>
     {
         public BasePagedExecutionResults() { }
-        public BasePagedExecutionResults(T[] values, uint pageIndex, uint pageCount) {
-            Values = values;
+        public BasePagedExecutionResults(T[] values, uint pageIndex, uint pageCount) : base(values) {
             PageCount = pageCount;
             PageIndex = pageIndex;
         }

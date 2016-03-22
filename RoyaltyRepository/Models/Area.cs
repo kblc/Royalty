@@ -22,7 +22,7 @@ namespace RoyaltyRepository.Models
     /// Район
     /// </summary>
     [Table("area")]
-    public partial class Area
+    public partial class Area : HistoryEntityBase
     {
         internal const string defaultAreaName = ".default";
 

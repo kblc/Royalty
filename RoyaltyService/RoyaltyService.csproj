@@ -65,6 +65,11 @@
   <ItemGroup>
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\ServicesConfigSection.cs" />
+    <Compile Include="Model\AccountDataRecordAdditional.cs" />
+    <Compile Include="Model\AccountDataRecord.cs" />
+    <Compile Include="Model\City.cs" />
+    <Compile Include="Model\Area.cs" />
+    <Compile Include="Model\Street.cs" />
     <Compile Include="Model\ImportQueueRecordFileAccountDataRecord.cs" />
     <Compile Include="Model\ImportQueueRecordFileInfoFile.cs" />
     <Compile Include="Model\ImportQueueRecordFileInfo.cs" />
@@ -77,6 +82,8 @@
     <Compile Include="Model\AccountSettingsImportDirectory.cs" />
     <Compile Include="Model\AccountSettingsColumn.cs" />
     <Compile Include="Model\ImportQueueRecordState.cs" />
+    <Compile Include="Model\Host.cs" />
+    <Compile Include="Model\Phone.cs" />
     <Compile Include="Model\Mark.cs" />
     <Compile Include="Model\ColumnType.cs" />
     <Compile Include="Model\AccountSettings.cs" />

@@ -316,9 +316,9 @@ namespace Royalty.ViewModels
             if (oldComponent != null)
             {
                 DependencyPropertyDescriptor.FromProperty(AbstractComponent.ReadOnlyIsLoadedProperty, oldComponent.GetType())
-                    .RemoveValueChanged(oldComponent, AccountsComponent_IsLoadedChanged);
+                    .RemoveValueChanged(oldComponent, AccountsComponent_IsLoadedOrIsActiveChanged);
                 DependencyPropertyDescriptor.FromProperty(AbstractComponent.IsActiveProperty, oldComponent.GetType())
-                    .RemoveValueChanged(oldComponent, AccountsComponent_IsActiveChanged);
+                    .RemoveValueChanged(oldComponent, AccountsComponent_IsLoadedOrIsActiveChanged);
             }
 
             if (newComponent == null)
@@ -345,9 +345,9 @@ namespace Royalty.ViewModels
             ImportQueueRecordStates = CollectionViewSource.GetDefaultView(newComponent.ImportQueueRecordStates);
 
             DependencyPropertyDescriptor.FromProperty(AbstractComponent.ReadOnlyIsLoadedProperty, newComponent.GetType())
-                .AddValueChanged(newComponent, AccountsComponent_IsLoadedChanged);
+                .AddValueChanged(newComponent, AccountsComponent_IsLoadedOrIsActiveChanged);
             DependencyPropertyDescriptor.FromProperty(AbstractComponent.IsActiveProperty, newComponent.GetType())
-                .AddValueChanged(newComponent, AccountsComponent_IsActiveChanged);
+                .AddValueChanged(newComponent, AccountsComponent_IsLoadedOrIsActiveChanged);
         }
 
         private void UpdateAccountsSeriesOfNumbersComponentSource(AccountsSeriesOfNumbersComponent newComponent) { }
@@ -381,12 +381,7 @@ namespace Royalty.ViewModels
             SetViewCommand = new DelegateCommand(o => View = (AccountsViewEnum)o);
         }
 
-        private void AccountsComponent_IsLoadedChanged(object sender, EventArgs e)
-        {
-            this.IsBusy = !AccountsComponent.IsLoaded || !AccountsComponent.IsActive;
-        }
-
-        private void AccountsComponent_IsActiveChanged(object sender, EventArgs e)
+        private void AccountsComponent_IsLoadedOrIsActiveChanged(object sender, EventArgs e)
         {
             this.IsBusy = !AccountsComponent.IsLoaded || !AccountsComponent.IsActive;
         }

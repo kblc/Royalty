@@ -22,7 +22,7 @@ namespace RoyaltyRepository.Models
     /// Улица
     /// </summary>
     [Table("street")]
-    public partial class Street
+    public partial class Street : HistoryEntityBase
     {
         public Street()
         {
